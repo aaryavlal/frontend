@@ -1,0 +1,27 @@
+@import 'root-color-map.scss';
+@import "bathroom";
+@import "blogs";
+@import "calendar";
+@import "chatbot";
+@import "hacks";
+@import "hacks_lxd";
+@import "hallpass";
+@import "microblog";
+@import "navbar";
+@import "platformer-game";
+@import "quiz";
+@import "rps_lesson";
+@import "search";
+// openaesthetic stuff
+@import "materials/main.scss";
+@import "elements/main.scss";
+@import "natm-2025-tri1.scss";
+
+
+html,
+body,
+input,
+textarea,
+select {
+    background-color: $background;
+}

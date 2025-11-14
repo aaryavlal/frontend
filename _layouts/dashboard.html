@@ -1,0 +1,1124 @@
+---
+title: Dashboard
+layout: openaesthetic
+active_tab: dashboard
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.css" />
+<link rel="stylesheet" href="https://preline.co/assets/css/main.min.css" />
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/openaesthetic/tabs.css" />
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/openaesthetic/charts.css" />
+<div class="w-full">
+    <div class="space-y-4 sm:space-y-6">
+        <div class="text-sm font-medium text-center border-b text-neutral-400 border-neutral-700 relative">
+            <ul class="flex flex-wrap -mb-px relative" id="tab-bar">
+                <li class="me-2">
+                    <a href="#" id="tab-github"
+                        class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300 active text-blue-500 border-blue-500"
+                        aria-current="page">GitHub Analytics</a>
+                </li>
+                <li class="me-2">
+                    <a href="#" id="tab-grade"
+                        class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300">Grade
+                        Predictor</a>
+                </li>
+                <li class="me-2">
+                    <a href="#" id="tab-admin-search"
+                    class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300">Admin Search</a>
+                </li>
+                <li class="me-2">
+                    <a href="#" id="tab-grade-analytics"
+                        class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300">Grade
+                        Analytics</a>
+                </li>
+                <li class="me-2">
+                    <a href="#" id="tab-your-feedback"
+                        class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300">
+                        Your Feedback
+                    </a>
+                </li>
+                <li class="me-2">
+                    <a href="#" id="tab-help"
+                        class="tab-btn inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:border-neutral-300 hover:text-neutral-300">
+                       ⓘ Help 
+                    </a>
+                </li>
+            </ul>
+            <!-- sliding underline indicator -->
+            <div id="tab-underline"
+                style="position:absolute;bottom:0;left:0;height:2px;width:0;background:#2563eb;transition:all 0.3s cubic-bezier(.4,0,.2,1);border-radius:2px;">
+            </div>
+        </div>
+
+        <!-- tab content container -->
+        <div id="tab-content-container" class="relative min-h-[400px]">
+            <!-- github analytics tab content -->
+            <div id="tab-content-github" class="tab-content block">
+                <!-- Grid -->
+                <div
+                    class="grid sm:grid-cols-2 lg:grid-cols-4 sm:grid-rows-4 lg:grid-rows-2 gap-4 sm:gap-6 text-neutral-200">
+                    <!-- Avatar Card -->
+                    <div
+                        class="row-span-2 col-start-1 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700">
+                        <div class="p-4 md:p-5 flex justify-center items-center">
+                            <img src="" alt="User Avatar" id="avatar" class="w-32 h-32 rounded-xl object-cover" />
+                        </div>
+                    </div>
+
+                    <!-- Profile Info Card -->
+                    <div
+                        class="row-span-2 col-start-2 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-5">
+                        <p class="text-xs uppercase text-neutral-500 mb-2">GitHub Info (Trimester)</p>
+                        <h3 id="username" class="text-2xl font-medium mb-2">Loading...</h3>
+                        <p id="profile-url" class="text-sm mb-1">Profile URL: Loading...</p>
+                        <p id="repos-url" class="text-sm mb-1">Repos URL: Loading...</p>
+                        <p id="public-repos" class="text-sm mb-1">Public Repos: Loading...</p>
+                        <p id="public-gists" class="text-sm mb-1">Public Gists: Loading...</p>
+                        <p id="followers" class="text-sm mb-1">Followers: Loading...</p>
+                        <p id="following" class="text-sm mb-1">Following: Loading...</p>
+                    </div>
+
+                    <!-- Commits Card -->
+                    <div
+                        class="col-start-3 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-5">
+                        <p class="text-xs uppercase text-neutral-500 mb-2 flex items-center gap-1">
+                            Commits
+                            <a href="#" class="info-link" id="commits-info" title="Click for details">
+                                <i class="fas fa-info-circle info-icon"></i>
+                            </a>
+                        </p>
+                        <h3 id="commits-count" class="text-2xl font-medium">Loading...</h3>
+                    </div>
+
+                    <!-- Issues Card -->
+                    <div
+                        class="col-start-4 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-5">
+                        <p class="text-xs uppercase text-neutral-500 mb-2 flex items-center gap-1">
+                            Issues
+                            <a href="#" class="info-link" id="issues-info" title="Click for details">
+                                <i class="fas fa-info-circle info-icon"></i>
+                            </a>
+                        </p>
+                        <h3 id="issues-count" class="text-2xl font-medium">Loading...</h3>
+                    </div>
+
+                    <!-- Pull Requests Card -->
+                    <div
+                        class="col-start-3 row-start-2 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-5">
+                        <p class="text-xs uppercase text-neutral-500 mb-2 flex items-center gap-1">
+                            Pull Requests
+                            <a href="#" class="info-link" id="prs-info" title="Click for details">
+                                <i class="fas fa-info-circle info-icon"></i>
+                            </a>
+                        </p>
+                        <h3 id="prs-count" class="text-2xl font-medium">Loading...</h3>
+                    </div>
+
+                    <!-- Lines Changed Card (replaces Public Repos card) -->
+                    <div
+                        class="col-start-4 row-start-2 flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-5">
+                        <p class="text-xs uppercase text-neutral-500 mb-2">Lines Changed</p>
+                        <h3 id="lines-changed" class="text-2xl font-medium">Loading...</h3>
+                    </div>
+                </div>
+
+                <!-- Commit Cards Container -->
+                <div id="commitCardsContainer" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- grade predictor tab content -->
+            <div id="tab-content-grade" class="tab-content hidden px-6 py-4 text-neutral-200">
+                <h2 class="text-xl font-semibold mb-4">Grade Predictor</h2>
+                <p class="mb-4 text-neutral-400 max-w-prose">
+                    This tool estimates your GitHub-based grade using two methods:
+                </p>
+
+                <ul class="list-disc list-inside text-neutral-300 mb-4">
+                    <li><strong>Basic Grade:</strong> Based on total commits.</li>
+                    <li><strong>Smart Grade:</strong> Includes commits, code changes, PRs, issues, followers, and more.</li>
+                </ul>
+
+                <div class="overflow-x-auto mb-4">
+                    <table class="w-full text-sm text-left text-neutral-300 border border-neutral-700">
+                        <thead class="bg-neutral-800 text-neutral-400">
+                            <tr>
+                                <th class="px-4 py-2">Metric</th>
+                                <th class="px-4 py-2">Included In</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-neutral-900">
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Commits</td><td class="px-4 py-2">Basic & Smart</td></tr>
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Lines Changed</td><td class="px-4 py-2">Smart</td></tr>
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Pull Requests</td><td class="px-4 py-2">Smart</td></tr>
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Issues</td><td class="px-4 py-2">Smart</td></tr>
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Repos / Gists</td><td class="px-4 py-2">Smart</td></tr>
+                            <tr class="border-t border-neutral-700"><td class="px-4 py-2">Followers / Following</td><td class="px-4 py-2">Smart</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-sm text-neutral-400 mb-4">
+                    <strong>Grade Scale:</strong> A (90%), B (80%), C (70%), F (55%) — based on engagement.
+                </div>
+
+                <div class="flex gap-4 mb-4">
+                    <button id="predictGradeBtn"
+                        class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 transition text-white font-semibold">
+                        Predict Grade (Commits)
+                    </button>
+                    <button id="smartPredictBtn"
+                        class="px-4 py-2 rounded bg-green-600 hover:bg-green-700 transition text-white font-semibold">
+                        Smart Predict Grade
+                    </button>
+                </div>
+                <p id="userGrade" class="text-xl font-semibold"></p>
+            </div>
+
+            <!-- admin search tab content -->
+            <div id="tab-content-admin-search" class="tab-content hidden px-6 py-4 text-neutral-200">
+                <h2 class="text-xl font-semibold mb-4">Admin: Search User Commits</h2>
+
+                <div class="mb-4 max-w-md">
+                    <label for="uid-input" class="block mb-2 font-medium text-neutral-300">Enter User ID (UID):</label>
+                    <input type="text" id="uid-input" class="w-full rounded px-3 py-2 bg-neutral-700 text-white border border-neutral-600 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. github username or UID" />
+                    <p id="uid-error" class="mt-1 text-red-500 text-sm min-h-[1.25rem]"></p>
+                </div>
+
+                <button id="uid-search-btn" class="mb-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition">
+                    Search Commits
+                </button>
+
+                <div id="admin-summary-container" class="mb-6"></div>
+                <div id="admin-commitCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div id="tab-content-your-feedback" class="tab-content hidden px-6 py-4 text-neutral-200">
+                <h2 class="text-xl font-semibold mb-4">Your Feedback</h2>
+                <div id="user-feedback-table-container">
+                    <p class="text-neutral-400">Loading your feedback history...</p>
+                </div>
+            </div>
+
+            <!-- help tab content -->
+            <div id="tab-content-help" class="tab-content hidden px-6 py-4 text-neutral-200 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4 text-blue-300">Analytics Help</h2>
+
+    <div class="mb-6 p-4 rounded-lg bg-blue-900/40 border border-blue-700">
+        <p class="mb-2">
+            <strong>What is this dashboard?</strong>
+            <br>
+
+            <i>Making the portfolio easier to use with clickable contributions, better stats, and simple access to your profile so coders can show their work.</i>
+
+            <br>
+            This dashboard provides real-time analytics and grade predictions based on your GitHub activity. It uses a secure backend API to fetch your contributions, pull requests, issues, and more, then visualizes them for both students and admins.
+        </p>
+        <p>
+            <strong>Why use it?</strong>
+            <br>
+            - Get accurate, up-to-date insights into your coding activity.<br>
+            - Predict your grade based on real engagement.<br>
+            - Admins can review and compare user contributions.
+        </p>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-8 mb-2 text-blue-200">How It Works</h3>
+    <ul class="list-disc list-inside mb-4">
+        <li>All API endpoints are <span class="font-semibold text-blue-300">JWT-secured</span> using <code>@token_required</code>.</li>
+        <li>Data is fetched from GitHub using both REST and GraphQL APIs for maximum detail.</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold mt-8 mb-2 text-blue-200">API Endpoints</h3>
+    <div class="mb-4">
+        <div class="mb-2 font-semibold text-blue-300">User Endpoints (require login):</div>
+        <ul class="list-disc list-inside mb-2">
+            <li><code>GET /api/analytics/github/user</code> — Your GitHub profile info</li>
+            <li><code>GET /api/analytics/github/user/profile_links</code> — Quick links to your GitHub profile and repos</li>
+            <li><code>GET /api/analytics/github/user/commits</code> — Commit stats (count, additions, deletions, details)</li>
+            <li><code>GET /api/analytics/github/user/prs</code> — Pull request stats</li>
+            <li><code>GET /api/analytics/github/user/issues</code> — Issue stats</li>
+            <li><code>GET /api/analytics/github/user/issue_comments</code> — Your comments on issues</li>
+            <li><code>GET /api/analytics/github/user/received_issue_comments</code> — Comments received on your issues</li>
+        </ul>
+        <div class="mb-2 font-semibold text-blue-300">Admin Endpoints:</div>
+        <ul class="list-disc list-inside mb-2">
+            <li><code>GET /api/analytics/commits/&lt;uid&gt;</code> — Any user's commit stats (admin only)</li>
+            <li><code>GET /api/analytics/issues/&lt;uid&gt;</code> — Any user's issue stats (admin only)</li>
+        </ul>
+        <div class="mb-2 font-semibold text-blue-300">Organization Endpoints:</div>
+        <ul class="list-disc list-inside mb-2">
+            <li><code>GET /api/analytics/github/org/&lt;org_name&gt;/users</code> — List users in a GitHub org</li>
+            <li><code>GET /api/analytics/github/org/&lt;org_name&gt;/repos</code> — List repos in a GitHub org</li>
+        </ul>
+    </div>
+
+    <div class="mb-6">
+        <img src="https://github.com/user-attachments/assets/f44da398-cb3d-43ef-b79b-9c6fdd6c30cd" alt="API Diagram" class="mb-4 rounded-lg border border-neutral-700 shadow" />
+    </div>
+
+    <h3 class="text-xl font-semibold mt-8 mb-2 text-blue-200">How the Backend Works</h3>
+    <div class="mb-4">
+        <ul class="list-disc list-inside mb-2">
+            <li>
+                <span class="font-semibold text-blue-300">Authentication:</span>
+                All endpoints require a valid JWT token. Admin endpoints check your user role.
+            </li>
+            <li>
+                <span class="font-semibold text-blue-300">Date Ranges:</span>
+                If you don't specify a date range, the API automatically uses trimester logic (June–Nov, Nov–Mar, Apr–June).
+            </li>
+            <li>
+                <span class="font-semibold text-blue-300">GitHub Data:</span>
+                Uses both REST and GraphQL to get detailed commit, PR, and issue data, including additions/deletions and comment counts.
+            </li>
+            <li>
+                <span class="font-semibold text-blue-300">Error Handling:</span>
+                All endpoints return clear error messages if something goes wrong (e.g., invalid UID, GitHub API issues, or permission errors).
+            </li>
+        </ul>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-8 mb-2 text-blue-200">Grade Prediction Logic</h3>
+    <div class="mb-4">
+        <p>
+            The dashboard predicts your grade using two models:
+        </p>
+        <ul class="list-disc list-inside mb-2">
+            <li><strong>Basic:</strong> Based only on commit count.</li>
+            <li><strong>Smart:</strong> Uses a weighted formula:</li>
+        </ul>
+        <pre class="bg-neutral-900 text-neutral-200 p-3 rounded mb-2 overflow-x-auto">
+            <code>
+            score += commits * 2
+            score += additions * 0.15
+            score += deletions * 0.1
+            score += prs * 3
+            score += issues * 1.5
+            score += repos * 1.2
+            score += gists * 0.5
+            </code>
+        </pre>
+
+        <p>
+            The final score is mapped to a letter grade (A, B, C, F) based on thresholds.
+        </p>
+    </div>
+
+    <h3 class="text-xl font-semibold mt-8 mb-2 text-blue-200">Troubleshooting & Tips</h3>
+    <ul class="list-disc list-inside mb-4">
+        <li>If you see "Error loading GitHub analytics data," check your login and network connection.</li>
+        <li>Admins: Make sure your account has the correct role to access admin endpoints.</li>
+        <li>Data is refreshed each time you load the dashboard or switch tabs.</li>
+        <li>Contact your instructor if you believe your GitHub data is missing or incorrect.</li>
+    </ul>
+
+    <div class="mt-8 p-4 rounded-lg bg-blue-900/40 border border-blue-700">
+        <strong>Need more help?</strong>
+        <br>
+        See the full <a href="/dashboard/help/analytics" class="text-blue-400 underline hover:text-blue-200">Analytics Help page</a> for detailed docs and examples.
+    </div>
+</div>
+            <!-- Grade analytics tab content -->
+            <div id="tab-content-grade-analytics" class="tab-content hidden">
+                <div class="items-center justify-center text-neutral-300" id="grade-analytics-container">
+                    <p>Loading grade analytics...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for info details -->
+<div id="dataModal" class="hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+        <span class="close" title="Close modal">&times;</span>
+        <pre id="modalData"></pre>
+    </div>
+</div>
+
+<!-- FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Required plugins -->
+<script src="https://cdn.jsdelivr.net/npm/preline/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash/lodash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/preline/dist/helper-apexcharts.js"></script>
+
+<!-- Your GitHub analytics JS integrated -->
+<script type="module">
+    import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    const profileLinksUrl = `${pythonURI}/api/analytics/github/user/profile_links`;
+    const userProfileUrl = `${pythonURI}/api/analytics/github/user`;
+    const commitsUrl = `${pythonURI}/api/analytics/github/user/commits`;
+    const prsUrl = `${pythonURI}/api/analytics/github/user/prs`;
+    const issuesUrl = `${pythonURI}/api/analytics/github/user/issues`;
+
+    async function fetchData() {
+        try {
+            const [profileLinksRes, userProfileRes, commitsRes, prsRes, issuesRes] = await Promise.all([
+                fetch(profileLinksUrl, fetchOptions),
+                fetch(userProfileUrl, fetchOptions),
+                fetch(commitsUrl, fetchOptions),
+                fetch(prsUrl, fetchOptions),
+                fetch(issuesUrl, fetchOptions),
+            ]);
+
+            if (![profileLinksRes, userProfileRes, commitsRes, prsRes, issuesRes].every((res) => res.ok)) {
+                throw new Error("One or more fetch requests failed.");
+            }
+
+            const profileLinks = await profileLinksRes.json();
+            const userProfile = await userProfileRes.json();
+            const commitsData = await commitsRes.json();
+            const prsData = await prsRes.json();
+            const issuesData = await issuesRes.json();
+
+            const commitsArray = commitsData.details_of_commits || [];
+            const commitsCount = commitsData.total_commit_contributions || 0;
+            const totalAdditions = commitsData.total_lines_added || 0;
+            const totalDeletions = commitsData.total_lines_deleted || 0;
+
+            const prsArray = prsData.pull_requests || [];
+            const issuesArray = issuesData.issues || [];
+
+            const username = userProfile.login || "N/A";
+            const avatarUrl = userProfile.avatar_url || "";
+            const profileUrl = profileLinks.profile_url || "#";
+            const reposUrl = profileLinks.repos_url || "#";
+
+            // Fill in profile info
+            document.getElementById("avatar").src = avatarUrl;
+            document.getElementById("username").textContent = `Username: ${username}`;
+            document.getElementById("profile-url").innerHTML = `Profile URL: <a href="${profileUrl}" target="_blank" class="text-blue-400 hover:underline">${profileUrl}</a>`;
+            document.getElementById("repos-url").innerHTML = `Repos URL: <a href="${reposUrl}" target="_blank" class="text-blue-400 hover:underline">${reposUrl}</a>`;
+            document.getElementById("public-repos").textContent = `Public Repos: ${userProfile.public_repos || 0}`;
+            document.getElementById("public-gists").textContent = `Public Gists: ${userProfile.public_gists || 0}`;
+            document.getElementById("followers").textContent = `Followers: ${userProfile.followers || 0}`;
+            document.getElementById("following").textContent = `Following: ${userProfile.following || 0}`;
+
+            // Show lines changed in the new separate card
+            document.getElementById("lines-changed").textContent = `+${totalAdditions} / -${totalDeletions}`;
+
+            document.getElementById("commits-count").textContent = commitsCount;
+            document.getElementById("issues-count").textContent = issuesArray.length;
+            document.getElementById("prs-count").textContent = prsArray.length;
+
+            // Clear commit cards container
+            const commitCardsContainer = document.getElementById("commitCardsContainer");
+            commitCardsContainer.innerHTML = "";
+
+            // Only show the 15 most recent commits
+            commitsArray.slice(0, 15).forEach((commit) => {
+                const card = document.createElement("div");
+                card.className =
+                    "flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-4";
+
+                card.innerHTML = `
+                    <h4 class="text-sm font-medium mb-1">${commit.repository || "Unknown Repo"}</h4>
+                    <p class="text-xs mb-1">
+                        <strong>Message:</strong>
+                        <a href="${commit.url}" target="_blank" class="text-blue-400 hover:underline">
+                            ${commit.message || "No message"}
+                        </a>
+                    </p>
+                    <p class="text-xs mb-1"><strong>Date:</strong> ${new Date(commit.date).toLocaleString() || "Unknown"}</p>
+                    <p class="text-xs mb-1">
+                        <span class="text-green-400">+${commit.additions || 0}</span>
+                        /
+                        <span class="text-red-400">-${commit.deletions || 0}</span>
+                    </p>
+                `;
+                commitCardsContainer.appendChild(card);
+            });
+
+            // Grade prediction buttons and output are moved to new tab, so disable them here
+            const predictGradeBtn = document.getElementById("predictGradeBtn");
+            const smartPredictBtn = document.getElementById("smartPredictBtn");
+            const userGradeEl = document.getElementById("userGrade");
+
+            predictGradeBtn.onclick = () => {
+                const grade = calculateGradeFromCommits(commitsCount);
+                userGradeEl.textContent = `Grade based on commits: ${grade}`;
+            };
+
+            smartPredictBtn.onclick = () => {
+                const smartData = {
+                    total_commit_contributions: commitsCount,
+                    total_lines_added: commitsData.total_lines_added || 0,
+                    total_lines_deleted: commitsData.total_lines_deleted || 0,
+                    prs: prsArray.length,
+                    issues: issuesArray.length,
+                    public_repos: userProfile.public_repos || 0,
+                    public_gists: userProfile.public_gists || 0,
+                    followers: userProfile.followers || 0,
+                    following: userProfile.following || 0,
+                };
+                const grade = calculateSmartGrade(smartData);
+                userGradeEl.textContent = `Smart Grade: ${grade}`;
+            };
+
+            // Info links to show modal details
+            setupInfoModal("commits-info", commitsData);
+            setupInfoModal("issues-info", issuesData);
+            setupInfoModal("prs-info", prsData);
+
+        } catch (error) {
+            console.error("Error fetching GitHub data:", error);
+            alert("Error loading GitHub analytics data. Please check console for details.");
+        }
+    }
+
+    async function loadUserFeedback() {
+    const uid = window.user?.uid;
+    if (!uid) return;
+
+    const container = document.getElementById("user-feedback-table-container");
+
+    try {
+        const res = await fetch(`${pythonURI}/api/feedback/user/${uid}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch feedback");
+
+        const feedbacks = await res.json();
+
+        if (!feedbacks.length) {
+        container.innerHTML = `<p class="text-neutral-400">You haven't submitted any feedback yet.</p>`;
+        return;
+        }
+
+        let allFeedbacks = feedbacks;
+
+        function renderFilteredTable(filteredFeedbacks) {
+        const rows = filteredFeedbacks.map(fb => `
+            <tr class="border-t border-neutral-700">
+            <td class="px-4 py-2">${new Date(fb.created_at).toLocaleDateString()}</td>
+            <td class="px-4 py-2">${fb.title}</td>
+            <td class="px-4 py-2">${fb.type}</td>
+            <td class="px-4 py-2">
+                <a href="${fb.github_issue_url}" target="_blank" class="text-blue-400 hover:underline">
+                ${fb.github_issue_url}
+                </a>
+            </td>
+            <td class="px-4 py-2">${fb.status}</td>
+            </tr>
+        `).join("");
+
+        container.innerHTML = `
+            <table class="w-full text-sm text-left text-neutral-300 border border-neutral-700">
+            <thead class="bg-neutral-800 text-neutral-400">
+                <tr>
+                <th class="px-4 py-2">Date Submitted</th>
+                <th class="px-4 py-2">Title</th>
+                <th class="px-4 py-2">
+                    Type<br />
+                    <select id="type-filter" class="bg-neutral-800 text-white border border-neutral-600 rounded px-2 py-1 mt-1 text-sm">
+                    <option value="">All</option>
+                    <option value="Bug">Bug</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="Inquiry">Inquiry</option>
+                    <option value="Other">Other</option>
+                    </select>
+                </th>
+                <th class="px-4 py-2">GitHub Issue</th>
+                <th class="px-4 py-2">
+                    Status<br />
+                    <select id="status-filter" class="bg-neutral-800 text-white border border-neutral-600 rounded px-2 py-1 mt-1 text-sm">
+                    <option value="">All</option>
+                    <option value="Open">Open</option>
+                    <option value="Closed">Closed</option>
+                    </select>
+                </th>
+                </tr>
+            </thead>
+            <tbody class="bg-neutral-900">${rows}</tbody>
+            </table>
+        `;
+
+        // Attach filter listeners
+        document.getElementById("type-filter").addEventListener("change", applyFilters);
+        document.getElementById("status-filter").addEventListener("change", applyFilters);
+        }
+
+        function applyFilters() {
+            const typeFilter = document.getElementById("type-filter").value;
+            const statusFilter = document.getElementById("status-filter").value;
+
+            const filtered = allFeedbacks.filter(fb => {
+                const typeMatch = typeFilter === "" || fb.type === typeFilter;
+                const statusMatch = statusFilter === "" || fb.status === statusFilter;
+                return typeMatch && statusMatch;
+            });
+
+            renderFilteredTable(filtered);
+        }
+
+        renderFilteredTable(allFeedbacks);
+
+    } catch (err) {
+        console.error("Error fetching user feedback:", err);
+        container.innerHTML = `<p class="text-red-500">Error loading your feedback. Try again later.</p>`;
+    }
+}
+
+    function calculateGradeFromCommits(commitCount) {
+        if (commitCount > 20) return "90 % (A)";
+        if (commitCount >= 10) return "85 % (B)";
+        if (commitCount >= 5) return "75 % (C)";
+        return "55 % (F)";
+    }
+
+    function calculateSmartGrade(data) {
+        const commits = data.total_commit_contributions || 0;
+        const additions = data.total_lines_added || 0;
+        const deletions = data.total_lines_deleted || 0;
+        const prs = data.prs || 0;
+        const issues = data.issues || 0;
+        const repos = data.public_repos || 0;
+        const gists = data.public_gists || 0;
+        const followers = data.followers || 0;
+        const following = data.following || 0;
+
+        let score = 0;
+        score += commits * 2;
+        score += additions * 0.15;
+        score += deletions * 0.1;
+        score += prs * 3;
+        score += issues * 1.5;
+        score += repos * 1.2;
+        score += gists * 0.5;
+        if (score > 70) {
+            return '90% (A)';
+        } else if (score > 50) {
+            return '80% (B)';
+        } else if (score > 30) {
+            return '70% (C)';
+        } else {
+            return '55% (F)';
+        }
+    }
+
+    //Admin Feature commit cards rendering
+    function renderCommitCards(commits, uid, container) {
+        commits.slice(0, 15).forEach(commit => {
+            const card = document.createElement("div");
+            card.className = "flex flex-col border shadow-2xs rounded-xl bg-neutral-800 border-neutral-700 p-4";
+
+            card.innerHTML = `
+                <h4 class="text-sm font-medium mb-1">${commit.repository || "Unknown Repo"}</h4>
+                <p class="text-xs mb-1">
+                    <strong>Message:</strong>
+                    <a href="${commit.url}" target="_blank" class="text-blue-400 hover:underline">
+                        ${commit.message || "No message"}
+                    </a>
+                </p>
+                <p class="text-xs mb-1"><strong>Date:</strong> ${new Date(commit.date).toLocaleString() || "Unknown"}</p>
+                <p class="text-xs mb-1">
+                    <span class="text-green-400">+${commit.additions || 0}</span>
+                    /
+                    <span class="text-red-400">-${commit.deletions || 0}</span>
+                </p>
+            `;
+
+            container.appendChild(card);
+        });
+    }
+        document.getElementById("uid-search-btn").addEventListener("click", async () => {
+        const uid = document.getElementById("uid-input").value.trim();
+        const errorEl = document.getElementById("uid-error");
+        const summaryContainer = document.getElementById("admin-summary-container");
+        const commitContainer = document.getElementById("admin-commitCardsContainer");
+
+        errorEl.textContent = "";
+        summaryContainer.innerHTML = "";
+        commitContainer.innerHTML = "";
+
+        if (!uid) {
+        errorEl.textContent = "Please enter a UID.";
+        return;
+        }
+
+        try {
+        const response = await fetch(`${pythonURI}/api/analytics/commits/${encodeURIComponent(uid)}`, fetchOptions);
+
+        if (!response.ok) {
+            const err = await response.json();
+            errorEl.textContent = err.message || "Failed to fetch user commit data.";
+            return;
+        }
+
+        const data = await response.json();
+
+        const commitData = data.commits?.details_of_commits || data.details_of_commits || [];
+        const commitCount = data.commits?.total_commit_contributions || data.total_commit_contributions || 0;
+        const totalAdditions = data.commits?.total_lines_added || data.total_lines_added || 0;
+        const totalDeletions = data.commits?.total_lines_deleted || data.total_lines_deleted || 0;
+
+        const summaryCard = document.createElement("div");
+        summaryCard.className = "summary-card bg-slate-800 text-white p-5 rounded-lg shadow max-w-xs text-center mx-auto";
+
+        summaryCard.innerHTML = `
+            <img src="https://github.com/identicons/${uid}.png" alt="Avatar" class="mx-auto rounded-full w-20 h-20 mb-3">
+            <p><strong>UID:</strong> ${uid}</p>
+            <p><strong>Total Commits:</strong> ${commitCount}</p>
+            <p><strong>Total Additions:</strong> +${totalAdditions}</p>
+            <p><strong>Total Deletions:</strong> -${totalDeletions}</p>
+        `;
+
+        summaryContainer.appendChild(summaryCard);
+
+        renderCommitCards(commitData, uid, commitContainer);
+
+        } catch (e) {
+        errorEl.textContent = "Unexpected error.";
+        console.error(e);
+        }
+    });
+
+    // Modal code
+    const dataModal = document.getElementById("dataModal");
+    const modalData = document.getElementById("modalData");
+    const closeModal = dataModal.querySelector(".close");
+
+    function setupInfoModal(elementId, data) {
+        const el = document.getElementById(elementId);
+        el.addEventListener("click", (e) => {
+            e.preventDefault();
+            modalData.textContent = JSON.stringify(data, null, 2);
+            dataModal.classList.remove("hidden");
+            dataModal.setAttribute("aria-hidden", "false");
+        });
+    }
+
+    closeModal.onclick = () => {
+        dataModal.classList.add("hidden");
+        dataModal.setAttribute("aria-hidden", "true");
+    };
+
+    window.onclick = (event) => {
+        if (event.target === dataModal) {
+            dataModal.classList.add("hidden");
+            dataModal.setAttribute("aria-hidden", "true");
+        }
+    };
+
+    // Tab switcher code with underline animation
+    const tabs = document.querySelectorAll(".tab-btn");
+    const tabContents = document.querySelectorAll(".tab-content");
+    const underline = document.getElementById("tab-underline");
+
+    function setUnderline(el) {
+        const rect = el.getBoundingClientRect();
+        const parentRect = el.parentElement.parentElement.getBoundingClientRect();
+        underline.style.width = `${rect.width}px`;
+        underline.style.left = `${rect.left - parentRect.left}px`;
+    }
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", async (e) => {
+            e.preventDefault();
+            tabs.forEach(t => t.classList.remove("active", "text-blue-500", "border-blue-500"));
+            tabContents.forEach(c => c.classList.add("hidden"));
+            tabContents.forEach(c => c.classList.remove("block"));
+            const targetId = `tab-content-${tab.id.replace("tab-", "")}`;
+            document.getElementById(targetId).classList.remove("hidden");
+            document.getElementById(targetId).classList.add("block");
+            tab.classList.add("active", "text-blue-500", "border-blue-500");
+            setUnderline(tab);
+
+            if (targetId === "tab-content-your-feedback") {
+                await loadUserFeedback();  // 👈 load feedback when user clicks the tab
+            }
+        });
+    });
+
+    async function checkAdminAndToggleTab() {
+        try {
+            const res = await fetch(`${pythonURI}/api/id`, fetchOptions);
+            if (!res.ok) throw new Error("Failed to fetch user info");
+
+            const user = await res.json();
+            const isAdmin = user.role === "Admin";
+
+            const adminTab = document.getElementById("tab-admin-search");
+            const adminTabContent = document.getElementById("tab-content-admin-search");
+
+            if (!isAdmin) {
+                adminTab?.remove();
+                adminTabContent?.remove();
+            }
+        } catch (err) {
+            console.error("Error checking admin status:", err);
+        }
+    }
+
+    // Call after fetching GitHub data
+    window.onload = async () => {
+        await checkAdminAndToggleTab(); 
+        const activeTab = document.querySelector(".tab-btn.active");
+        if (activeTab) setUnderline(activeTab);
+
+        await fetchData();
+
+    };
+</script>
+
+<!-- JavaScript for tab switching -->
+<script type="module">
+    import { setupTabSwitcher } from '{{ site.baseurl }}/assets/js/openaesthetic/dashboard/tabSwitcher.js';
+
+    // call the function with your tab ids and initial tab
+    document.addEventListener('DOMContentLoaded', function () {
+        setupTabSwitcher(
+            ['github', 'grade', 'admin-search', 'help', 'grade-analytics'],
+            'github'
+            );
+    });
+</script>
+
+<script type="module">
+    import { pythonURI } from '{{ site.baseurl }}/assets/js/api/config.js';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const gradeTab = document.getElementById('tab-grade-analytics');
+        const gradeContent = document.getElementById('grade-analytics-container');
+        let loaded = false;
+
+        // Feedback and badge color logic
+        function getGradeFeedback(percent) {
+            let badgeColor = 'bg-danger';
+            let feedback = 'Immediate intervention is required to pass this course.';
+            if (percent >= 90) {
+                badgeColor = 'bg-success';
+                feedback = 'Excellent work! Keep up the great performance.';
+            } else if (percent >= 80) {
+                badgeColor = 'bg-info';
+                feedback = 'Good work! Continue focusing on improvement.';
+            } else if (percent >= 70) {
+                badgeColor = 'bg-warning text-dark';
+                feedback = 'Satisfactory work. Consider seeking additional support.';
+            } else if (percent >= 60) {
+                badgeColor = 'bg-danger';
+                feedback = 'You need to significantly improve to pass this course.';
+            }
+            return { badgeColor, feedback };
+        }
+
+        function renderGradeData(data) {
+            if (!data || Object.keys(data).length === 0) {
+                return `<p class="text-neutral-400">No grade analytics available for your account.</p>`;
+            }
+            if (Array.isArray(data)) {
+                data = data[0] || {};
+            }
+
+            // Feature order (match profile)
+            const features = [
+                "Attendance", "Work Habits", "Behavior", "Timeliness", "Tech Sense",
+                "Tech Talk", "Tech Growth", "Advocacy", "Communication and Collaboration",
+                "Integrity", "Organization"
+            ];
+
+            // Calculate percent and letter grade
+            let totalScore = 0;
+            let maxScore = features.length * 5;
+            features.forEach(skill => {
+                totalScore += Number(data[skill]) || 0;
+            });
+            const avgRatingValue = (totalScore / features.length).toFixed(1);
+            const percent = Math.round((totalScore / maxScore) * 100);
+            let grade = data.grade || data.predicted_grade || '-';
+            if (grade === '-' && typeof percent === 'number') {
+                if (percent >= 90) grade = 'A';
+                else if (percent >= 80) grade = 'B';
+                else if (percent >= 70) grade = 'C';
+                else if (percent >= 60) grade = 'D';
+                else grade = 'F';
+            }
+            const { badgeColor, feedback } = getGradeFeedback(percent);
+
+            // Table rows
+            let tableRows = '';
+            features.forEach(skill => {
+                const rating = Number(data[skill]) || 0;
+                const ratio = (rating / 5).toFixed(1);
+                tableRows += `
+                  <tr>
+                    <td style="text-align:left;padding:0.5em 1em;">${skill}</td>
+                    <td style="text-align:center;padding:0.5em 1em;">${rating}</td>
+                    <td style="text-align:center;padding:0.5em 1em;">${ratio}</td>
+                  </tr>
+                `;
+            });
+            // Add average row
+            tableRows += `
+              <tr class="fw-bold table-active">
+                <td style="color:#ffc107;text-align:left;padding:0.5em 1em;">Average</td>
+                <td style="color:#ffc107;text-align:center;padding:0.5em 1em;">${avgRatingValue}</td>
+                <td style="color:#ffc107;text-align:center;padding:0.5em 1em;">${(avgRatingValue / 5).toFixed(1)}</td>
+              </tr>
+            `;
+
+            // Card style (match screenshot)
+            return `
+            <div id="profile-results-card" style="
+                background:#181b23;
+                color:#fff;
+                border-radius:2rem;
+                border:1px solid #23232a;
+                box-shadow:0 8px 32px 0 #0005;
+                margin:2rem auto 0 auto;
+                max-width:1200px;
+                padding:0;
+                ">
+              <div style="display:flex;flex-wrap:wrap;">
+                <!-- Left: Grade only -->
+                <div style="
+                    flex:1 1 320px;
+                    min-width:320px;
+                    max-width:400px;
+                    padding:3rem 1.5rem 3rem 2.5rem;
+                    display:flex;
+                    flex-direction:column;
+                    align-items:center;
+                    justify-content:center;
+                    border-right:1.5px solid #23232a;
+                    ">
+                  <div style="font-size:1.5rem;font-weight:600;margin-bottom:2.2rem;text-align:left;width:100%;">Predicted Grade</div>
+                  <div style="margin-bottom:1.5rem;width:100%;">
+                    <span style="font-size:1.1rem;">Letter Grade:</span>
+                    <div style="display:inline-block;vertical-align:middle;margin-left:1.2rem;">
+                      <span style="
+                        display:inline-block;
+                        background:#06b6d4;
+                        color:#fff;
+                        font-size:3rem;
+                        font-weight:700;
+                        border-radius:0.3em;
+                        padding:0.2em 1.2em 0.2em 1.2em;
+                        box-shadow:0 2px 8px #06b6d455;
+                        letter-spacing:2px;
+                        ">${grade}</span>
+                    </div>
+                  </div>
+                  <div style="margin-top:2.5rem;font-size:1.1rem;color:#fff;text-align:center;min-height:2.5em;width:100%;">
+                    ${feedback}
+                  </div>
+                </div>
+                <!-- Right: Skills Table -->
+                <div style="
+                    flex:2 1 500px;
+                    min-width:340px;
+                    padding:3rem 2.5rem 3rem 2.5rem;
+                    ">
+                  <div style="font-size:1.5rem;font-weight:600;margin-bottom:1.2rem;">Skills Summary</div>
+                  <div style="color:#ffc107;font-size:1.15rem;font-weight:600;margin-bottom:1.2rem;">
+                    Overall Rating: <span style="color:#fff;">${avgRatingValue}</span> out of 5.0
+                  </div>
+                  <div style="overflow-x:auto;">
+                    <table style="
+                        width:100%;
+                        border-collapse:separate;
+                        border-spacing:0;
+                        background:transparent;
+                        font-size:1.1rem;
+                        ">
+                      <thead>
+                        <tr style="background:transparent;">
+                          <th style="text-align:left;padding:0.5em 1em;font-weight:700;">Skill</th>
+                          <th style="text-align:center;padding:0.5em 1em;font-weight:700;">Rating</th>
+                          <th style="text-align:center;padding:0.5em 1em;font-weight:700;">Ratio</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${tableRows}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <style>
+              #profile-results-card {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                margin-bottom: 2.5rem;
+              }
+              #profile-results-card th, #profile-results-card td {
+                border: none;
+                background: transparent;
+              }
+              #profile-results-card tr.table-active {
+                background: #23232a !important;
+              }
+              @media (max-width: 900px) {
+                #profile-results-card > div { flex-direction:column !important; }
+                #profile-results-card > div > div { max-width:100% !important; padding:2rem 1rem !important; border-right:none !important;}
+              }
+            </style>
+            `;
+        }
+
+        // --- Render AP Exam Predictor Card (match screenshot) ---
+        function renderAPExamCard(ap_exam) {
+            if (!ap_exam || !ap_exam.predicted_score) {
+                return `<p class="text-neutral-400">No AP Exam predictor data available for your account.</p>`;
+            }
+            const practice = ap_exam.predicted_score.practice_based || {};
+            const manual = ap_exam.predicted_score.manual_calculator || {};
+            const lastUpdated = ap_exam.last_updated || "N/A";
+
+            // Score interpretation
+            const interpretations = {
+                5: "Extremely well qualified",
+                4: "Well qualified",
+                3: "Qualified",
+                2: "Possibly qualified",
+                1: "No recommendation"
+            };
+
+            // Confidence badge color
+            function confidenceBadge(level) {
+                let color = "#334155", bg = "#334155";
+                if (level === "High") { color = "#22d3ee"; bg = "#0e7490"; }
+                else if (level === "Medium") { color = "#fbbf24"; bg = "#78350f"; }
+                else if (level === "Low") { color = "#f87171"; bg = "#7f1d1d"; }
+                return `<span style="display:inline-block;padding:0.3em 1.2em;border-radius:1.2em;font-size:1rem;font-weight:600;background:${bg};color:${color};margin-top:0.7em;">${level?.toUpperCase() || "LOW"} CONFIDENCE</span>`;
+            }
+
+            // Card style (match screenshot)
+            return `
+            <div style="background:#10131a;border-radius:18px;max-width:900px;margin:2.5rem auto 0 auto;padding:2.5rem 2rem 2.5rem 2rem;box-shadow:0 8px 32px 0 #0005;border:1.5px solid #23232a;">
+                <div style="font-size:2rem;font-weight:700;text-align:center;color:#e5e7eb;margin-bottom:1.2rem;">
+                    Your AP Exam Predictor Results
+                    <div style="width:80px;height:3px;background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4);margin:0.5rem auto 0 auto;border-radius:2px;"></div>
+                </div>
+                <div style="margin:1.5rem 0 2.5rem 0;">
+                    <div style="display:flex;align-items:center;justify-content:center;">
+                        <span style="display:inline-flex;align-items:center;gap:0.5em;background:#172032;border-radius:0.7em;padding:0.5em 1.2em;font-size:1.05rem;color:#bae6fd;">
+                            <span style="font-size:1.2em;">📅</span>
+                            Last Updated: <span style="font-weight:600;">${lastUpdated}</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- Practice-Based Prediction -->
+                <div style="margin-bottom:2.5rem;">
+                    <div style="display:flex;align-items:center;gap:0.7em;font-size:1.15rem;font-weight:600;color:#fde047;margin-bottom:1.2rem;">
+                        <span style="font-size:1.2em;">📊</span> Practice-Based Prediction
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem 1.2rem;">
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">MCQ 2018</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${practice.mcq_2018 ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 70</span></span>
+                        </div>
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">MCQ 2020</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${practice.mcq_2020 ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 70</span></span>
+                        </div>
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">MCQ 2021</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${practice.mcq_2021 ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 70</span></span>
+                        </div>
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">PRACTICE FRQ</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${practice.practice_frq ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 6</span></span>
+                        </div>
+                    </div>
+                    <div style="margin-top:1.5rem;">
+                        <div style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);border:2px solid #4338ca;border-radius:1rem;padding:2rem 1.5rem 1.2rem 1.5rem;display:flex;flex-direction:column;align-items:flex-start;">
+                            <span style="color:#c4b5fd;font-size:1.1rem;font-weight:600;margin-bottom:0.7em;">PREDICTED AP SCORE</span>
+                            <span style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,#fff,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem;">${practice.predicted_ap_score ?? "-"}</span>
+                            ${confidenceBadge(practice.confidence_level)}
+                        </div>
+                    </div>
+                </div>
+                <hr style="border:0;border-top:1.5px solid #23232a;margin:2.5rem 0;">
+                <!-- Manual Calculator Results -->
+                <div>
+                    <div style="display:flex;align-items:center;gap:0.7em;font-size:1.15rem;font-weight:600;color:#fde047;margin-bottom:1.2rem;">
+                        <span style="font-size:1.2em;">📊</span> Manual Calculator Results
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem 1.2rem;">
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">MCQ SCORE</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${manual.mcq_score ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 70</span></span>
+                        </div>
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">FRQ SCORE</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${manual.frq_score ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 6</span></span>
+                        </div>
+                        <div style="background:#181b23;border-radius:1rem;padding:1.2rem 1.2rem 1rem 1.2rem;display:flex;flex-direction:column;">
+                            <span style="color:#a1a1aa;font-size:0.98rem;margin-bottom:0.2em;">COMPOSITE SCORE</span>
+                            <span style="font-size:1.5rem;font-weight:700;color:#fff;">${manual.composite_score ?? "-"} <span style="color:#71717a;font-size:1rem;font-weight:400;">/ 100</span></span>
+                        </div>
+                    </div>
+                    <div style="margin-top:1.5rem;">
+                        <div style="background:linear-gradient(135deg,#1e1b4b 0%,#312e81 100%);border:2px solid #4338ca;border-radius:1rem;padding:2rem 1.5rem 1.2rem 1.5rem;display:flex;flex-direction:column;align-items:flex-start;">
+                            <span style="color:#c4b5fd;font-size:1.1rem;font-weight:600;margin-bottom:0.7em;">PREDICTED AP SCORE</span>
+                            <span style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,#fff,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem;">${manual.predicted_ap_score ?? "-"}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                @media (max-width: 900px) {
+                    #ap-exam-results-card > div { flex-direction:column !important; }
+                    #ap-exam-results-card > div > div { max-width:100% !important; padding:2rem 1rem !important; }
+                }
+            </style>
+            `;
+        }
+
+        // --- Fetch and render both cards ---
+        async function fetchGradeAnalytics() {
+            try {
+                // Grade analytics
+                const gradeRes = await fetch(`${pythonURI}/api/grade/predict`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                let gradeHtml = '';
+                if (gradeRes.ok) {
+                    const gradeData = await gradeRes.json();
+                    gradeHtml = renderGradeData(gradeData);
+                } else {
+                    gradeHtml = `<p class="text-red-400">Failed to load grade analytics.</p>`;
+                }
+
+                // AP Exam analytics
+                const apExamRes = await fetch(`${pythonURI}/api/apexam`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                let apExamHtml = '';
+                if (apExamRes.ok) {
+                    const apExamData = await apExamRes.json();
+                    apExamHtml = renderAPExamCard(apExamData.ap_exam);
+                } else {
+                    apExamHtml = `<p class="text-red-400">Failed to load AP Exam predictor data.</p>`;
+                }
+
+                gradeContent.innerHTML = gradeHtml + apExamHtml;
+            } catch (err) {
+                gradeContent.innerHTML = `<p class="text-red-400">Error loading analytics.</p>`;
+            }
+        }
+
+        gradeTab.addEventListener('click', function () {
+            if (!loaded) {
+                fetchGradeAnalytics();
+                loaded = true;
+            }
+        });
+    });
+</script>
+
