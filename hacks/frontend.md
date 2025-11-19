@@ -836,22 +836,34 @@ breadcrumbs: true
   async function loadRoomProgress() {
     if (!currentRoomId) return;
 
+    console.log('🔍 Loading room progress...');
+
     try {
       // Add timestamp to prevent caching
       const data = await apiCall(`/api/rooms/${currentRoomId}/progress?t=${Date.now()}`);
+      
+      console.log('📊 Room Progress Data:', {
+        total_members: data.total_members,
+        completed_modules: data.completed_modules,
+        member_progress: data.member_progress
+      });
 
       // Update member count in room info
       document.getElementById('displayMemberCount').textContent = data.total_members;
 
       // Update CPU nodes - RESET FIRST
+      console.log('💡 Resetting all CPU nodes...');
       for (let i = 1; i <= 6; i++) {
         const node = document.getElementById(`node${i}`);
         node.classList.remove('active');  // Remove all first
       }
+      
       // Then add active ones
+      console.log('⚡ Lighting up nodes:', data.completed_modules);
       data.completed_modules.forEach(moduleNum => {
         const node = document.getElementById(`node${moduleNum}`);
         node.classList.add('active');
+        console.log(`  ✅ Node ${moduleNum} lit`);
       });
 
       // Update members list
@@ -887,14 +899,19 @@ breadcrumbs: true
 
       // Update my completed modules - RESET FIRST
       const myProgress = await apiCall('/api/progress/my-progress');
+      console.log('👤 My Progress:', myProgress.completed_modules);
+      
       const buttons = document.querySelectorAll('.module-btn');
       
       // Reset ALL buttons first
+      console.log('🔄 Resetting all module buttons...');
       buttons.forEach(btn => btn.classList.remove('completed'));
       
       // Mark only the completed ones
+      console.log('✅ Marking completed modules:', myProgress.completed_modules);
       myProgress.completed_modules.forEach(moduleNum => {
         buttons[moduleNum - 1].classList.add('completed');
+        console.log(`  ✅ Button ${moduleNum} marked complete`);
       });
 
       // Update last refresh time
@@ -903,7 +920,8 @@ breadcrumbs: true
       if (lastRefreshEl) {
         lastRefreshEl.textContent = `Last updated: ${now}`;
       }
-      console.log(`✅ Refreshed at ${now} - Members: ${data.total_members}, Completed: [${data.completed_modules}]`);
+      console.log(`✅ Refresh complete at ${now}`);
+      console.log('='.repeat(60));
 
     } catch (error) {
       console.error('Failed to load room progress:', error);
