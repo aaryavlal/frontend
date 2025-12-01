@@ -633,6 +633,108 @@ breadcrumbs: true
     }
   }
 
+  /* Confirmation Modal */
+  .confirm-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 20000;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .confirm-modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .confirm-dialog {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border: 3px solid #ef4444;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(239, 68, 68, 0.3);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .confirm-icon {
+    font-size: 4em;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .confirm-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ef4444;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .confirm-message {
+    color: #cbd5e1;
+    font-size: 1.1em;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .confirm-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .confirm-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .confirm-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .confirm-btn.cancel {
+    background: #475569;
+    color: #e2e8f0;
+  }
+
+  .confirm-btn.cancel:hover {
+    background: #64748b;
+    box-shadow: 0 5px 15px rgba(71, 85, 105, 0.4);
+  }
+
+  .confirm-btn.confirm {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+  }
+
+  .confirm-btn.confirm:hover {
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5);
+  }
+
   /* Module Button Completion Animation */
   .module-btn.completing {
     animation: moduleComplete 0.6s ease-out;
@@ -897,6 +999,19 @@ breadcrumbs: true
   </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="confirm-modal">
+  <div class="confirm-dialog">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirmTitle">Confirm Action</div>
+    <div class="confirm-message" id="confirmMessage">Are you sure?</div>
+    <div class="confirm-buttons">
+      <button class="confirm-btn cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-btn confirm" id="confirmButton">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <script>
   let authToken = null;
   let currentUser = null;
@@ -925,6 +1040,59 @@ breadcrumbs: true
       toast.remove();
     }, 3000);
   }
+
+  // Confirmation Modal Functions
+  function showConfirm(title, message, onConfirm) {
+    console.log('🔔 showConfirm called:', title);
+    const modal = document.getElementById('confirmModal');
+    const titleEl = document.getElementById('confirmTitle');
+    const messageEl = document.getElementById('confirmMessage');
+    const confirmBtn = document.getElementById('confirmButton');
+    
+    if (!modal) {
+      console.error('❌ Modal element not found!');
+      // Fallback to confirm() if modal doesn't exist
+      if (confirm(`${title}\n\n${message}`)) {
+        onConfirm();
+      }
+      return;
+    }
+    
+    console.log('✅ Modal found, showing...');
+    titleEl.textContent = title;
+    messageEl.textContent = message;
+    modal.classList.add('show');
+    
+    // Remove old listeners and add new one
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    
+    newConfirmBtn.addEventListener('click', () => {
+      console.log('✅ Confirm clicked');
+      closeConfirm();
+      onConfirm();
+    });
+    
+    // Update the ID for future use
+    newConfirmBtn.id = 'confirmButton';
+  }
+
+  function closeConfirm() {
+    const modal = document.getElementById('confirmModal');
+    modal.classList.remove('show');
+  }
+
+  // Close modal on background click
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeConfirm();
+        }
+      });
+    }
+  });
 
   function showCelebration(type, moduleNumber, message) {
     const overlay = document.createElement('div');
@@ -1253,138 +1421,146 @@ breadcrumbs: true
   async function leaveRoom() {
     if (!currentRoomId) return;
 
-    if (!confirm('Are you sure you want to leave this room?')) return;
+    showConfirm(
+      'Leave Room?',
+      'Are you sure you want to leave this room? You will lose your current session.',
+      async () => {
+        try {
+          await apiCall(`/api/rooms/${currentRoomId}/leave`, 'POST');
+          
+          currentRoomId = null;
+          currentRoomData = null;
+          cpuFullyLit = false;
 
-    try {
-      await apiCall(`/api/rooms/${currentRoomId}/leave`, 'POST');
-      
-      currentRoomId = null;
-      currentRoomData = null;
-      cpuFullyLit = false;
+          document.getElementById('joinRoomSection').classList.remove('hidden');
+          document.getElementById('currentRoomInfo').classList.add('hidden');
+          document.getElementById('cpuSection').style.display = 'none';
+          document.getElementById('moduleSection').style.display = 'none';
+          document.getElementById('membersSection').style.display = 'none';
+          document.getElementById('resetSection').classList.add('hidden');
 
-      document.getElementById('joinRoomSection').classList.remove('hidden');
-      document.getElementById('currentRoomInfo').classList.add('hidden');
-      document.getElementById('cpuSection').style.display = 'none';
-      document.getElementById('moduleSection').style.display = 'none';
-      document.getElementById('membersSection').style.display = 'none';
-      document.getElementById('resetSection').classList.add('hidden');
+          // Reset CPU visualization
+          const cpuContainer = document.getElementById('cpuContainer');
+          cpuContainer.classList.remove('all-active');
+          for (let i = 1; i <= 6; i++) {
+            document.getElementById(`node${i}`).classList.remove('active');
+          }
 
-      // Reset CPU visualization
-      const cpuContainer = document.getElementById('cpuContainer');
-      cpuContainer.classList.remove('all-active');
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById(`node${i}`).classList.remove('active');
+          showToast('✅ Left room successfully');
+        } catch (error) {
+          showToast(`❌ Failed to leave room: ${error.message}`);
+        }
       }
-
-      showToast('✅ Left room successfully');
-    } catch (error) {
-      showToast(`❌ Failed to leave room: ${error.message}`);
-    }
+    );
   }
 
   async function resetProgress() {
-    if (!confirm('⚠️ This will reset ALL progress for EVERYONE in the room. Are you sure?')) {
-      return;
-    }
-
-    try {
-      // Call backend reset endpoint
-      await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
-      
-      console.log('🔄 Backend reset successful, clearing UI...');
-      
-      // Reset local state
-      cpuFullyLit = false;
-      
-      // Reset CPU visualization
-      const cpuContainer = document.getElementById('cpuContainer');
-      cpuContainer.classList.remove('all-active');
-      
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById(`node${i}`).classList.remove('active');
+    showConfirm(
+      'RESET ALL PROGRESS?',
+      'This will delete ALL completed modules for EVERYONE in the room. This cannot be undone!',
+      async () => {
+        try {
+          // Call backend reset endpoint
+          await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
+          
+          console.log('🔄 Backend reset successful, clearing UI...');
+          
+          // Reset local state
+          cpuFullyLit = false;
+          
+          // Reset CPU visualization
+          const cpuContainer = document.getElementById('cpuContainer');
+          cpuContainer.classList.remove('all-active');
+          
+          for (let i = 1; i <= 6; i++) {
+            document.getElementById(`node${i}`).classList.remove('active');
+          }
+          
+          // Hide reset button
+          document.getElementById('resetSection').classList.add('hidden');
+          
+          // FORCE CLEAR all module buttons BEFORE reload
+          const buttons = document.querySelectorAll('.module-btn');
+          buttons.forEach(btn => btn.classList.remove('completed'));
+          
+          // FORCE CLEAR members list
+          const membersList = document.getElementById('membersList');
+          membersList.innerHTML = '';
+          
+          console.log('✅ UI cleared, reloading fresh data...');
+          
+          showToast('🔄 Progress reset for all members!');
+          
+          // Wait a moment for backend to process, then reload
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Reload progress with cache-busting timestamp
+          await loadRoomProgress();
+          
+          console.log('✅ Reset complete!');
+        } catch (error) {
+          showToast(`❌ Failed to reset progress: ${error.message}`);
+          console.error('Reset error:', error);
+        }
       }
-      
-      // Hide reset button
-      document.getElementById('resetSection').classList.add('hidden');
-      
-      // FORCE CLEAR all module buttons BEFORE reload
-      const buttons = document.querySelectorAll('.module-btn');
-      buttons.forEach(btn => btn.classList.remove('completed'));
-      
-      // FORCE CLEAR members list
-      const membersList = document.getElementById('membersList');
-      membersList.innerHTML = '';
-      
-      console.log('✅ UI cleared, reloading fresh data...');
-      
-      showToast('🔄 Progress reset for all members!');
-      
-      // Wait a moment for backend to process, then reload
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Reload progress with cache-busting timestamp
-      await loadRoomProgress();
-      
-      console.log('✅ Reset complete!');
-    } catch (error) {
-      showToast(`❌ Failed to reset progress: ${error.message}`);
-      console.error('Reset error:', error);
-    }
+    );
   }
 
   async function resetProgressMidGame() {
-    if (!confirm('⚠️ RESET ALL PROGRESS?\n\nThis will delete ALL completed modules for EVERYONE in the room.\n\nAre you absolutely sure?')) {
-      return;
-    }
+    showConfirm(
+      'RESET ALL PROGRESS?',
+      'This will delete ALL completed modules for EVERYONE in the room. Are you absolutely sure?',
+      async () => {
+        const refreshBtn = document.getElementById('refreshProgressBtn');
+        const originalText = refreshBtn ? refreshBtn.innerHTML : '';
+        
+        if (refreshBtn) {
+          refreshBtn.innerHTML = '⏳ Resetting...';
+          refreshBtn.disabled = true;
+        }
 
-    const refreshBtn = document.getElementById('refreshProgressBtn');
-    const originalText = refreshBtn ? refreshBtn.innerHTML : '';
-    
-    if (refreshBtn) {
-      refreshBtn.innerHTML = '⏳ Resetting...';
-      refreshBtn.disabled = true;
-    }
-
-    try {
-      // Call backend reset endpoint
-      await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
-      
-      // Reset local state
-      cpuFullyLit = false;
-      
-      // Reset CPU visualization
-      const cpuContainer = document.getElementById('cpuContainer');
-      cpuContainer.classList.remove('all-active');
-      
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById(`node${i}`).classList.remove('active');
+        try {
+          // Call backend reset endpoint
+          await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
+          
+          // Reset local state
+          cpuFullyLit = false;
+          
+          // Reset CPU visualization
+          const cpuContainer = document.getElementById('cpuContainer');
+          cpuContainer.classList.remove('all-active');
+          
+          for (let i = 1; i <= 6; i++) {
+            document.getElementById(`node${i}`).classList.remove('active');
+          }
+          
+          // Hide the post-completion reset button if it's showing
+          const resetSection = document.getElementById('resetSection');
+          if (resetSection) {
+            resetSection.classList.add('hidden');
+          }
+          
+          // Reset all module buttons
+          const buttons = document.querySelectorAll('.module-btn');
+          buttons.forEach(btn => btn.classList.remove('completed'));
+          
+          showToast('🔄 All progress reset!');
+          
+          // Wait for backend to process
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Reload progress to sync with backend
+          await loadRoomProgress();
+        } catch (error) {
+          showToast(`❌ Failed to reset: ${error.message}`);
+        } finally {
+          if (refreshBtn) {
+            refreshBtn.innerHTML = originalText;
+            refreshBtn.disabled = false;
+          }
+        }
       }
-      
-      // Hide the post-completion reset button if it's showing
-      const resetSection = document.getElementById('resetSection');
-      if (resetSection) {
-        resetSection.classList.add('hidden');
-      }
-      
-      // Reset all module buttons
-      const buttons = document.querySelectorAll('.module-btn');
-      buttons.forEach(btn => btn.classList.remove('completed'));
-      
-      showToast('🔄 All progress reset!');
-      
-      // Wait for backend to process
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Reload progress to sync with backend
-      await loadRoomProgress();
-    } catch (error) {
-      showToast(`❌ Failed to reset: ${error.message}`);
-    } finally {
-      if (refreshBtn) {
-        refreshBtn.innerHTML = originalText;
-        refreshBtn.disabled = false;
-      }
-    }
+    );
   }
 
   async function completeModule(moduleNumber) {
@@ -1553,9 +1729,6 @@ breadcrumbs: true
       }
       console.log(`✅ Refresh complete at ${now}`);
       console.log('='.repeat(60));
-      
-      // Show success toast
-      showToast('✅ Progress refreshed!');
 
     } catch (error) {
       console.error('Failed to load room progress:', error);
