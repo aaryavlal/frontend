@@ -1,9 +1,8 @@
 ---
 layout: post
 title: "Dummy Quiz"
-permalink: /dummy-quiz/
+permalink: /dummy-quiz
 ---
-<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
