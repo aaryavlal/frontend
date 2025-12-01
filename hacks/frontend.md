@@ -224,31 +224,151 @@ breadcrumbs: true
     box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
   }
 
+  /* CPU Chip Layout */
+  .cpu-container {
+    position: relative;
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 40px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 20px;
+    border: 3px solid #334155;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s ease;
+  }
+
+  .cpu-container.all-active {
+    border-color: #38bdf8;
+    background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
+    box-shadow: 0 0 60px rgba(56, 189, 248, 0.8), 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: cpuGlow 2s infinite;
+  }
+
+  @keyframes cpuGlow {
+    0%, 100% { 
+      box-shadow: 0 0 60px rgba(56, 189, 248, 0.8), 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    50% { 
+      box-shadow: 0 0 80px rgba(56, 189, 248, 1), 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .cpu-label {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #64748b;
+    letter-spacing: 2px;
+    transition: color 0.5s;
+  }
+
+  .cpu-container.all-active .cpu-label {
+    color: #38bdf8;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  }
+
   .cpu-visualization {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin: 30px 0;
+    gap: 15px;
+    position: relative;
+  }
+
+  /* Pin connectors on sides */
+  .cpu-pins {
+    position: absolute;
+    display: flex;
+    gap: 8px;
+  }
+
+  .cpu-pins.left {
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+  }
+
+  .cpu-pins.right {
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+  }
+
+  .cpu-pins.top {
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+
+  .cpu-pins.bottom {
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+
+  .pin {
+    width: 4px;
+    height: 15px;
+    background: #334155;
+    border-radius: 2px;
+    transition: background 0.5s;
+  }
+
+  .cpu-pins.left .pin,
+  .cpu-pins.right .pin {
+    width: 15px;
+    height: 4px;
+  }
+
+  .cpu-container.all-active .pin {
+    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+    box-shadow: 0 0 5px rgba(56, 189, 248, 0.8);
   }
 
   .node {
     background: #1e293b;
-    padding: 30px;
-    border-radius: 12px;
+    padding: 20px;
+    border-radius: 10px;
     text-align: center;
     border: 2px solid #334155;
     transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(56, 189, 248, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .node.active::before {
+    opacity: 1;
   }
 
   .node.active {
     border-color: #38bdf8;
     background: linear-gradient(135deg, #1e293b 0%, #0c4a6e 100%);
-    box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
   }
 
   .node-icon {
-    font-size: 3em;
-    margin-bottom: 15px;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
   }
 
   .node.active .node-icon {
@@ -256,18 +376,47 @@ breadcrumbs: true
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
   }
 
   .node-label {
     color: #94a3b8;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 0.9em;
+    position: relative;
+    z-index: 1;
   }
 
   .node.active .node-label {
     color: #38bdf8;
+  }
+
+  /* Circuit traces connecting nodes */
+  .circuit-trace {
+    position: absolute;
+    background: #334155;
+    transition: background 0.5s, box-shadow 0.5s;
+    z-index: 0;
+  }
+
+  .cpu-container.all-active .circuit-trace {
+    background: linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  }
+
+  .trace-horizontal {
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+  }
+
+  .trace-vertical {
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    top: 0;
   }
 
   .module-controls {
@@ -315,11 +464,210 @@ breadcrumbs: true
   .inline-inputs .form-group {
     flex: 1;
   }
+
+  /* Celebration Animations */
+  .celebration-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .celebration-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border: 3px solid;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    text-align: center;
+    animation: slideUp 0.5s ease-out;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .celebration-card.personal {
+    border-color: #38bdf8;
+  }
+
+  .celebration-card.room-module {
+    border-color: #22c55e;
+  }
+
+  .celebration-card.room-complete {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #1e293b 0%, #451a03 100%);
+  }
+
+  .celebration-icon {
+    font-size: 5em;
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .celebration-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .celebration-card.room-module .celebration-title {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .celebration-card.room-complete .celebration-title {
+    background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .celebration-message {
+    color: #cbd5e1;
+    font-size: 1.1em;
+    margin-bottom: 25px;
+    line-height: 1.6;
+  }
+
+  .celebration-btn {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+    color: #0f172a;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .celebration-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5);
+  }
+
+  /* Confetti Animation */
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #38bdf8;
+    position: absolute;
+    animation: confetti-fall 3s linear forwards;
+  }
+
+  @keyframes confetti-fall {
+    to {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  /* Toast Notification */
+  .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+    color: #0f172a;
+    padding: 20px 30px;
+    border-radius: 12px;
+    font-weight: bold;
+    z-index: 999;
+    animation: slideInRight 0.5s ease-out, slideOutRight 0.5s ease-out 2.5s forwards;
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+
+  /* Module Button Completion Animation */
+  .module-btn.completing {
+    animation: moduleComplete 0.6s ease-out;
+  }
+
+  @keyframes moduleComplete {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
+    100% { transform: scale(1); }
+  }
+
+  /* Node Activation Animation */
+  .node.activating {
+    animation: nodeActivate 0.8s ease-out;
+  }
+
+  @keyframes nodeActivate {
+    0% { 
+      transform: scale(1);
+      box-shadow: 0 0 0 rgba(56, 189, 248, 0);
+    }
+    50% { 
+      transform: scale(1.15);
+      box-shadow: 0 0 50px rgba(56, 189, 248, 0.8);
+    }
+    100% { 
+      transform: scale(1);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+    }
+  }
 </style>
 
 <div class="container">
   <div class="header">
-    <h1>🖥️ Room System Test</h1>
+    <h2>🖥️ Room System Test</h2>
     <p>Parallel Computing Education Platform</p>
   </div>
 
@@ -425,32 +773,80 @@ breadcrumbs: true
 
   <!-- CPU Visualization -->
   <div class="section" id="cpuSection" style="display: none;">
-    <h2>🖥️ Step 3: Room Progress (CPU Nodes)</h2>
-    <div class="cpu-visualization">
-      <div class="node" id="node1">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 1</div>
+    <h2>🖥️ Step 3: CPU Core Status</h2>
+    <p style="color: #94a3b8; margin-bottom: 20px; text-align: center;">
+      Each core lights up when ALL members complete the corresponding module
+    </p>
+    
+    <div class="cpu-container" id="cpuContainer">
+      <div class="cpu-label">PARALLEL PROCESSOR</div>
+      
+      <!-- CPU Pins -->
+      <div class="cpu-pins left">
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
       </div>
-      <div class="node" id="node2">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 2</div>
+      <div class="cpu-pins right">
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
       </div>
-      <div class="node" id="node3">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 3</div>
+      <div class="cpu-pins top">
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
       </div>
-      <div class="node" id="node4">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 4</div>
+      <div class="cpu-pins bottom">
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
+        <div class="pin"></div>
       </div>
-      <div class="node" id="node5">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 5</div>
+      
+      <div class="cpu-visualization">
+        <div class="node" id="node1">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 1</div>
+        </div>
+        <div class="node" id="node2">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 2</div>
+        </div>
+        <div class="node" id="node3">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 3</div>
+        </div>
+        <div class="node" id="node4">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 4</div>
+        </div>
+        <div class="node" id="node5">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 5</div>
+        </div>
+        <div class="node" id="node6">
+          <div class="node-icon">⚡</div>
+          <div class="node-label">CORE 6</div>
+        </div>
       </div>
-      <div class="node" id="node6">
-        <div class="node-icon">⚡</div>
-        <div class="node-label">NODE 6</div>
-      </div>
+    </div>
+
+    <!-- Reset Button (only shows when CPU is fully lit) -->
+    <div id="resetSection" class="hidden" style="text-align: center; margin-top: 30px;">
+      <button class="btn btn-danger" onclick="resetProgress()">
+        🔄 Reset All Progress
+      </button>
+      <p style="color: #94a3b8; margin-top: 10px; font-size: 0.9em;">
+        This will clear all completed modules for everyone in the room
+      </p>
     </div>
   </div>
 
@@ -492,9 +888,9 @@ breadcrumbs: true
   <div class="section" id="membersSection" style="display: none;">
     <h2>👥 Room Members Progress</h2>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <button class="btn btn-secondary" onclick="loadRoomProgress()">🔄 Refresh Progress</button>
+      <button id="refreshProgressBtn" class="btn btn-danger" onclick="resetProgressMidGame()">🔄 Reset Room Progress</button>
       <div id="lastRefresh" style="color: #94a3b8; font-size: 0.9em;">
-        Auto-refresh every 5 seconds
+        Click to reset all progress
       </div>
     </div>
     <ul class="members-list" id="membersList"></ul>
@@ -506,6 +902,7 @@ breadcrumbs: true
   let currentUser = null;
   let currentRoomId = null;
   let currentRoomData = null;
+  let cpuFullyLit = false; // Track if all cores are active
 
   function getApiUrl() {
     return document.getElementById('apiUrl').value.trim();
@@ -515,6 +912,101 @@ breadcrumbs: true
     const element = document.getElementById(elementId);
     element.textContent = message;
     element.className = `status ${type}`;
+  }
+
+  // Animation Helper Functions
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
+
+  function showCelebration(type, moduleNumber, message) {
+    const overlay = document.createElement('div');
+    overlay.className = 'celebration-overlay';
+    
+    let icon, title, cardClass;
+    
+    if (type === 'personal') {
+      icon = '✅';
+      title = `Module ${moduleNumber} Complete!`;
+      cardClass = 'personal';
+    } else if (type === 'room-module') {
+      icon = '✨';
+      title = `Room Module ${moduleNumber} Complete!`;
+      cardClass = 'room-module';
+    } else if (type === 'room-complete') {
+      icon = '🎉';
+      title = 'ALL MODULES COMPLETE!';
+      cardClass = 'room-complete';
+    }
+    
+    overlay.innerHTML = `
+      <div class="celebration-card ${cardClass}">
+        <div class="celebration-icon">${icon}</div>
+        <div class="celebration-title">${title}</div>
+        <div class="celebration-message">${message}</div>
+        <button class="celebration-btn" onclick="closeCelebration()">Continue</button>
+      </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Add confetti for room completions
+    if (type === 'room-module' || type === 'room-complete') {
+      createConfetti();
+    }
+  }
+
+  function closeCelebration() {
+    const overlay = document.querySelector('.celebration-overlay');
+    if (overlay) {
+      overlay.remove();
+    }
+  }
+
+  function createConfetti() {
+    const colors = ['#38bdf8', '#22c55e', '#f59e0b', '#ef4444', '#a855f7', '#ec4899'];
+    
+    for (let i = 0; i < 50; i++) {
+      setTimeout(() => {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 3000);
+      }, i * 30);
+    }
+  }
+
+  function animateModuleButton(moduleNumber) {
+    const buttons = document.querySelectorAll('.module-btn');
+    const button = buttons[moduleNumber - 1];
+    button.classList.add('completing');
+    
+    setTimeout(() => {
+      button.classList.remove('completing');
+      button.classList.add('completed');
+    }, 600);
+  }
+
+  function animateNode(nodeNumber) {
+    const node = document.getElementById(`node${nodeNumber}`);
+    node.classList.add('activating');
+    
+    setTimeout(() => {
+      node.classList.remove('activating');
+      node.classList.add('active');
+    }, 800);
   }
 
   async function apiCall(endpoint, method = 'GET', body = null) {
@@ -614,6 +1106,7 @@ breadcrumbs: true
     currentUser = null;
     currentRoomId = null;
     currentRoomData = null;
+    cpuFullyLit = false;
 
     document.getElementById('loginForm').classList.remove('hidden');
     document.getElementById('loggedInInfo').classList.add('hidden');
@@ -663,10 +1156,10 @@ breadcrumbs: true
     
     try {
       const data = await apiCall('/api/test-auth', 'GET');
-      alert('✅ Token is VALID!\n\n' + JSON.stringify(data, null, 2));
+      showToast('✅ Token is valid!');
       console.log('Token test success:', data);
     } catch (error) {
-      alert('❌ Token is INVALID!\n\nError: ' + error.message);
+      showToast('❌ Token is invalid!');
       console.error('Token test failed:', error);
     }
   }
@@ -688,16 +1181,16 @@ breadcrumbs: true
     const roomName = document.getElementById('roomName').value.trim();
 
     if (!roomName) {
-      alert('Please enter a room name');
+      showToast('⚠️ Please enter a room name');
       return;
     }
 
     try {
       const data = await apiCall('/api/rooms', 'POST', { name: roomName });
-      alert(`Room created! Code: ${data.room.room_code}`);
+      showToast(`✅ Room created! Code: ${data.room.room_code}`);
       document.getElementById('roomName').value = '';
     } catch (error) {
-      alert(`Failed to create room: ${error.message}`);
+      showToast(`❌ Failed to create room: ${error.message}`);
     }
   }
 
@@ -705,7 +1198,7 @@ breadcrumbs: true
     const roomCode = document.getElementById('roomCode').value.trim().toUpperCase();
 
     if (!roomCode || roomCode.length !== 6) {
-      alert('Please enter a valid 6-character room code');
+      showToast('⚠️ Please enter a valid 6-character room code');
       return;
     }
 
@@ -714,10 +1207,10 @@ breadcrumbs: true
       currentRoomId = data.room.id;
       currentRoomData = data.room;
       
-      alert(`Joined room: ${data.room.name}`);
+      showToast(`✅ Joined room: ${data.room.name}`);
       await loadCurrentRoom();
     } catch (error) {
-      alert(`Failed to join room: ${error.message}`);
+      showToast(`❌ Failed to join room: ${error.message}`);
     }
   }
 
@@ -727,10 +1220,10 @@ breadcrumbs: true
       currentRoomId = data.room.id;
       currentRoomData = data.room;
       
-      alert(`Joined Demo Room! This room never deletes - it just resets when complete.`);
+      showToast('✅ Joined Demo Room!');
       await loadCurrentRoom();
     } catch (error) {
-      alert(`Failed to join demo room: ${error.message}`);
+      showToast(`❌ Failed to join demo room: ${error.message}`);
     }
   }
 
@@ -753,7 +1246,7 @@ breadcrumbs: true
 
       await loadRoomProgress();
     } catch (error) {
-      alert(`Failed to load room: ${error.message}`);
+      showToast(`❌ Failed to load room: ${error.message}`);
     }
   }
 
@@ -767,21 +1260,130 @@ breadcrumbs: true
       
       currentRoomId = null;
       currentRoomData = null;
+      cpuFullyLit = false;
 
       document.getElementById('joinRoomSection').classList.remove('hidden');
       document.getElementById('currentRoomInfo').classList.add('hidden');
       document.getElementById('cpuSection').style.display = 'none';
       document.getElementById('moduleSection').style.display = 'none';
       document.getElementById('membersSection').style.display = 'none';
+      document.getElementById('resetSection').classList.add('hidden');
 
-      // Reset nodes
+      // Reset CPU visualization
+      const cpuContainer = document.getElementById('cpuContainer');
+      cpuContainer.classList.remove('all-active');
       for (let i = 1; i <= 6; i++) {
         document.getElementById(`node${i}`).classList.remove('active');
       }
 
-      alert('Left room successfully');
+      showToast('✅ Left room successfully');
     } catch (error) {
-      alert(`Failed to leave room: ${error.message}`);
+      showToast(`❌ Failed to leave room: ${error.message}`);
+    }
+  }
+
+  async function resetProgress() {
+    if (!confirm('⚠️ This will reset ALL progress for EVERYONE in the room. Are you sure?')) {
+      return;
+    }
+
+    try {
+      // Call backend reset endpoint
+      await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
+      
+      console.log('🔄 Backend reset successful, clearing UI...');
+      
+      // Reset local state
+      cpuFullyLit = false;
+      
+      // Reset CPU visualization
+      const cpuContainer = document.getElementById('cpuContainer');
+      cpuContainer.classList.remove('all-active');
+      
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById(`node${i}`).classList.remove('active');
+      }
+      
+      // Hide reset button
+      document.getElementById('resetSection').classList.add('hidden');
+      
+      // FORCE CLEAR all module buttons BEFORE reload
+      const buttons = document.querySelectorAll('.module-btn');
+      buttons.forEach(btn => btn.classList.remove('completed'));
+      
+      // FORCE CLEAR members list
+      const membersList = document.getElementById('membersList');
+      membersList.innerHTML = '';
+      
+      console.log('✅ UI cleared, reloading fresh data...');
+      
+      showToast('🔄 Progress reset for all members!');
+      
+      // Wait a moment for backend to process, then reload
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Reload progress with cache-busting timestamp
+      await loadRoomProgress();
+      
+      console.log('✅ Reset complete!');
+    } catch (error) {
+      showToast(`❌ Failed to reset progress: ${error.message}`);
+      console.error('Reset error:', error);
+    }
+  }
+
+  async function resetProgressMidGame() {
+    if (!confirm('⚠️ RESET ALL PROGRESS?\n\nThis will delete ALL completed modules for EVERYONE in the room.\n\nAre you absolutely sure?')) {
+      return;
+    }
+
+    const refreshBtn = document.getElementById('refreshProgressBtn');
+    const originalText = refreshBtn ? refreshBtn.innerHTML : '';
+    
+    if (refreshBtn) {
+      refreshBtn.innerHTML = '⏳ Resetting...';
+      refreshBtn.disabled = true;
+    }
+
+    try {
+      // Call backend reset endpoint
+      await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
+      
+      // Reset local state
+      cpuFullyLit = false;
+      
+      // Reset CPU visualization
+      const cpuContainer = document.getElementById('cpuContainer');
+      cpuContainer.classList.remove('all-active');
+      
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById(`node${i}`).classList.remove('active');
+      }
+      
+      // Hide the post-completion reset button if it's showing
+      const resetSection = document.getElementById('resetSection');
+      if (resetSection) {
+        resetSection.classList.add('hidden');
+      }
+      
+      // Reset all module buttons
+      const buttons = document.querySelectorAll('.module-btn');
+      buttons.forEach(btn => btn.classList.remove('completed'));
+      
+      showToast('🔄 All progress reset!');
+      
+      // Wait for backend to process
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Reload progress to sync with backend
+      await loadRoomProgress();
+    } catch (error) {
+      showToast(`❌ Failed to reset: ${error.message}`);
+    } finally {
+      if (refreshBtn) {
+        refreshBtn.innerHTML = originalText;
+        refreshBtn.disabled = false;
+      }
     }
   }
 
@@ -789,47 +1391,51 @@ breadcrumbs: true
     try {
       const data = await apiCall('/api/progress/complete', 'POST', { module_number: moduleNumber });
       
-      // Update button
-      const buttons = document.querySelectorAll('.module-btn');
-      buttons[moduleNumber - 1].classList.add('completed');
+      // Animate the button
+      animateModuleButton(moduleNumber);
 
-      // Show message
+      // Show appropriate celebration
       if (data.room_progress) {
         if (data.room_progress.room_complete) {
           if (data.room_progress.is_demo) {
-            // Demo room - resets instead of deleting
-            alert('🎉 CONGRATULATIONS! All modules complete!\n\n✨ Demo room has been reset - all progress cleared!\n\nYou can start over immediately.');
+            // Demo room - just celebrate, DON'T auto-reset
+            showCelebration('room-complete', moduleNumber, 
+              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\n✨ The CPU is fully lit!\n\nUse the Reset button below to start over.');
             
-            // Clear all UI elements immediately
-            const allButtons = document.querySelectorAll('.module-btn');
-            allButtons.forEach(btn => btn.classList.remove('completed'));
-            
-            for (let i = 1; i <= 6; i++) {
-              document.getElementById(`node${i}`).classList.remove('active');
-            }
-            
-            // Wait a moment for backend to finish reset, then reload
-            setTimeout(async () => {
-              await loadRoomProgress();
-            }, 500);
+            // DON'T clear anything - let the CPU stay lit!
+            // The reset button will appear via loadRoomProgress()
+            await loadRoomProgress();
           } else {
             // Regular room - gets deleted
-            alert('🎉 CONGRATULATIONS! All modules complete! The room has been closed.');
-            window.location.reload();
+            showCelebration('room-complete', moduleNumber,
+              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\nThe room has been closed.');
+            
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
           }
         } else if (data.room_progress.module_complete) {
-          alert(`✨ Module ${moduleNumber} completed by entire room! Node ${moduleNumber} lit up!`);
+          showCelebration('room-module', moduleNumber,
+            `🌟 Everyone in the room has completed Module ${moduleNumber}!\n\nNode ${moduleNumber} is now lit up!`);
+          
+          // Animate the corresponding node
+          setTimeout(() => {
+            animateNode(moduleNumber);
+          }, 500);
+          
           await loadRoomProgress();
         } else {
-          alert(`✅ Module ${moduleNumber} completed! Waiting for other members...`);
+          showCelebration('personal', moduleNumber,
+            `Great job! You completed Module ${moduleNumber}.\n\nWaiting for other members to finish...`);
           await loadRoomProgress();
         }
       } else {
-        alert(`✅ Module ${moduleNumber} completed!`);
+        showCelebration('personal', moduleNumber,
+          `Module ${moduleNumber} completed!`);
         await loadRoomProgress();
       }
     } catch (error) {
-      alert(`Failed to complete module: ${error.message}`);
+      showToast(`❌ Failed to complete module: ${error.message}`);
     }
   }
 
@@ -837,6 +1443,14 @@ breadcrumbs: true
     if (!currentRoomId) return;
 
     console.log('🔍 Loading room progress...');
+    
+    // Show loading indicator - use ID for more reliable selection
+    const refreshBtn = document.getElementById('refreshProgressBtn');
+    const originalText = refreshBtn ? refreshBtn.innerHTML : '';
+    if (refreshBtn) {
+      refreshBtn.innerHTML = '⏳ Refreshing...';
+      refreshBtn.disabled = true;
+    }
 
     try {
       // Add timestamp to prevent caching
@@ -851,21 +1465,38 @@ breadcrumbs: true
       // Update member count in room info
       document.getElementById('displayMemberCount').textContent = data.total_members;
 
-      // Update CPU nodes - RESET FIRST
-      console.log('💡 Resetting all CPU nodes...');
-      for (let i = 1; i <= 6; i++) {
-        const node = document.getElementById(`node${i}`);
-        node.classList.remove('active');  // Remove all first
-      }
-      
-      // Then add active ones
-      console.log('⚡ Lighting up nodes:', data.completed_modules);
-      data.completed_modules.forEach(moduleNum => {
-        const node = document.getElementById(`node${moduleNum}`);
-        node.classList.add('active');
-        console.log(`  ✅ Node ${moduleNum} lit`);
-      });
+      // Only update CPU if not fully lit or if explicitly resetting
+      if (!cpuFullyLit) {
+        // Update CPU nodes - RESET FIRST
+        console.log('💡 Resetting all CPU cores...');
+        for (let i = 1; i <= 6; i++) {
+          const node = document.getElementById(`node${i}`);
+          node.classList.remove('active');
+        }
+        
+        // Then add active ones
+        console.log('⚡ Lighting up cores:', data.completed_modules);
+        data.completed_modules.forEach(moduleNum => {
+          const node = document.getElementById(`node${moduleNum}`);
+          node.classList.add('active');
+          console.log(`  ✅ Core ${moduleNum} lit`);
+        });
 
+        // Check if all 6 modules are complete
+        if (data.completed_modules.length === 6) {
+          cpuFullyLit = true;
+          const cpuContainer = document.getElementById('cpuContainer');
+          cpuContainer.classList.add('all-active');
+          document.getElementById('resetSection').classList.remove('hidden');
+          console.log('🎉 CPU FULLY LIT!');
+        }
+      } else {
+        console.log('🔒 CPU is fully lit - maintaining state until reset');
+      }
+
+      // ALWAYS update members list and buttons (even when CPU is lit)
+      // This allows refresh button to show new members joining
+      
       // Update members list
       const membersList = document.getElementById('membersList');
       membersList.innerHTML = '';
@@ -922,16 +1553,34 @@ breadcrumbs: true
       }
       console.log(`✅ Refresh complete at ${now}`);
       console.log('='.repeat(60));
+      
+      // Show success toast
+      showToast('✅ Progress refreshed!');
 
     } catch (error) {
       console.error('Failed to load room progress:', error);
+      showToast(`❌ Failed to refresh: ${error.message}`);
+    } finally {
+      // ALWAYS restore button, even if there was an error
+      console.log('🔄 Restoring refresh button...');
+      if (refreshBtn) {
+        refreshBtn.innerHTML = originalText;
+        refreshBtn.disabled = false;
+        console.log('✅ Button restored');
+      } else {
+        console.error('❌ Could not find refresh button to restore!');
+      }
     }
   }
 
-  // Auto-refresh progress every 5 seconds if in a room
+  // Auto-refresh progress every 5 seconds if in a room (DISABLED - use manual refresh button)
+  // Uncomment the lines below if you want automatic updates:
+  /*
   setInterval(() => {
     if (currentRoomId && authToken) {
       loadRoomProgress();
     }
   }, 5000);
+  */
+
 </script>
