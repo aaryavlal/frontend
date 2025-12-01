@@ -57,9 +57,7 @@ While often used interchangeably, concurrency and parallelism have a key distinc
 </style>
 </head>
 <body>
-
 <div class="container">
-    <h2>Concurrency vs Parallelism Demonstration</h2>
     <p>Click a scenario to see how Task A (Green) and Task B (Blue) are executed.</p>
     <div class="scenario" onclick="runSequential()">
         <h3>1. Sequential (No Concurrency/Parallelism) - 1 Core</h3>
