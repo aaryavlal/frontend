@@ -752,18 +752,130 @@ breadcrumbs: true
   }
 
   @keyframes nodeActivate {
-    0% { 
+    0% {
       transform: scale(1);
       box-shadow: 0 0 0 rgba(56, 189, 248, 0);
     }
-    50% { 
+    50% {
       transform: scale(1.15);
       box-shadow: 0 0 50px rgba(56, 189, 248, 0.8);
     }
-    100% { 
+    100% {
       transform: scale(1);
       box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
     }
+  }
+
+  /* Glossary Styles */
+  .glossary-entry {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #38bdf8;
+    transition: all 0.3s;
+  }
+
+  .glossary-entry:hover {
+    background: #1e293b;
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+  }
+
+  .glossary-term {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #38bdf8;
+    margin-bottom: 10px;
+  }
+
+  .glossary-definition {
+    color: #e2e8f0;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+
+  .glossary-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.85em;
+    padding-top: 10px;
+    border-top: 1px solid #334155;
+  }
+
+  .glossary-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .glossary-action-btn {
+    padding: 5px 12px;
+    font-size: 0.85em;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .glossary-action-btn:hover {
+    background: #475569;
+    border-color: #38bdf8;
+  }
+
+  .glossary-action-btn.delete {
+    border-color: #ef4444;
+  }
+
+  .glossary-action-btn.delete:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+  }
+
+  .glossary-empty {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+  }
+
+  .glossary-empty-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 12px;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #38bdf8;
+  }
+
+  /* Edit Form Styles */
+  .edit-form {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+  }
+
+  .edit-form .form-group {
+    margin-bottom: 15px;
+  }
+
+  .edit-form-actions {
+    display: flex;
+    gap: 10px;
   }
 </style>
 
@@ -996,6 +1108,53 @@ breadcrumbs: true
       </div>
     </div>
     <ul class="members-list" id="membersList"></ul>
+  </div>
+
+  <!-- Glossary Section -->
+  <div class="section" id="glossarySection" style="display: none;">
+    <h2>📖 Step 5: Room Glossary</h2>
+    <p style="color: #94a3b8; margin-bottom: 20px;">
+      Build a shared knowledge base with your team! Add terms and definitions as you learn.
+    </p>
+
+    <!-- Glossary Stats -->
+    <div class="glossary-stats" style="background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around;">
+      <div style="text-align: center;">
+        <div style="font-size: 2em; color: #38bdf8; font-weight: bold;" id="glossaryTotalEntries">0</div>
+        <div style="color: #94a3b8; font-size: 0.9em;">Total Entries</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 2em; color: #22c55e; font-weight: bold;" id="glossaryContributors">0</div>
+        <div style="color: #94a3b8; font-size: 0.9em;">Contributors</div>
+      </div>
+    </div>
+
+    <!-- Add Entry Form -->
+    <div class="glossary-form" style="background: #0f172a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+      <h3 style="color: #38bdf8; margin-bottom: 15px;">Add New Entry</h3>
+      <form id="addGlossaryForm" onsubmit="addGlossaryEntry(event)">
+        <div class="form-group">
+          <label for="glossaryTerm">Term:</label>
+          <input type="text" id="glossaryTerm" placeholder="e.g., Race Condition" required>
+        </div>
+        <div class="form-group">
+          <label for="glossaryDefinition">Definition:</label>
+          <textarea id="glossaryDefinition" placeholder="Enter a clear definition..." required style="min-height: 100px; resize: vertical; font-family: inherit;"></textarea>
+        </div>
+        <button type="submit" class="btn">Add to Glossary</button>
+      </form>
+    </div>
+
+    <!-- Search Box -->
+    <div class="form-group">
+      <label for="glossarySearch">Search Glossary:</label>
+      <input type="text" id="glossarySearch" placeholder="Search terms and definitions..." oninput="searchGlossary()">
+    </div>
+
+    <!-- Glossary Entries List -->
+    <div id="glossaryList" style="margin-top: 20px;">
+      <!-- Entries will be dynamically inserted here -->
+    </div>
   </div>
 </div>
 
@@ -1282,6 +1441,7 @@ breadcrumbs: true
     document.getElementById('cpuSection').style.display = 'none';
     document.getElementById('moduleSection').style.display = 'none';
     document.getElementById('membersSection').style.display = 'none';
+    document.getElementById('glossarySection').style.display = 'none';
 
     showStatus('authStatus', 'Logged out', 'info');
   }
@@ -1299,22 +1459,44 @@ breadcrumbs: true
   }
 
   // Auto-leave room when closing tab/window
-  window.addEventListener('beforeunload', (event) => {
+  function cleanupOnExit() {
     if (currentRoomId && authToken) {
-      // Use navigator.sendBeacon for reliable async request on page unload
       const url = `${getApiUrl()}/api/rooms/${currentRoomId}/leave`;
-      const data = new Blob([JSON.stringify({})], { type: 'application/json' });
-      
-      // sendBeacon doesn't support custom headers easily, so we use fetch with keepalive
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({}),
-        keepalive: true  // Ensures request completes even if page closes
-      }).catch(err => console.log('Cleanup request sent'));
+
+      // Try fetch with keepalive first (most reliable with auth headers)
+      try {
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({}),
+          keepalive: true  // Ensures request completes even if page closes
+        }).catch(err => console.log('Cleanup request sent via fetch'));
+      } catch (e) {
+        console.log('Fetch failed, user will be removed on next cleanup cycle');
+      }
+    }
+  }
+
+  // Multiple event listeners for better cross-browser support
+  window.addEventListener('beforeunload', cleanupOnExit);
+  window.addEventListener('pagehide', cleanupOnExit);
+
+  // Detect when user closes tab (becomes hidden and stays hidden)
+  let isPageHidden = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isPageHidden = true;
+      // Wait a bit to see if they're switching tabs or actually leaving
+      setTimeout(() => {
+        if (isPageHidden && currentRoomId && authToken) {
+          cleanupOnExit();
+        }
+      }, 2000);
+    } else {
+      isPageHidden = false;
     }
   });
 
@@ -1411,8 +1593,10 @@ breadcrumbs: true
       document.getElementById('cpuSection').style.display = 'block';
       document.getElementById('moduleSection').style.display = 'block';
       document.getElementById('membersSection').style.display = 'block';
+      document.getElementById('glossarySection').style.display = 'block';
 
       await loadRoomProgress();
+      await loadGlossary();
     } catch (error) {
       showToast(`❌ Failed to load room: ${error.message}`);
     }
@@ -1437,6 +1621,7 @@ breadcrumbs: true
           document.getElementById('cpuSection').style.display = 'none';
           document.getElementById('moduleSection').style.display = 'none';
           document.getElementById('membersSection').style.display = 'none';
+          document.getElementById('glossarySection').style.display = 'none';
           document.getElementById('resetSection').classList.add('hidden');
 
           // Reset CPU visualization
@@ -1746,14 +1931,196 @@ breadcrumbs: true
     }
   }
 
-  // Auto-refresh progress every 5 seconds if in a room (DISABLED - use manual refresh button)
-  // Uncomment the lines below if you want automatic updates:
-  /*
+  // Auto-refresh progress and glossary every 5 seconds if in a room
   setInterval(() => {
     if (currentRoomId && authToken) {
       loadRoomProgress();
+      loadGlossary();
     }
   }, 5000);
-  */
+
+  // ===== GLOSSARY FUNCTIONS =====
+
+  let currentEditingEntryId = null;
+
+  async function loadGlossary(searchTerm = '') {
+    if (!currentRoomId) return;
+
+    try {
+      const url = searchTerm
+        ? `/api/glossary/room/${currentRoomId}?search=${encodeURIComponent(searchTerm)}`
+        : `/api/glossary/room/${currentRoomId}`;
+
+      const data = await apiCall(url);
+
+      // Update stats
+      document.getElementById('glossaryTotalEntries').textContent = data.stats.total_entries;
+      document.getElementById('glossaryContributors').textContent = data.stats.contributors;
+
+      // Display entries
+      const glossaryList = document.getElementById('glossaryList');
+
+      if (data.entries.length === 0) {
+        glossaryList.innerHTML = `
+          <div class="glossary-empty">
+            <div class="glossary-empty-icon">📚</div>
+            <p>${searchTerm ? 'No entries found matching your search.' : 'No glossary entries yet. Be the first to add one!'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      glossaryList.innerHTML = data.entries.map(entry => createGlossaryEntryHTML(entry)).join('');
+    } catch (error) {
+      showToast(`❌ Failed to load glossary: ${error.message}`);
+    }
+  }
+
+  function createGlossaryEntryHTML(entry) {
+    const isAuthor = currentUser && entry.author_id === currentUser.id;
+    const isAdmin = currentUser && currentUser.role === 'admin';
+    const canEdit = isAuthor || isAdmin;
+
+    return `
+      <div class="glossary-entry" id="entry-${entry.id}">
+        <div class="glossary-term">${escapeHtml(entry.term)}</div>
+        <div class="glossary-definition">${escapeHtml(entry.definition)}</div>
+        <div class="glossary-meta">
+          <span>Added by ${escapeHtml(entry.author_name)} on ${formatDate(entry.created_at)}</span>
+          ${canEdit ? `
+            <div class="glossary-actions">
+              <button class="glossary-action-btn" onclick="startEditEntry(${entry.id})">✏️ Edit</button>
+              <button class="glossary-action-btn delete" onclick="deleteGlossaryEntry(${entry.id})">🗑️ Delete</button>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  }
+
+  async function addGlossaryEntry(event) {
+    event.preventDefault();
+
+    const term = document.getElementById('glossaryTerm').value.trim();
+    const definition = document.getElementById('glossaryDefinition').value.trim();
+
+    if (!term || !definition) {
+      showToast('⚠️ Please fill in both term and definition');
+      return;
+    }
+
+    try {
+      await apiCall(`/api/glossary/room/${currentRoomId}`, 'POST', { term, definition });
+
+      showToast('✅ Entry added to glossary!');
+
+      // Clear form
+      document.getElementById('glossaryTerm').value = '';
+      document.getElementById('glossaryDefinition').value = '';
+
+      // Reload glossary
+      await loadGlossary();
+    } catch (error) {
+      showToast(`❌ Failed to add entry: ${error.message}`);
+    }
+  }
+
+  async function startEditEntry(entryId) {
+    if (currentEditingEntryId) {
+      cancelEdit();
+    }
+
+    currentEditingEntryId = entryId;
+
+    try {
+      const data = await apiCall(`/api/glossary/${entryId}`);
+      const entry = data.entry;
+
+      const entryElement = document.getElementById(`entry-${entryId}`);
+      const term = entryElement.querySelector('.glossary-term').textContent;
+      const definition = entryElement.querySelector('.glossary-definition').textContent;
+
+      entryElement.innerHTML = `
+        <div class="edit-form">
+          <div class="form-group">
+            <label>Term:</label>
+            <input type="text" id="editTerm-${entryId}" value="${escapeHtml(term)}" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Definition:</label>
+            <textarea id="editDefinition-${entryId}" rows="4">${escapeHtml(definition)}</textarea>
+          </div>
+          <div class="edit-form-actions">
+            <button class="btn" onclick="saveEdit(${entryId})">💾 Save</button>
+            <button class="btn btn-secondary" onclick="cancelEdit()">❌ Cancel</button>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      showToast(`❌ Failed to load entry: ${error.message}`);
+    }
+  }
+
+  async function saveEdit(entryId) {
+    const term = document.getElementById(`editTerm-${entryId}`).value.trim();
+    const definition = document.getElementById(`editDefinition-${entryId}`).value.trim();
+
+    if (!term || !definition) {
+      showToast('⚠️ Term and definition cannot be empty');
+      return;
+    }
+
+    try {
+      await apiCall(`/api/glossary/${entryId}`, 'PUT', { term, definition });
+
+      showToast('✅ Entry updated successfully!');
+      currentEditingEntryId = null;
+
+      // Reload glossary
+      await loadGlossary();
+    } catch (error) {
+      showToast(`❌ Failed to update entry: ${error.message}`);
+    }
+  }
+
+  function cancelEdit() {
+    currentEditingEntryId = null;
+    loadGlossary();
+  }
+
+  async function deleteGlossaryEntry(entryId) {
+    showConfirm(
+      'Delete Entry?',
+      'Are you sure you want to delete this glossary entry? This cannot be undone.',
+      async () => {
+        try {
+          await apiCall(`/api/glossary/${entryId}`, 'DELETE');
+
+          showToast('✅ Entry deleted successfully!');
+
+          // Reload glossary
+          await loadGlossary();
+        } catch (error) {
+          showToast(`❌ Failed to delete entry: ${error.message}`);
+        }
+      }
+    );
+  }
+
+  function searchGlossary() {
+    const searchTerm = document.getElementById('glossarySearch').value.trim();
+    loadGlossary(searchTerm);
+  }
 
 </script>
