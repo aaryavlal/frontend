@@ -1071,30 +1071,47 @@ breadcrumbs: true
       Complete modules to see nodes light up when ALL room members finish!
     </p>
     <div class="module-controls">
-      <button class="module-btn" onclick="completeModule(1)">
+      <button class="module-btn" data-permalink="/cores/core-1" data-module="1" onclick="openModule(this)">
         <div style="font-size: 1.5em;">📖</div>
         Module 1
       </button>
-      <button class="module-btn" onclick="completeModule(2)">
+      <button class="module-btn" data-permalink="/cores/core-2" data-module="2" onclick="openModule(this)">
         <div style="font-size: 1.5em;">💻</div>
         Module 2
       </button>
-      <button class="module-btn" onclick="completeModule(3)">
+      <button class="module-btn" data-permalink="/cores/core-3" data-module="3" onclick="openModule(this)">
         <div style="font-size: 1.5em;">⚙️</div>
         Module 3
       </button>
-      <button class="module-btn" onclick="completeModule(4)">
+      <button class="module-btn" data-permalink="/cores/core-4" data-module="4" onclick="openModule(this)">
         <div style="font-size: 1.5em;">📊</div>
         Module 4
       </button>
-      <button class="module-btn" onclick="completeModule(5)">
+      <button class="module-btn" data-permalink="/cores/core-5" data-module="5" onclick="openModule(this)">
         <div style="font-size: 1.5em;">🚀</div>
         Module 5
       </button>
-      <button class="module-btn" onclick="completeModule(6)">
+      <button class="module-btn" data-permalink="/cores/core-6" data-module="6" onclick="openModule(this)">
         <div style="font-size: 1.5em;">🎯</div>
         Module 6
       </button>
+    </div>
+
+    <!-- Full-page Module Overlay -->
+    <div id="modulePanel" style="position:fixed; inset:0; background:rgba(6,10,14,0.92); color:#e2e8f0; z-index:20000; display:none; overflow:auto;">
+      <div style="max-width:1100px; margin:36px auto; background:#0b1220; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+        <div style="padding:18px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; background:linear-gradient(90deg,#071226,#0b1220);">
+          <div style="font-weight:700; color:#38bdf8;">Module</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button class="btn btn-secondary" id="moduleMarkBtn">Mark Complete</button>
+            <button class="btn" id="moduleCloseBtn">Close</button>
+          </div>
+        </div>
+        <div id="modulePanelContent" style="padding:22px; min-height:320px;">
+          <!-- content loaded via AJAX -->
+          <p style="color:#94a3b8">Loading...</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1938,6 +1955,65 @@ breadcrumbs: true
       loadGlossary();
     }
   }, 5000);
+
+  // --- Full-page Module Overlay functions (AJAX load, stays on same permalink) ---
+  function openModule(btn) {
+    try {
+      const permalink = btn.getAttribute('data-permalink') || '/cores/core-1';
+      const moduleNumber = parseInt(btn.getAttribute('data-module')) || 0;
+
+      // compute base prefix: if site served under /frontend, include it
+      const firstSeg = window.location.pathname.split('/')[1];
+      const base = firstSeg === 'frontend' ? '/frontend' : '';
+      const url = base + permalink;
+
+      const panel = document.getElementById('modulePanel');
+      const content = document.getElementById('modulePanelContent');
+      const markBtn = document.getElementById('moduleMarkBtn');
+      const closeBtn = document.getElementById('moduleCloseBtn');
+
+      // show loading and display overlay
+      content.innerHTML = '<p style="color:#94a3b8">Loading...</p>';
+      panel.style.display = 'block';
+
+      // wire mark complete
+      markBtn.onclick = async () => {
+        try {
+          await completeModule(moduleNumber);
+          showToast('Marked complete');
+        } catch (e) {
+          console.error('Mark complete failed', e);
+          showToast('Login required to mark complete');
+        }
+      };
+
+      // wire close
+      if (closeBtn) closeBtn.onclick = closeModule;
+
+      fetch(url, { credentials: 'same-origin' })
+        .then(r => r.text())
+        .then(html => {
+          try {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            // try common content containers
+            const article = doc.querySelector('article') || doc.querySelector('.container') || doc.querySelector('#content') || doc.body;
+            content.innerHTML = article ? article.innerHTML : html;
+          } catch (e) {
+            content.innerHTML = html;
+          }
+        }).catch(err => {
+          content.innerHTML = `<p style="color:#ef4444">Failed to load module: ${err.message}</p>`;
+        });
+    } catch (err) {
+      console.error('openModule error', err);
+    }
+  }
+
+  function closeModule() {
+    const panel = document.getElementById('modulePanel');
+    panel.style.display = 'none';
+  }
 
   // ===== GLOSSARY FUNCTIONS =====
 
