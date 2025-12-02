@@ -1501,22 +1501,6 @@ breadcrumbs: true
   window.addEventListener('beforeunload', cleanupOnExit);
   window.addEventListener('pagehide', cleanupOnExit);
 
-  // Detect when user closes tab (becomes hidden and stays hidden)
-  let isPageHidden = false;
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      isPageHidden = true;
-      // Wait a bit to see if they're switching tabs or actually leaving
-      setTimeout(() => {
-        if (isPageHidden && currentRoomId && authToken) {
-          cleanupOnExit();
-        }
-      }, 2000);
-    } else {
-      isPageHidden = false;
-    }
-  });
-
   async function testToken() {
     console.log('Testing token...');
     console.log('Current authToken:', authToken);
