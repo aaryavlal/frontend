@@ -616,6 +616,35 @@ breadcrumbs: true
     box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
   }
 
+  /* Full-page Module Panel (centered, sits above cores) */
+  .module-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start; /* allow dialog to be placed above CPU */
+    justify-content: center;
+    padding: 0; /* we'll set spacing via computed top */
+    background: rgba(6, 10, 14, 0.92);
+    color: #e2e8f0;
+    z-index: 45000; /* above cores and other overlays */
+    overflow: auto;
+  }
+
+  .module-dialog {
+    max-width: 1100px;
+    width: 100%;
+    max-height: calc(100vh - 72px);
+    margin: 36px auto;
+    background: #0b1220;
+    border-radius: 10px;
+    overflow: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    position: absolute; /* positioned by script */
+  }
+
   @keyframes slideInRight {
     from {
       transform: translateX(400px);
@@ -1245,8 +1274,8 @@ breadcrumbs: true
     </div>
 
     <!-- Full-page Module Overlay -->
-    <div id="modulePanel" style="position:fixed; inset:0; background:rgba(6,10,14,0.92); color:#e2e8f0; z-index:20000; display:none; overflow:auto;">
-      <div style="max-width:1100px; margin:36px auto; background:#0b1220; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.6);">
+    <div id="modulePanel" class="module-panel" style="display:none;">
+      <div class="module-dialog">
         <div style="padding:18px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; background:linear-gradient(90deg,#071226,#0b1220);">
           <div style="font-weight:700; color:#38bdf8;">Module</div>
           <div style="display:flex; gap:8px; align-items:center;">
@@ -2193,10 +2222,49 @@ breadcrumbs: true
       const content = document.getElementById('modulePanelContent');
       const markBtn = document.getElementById('moduleMarkBtn');
       const closeBtn = document.getElementById('moduleCloseBtn');
+      const dialog = panel.querySelector('.module-dialog');
 
       // show loading and display overlay
       content.innerHTML = '<p style="color:#94a3b8">Loading...</p>';
       panel.style.display = 'block';
+
+      // prepare dialog positioning
+      dialog.style.left = '50%';
+      dialog.style.transform = 'translateX(-50%)';
+
+      // function to place dialog just above the CPU visualization
+      function positionDialog() {
+        try {
+          const cpu = document.getElementById('cpuContainer');
+          const dialogHeight = dialog.offsetHeight || 400;
+          let top = 36; // default top padding
+
+          if (cpu) {
+            const cpuRect = cpu.getBoundingClientRect();
+            // target: place dialog above CPU art
+            top = Math.round(cpuRect.top + window.scrollY - dialogHeight - 12);
+            // if not enough space above CPU, fallback to placing it above viewport padding
+            if (top < 36) top = 36;
+            // if dialog would overflow bottom of viewport, center it vertically instead
+            const viewportBottom = window.scrollY + window.innerHeight;
+            if (top + dialogHeight > viewportBottom - 24) {
+              top = Math.max(36, Math.round(window.scrollY + (window.innerHeight - dialogHeight) / 2));
+            }
+          }
+
+          dialog.style.top = `${top}px`;
+        } catch (e) {
+          console.error('positionDialog error', e);
+        }
+      }
+
+      // create/attach a single handler to update position on scroll/resize while panel is open
+      panel._posHandler = () => requestAnimationFrame(positionDialog);
+      window.addEventListener('resize', panel._posHandler);
+      window.addEventListener('scroll', panel._posHandler, { passive: true });
+
+      // initial placement
+      positionDialog();
 
       // wire mark complete
       markBtn.onclick = async () => {
@@ -2224,6 +2292,9 @@ breadcrumbs: true
           } catch (e) {
             content.innerHTML = html;
           }
+
+          // reposition after content loads (height may have changed)
+          requestAnimationFrame(positionDialog);
         }).catch(err => {
           content.innerHTML = `<p style="color:#ef4444">Failed to load module: ${err.message}</p>`;
         });
@@ -2234,7 +2305,21 @@ breadcrumbs: true
 
   function closeModule() {
     const panel = document.getElementById('modulePanel');
+    if (!panel) return;
+
+    // remove position handlers
+    if (panel._posHandler) {
+      window.removeEventListener('resize', panel._posHandler);
+      window.removeEventListener('scroll', panel._posHandler);
+      panel._posHandler = null;
+    }
+
+    // hide panel
     panel.style.display = 'none';
+
+    // reset dialog top so next open starts fresh
+    const dialog = panel.querySelector('.module-dialog');
+    if (dialog) dialog.style.top = '';
   }
 
   // ===== GLOSSARY FUNCTIONS =====
