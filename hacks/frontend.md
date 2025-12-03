@@ -110,6 +110,11 @@ breadcrumbs: true
     color: #e2e8f0;
   }
 
+  .btn-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+  }
+
   .btn-danger {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
@@ -642,7 +647,7 @@ breadcrumbs: true
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
-    z-index: 20000;
+    z-index: 40000;
     animation: fadeIn 0.2s ease-out;
   }
 
@@ -877,6 +882,142 @@ breadcrumbs: true
     display: flex;
     gap: 10px;
   }
+
+  /* Admin Rooms Modal */
+  .admin-rooms-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 30000;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .admin-rooms-modal.show {
+    display: block;
+  }
+
+  .admin-rooms-dialog {
+    max-width: 1200px;
+    margin: 40px auto;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 15px;
+    border: 3px solid #38bdf8;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .admin-rooms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #334155;
+  }
+
+  .admin-rooms-header h2 {
+    color: #38bdf8;
+    margin: 0;
+  }
+
+  .admin-rooms-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .room-card {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+  }
+
+  .room-card:hover {
+    background: #1e293b;
+    border-left-color: #38bdf8;
+  }
+
+  .room-card.demo {
+    border-left-color: #22c55e;
+  }
+
+  .room-card-info {
+    flex: 1;
+  }
+
+  .room-card-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #e2e8f0;
+    margin-bottom: 10px;
+  }
+
+  .room-card-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    color: #94a3b8;
+    font-size: 0.95em;
+  }
+
+  .room-card-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .room-card-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-small {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
+
+  .room-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .room-stats-summary {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #38bdf8;
+  }
+
+  .stat-label {
+    color: #94a3b8;
+    margin-top: 5px;
+  }
 </style>
 
 <div class="container">
@@ -939,6 +1080,12 @@ breadcrumbs: true
           <input type="text" id="roomName" placeholder="e.g., Computer Science 101">
         </div>
         <button class="btn" onclick="createRoom()">Create Room</button>
+      </div>
+
+      <!-- Admin: Manage Active Rooms -->
+      <div style="margin-top: 30px;">
+        <h3>Manage Active Rooms</h3>
+        <button class="btn" onclick="showActiveRoomsModal()">📊 View & Delete Rooms</button>
       </div>
     </div>
 
@@ -1188,6 +1335,44 @@ breadcrumbs: true
   </div>
 </div>
 
+<!-- Admin Rooms Management Modal -->
+<div id="adminRoomsModal" class="admin-rooms-modal">
+  <div class="admin-rooms-dialog">
+    <div class="admin-rooms-header">
+      <h2>🔧 Manage Active Rooms</h2>
+      <button class="btn btn-secondary" onclick="closeAdminRoomsModal()">✖ Close</button>
+    </div>
+
+    <!-- Stats Summary -->
+    <div class="room-stats-summary" id="roomStatsSummary">
+      <div class="stat-item">
+        <div class="stat-value" id="totalRooms">0</div>
+        <div class="stat-label">Total Rooms</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="deletableRooms">0</div>
+        <div class="stat-label">Deletable Rooms</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="totalMembers">0</div>
+        <div class="stat-label">Total Members</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="admin-rooms-actions">
+      <button class="btn" onclick="refreshActiveRooms()">🔄 Refresh</button>
+      <button class="btn btn-danger" onclick="deleteSelectedRooms()">🗑️ Delete Selected</button>
+      <button class="btn btn-danger" onclick="deleteAllNonDemoRooms()">🗑️ Delete All Non-Demo</button>
+    </div>
+
+    <!-- Rooms List -->
+    <div id="adminRoomsList">
+      <p style="color: #94a3b8; text-align: center;">Loading rooms...</p>
+    </div>
+  </div>
+</div>
+
 <script>
   let authToken = null;
   let currentUser = null;
@@ -1224,7 +1409,7 @@ breadcrumbs: true
     const titleEl = document.getElementById('confirmTitle');
     const messageEl = document.getElementById('confirmMessage');
     const confirmBtn = document.getElementById('confirmButton');
-    
+
     if (!modal) {
       console.error('❌ Modal element not found!');
       // Fallback to confirm() if modal doesn't exist
@@ -1233,24 +1418,22 @@ breadcrumbs: true
       }
       return;
     }
-    
+
     console.log('✅ Modal found, showing...');
     titleEl.textContent = title;
     messageEl.textContent = message;
     modal.classList.add('show');
-    
+
     // Remove old listeners and add new one
     const newConfirmBtn = confirmBtn.cloneNode(true);
+    newConfirmBtn.id = 'confirmButton';  // Set ID BEFORE replacing
     confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-    
+
     newConfirmBtn.addEventListener('click', () => {
-      console.log('✅ Confirm clicked');
+      console.log('✅ Confirm clicked, executing callback');
       closeConfirm();
       onConfirm();
     });
-    
-    // Update the ID for future use
-    newConfirmBtn.id = 'confirmButton';
   }
 
   function closeConfirm() {
@@ -1599,7 +1782,11 @@ breadcrumbs: true
       await loadRoomProgress();
       await loadGlossary();
     } catch (error) {
-      showToast(`❌ Failed to load room: ${error.message}`);
+      // Room doesn't exist or user is not a member - clear room state
+      console.log('⚠️ Failed to load room, clearing state:', error.message);
+      currentRoomId = null;
+      currentRoomData = null;
+      showToast(`⚠️ Room no longer available`);
     }
   }
 
@@ -1612,30 +1799,32 @@ breadcrumbs: true
       async () => {
         try {
           await apiCall(`/api/rooms/${currentRoomId}/leave`, 'POST');
-          
-          currentRoomId = null;
-          currentRoomData = null;
-          cpuFullyLit = false;
-
-          document.getElementById('joinRoomSection').classList.remove('hidden');
-          document.getElementById('currentRoomInfo').classList.add('hidden');
-          document.getElementById('cpuSection').style.display = 'none';
-          document.getElementById('moduleSection').style.display = 'none';
-          document.getElementById('membersSection').style.display = 'none';
-          document.getElementById('glossarySection').style.display = 'none';
-          document.getElementById('resetSection').classList.add('hidden');
-
-          // Reset CPU visualization
-          const cpuContainer = document.getElementById('cpuContainer');
-          cpuContainer.classList.remove('all-active');
-          for (let i = 1; i <= 6; i++) {
-            document.getElementById(`node${i}`).classList.remove('active');
-          }
-
-          showToast('✅ Left room successfully');
         } catch (error) {
-          showToast(`❌ Failed to leave room: ${error.message}`);
+          console.log('Leave room API call failed (might already be removed):', error.message);
+          // Continue anyway - user might have been kicked out already
         }
+
+        // Always clear the UI regardless of API success/failure
+        currentRoomId = null;
+        currentRoomData = null;
+        cpuFullyLit = false;
+
+        document.getElementById('joinRoomSection').classList.remove('hidden');
+        document.getElementById('currentRoomInfo').classList.add('hidden');
+        document.getElementById('cpuSection').style.display = 'none';
+        document.getElementById('moduleSection').style.display = 'none';
+        document.getElementById('membersSection').style.display = 'none';
+        document.getElementById('glossarySection').style.display = 'none';
+        document.getElementById('resetSection').classList.add('hidden');
+
+        // Reset CPU visualization
+        const cpuContainer = document.getElementById('cpuContainer');
+        cpuContainer.classList.remove('all-active');
+        for (let i = 1; i <= 6; i++) {
+          document.getElementById(`node${i}`).classList.remove('active');
+        }
+
+        showToast('✅ Left room successfully');
       }
     );
   }
@@ -1817,12 +2006,36 @@ breadcrumbs: true
     try {
       // Add timestamp to prevent caching
       const data = await apiCall(`/api/rooms/${currentRoomId}/progress?t=${Date.now()}`);
-      
+
       console.log('📊 Room Progress Data:', {
         total_members: data.total_members,
         completed_modules: data.completed_modules,
         member_progress: data.member_progress
       });
+
+      // Check if current user is still a member of this room
+      const currentUserId = currentUser.id;
+      const isStillMember = data.member_progress.some(m => m.id === currentUserId);
+
+      if (!isStillMember) {
+        console.log('⚠️ User is no longer a member of this room - forcing leave');
+        showToast('🚪 You have been removed from this room');
+
+        // Force leave without API call (already removed server-side)
+        currentRoomId = null;
+        currentRoomData = null;
+        cpuFullyLit = false;
+
+        document.getElementById('joinRoomSection').classList.remove('hidden');
+        document.getElementById('currentRoomInfo').classList.add('hidden');
+        document.getElementById('cpuSection').style.display = 'none';
+        document.getElementById('moduleSection').style.display = 'none';
+        document.getElementById('membersSection').style.display = 'none';
+        document.getElementById('glossarySection').style.display = 'none';
+        document.getElementById('resetSection').classList.add('hidden');
+
+        return; // Exit early
+      }
 
       // Update member count in room info
       document.getElementById('displayMemberCount').textContent = data.total_members;
@@ -2181,6 +2394,201 @@ breadcrumbs: true
   function searchGlossary() {
     const searchTerm = document.getElementById('glossarySearch').value.trim();
     loadGlossary(searchTerm);
+  }
+
+  // ===== ADMIN ROOMS MANAGEMENT =====
+
+  let adminRoomsData = [];
+
+  async function showActiveRoomsModal() {
+    const modal = document.getElementById('adminRoomsModal');
+    modal.classList.add('show');
+    await loadActiveRooms();
+  }
+
+  function closeAdminRoomsModal() {
+    const modal = document.getElementById('adminRoomsModal');
+    modal.classList.remove('show');
+  }
+
+  async function loadActiveRooms() {
+    try {
+      const data = await apiCall('/api/rooms/active');
+      adminRoomsData = data.rooms;
+      displayAdminRooms(adminRoomsData);
+    } catch (error) {
+      const roomsList = document.getElementById('adminRoomsList');
+      roomsList.innerHTML = `<p style="color: #ef4444; text-align: center;">❌ Failed to load rooms: ${error.message}</p>`;
+    }
+  }
+
+  function displayAdminRooms(rooms) {
+    // Update stats
+    const totalRooms = rooms.length;
+    const deletableRooms = rooms.filter(r => r.can_delete).length;
+    const totalMembers = rooms.reduce((sum, r) => sum + r.member_count, 0);
+
+    document.getElementById('totalRooms').textContent = totalRooms;
+    document.getElementById('deletableRooms').textContent = deletableRooms;
+    document.getElementById('totalMembers').textContent = totalMembers;
+
+    // Display rooms
+    const roomsList = document.getElementById('adminRoomsList');
+
+    if (rooms.length === 0) {
+      roomsList.innerHTML = '<p style="color: #94a3b8; text-align: center;">No rooms found.</p>';
+      return;
+    }
+
+    roomsList.innerHTML = rooms.map(room => {
+      const isDemo = room.is_demo;
+      const checkboxHtml = room.can_delete
+        ? `<input type="checkbox" class="room-checkbox" data-room-id="${room.id}">`
+        : '';
+
+      return `
+        <div class="room-card ${isDemo ? 'demo' : ''}">
+          <div class="room-card-info">
+            <div class="room-card-title">
+              ${escapeHtml(room.name)}
+              ${isDemo ? '<span style="color: #22c55e; margin-left: 10px;">🔒 DEMO</span>' : ''}
+            </div>
+            <div class="room-card-details">
+              <div class="room-card-detail">
+                <strong>Code:</strong> ${room.room_code}
+              </div>
+              <div class="room-card-detail">
+                <strong>Members:</strong> ${room.member_count}
+              </div>
+              <div class="room-card-detail">
+                <strong>Progress:</strong> ${room.progress_percentage.toFixed(0)}% (${room.completed_modules.length}/6)
+              </div>
+              <div class="room-card-detail">
+                <strong>Creator:</strong> ${escapeHtml(room.creator_name)}
+              </div>
+              <div class="room-card-detail">
+                <strong>Created:</strong> ${new Date(room.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+          <div class="room-card-actions">
+            ${checkboxHtml}
+            <button class="btn btn-warning btn-small" onclick="shutdownRoom(${room.id})">
+              🚪 Shutdown
+            </button>
+            ${room.can_delete ? `
+              <button class="btn btn-danger btn-small" onclick="deleteSingleRoom(${room.id})">
+                🗑️ Delete
+              </button>
+            ` : `
+              <span style="color: #22c55e; font-weight: bold;">Protected</span>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function refreshActiveRooms() {
+    showToast('🔄 Refreshing rooms...');
+    await loadActiveRooms();
+    showToast('✅ Rooms refreshed!');
+  }
+
+  async function deleteSingleRoom(roomId) {
+    const room = adminRoomsData.find(r => r.id === roomId);
+    if (!room) return;
+
+    showConfirm(
+      'Delete Room?',
+      `Are you sure you want to delete "${room.name}" (${room.room_code})? This will remove all members and progress.`,
+      async () => {
+        try {
+          await apiCall(`/api/rooms/${roomId}`, 'DELETE');
+          showToast(`✅ Room "${room.name}" deleted successfully!`);
+          await loadActiveRooms();
+        } catch (error) {
+          showToast(`❌ Failed to delete room: ${error.message}`);
+        }
+      }
+    );
+  }
+
+  async function shutdownRoom(roomId) {
+    const room = adminRoomsData.find(r => r.id === roomId);
+    if (!room) return;
+
+    showConfirm(
+      'Shutdown Room?',
+      `Are you sure you want to shutdown "${room.name}" (${room.room_code})? This will kick out all ${room.member_count} member(s) from the room.`,
+      async () => {
+        try {
+          const result = await apiCall(`/api/rooms/${roomId}/shutdown`, 'POST');
+          showToast(`✅ ${result.message}`);
+          await loadActiveRooms();
+        } catch (error) {
+          showToast(`❌ Failed to shutdown room: ${error.message}`);
+        }
+      }
+    );
+  }
+
+  async function deleteSelectedRooms() {
+    const checkboxes = document.querySelectorAll('.room-checkbox:checked');
+    const roomIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.roomId));
+
+    if (roomIds.length === 0) {
+      showToast('⚠️ No rooms selected');
+      return;
+    }
+
+    showConfirm(
+      'Delete Selected Rooms?',
+      `Are you sure you want to delete ${roomIds.length} selected room(s)? This cannot be undone.`,
+      async () => {
+        try {
+          const result = await apiCall('/api/rooms/bulk-delete', 'POST', { room_ids: roomIds });
+
+          let message = `✅ ${result.message}\n`;
+          message += `Deleted: ${result.summary.deleted_count}, `;
+          message += `Protected: ${result.summary.protected_count}, `;
+          message += `Failed: ${result.summary.failed_count}`;
+
+          showToast(message);
+          await loadActiveRooms();
+        } catch (error) {
+          showToast(`❌ Bulk delete failed: ${error.message}`);
+        }
+      }
+    );
+  }
+
+  async function deleteAllNonDemoRooms() {
+    const deletableRooms = adminRoomsData.filter(r => r.can_delete);
+
+    if (deletableRooms.length === 0) {
+      showToast('✅ No deletable rooms found');
+      return;
+    }
+
+    showConfirm(
+      'DELETE ALL NON-DEMO ROOMS?',
+      `⚠️ WARNING: This will DELETE ALL ${deletableRooms.length} non-demo room(s)! This action CANNOT be undone!`,
+      async () => {
+        try {
+          const roomIds = deletableRooms.map(r => r.id);
+          const result = await apiCall('/api/rooms/bulk-delete', 'POST', { room_ids: roomIds });
+
+          let message = `✅ ${result.message}\n`;
+          message += `Deleted: ${result.summary.deleted_count} room(s)`;
+
+          showToast(message);
+          await loadActiveRooms();
+        } catch (error) {
+          showToast(`❌ Failed to delete rooms: ${error.message}`);
+        }
+      }
+    );
   }
 
 </script>
