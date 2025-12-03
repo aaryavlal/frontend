@@ -3,163 +3,64 @@ layout: post
 title: "Dummy Quiz"
 permalink: /dummy-quiz
 ---
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Dummy Quiz Frontend</title>
-    <style>
-      body{font-family:Arial,Helvetica,sans-serif;padding:20px}
-      .container{display:flex;gap:24px}
-      .left{flex:2}
-      .right{flex:1;border-left:1px solid #ddd;padding-left:16px}
-      .question{margin-bottom:12px}
-      .choice{display:block}
-    </style>
-  </head>
-  <body>
-    <h1>Dummy Quiz Frontend</h1>
-    <p>This static page demonstrates fetching quizzes from the backend API and taking a quiz. It assumes the backend is at <code>http://localhost:8587</code>. If your backend runs on a different host/port, change <code>BACKEND_URL</code> below.</p>
 
-    <div>
-      <label for="backend">Backend URL: </label>
-      <input id="backend" type="text" value="http://localhost:8587" style="width:320px">
-      <button id="reload">Reload Quizzes</button>
-    </div>
+<h1>Dummy Quiz</h1>
 
-    <div class="container">
-      <div class="left">
-        <h2>Quizzes</h2>
-        <div id="quiz-list">Loading...</div>
+<p><strong>Question:</strong></p>
+<p>
+  In your own words, explain what parallel computing is and give one real-world
+  example where it would be beneficial. Answer in 3–5 sentences.
+</p>
 
-        <hr>
-        <div id="quiz-area"></div>
-      </div>
-      <div class="right">
-        <h2>Leaderboard</h2>
-        <div id="leaderboard-area">Select a quiz to view leaderboard</div>
-      </div>
-    </div>
-    <hr>
-    <div>
-      <label for="userIdField">Test User ID (optional): </label>
-      <input id="userIdField" type="number" placeholder="userId for local testing">
-      <small>Provide a numeric userId to submit attempts as that user when not authenticated.</small>
-    </div>
+<label for="answer"><strong>Your answer:</strong></label><br>
+<textarea id="answer" rows="8" style="width:100%; max-width:700px;"
+          placeholder="Type your answer here..."></textarea>
+<br><br>
+<button id="submit-btn">Submit Answer</button>
 
-    <script>
-    // Simple frontend; no frameworks. Adjust BACKEND_URL as needed.
-    async function fetchJson(url, opts){
-      const r = await fetch(url, opts);
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      return r.json();
+<pre id="result" style="margin-top:1rem; white-space:pre-wrap;"></pre>
+
+<script>
+  const API_URL = "http://localhost:5000/api/quiz/grade"; // change for production
+
+  document.getElementById("submit-btn").addEventListener("click", async () => {
+    const answerEl = document.getElementById("answer");
+    const resultEl = document.getElementById("result");
+    const answer = answerEl.value.trim();
+
+    if (!answer) {
+      resultEl.textContent = "Please enter an answer before submitting.";
+      return;
     }
 
-    function getBackend(){
-      return document.getElementById('backend').value.replace(/\/$/,'');
-    }
+    resultEl.textContent = "Grading your answer...";
 
-    async function loadQuizzes(){
-      const container = document.getElementById('quiz-list');
-      container.innerHTML = 'Loading...';
-      try{
-        const url = getBackend() + '/api/quiz/all';
-        const data = await fetchJson(url);
-        container.innerHTML = '';
-        data.forEach(q=>{
-          const el = document.createElement('div');
-          el.innerHTML = `<strong>${q.title}</strong> <small>${q.description||''}</small>`;
-          const btn = document.createElement('button');
-          btn.textContent = 'Take';
-          btn.addEventListener('click', ()=>loadQuiz(q.id));
-          el.appendChild(document.createTextNode(' '));
-          el.appendChild(btn);
-          container.appendChild(el);
-        });
-      }catch(e){
-        container.innerText = 'Failed to load quizzes: '+e.message;
+    try {
+      const resp = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer })
+      });
+
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        resultEl.textContent =
+          "Error: " + (data.error || resp.statusText);
+        if (data.details) {
+          resultEl.textContent += "\nDetails: " + data.details;
+        }
+        return;
       }
+
+      const score = data.score ?? "N/A";
+      const maxScore = data.max_score ?? "?";
+      const feedback = data.feedback ?? data.raw_response ?? "";
+
+      resultEl.textContent = `Score: ${score}/${maxScore}\n\nFeedback:\n${feedback}`;
+    } catch (err) {
+      console.error(err);
+      resultEl.textContent = "Network or server error.";
     }
-
-    async function loadQuiz(id){
-      const area = document.getElementById('quiz-area');
-      area.innerHTML = 'Loading quiz...';
-      try{
-        const url = getBackend() + '/api/quiz/' + id;
-        const q = await fetchJson(url);
-        area.innerHTML = `<h3>${q.title}</h3><p>${q.description||''}</p>`;
-
-        const form = document.createElement('form');
-        q.questions.forEach(question=>{
-          const qdiv = document.createElement('div');
-          qdiv.className = 'question';
-          qdiv.innerHTML = `<div><strong>${question.text}</strong></div>`;
-          question.choices.forEach(choice=>{
-            const label = document.createElement('label');
-            label.className = 'choice';
-            label.innerHTML = `<input type='radio' name='q_${question.id}' value='${choice.id}'> ${choice.text}`;
-            qdiv.appendChild(label);
-          });
-          form.appendChild(qdiv);
-        });
-
-        const submit = document.createElement('button');
-        submit.type = 'button';
-        submit.textContent = 'Submit Attempt';
-        submit.addEventListener('click', async ()=>{
-          const answers = [];
-          q.questions.forEach(question=>{
-            const sel = form.querySelector(`input[name='q_${question.id}']:checked`);
-            if(sel) answers.push({questionId: question.id, choiceId: parseInt(sel.value)});
-          });
-          try{
-            const payload = {quizId:id, answers:answers};
-            const maybeUser = document.getElementById('userIdField').value;
-            if (maybeUser) payload.userId = parseInt(maybeUser);
-            const res = await fetchJson(getBackend() + '/api/quiz/attempt', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
-            alert('Score: '+res.score + ' / ' + res.total);
-            loadLeaderboard(id);
-          }catch(err){
-            alert('Submit failed: '+err.message);
-          }
-        });
-
-        form.appendChild(submit);
-        area.appendChild(form);
-
-        // load leaderboard for this quiz
-        loadLeaderboard(id);
-      }catch(e){
-        area.innerText = 'Failed to load quiz: '+e.message;
-      }
-    }
-
-    async function loadLeaderboard(quizId){
-      const area = document.getElementById('leaderboard-area');
-      area.innerHTML = 'Loading...';
-      try{
-        const url = getBackend() + '/api/quiz/leaderboard/' + quizId;
-        const data = await fetchJson(url);
-        if(!data || data.length===0){ area.innerText = 'No attempts yet.'; return; }
-        const tbl = document.createElement('table');
-        tbl.border = 1;
-        const hdr = document.createElement('tr');
-        hdr.innerHTML = '<th>#</th><th>User</th><th>Score</th><th>Total</th><th>When</th>';
-        tbl.appendChild(hdr);
-        data.forEach((r,i)=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${i+1}</td><td>${r.userName||r.userId}</td><td>${r.score}</td><td>${r.total}</td><td>${new Date(r.timestamp).toLocaleString()}</td>`;
-          tbl.appendChild(tr);
-        });
-        area.innerHTML = '';
-        area.appendChild(tbl);
-      }catch(e){
-        area.innerText = 'Failed to load leaderboard: '+e.message;
-      }
-    }
-
-    document.getElementById('reload').addEventListener('click', ()=>loadQuizzes());
-    // initial load
-    loadQuizzes();
-    </script>
-  </body>
-</html>
+  });
+</script>
