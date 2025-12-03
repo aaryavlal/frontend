@@ -2015,7 +2015,10 @@ breadcrumbs: true
 
       // Check if current user is still a member of this room
       const currentUserId = currentUser.id;
+      console.log('🔍 Checking membership - Current User ID:', currentUserId);
+      console.log('🔍 Member Progress IDs:', data.member_progress.map(m => m.id));
       const isStillMember = data.member_progress.some(m => m.id === currentUserId);
+      console.log('✅ Is Still Member?', isStillMember);
 
       if (!isStillMember) {
         console.log('⚠️ User is no longer a member of this room - forcing leave');
@@ -2131,6 +2134,28 @@ breadcrumbs: true
 
     } catch (error) {
       console.error('Failed to load room progress:', error);
+
+      // If room was deleted or user was removed, clear the UI
+      if (error.message.includes('Room not found') || error.message.includes('not found')) {
+        console.log('⚠️ Room no longer exists - forcing leave');
+        showToast('🚪 This room has been deleted');
+
+        // Force leave without API call
+        currentRoomId = null;
+        currentRoomData = null;
+        cpuFullyLit = false;
+
+        document.getElementById('joinRoomSection').classList.remove('hidden');
+        document.getElementById('currentRoomInfo').classList.add('hidden');
+        document.getElementById('cpuSection').style.display = 'none';
+        document.getElementById('moduleSection').style.display = 'none';
+        document.getElementById('membersSection').style.display = 'none';
+        document.getElementById('glossarySection').style.display = 'none';
+        document.getElementById('resetSection').classList.add('hidden');
+
+        return; // Exit early, skip the finally block restoration
+      }
+
       showToast(`❌ Failed to refresh: ${error.message}`);
     } finally {
       // ALWAYS restore button, even if there was an error
