@@ -634,10 +634,10 @@ breadcrumbs: true
   }
 
   .module-dialog {
-    max-width: 1100px;
-    width: 100%;
-    max-height: calc(100vh - 72px);
-    margin: 36px auto;
+    max-width: 1400px;
+    width: 95%;
+    max-height: calc(100vh - 40px);
+    margin: 20px auto;
     background: #0b1220;
     border-radius: 10px;
     overflow: auto;

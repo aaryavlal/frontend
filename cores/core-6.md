@@ -9,11 +9,10 @@ breadcrumbs: true
 
 ## Module 6 — Case Studies & Projects
 
-This page is a placeholder for Core 6 / Module 6 content.
+### Computing Infrastructure Builder Game
 
-### Learning Objectives
+Build the right computing infrastructure for different scenarios!
 
-- Review real-world parallel systems
-- Plan a small project that uses parallelism
+<iframe src="{{site.baseurl}}/assets/computing-game.html" style="width: 100%; height: 850px; border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></iframe>
 
 [Back to Prototype Room](/prototyperoomcode)
