@@ -1,0 +1,81 @@
+<div class="embedded-editor-container">
+    <div class="editor-instance" style="height: 300px; width: 100%;"></div>
+    <button class="run-btn">Run Code</button>
+    <div class="output-panel"></div>
+</div>
+
+<script>
+    // IIFE to initialize the editor for the *last* .embedded-editor-container
+    // This script runs right after its container is inserted into the DOM.
+    (function() {
+        const container = document.currentScript.previousElementSibling;
+        if (!container || !container.classList.contains('embedded-editor-container')) return;
+
+        const editorElement = container.querySelector('.editor-instance');
+        const runButton = container.querySelector('.run-btn');
+        const outputDiv = container.querySelector('.output-panel');
+
+        // Ace Editor Initialization
+        const editor = ace.edit(editorElement);
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/rust");
+        editor.setOptions({
+            fontSize: "14pt",
+            maxLines: Infinity,
+            minLines: 10
+        });
+
+        editor.setValue(`fn main() {
+    println!("Hello, World!");
+}`);
+
+        // Set initial output style
+        outputDiv.style.marginTop = '10px';
+        outputDiv.style.padding = '10px';
+        outputDiv.style.border = '1px solid #ccc';
+        outputDiv.style.whiteSpace = 'pre-wrap';
+        outputDiv.style.fontSize = '14pt';
+        outputDiv.textContent = 'Output will appear here.';
+
+        // Run button
+        runButton.addEventListener('click', async function() {
+            const code = editor.getValue();
+            outputDiv.textContent = 'Sending to Rust Playground...\n\n';
+
+            try {
+                const response = await fetch('https://play.rust-lang.org/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        channel: "stable",
+                        mode: "debug",
+                        edition: "2021",
+                        crateType: "bin",
+                        code: code,
+                        tests: false
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    outputDiv.textContent =
+                        (result.stderr ? `Warnings:\n${result.stderr}` : '') +
+                        `\n${result.stdout || '(no stdout)'}\n`;
+                } else {
+                    outputDiv.textContent =
+                        `Error:${result.stderr || result.stdout || 'Unknown error'}`;
+                }
+
+            } catch (err) {
+                outputDiv.textContent = `Request failed: ${err.message}`;
+            }
+        });
+    })();
+</script>

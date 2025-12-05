@@ -81,7 +81,7 @@ permalink: /editor
             }
     
         } catch (err) {
-            outputDiv.textContent = `Request failed: ${err.message}\n\nCheck your internet connection or try again later.`;
+            outputDiv.textContent = `Request failed: ${err.message}\n\nUnknown error I was unbothered to write a catch for`;
         }
     });
 </script>
