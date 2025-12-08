@@ -38,9 +38,16 @@
             border: 2px solid #38bdf8;
         }
 
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
         .scenario-display h2 {
             font-size: 16px;
-            margin: 0 0 8px 0;
+            margin: 0;
             color: #38bdf8;
         }
 
@@ -420,7 +427,10 @@
         <h1>Computing Infrastructure Builder</h1>
 
         <div class="scenario-display">
-            <h2>Current Scenario</h2>
+            <div class="scenario-header">
+                <h2>Current Scenario</h2>
+                <button id="new-scenario-btn" class="btn btn-tertiary">New Scenario</button>
+            </div>
             <div id="scenario-text" class="scenario-text"></div>
             <div id="scenario-type" class="scenario-type"></div>
         </div>
@@ -475,7 +485,6 @@
                     <button id="autofill-btn" class="btn btn-tertiary">Auto-fill: ON</button>
                     <button id="check-btn" class="btn btn-primary">Check Efficiency</button>
                     <button id="clear-btn" class="btn btn-secondary">Clear All</button>
-                    <button id="new-scenario-btn" class="btn btn-tertiary">New Scenario</button>
                 </div>
                 <div id="result-display" class="result-display"></div>
             </div>
