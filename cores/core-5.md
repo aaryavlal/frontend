@@ -2,12 +2,11 @@
 toc: true
 layout: post
 title: "Core 5 — Module 5: Performance & Scaling"
-description: "Module 5: Measuring performance, scalability and trade-offs"
+description: "Module 5: Measuring performance though speedup"
 permalink: /cores/core-5
 breadcrumbs: true
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -440,7 +439,6 @@ h1 {
                 <ul style="margin-left: 20px;">
                     <li>No communication overhead</li>
                     <li>Simpler to implement and debug</li>
-                    <li>Better cache locality</li>
                     <li>Faster for small tasks</li>
                 </ul>
                 <p style="margin-top: 10px;"><strong>Disadvantages:</strong></p>
@@ -453,7 +451,7 @@ h1 {
         </div>
 
         <div class="tip">
-            <strong>Key Insight:</strong> Parallel isn't always faster! For small tasks, the overhead of coordinating between CPU cores can exceed the time saved. Serial execution can actually be more efficient when tasks are quick or highly dependent on each other. The sweet spot for parallelization is independent tasks that take substantial time to complete.
+            <strong>Key Insight:</strong> Parallel isn't always faster. For small tasks, coordination overhead can exceed time saved. Serial execution is often more efficient when tasks are quick or dependent on each other.
         </div>
 
         <div style="background: #0f172a; padding: 20px; border-radius: 8px; margin-top: 15px;">
