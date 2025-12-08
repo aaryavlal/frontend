@@ -2,6 +2,16 @@ import { baseurl, pythonURI, fetchOptions } from './config.js';
 
 console.log("login.js loaded");
 
+// Global logout function
+window.logout = function() {
+    // Clear localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+
+    // Redirect to login page
+    window.location.href = baseurl + '/login';
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log("Base URL:", baseurl); // Debugging line
     getCredentials(baseurl) // Call the function to get credentials
@@ -9,20 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Credentials data:", data); // Debugging line
             const loginArea = document.getElementById('loginArea');
             if (data) { // Update the login area based on the data
+                const displayName = data.name || data.username || 'User';
                 loginArea.innerHTML = `
                     <div class="dropdown">
-                        <button class="dropbtn">${data.name}</button>
+                        <button class="dropbtn">${displayName}</button>
                         <div class="dropdown-content hidden">
                             ${
-                                data.roles && Array.isArray(data.roles) && data.roles.length > 0
+                                data.role
                                     ? `<div class="roles-list" style="padding: 8px 16px; color: #888; font-size: 0.95em;">
-                                        Roles: ${data.roles.map(role => role.name).join(", ")}
+                                        Role: ${data.role}
                                        </div>
                                        <hr style="margin: 4px 0;">`
                                     : ''
                             }
-                            <a href="${baseurl}/profile">Profile</a>
-                            <a href="${baseurl}/logout">Logout</a>
+                            <a href="${baseurl}/prototyperoomcode">Prototype Room</a>
+                            <a href="javascript:void(0)" onclick="logout()">Logout</a>
                         </div>
                     </div>
                 `;
@@ -64,22 +75,39 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getCredentials(baseurl) {
-    const URL = pythonURI + '/api/id';
+    // Check for JWT token in localStorage
+    const authToken = localStorage.getItem('access_token');
+
+    if (!authToken) {
+        console.log("No auth token found");
+        return Promise.resolve(null);
+    }
+
+    // Call the integrated backend's /api/auth/me endpoint
+    const URL = pythonURI + '/api/auth/me';
     return fetch(URL, {
-        ...fetchOptions,
-        credentials: 'include' // Add this to include cookies
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        },
+        credentials: 'include'
     })
     .then(response => {
         if (!response.ok) {
             console.warn("HTTP status code: " + response.status);
+            // Token might be invalid, clear it
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
             return null;
         }
         return response.json();
     })
     .then(data => {
         if (data === null) return null;
-        console.log("User data:", data);
-        return data;
+        console.log("User data from /api/auth/me:", data);
+        // The response has format: { user: { id, username, email, ... } }
+        return data.user;
     })
     .catch(err => {
         console.error("Fetch error: ", err);

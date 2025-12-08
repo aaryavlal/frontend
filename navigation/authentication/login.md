@@ -79,30 +79,14 @@ show_reading_time: false
         <hr>
         <form id="signupForm" onsubmit="signup(); return false;">
             <div class="form-group">
-                <input type="text" id="name" placeholder="Name" required>
+                <input type="text" id="signupUid" placeholder="Username" required>
             </div>
             <div class="form-group">
-                <input type="text" id="signupUid" placeholder="GitHub ID" required>
-            </div>
-            <div class="form-group">
-                <input type="text" id="signupSid" placeholder="Student ID" required>
-            </div>
-            <div class="form-group">
-                <input type="text" id="signupEmail" placeholder="Email" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
             </div>
             <div class="form-group">
                 <input type="password" id="signupPassword" placeholder="Password" required>
             </div>
-            <p>
-                <label class="switch">
-                    <span class="toggle">
-                        <input type="checkbox" name="kasmNeeded" id="kasmNeeded">
-                        <span class="slider"></span>
-                    </span>
-                    <span class="label-text">Kasm Server Needed</span>
-                </label>
-
-            </p>
             <p>
                 <button type="submit" class="large primary submit-button">Sign Up</button>
             </p>
@@ -112,12 +96,70 @@ show_reading_time: false
 </div>
 <script type="module">
     import { login, pythonURI, javaURI, fetchOptions } from '{{site.baseurl}}/assets/js/api/config.js';
-    // Function to handle both Python and Java login simultaneously
+
+    // Function to handle integrated backend login
     window.loginBoth = function () {
-    javaLogin();  // Call Java login
-    pythonLogin();
-};
-    // Function to handle Python login
+        const username = document.getElementById("uid").value;
+        const password = document.getElementById("password").value;
+
+        if (!username || !password) {
+            document.getElementById("message").textContent = "Username and password are required";
+            return;
+        }
+
+        // Clear any previous messages
+        document.getElementById("message").textContent = "";
+
+        // Login to Prototype API (JWT-based)
+        prototypeLogin(username, password);
+
+        // Also login to Java backend
+        javaLogin();
+    }
+
+    // Function to handle Prototype API login (JWT-based)
+    function prototypeLogin(username, password) {
+        const loginURL = `${pythonURI}/api/auth/login`;
+
+        const loginOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        };
+
+        fetch(loginURL, loginOptions)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Invalid login credentials");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Prototype API login successful!", data);
+                // Store JWT token in localStorage
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
+                }
+                // Store user info
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+                // Redirect to profile or prototype room
+                window.location.href = '{{site.baseurl}}/prototyperoomcode';
+            })
+            .catch(error => {
+                console.error("Prototype login failed:", error.message);
+                document.getElementById("message").textContent = error.message;
+            });
+    }
+
+    // Legacy Python login function (kept for compatibility)
     window.pythonLogin = function () {
         const options = {
             URL: `${pythonURI}/api/authenticate`,
@@ -247,72 +289,56 @@ show_reading_time: false
         // Disable the button and change its color
         signupButton.disabled = true;
         signupButton.classList.add("disabled");
-        const signupOptionsPython = {
-            URL: `${pythonURI}/api/user`,
+
+        const username = document.getElementById("signupUid").value;
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+        const nameField = document.getElementById("name");
+        const name = nameField ? nameField.value : username;
+
+        // Sign up to Prototype API first
+        const prototypeSignupURL = `${pythonURI}/api/auth/register`;
+        const prototypeSignupOptions = {
             method: "POST",
-            cache: "no-cache",
-            body: {
-                name: document.getElementById("name").value,
-                uid: document.getElementById("signupUid").value,
-                email: document.getElementById("signupEmail").value,
-                password: document.getElementById("signupPassword").value,
-                kasm_server_needed: document.getElementById("kasmNeeded").checked,
-            }
-        };
-        const signupOptionsJava = {
-            URL: `${javaURI}/api/person/create`,
-            method: "POST",
-            cache: "no-cache",
-            headers: new Headers({
-                "Content-Type": "application/json"
-            }),
-            body: JSON.stringify({
-                uid: document.getElementById("signupUid").value,
-                sid: document.getElementById("signupSid").value,
-                email: document.getElementById("signupEmail").value,
-                dob: "11-01-2024",  // Static date for now, you can modify this
-                name: document.getElementById("name").value,
-                password: document.getElementById("signupPassword").value,
-                kasmServerNeeded: document.getElementById("kasmNeeded").checked,
-            })
-        };
-        fetch(signupOptionsJava.URL, signupOptionsJava)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("signupMessage").innerText = "Sign up successful!";
-                } else {
-                    document.getElementById("signupMessage").innerText = "Sign up failed: " + data.message;
-                }
-            })
-            .catch(error => {
-                document.getElementById("signupMessage").innerText = "Error: " + error.message;
-                console.error('Error during signup:', error);
-            });
-        fetch(signupOptionsPython.URL, {
-            method: signupOptionsPython.method,
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(signupOptionsPython.body)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Signup failed on one or both backends: ${response.status}`);
-                }
-                return response.json();
+            credentials: "include",
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
             })
+        };
+
+        fetch(prototypeSignupURL, prototypeSignupOptions)
+            .then(response => response.json())
             .then(data => {
-                document.getElementById("signupMessage").textContent = "Signup successful!";
-                // Optionally redirect to login page or handle as needed
-                // window.location.href = '{{site.baseurl}}/profile';
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                document.getElementById("signupMessage").innerText = "Sign up successful!";
+                console.log("Prototype signup successful:", data);
+
+                // Store JWT token
+                if (data.access_token) {
+                    localStorage.setItem('access_token', data.access_token);
+                }
+                // Store user info
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+
+                // Auto-login after 1 second
+                setTimeout(() => {
+                    window.location.href = '{{site.baseurl}}/prototyperoomcode';
+                }, 1000);
             })
             .catch(error => {
-                console.error("Signup Error:", error);
-                document.getElementById("signupMessage").textContent = `Signup Error: ${error.message}`;
-                // Re-enable the button if there is an error
+                console.error("Prototype signup failed:", error);
+                document.getElementById("signupMessage").innerText = "Sign up failed: " + error.message;
                 signupButton.disabled = false;
-                signupButton.style.backgroundColor = ''; // Reset to default color
+                signupButton.classList.remove("disabled");
             });
     }
     function javaDatabase() {

@@ -28,6 +28,9 @@ breadcrumbs: true
   }
 
   .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     text-align: center;
     margin-bottom: 40px;
     padding: 30px;
@@ -637,14 +640,44 @@ breadcrumbs: true
   }
 
   .module-dialog {
+<<<<<<< HEAD
     width: min(1100px, 100%);
     min-height: calc(100vh - clamp(40px, 8vh, 96px));
     margin: 0 auto;
+=======
+    max-width: none;
+    width: 98%;
+    max-height: calc(100vh - 20px);
+    margin: 10px auto;
+>>>>>>> d86f852 (Login integration)
     background: #0b1220;
     border-radius: 12px;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     position: relative;
+  }
+
+  /* Override content constraints inside module panel */
+  #modulePanelContent {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #modulePanelContent *,
+  #modulePanelContent .container,
+  #modulePanelContent article,
+  #modulePanelContent #content,
+  #modulePanelContent .wrapper,
+  #modulePanelContent .post,
+  #modulePanelContent .post-content,
+  #modulePanelContent .opencs_root {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #modulePanelContent > * {
+    width: 100% !important;
   }
 
   @keyframes slideInRight {
@@ -1053,8 +1086,14 @@ breadcrumbs: true
 
 <div class="container">
   <div class="header">
-    <h2>🖥️ Room System Test</h2>
-    <p>Parallel Computing Education Platform</p>
+    <div>
+      <h2>🖥️ Room System Test</h2>
+      <p>Parallel Computing Education Platform</p>
+    </div>
+    <div id="userInfo" style="text-align: right; display: none;">
+      <p style="margin: 0; color: #38bdf8; font-weight: 600;">👤 <span id="displayUsername"></span></p>
+      <button class="btn btn-secondary" onclick="logout()" style="margin-top: 8px; padding: 6px 12px; font-size: 12px;">Logout</button>
+    </div>
   </div>
 
   <!-- Configuration Section -->
@@ -1062,45 +1101,13 @@ breadcrumbs: true
     <h2>⚙️ Configuration</h2>
     <div class="form-group">
       <label for="apiUrl">Backend API URL:</label>
-      <input type="text" id="apiUrl" value="http://localhost:5000" placeholder="http://localhost:5000">
-    </div>
-  </div>
-
-  <!-- Authentication Section -->
-  <div class="section">
-    <h2>🔐 Step 1: Authentication</h2>
-    <div id="authStatus" class="status info">
-      Not logged in
-    </div>
-
-    <div id="loginForm">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" placeholder="Enter username">
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter password">
-      </div>
-      <div style="display: flex; gap: 15px;">
-        <button class="btn" onclick="login()">Login</button>
-        <button class="btn btn-secondary" onclick="register()">Register</button>
-      </div>
-    </div>
-
-    <div id="loggedInInfo" class="hidden">
-      <p>Logged in as: <strong id="currentUsername"></strong></p>
-      <p>Role: <strong id="currentRole"></strong></p>
-      <div style="display: flex; gap: 15px;">
-        <button class="btn btn-secondary" onclick="testToken()">🔍 Test Token</button>
-        <button class="btn btn-secondary" onclick="logout()">Logout</button>
-      </div>
+      <input type="text" id="apiUrl" value="http://localhost:8587" placeholder="http://localhost:8587">
     </div>
   </div>
 
   <!-- Room Management Section -->
   <div class="section" id="roomSection" style="display: none;">
-    <h2>🏠 Step 2: Room Management</h2>
+    <h2>🏠 Step 1: Room Management</h2>
 
     <!-- Admin: Create Room -->
     <div id="createRoomSection" class="hidden">
@@ -1165,7 +1172,7 @@ breadcrumbs: true
 
   <!-- CPU Visualization -->
   <div class="section" id="cpuSection" style="display: none;">
-    <h2>🖥️ Step 3: CPU Core Status</h2>
+    <h2>🖥️ Step 2: CPU Core Status</h2>
     <p style="color: #94a3b8; margin-bottom: 20px; text-align: center;">
       Each core lights up when ALL members complete the corresponding module
     </p>
@@ -1244,7 +1251,7 @@ breadcrumbs: true
 
   <!-- Module Completion Section -->
   <div class="section" id="moduleSection" style="display: none;">
-    <h2>📚 Step 4: Complete Modules</h2>
+    <h2>📚 Step 3: Complete Modules</h2>
     <p style="color: #94a3b8; margin-bottom: 20px;">
       Complete modules to see nodes light up when ALL room members finish!
     </p>
@@ -1307,7 +1314,7 @@ breadcrumbs: true
 
   <!-- Glossary Section -->
   <div class="section" id="glossarySection" style="display: none;">
-    <h2>📖 Step 5: Room Glossary</h2>
+    <h2>📖 Step 4: Room Glossary</h2>
     <p style="color: #94a3b8; margin-bottom: 20px;">
       Build a shared knowledge base with your team! Add terms and definitions as you learn.
     </p>
@@ -1405,11 +1412,22 @@ breadcrumbs: true
 </div>
 
 <script>
-  let authToken = null;
+  // Initialize authToken from localStorage if it exists
+  let authToken = localStorage.getItem('access_token') || null;
   let currentUser = null;
   let currentRoomId = null;
   let currentRoomData = null;
   let cpuFullyLit = false; // Track if all cores are active
+
+  // Load user from localStorage if it exists
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    try {
+      currentUser = JSON.parse(storedUser);
+    } catch (e) {
+      console.error('Failed to parse stored user:', e);
+    }
+  }
 
   function getApiUrl() {
     return document.getElementById('apiUrl').value.trim();
@@ -1473,7 +1491,7 @@ breadcrumbs: true
   }
 
   // Close modal on background click
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     const modal = document.getElementById('confirmModal');
     if (modal) {
       modal.addEventListener('click', (e) => {
@@ -1481,6 +1499,39 @@ breadcrumbs: true
           closeConfirm();
         }
       });
+    }
+
+    // Auto-load user if token exists
+    if (authToken) {
+      console.log('Token found in localStorage, fetching user info...');
+      try {
+        // Fetch current user info from backend
+        const userData = await apiCall('/api/auth/me', 'GET');
+        currentUser = userData.user;
+
+        // Update localStorage with fresh user data
+        localStorage.setItem('user', JSON.stringify(currentUser));
+
+        console.log('User loaded:', currentUser);
+        updateUIAfterLogin();
+
+        // If user is in a room, load it
+        if (currentUser.current_room_id) {
+          await loadCurrentRoom();
+        }
+      } catch (error) {
+        console.error('Failed to load user:', error);
+        // Token might be invalid, clear and redirect to login
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        const baseurl = '{{site.baseurl}}';
+        window.location.href = baseurl + '/login';
+      }
+    } else {
+      // No token - redirect to login page
+      console.log('No token found - redirecting to login');
+      const baseurl = '{{site.baseurl}}';
+      window.location.href = baseurl + '/login';
     }
   });
 
@@ -1618,6 +1669,11 @@ breadcrumbs: true
 
       authToken = data.access_token;
       currentUser = data.user;
+
+      // Save to localStorage
+      localStorage.setItem('access_token', authToken);
+      localStorage.setItem('user', JSON.stringify(currentUser));
+
       showStatus('authStatus', `Registered and logged in as ${username}!`, 'success');
       updateUIAfterLogin();
     } catch (error) {
@@ -1639,6 +1695,11 @@ breadcrumbs: true
 
       authToken = data.access_token;
       currentUser = data.user;
+
+      // Save to localStorage
+      localStorage.setItem('access_token', authToken);
+      localStorage.setItem('user', JSON.stringify(currentUser));
+
       console.log('Login successful! Token:', authToken ? 'Token received' : 'NO TOKEN');
       console.log('User:', currentUser);
       showStatus('authStatus', `Logged in as ${username}!`, 'success');
@@ -1659,22 +1720,28 @@ breadcrumbs: true
     if (currentRoomId) {
       leaveRoomSilently();
     }
-    
+
     authToken = null;
     currentUser = null;
     currentRoomId = null;
     currentRoomData = null;
     cpuFullyLit = false;
 
-    document.getElementById('loginForm').classList.remove('hidden');
-    document.getElementById('loggedInInfo').classList.add('hidden');
+    // Clear localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+
+    // Hide user info and sections
+    document.getElementById('userInfo').style.display = 'none';
     document.getElementById('roomSection').style.display = 'none';
     document.getElementById('cpuSection').style.display = 'none';
     document.getElementById('moduleSection').style.display = 'none';
     document.getElementById('membersSection').style.display = 'none';
     document.getElementById('glossarySection').style.display = 'none';
 
-    showStatus('authStatus', 'Logged out', 'info');
+    // Redirect to login page
+    const baseurl = '{{site.baseurl}}';
+    window.location.href = baseurl + '/login';
   }
 
   async function leaveRoomSilently() {
@@ -1730,14 +1797,14 @@ breadcrumbs: true
   }
 
   function updateUIAfterLogin() {
-    document.getElementById('loginForm').classList.add('hidden');
-    document.getElementById('loggedInInfo').classList.remove('hidden');
-    document.getElementById('currentUsername').textContent = currentUser.username;
-    document.getElementById('currentRole').textContent = currentUser.role;
+    // Show user info in header
+    document.getElementById('userInfo').style.display = 'block';
+    document.getElementById('displayUsername').textContent = currentUser.username;
 
+    // Show room section
     document.getElementById('roomSection').style.display = 'block';
 
-    if (currentUser.role === 'admin') {
+    if (currentUser && currentUser.role === 'admin') {
       document.getElementById('createRoomSection').classList.remove('hidden');
     }
   }
@@ -2260,9 +2327,46 @@ breadcrumbs: true
           try {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            // try common content containers
-            const article = doc.querySelector('article') || doc.querySelector('.container') || doc.querySelector('#content') || doc.body;
-            content.innerHTML = article ? article.innerHTML : html;
+
+            // Extract just the post-content div, which has the actual content
+            const postContent = doc.querySelector('.post-content');
+
+            if (postContent) {
+              // Clone the content to avoid reference issues
+              const clonedContent = postContent.cloneNode(true);
+
+              // Remove all wrapper divs and just get the children
+              content.innerHTML = '';
+
+              // Create a clean container without width constraints
+              const cleanDiv = document.createElement('div');
+              cleanDiv.style.width = '100%';
+              cleanDiv.style.maxWidth = 'none';
+              cleanDiv.innerHTML = clonedContent.innerHTML;
+
+              content.appendChild(cleanDiv);
+
+              // Force expand any remaining wrapper elements
+              setTimeout(() => {
+                const allElements = content.querySelectorAll('*');
+                allElements.forEach(el => {
+                  const computed = window.getComputedStyle(el);
+                  if (computed.maxWidth && computed.maxWidth !== 'none') {
+                    el.style.maxWidth = 'none';
+                  }
+                  if (el.classList.contains('wrapper') || el.classList.contains('container')) {
+                    el.style.maxWidth = 'none';
+                    el.style.width = '100%';
+                    el.style.marginLeft = '0';
+                    el.style.marginRight = '0';
+                  }
+                });
+              }, 10);
+            } else {
+              // Fallback to old method
+              const article = doc.querySelector('article') || doc.querySelector('.container') || doc.querySelector('#content') || doc.body;
+              content.innerHTML = article ? article.innerHTML : html;
+            }
           } catch (e) {
             content.innerHTML = html;
           }
