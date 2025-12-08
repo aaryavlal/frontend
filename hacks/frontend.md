@@ -616,33 +616,35 @@ breadcrumbs: true
     box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
   }
 
+  body.module-panel-open {
+    overflow: hidden;
+  }
+
   /* Full-page Module Panel (centered, sits above cores) */
   .module-panel {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    align-items: flex-start; /* allow dialog to be placed above CPU */
+    align-items: stretch;
     justify-content: center;
-    padding: 0; /* we'll set spacing via computed top */
+    padding: clamp(20px, 4vh, 48px) clamp(16px, 5vw, 48px);
     background: rgba(6, 10, 14, 0.92);
     color: #e2e8f0;
     z-index: 45000; /* above cores and other overlays */
-    overflow: auto;
+    overflow-y: auto;
   }
 
   .module-dialog {
-    max-width: 1400px;
-    width: 95%;
-    max-height: calc(100vh - 40px);
-    margin: 20px auto;
+    width: min(1100px, 100%);
+    min-height: calc(100vh - clamp(40px, 8vh, 96px));
+    margin: 0 auto;
     background: #0b1220;
-    border-radius: 10px;
-    overflow: auto;
+    border-radius: 12px;
+    overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    position: absolute; /* positioned by script */
+    position: relative;
   }
 
   @keyframes slideInRight {
@@ -2224,47 +2226,19 @@ breadcrumbs: true
       const closeBtn = document.getElementById('moduleCloseBtn');
       const dialog = panel.querySelector('.module-dialog');
 
-      // show loading and display overlay
-      content.innerHTML = '<p style="color:#94a3b8">Loading...</p>';
-      panel.style.display = 'block';
-
-      // prepare dialog positioning
-      dialog.style.left = '50%';
-      dialog.style.transform = 'translateX(-50%)';
-
-      // function to place dialog just above the CPU visualization
-      function positionDialog() {
-        try {
-          const cpu = document.getElementById('cpuContainer');
-          const dialogHeight = dialog.offsetHeight || 400;
-          let top = 36; // default top padding
-
-          if (cpu) {
-            const cpuRect = cpu.getBoundingClientRect();
-            // target: place dialog above CPU art
-            top = Math.round(cpuRect.top + window.scrollY - dialogHeight - 12);
-            // if not enough space above CPU, fallback to placing it above viewport padding
-            if (top < 36) top = 36;
-            // if dialog would overflow bottom of viewport, center it vertically instead
-            const viewportBottom = window.scrollY + window.innerHeight;
-            if (top + dialogHeight > viewportBottom - 24) {
-              top = Math.max(36, Math.round(window.scrollY + (window.innerHeight - dialogHeight) / 2));
-            }
-          }
-
-          dialog.style.top = `${top}px`;
-        } catch (e) {
-          console.error('positionDialog error', e);
-        }
+      if (panel.parentElement !== document.body) {
+        document.body.appendChild(panel);
       }
 
-      // create/attach a single handler to update position on scroll/resize while panel is open
-      panel._posHandler = () => requestAnimationFrame(positionDialog);
-      window.addEventListener('resize', panel._posHandler);
-      window.addEventListener('scroll', panel._posHandler, { passive: true });
+      document.body.classList.add('module-panel-open');
 
-      // initial placement
-      positionDialog();
+      // show loading and display overlay
+      content.innerHTML = '<p style="color:#94a3b8">Loading...</p>';
+      panel.style.display = 'flex';
+      panel.scrollTop = 0;
+      if (dialog) {
+        dialog.scrollTop = 0;
+      }
 
       // wire mark complete
       markBtn.onclick = async () => {
@@ -2293,8 +2267,10 @@ breadcrumbs: true
             content.innerHTML = html;
           }
 
-          // reposition after content loads (height may have changed)
-          requestAnimationFrame(positionDialog);
+          // ensure scroll starts at the top after content loads
+          if (dialog) {
+            dialog.scrollTop = 0;
+          }
         }).catch(err => {
           content.innerHTML = `<p style="color:#ef4444">Failed to load module: ${err.message}</p>`;
         });
@@ -2307,19 +2283,12 @@ breadcrumbs: true
     const panel = document.getElementById('modulePanel');
     if (!panel) return;
 
-    // remove position handlers
-    if (panel._posHandler) {
-      window.removeEventListener('resize', panel._posHandler);
-      window.removeEventListener('scroll', panel._posHandler);
-      panel._posHandler = null;
-    }
-
     // hide panel
     panel.style.display = 'none';
+    document.body.classList.remove('module-panel-open');
 
-    // reset dialog top so next open starts fresh
-    const dialog = panel.querySelector('.module-dialog');
-    if (dialog) dialog.style.top = '';
+    // ensure scroll resets for next open
+    panel.scrollTop = 0;
   }
 
   // ===== GLOSSARY FUNCTIONS =====
