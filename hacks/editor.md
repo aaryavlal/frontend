@@ -9,10 +9,20 @@ permalink: /editor
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min/theme-monokai.js"></script>
 
 <style>
-    #editor {
+    #editor-container {
         position: relative;
+    }
+    #editor {
         height: 800px;
         width: 100%;
+    }
+    #editor-buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        display: flex;
+        gap: 5px;
     }
     #output {
         margin-top: 10px;
@@ -23,8 +33,13 @@ permalink: /editor
     }
 </style>
 
-<div id="editor"></div>
-<button id="run-btn">Run</button>
+<div id="editor-container">
+    <div id="editor"></div>
+    <div id="editor-buttons">
+        <button id="copy-btn">Copy</button>
+        <button id="run-btn">Run</button>
+    </div>
+</div>
 <div id="output"></div>
 
 <script>
@@ -40,6 +55,14 @@ permalink: /editor
     editor.setValue(`fn main() {
     println!("Hello, world!");
 }`);
+
+    document.getElementById('copy-btn').addEventListener('click', function() {
+        navigator.clipboard.writeText(editor.getValue()).then(function() {
+            console.log('Code copied to clipboard');
+        }).catch(function(err) {
+            console.error('Failed to copy: ', err);
+        });
+    });
 
     document.getElementById('run-btn').addEventListener('click', async function() {
         const code = editor.getValue();
