@@ -614,9 +614,10 @@ breadcrumbs: true
     padding: 20px 30px;
     border-radius: 12px;
     font-weight: bold;
-    z-index: 999;
+    z-index: 999999;
     animation: slideInRight 0.5s ease-out, slideOutRight 0.5s ease-out 2.5s forwards;
     box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
+    pointer-events: none;
   }
 
   body.module-panel-open {
@@ -2052,13 +2053,13 @@ breadcrumbs: true
             // The reset button will appear via loadRoomProgress()
             await loadRoomProgress();
           } else {
-            // Regular room - gets deleted
+            // Regular room - show celebration and stay in the room
             showCelebration('room-complete', moduleNumber,
-              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\nThe room has been closed.');
-            
-            setTimeout(() => {
-              window.location.reload();
-            }, 3000);
+              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\n✨ The CPU is fully lit!\n\nUse the Reset button below to start over or leave the room when ready.');
+
+            // DON'T reload - let users stay and see the celebration
+            // The reset button will appear via loadRoomProgress()
+            await loadRoomProgress();
           }
         } else if (data.room_progress.module_complete) {
           showCelebration('room-module', moduleNumber,
@@ -2308,9 +2309,11 @@ breadcrumbs: true
       markBtn.onclick = async () => {
         try {
           await completeModule(moduleNumber);
+          closeModule();
           showToast('Marked complete');
         } catch (e) {
           console.error('Mark complete failed', e);
+          closeModule();
           showToast('Login required to mark complete');
         }
       };
