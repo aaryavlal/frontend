@@ -1,212 +1,304 @@
 ---
-title: Fetch of Flask Backend Jokes
+title: Programmer Jokes
 layout: post
-description: An introductory example of Frontend talking to Backend Python Flask application serving jokes.  
-permalink: /python/flask/api/jokes
+description: An interactive frontend fetching jokes from a Flask backend API.
+permalink: /jokes
 image: /images/jokes.png
 breadcrumb: true
 show_reading_time: false
 ---
+
 <style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  :root {
+    --bg: #071226;
+    --panel: #0b1220;
+    --neon: #38bdf8;
+    --accent: #22c55e;
+    --muted: #94a3b8;
   }
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+
+  .jokes-container {
+    max-width: 900px;
+    margin: 0 auto;
   }
-  th {
-    background-color: #4CAF50;
-    color: white;
+
+  .jokes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
-  button {
-    padding: 8px 16px;
-    margin: 2px;
-    cursor: pointer;
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    border-radius: 4px;
+
+  .jokes-panel {
+    background: linear-gradient(180deg, var(--panel), #0f1622);
+    border-radius: 10px;
+    padding: 18px;
+    border: 1px solid rgba(56, 189, 248, 0.06);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+    margin-bottom: 16px;
   }
-  button:hover {
-    background-color: #005f7a;
+
+  .joke-card {
+    background: #041b2d;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid var(--neon);
+    margin-bottom: 12px;
+    line-height: 1.6;
   }
-  .scenario-cell {
+
+  .joke-text {
+    font-size: 15px;
+    color: #e6eef8;
+    margin-bottom: 10px;
     font-weight: 500;
-    max-width: 500px;
+  }
+
+  .joke-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    background: linear-gradient(90deg, var(--neon), #3b82f6);
+    color: #041827;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .btn:hover {
+    opacity: 0.9;
+  }
+
+  .btn.secondary {
+    background: transparent;
+    color: var(--neon);
+    border: 1px solid rgba(56, 189, 248, 0.16);
+  }
+
+  .btn.secondary:hover {
+    background: rgba(56, 189, 248, 0.1);
+  }
+
+  .loading {
+    color: var(--muted);
+    text-align: center;
+    padding: 20px;
+  }
+
+  .error {
+    color: #ff6b6b;
+    padding: 12px;
+    background: #1a0b0b;
+    border-radius: 6px;
+    border: 1px solid #8b3333;
+  }
+
+  .stats-panel {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .stat-item {
+    background: #04202a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .stat-value {
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 12px;
   }
 </style>
 
-<!-- HTML table fragment for page -->
-<table>
-  <thead>
-  <tr>
-    <th class="scenario-cell">Scenario</th>
-    <th>Distributed Computing</th>
-    <th>Parallel Computing</th>
-    <th>Sequential Computing</th>
-  </tr>
-  </thead>
-  <tbody id="result">
-    <!-- javascript generated data -->
-  </tbody>
-</table>
+<div class="jokes-container">
+  <div class="jokes-header">
+    <h1>😄 Programmer Jokes</h1>
+    <div class="stats-panel">
+      <div class="stat-item">
+        <div class="stat-value" id="totalCount">—</div>
+        <div class="stat-label">Total Jokes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="currentIndex">—</div>
+        <div class="stat-label">Current</div>
+      </div>
+    </div>
+  </div>
 
-<script type="module">
-  import { javaURI, pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+  <div class="jokes-panel">
+    <div id="jokeContainer"></div>
+    
+    <div class="controls">
+      <button id="prevBtn" class="btn">← Previous</button>
+      <button id="nextBtn" class="btn">Next →</button>
+      <button id="randomBtn" class="btn secondary">🎲 Random</button>
+      <button id="refreshBtn" class="btn secondary">🔄 Refresh</button>
+      <div style="margin-left: auto; display: flex; gap: 8px;">
+        <button id="hahaBtn" class="btn" style="background: linear-gradient(90deg, #22c55e, #16a34a); min-width: 100px;">😄 Like</button>
+        <button id="boohooBtn" class="btn" style="background: linear-gradient(90deg, #ff6b6b, #dc2626); min-width: 100px;">😒 Dislike</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // prepare HTML defined "result" container for new output
-  const resultContainer = document.getElementById("result");
+  <script type="module">
+  import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
 
-  // keys for scenario voting options
-  const DISTRIBUTED = "distributed";
-  const PARALLEL = "parallel";
-  const SEQUENTIAL = "sequential";
+  let jokes = [];
+  let currentIndex = 0;
+  let currentJokeId = null;
 
-  // prepare fetch urls
-  const url = `${pythonURI}/api/scenarios`;
-  const getURL = url + "/";
-  const distributedURL = url + "/distributed/";
-  const parallelURL = url + "/parallel/";
-  const sequentialURL = url + "/sequential/";
+  // Construct API URL using pythonURI from config (main.py serves jokes)
+  const API_BASE = `${pythonURI}/api/jokes`;
 
-  // prepare fetch PUT options, clones with JS Spread Operator (...)
-  const voteOptions = {...fetchOptions,
-    method: 'PUT',
-  }; // clones and replaces method
-
-
-  // fetch the API to obtain scenarios data
-  fetch(getURL, fetchOptions)
-    .then(response => {
-      if (response.status !== 200) {
-        error('GET API response failure: ' + response.status);
-        return;
+  async function loadJokes() {
+    try {
+      console.log('Fetching jokes from:', API_BASE);
+      const response = await fetch(API_BASE, fetchOptions);
+      console.log('Response status:', response.status);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      jokes = await response.json();
+      console.log('Jokes loaded:', jokes.length);
+      document.getElementById('totalCount').textContent = jokes.length;
+      if (jokes.length > 0) {
+        currentIndex = 0;
+        displayJoke();
       }
-      response.json().then(data => {
-        console.log(data);
-        // format response data into a table
-        for (const row of data) {
-          // make "tr element" for each "row of data"
-          const tr = document.createElement("tr");
-
-          // td for scenario cell
-          const scenario = document.createElement("td");
-          scenario.className = "scenario-cell";
-          scenario.innerHTML = row.id + ". " + row.scenario;
-
-          // td for distributed cell with onclick actions
-          const distributedCell = document.createElement("td");
-          const distributedBtn = document.createElement('button');
-          distributedBtn.id = DISTRIBUTED + row.id;
-          distributedBtn.innerHTML = row.distributed;
-          distributedBtn.onclick = function () {
-            vote(DISTRIBUTED, distributedURL + row.id, distributedBtn.id);
-          };
-          distributedCell.appendChild(distributedBtn);
-
-          // td for parallel cell with onclick actions
-          const parallelCell = document.createElement("td");
-          const parallelBtn = document.createElement('button');
-          parallelBtn.id = PARALLEL + row.id;
-          parallelBtn.innerHTML = row.parallel;
-          parallelBtn.onclick = function () {
-            vote(PARALLEL, parallelURL + row.id, parallelBtn.id);
-          };
-          parallelCell.appendChild(parallelBtn);
-
-          // td for sequential cell with onclick actions
-          const sequentialCell = document.createElement("td");
-          const sequentialBtn = document.createElement('button');
-          sequentialBtn.id = SEQUENTIAL + row.id;
-          sequentialBtn.innerHTML = row.sequential;
-          sequentialBtn.onclick = function () {
-            vote(SEQUENTIAL, sequentialURL + row.id, sequentialBtn.id);
-          };
-          sequentialCell.appendChild(sequentialBtn);
-
-          // finish row and append to DOM container
-          tr.appendChild(scenario);
-          tr.appendChild(distributedCell);
-          tr.appendChild(parallelCell);
-          tr.appendChild(sequentialCell);
-          resultContainer.appendChild(tr);
-        }
-      })
-    })
-    .catch(err => {
-      error(err + ": " + getURL);
-    });
-
-  // Function and interval to refresh the vote counts every 5 seconds
-  function refreshVotes() {
-    fetch(getURL, fetchOptions)
-      .then(response => response.json())
-      .then(data => {
-        // update all vote data
-        for (const row of data) {
-          const distributedBtn = document.getElementById(DISTRIBUTED + row.id);
-          if (distributedBtn) distributedBtn.innerHTML = row.distributed;
-          const parallelBtn = document.getElementById(PARALLEL + row.id);
-          if (parallelBtn) parallelBtn.innerHTML = row.parallel;
-          const sequentialBtn = document.getElementById(SEQUENTIAL + row.id);
-          if (sequentialBtn) sequentialBtn.innerHTML = row.sequential;
-        }
-      })
-      .catch(err => {
-        // Optionally handle refresh errors
-        console.error('Refresh error:', err);
-      });
-  }
-  // Call refreshVotes every 5 seconds
-  setInterval(refreshVotes, 5000);
-
-  // Vote function to handle user voting actions
-  function vote(type, postURL, elemID) {
-
-    // fetch the API
-    fetch(postURL, voteOptions)
-    // response is a RESTful "promise" on any successful fetch
-    .then(response => {
-      // check for response errors
-      if (response.status !== 200) {
-          error("POST API response failure: " + response.status)
-          return;  // api failure
-      }
-      // valid response will have JSON data
-      response.json().then(data => {
-          console.log(data);
-          // Update the appropriate button based on vote type
-          if (type === DISTRIBUTED)
-            document.getElementById(elemID).innerHTML = data.distributed;
-          else if (type === PARALLEL)
-            document.getElementById(elemID).innerHTML = data.parallel;
-          else if (type === SEQUENTIAL)
-            document.getElementById(elemID).innerHTML = data.sequential;
-          else
-            error("unknown type: " + type);  // should never occur
-      })
-    })
-    // catch fetch errors (ie Nginx ACCESS to server blocked)
-    .catch(err => {
-      error(err + " " + postURL);
-    });
-  
+    } catch (error) {
+      console.error('Error loading jokes:', error);
+      console.error('API URL:', API_BASE);
+      console.error('pythonURI:', pythonURI);
+      console.error('FetchOptions:', fetchOptions);
+      document.getElementById('jokeContainer').innerHTML = `<div class="error">⚠️ Failed to load jokes from ${API_BASE}. Make sure the backend (main.py) is running on port 8587. Error: ${error.message}</div>`;
+    }
   }
 
-  // Something went wrong with actions or responses
-  function error(err) {
-    // log as Error in console
-    console.error(err);
-    // append error to resultContainer
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.innerHTML = err;
-    td.setAttribute('colspan', '4');
-    tr.appendChild(td);
-    resultContainer.appendChild(tr);
+  function displayJoke() {
+    if (jokes.length === 0) {
+      document.getElementById('jokeContainer').innerHTML = '<div class="loading">Loading jokes...</div>';
+      return;
+    }
+
+    const joke = jokes[currentIndex];
+    currentJokeId = joke.id;
+    const hahaCount = joke.haha || 0;
+    const boohooCount = joke.boohoo || 0;
+    const totalVotes = hahaCount + boohooCount || 1;
+    const hahaPercent = Math.round((hahaCount / totalVotes) * 100);
+
+    document.getElementById('jokeContainer').innerHTML = `
+      <div class="joke-card">
+        <div class="joke-text">${escapeHtml(joke.joke)}</div>
+        <div class="joke-stats">
+          <div class="stat">😄 ${hahaCount} (${hahaPercent}%)</div>
+          <div class="stat">😒 ${boohooCount}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('currentIndex').textContent = currentIndex + 1;
   }
 
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  async function voteHaha() {
+    if (currentJokeId === null) return;
+    try {
+      const voteOptions = {...fetchOptions, method: 'PUT'};
+      const url = `${API_BASE}/${currentJokeId}/haha`;
+      console.log('Voting haha on joke:', currentJokeId, 'URL:', url);
+      const response = await fetch(url, voteOptions);
+      console.log('Vote response status:', response.status);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const updatedJoke = await response.json();
+      console.log('Updated joke:', updatedJoke);
+      jokes[currentIndex] = updatedJoke;
+      displayJoke();
+    } catch (error) {
+      console.error('Error voting haha:', error);
+      alert('Failed to vote. Check console for details.');
+    }
+  }
+
+  async function voteBoohoo() {
+    if (currentJokeId === null) return;
+    try {
+      const voteOptions = {...fetchOptions, method: 'PUT'};
+      const url = `${API_BASE}/${currentJokeId}/boohoo`;
+      console.log('Voting boohoo on joke:', currentJokeId, 'URL:', url);
+      const response = await fetch(url, voteOptions);
+      console.log('Vote response status:', response.status);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const updatedJoke = await response.json();
+      console.log('Updated joke:', updatedJoke);
+      jokes[currentIndex] = updatedJoke;
+      displayJoke();
+    } catch (error) {
+      console.error('Error voting boohoo:', error);
+      alert('Failed to vote. Check console for details.');
+    }
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (jokes.length > 0) {
+      currentIndex = (currentIndex + 1) % jokes.length;
+      displayJoke();
+    }
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (jokes.length > 0) {
+      currentIndex = (currentIndex - 1 + jokes.length) % jokes.length;
+      displayJoke();
+    }
+  });
+
+  document.getElementById('randomBtn').addEventListener('click', () => {
+    if (jokes.length > 0) {
+      currentIndex = Math.floor(Math.random() * jokes.length);
+      displayJoke();
+    }
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', () => {
+    loadJokes();
+  });
+
+  document.getElementById('hahaBtn').addEventListener('click', voteHaha);
+  document.getElementById('boohooBtn').addEventListener('click', voteBoohoo);
+
+  // Keyboard shortcuts
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+    if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
+  });
+
+  // Load jokes on page load
+  loadJokes();
 </script>
