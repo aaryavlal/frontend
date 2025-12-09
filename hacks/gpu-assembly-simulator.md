@@ -697,7 +697,6 @@ body {
   background: #5CBFFF;
 }
 </style>
-</head>
 <body>
 
 <div class="game-frame">
