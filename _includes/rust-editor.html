@@ -1,0 +1,113 @@
+{% assign default_code = 'fn main() {
+    println!("Hello, World!");
+}' %}
+
+<div class="embedded-editor-container">
+    <div class="editor-wrapper">
+        <div class="editor-instance" style="height: 300px; width: 100%;"></div>
+        <div class="editor-buttons">
+            <button class="copy-btn">Copy</button>
+            <button class="run-btn">Run Code</button>
+        </div>
+    </div>
+    <div class="output-panel"></div>
+</div>
+
+<script>
+    // IIFE to initialize the editor for the *last* .embedded-editor-container
+    // This script runs right after its container is inserted into the DOM.
+    (function() {
+        const container = document.currentScript.previousElementSibling;
+        if (!container || !container.classList.contains('embedded-editor-container')) return;
+
+        const editorElement = container.querySelector('.editor-instance');
+        const runButton = container.querySelector('.run-btn');
+        const outputDiv = container.querySelector('.output-panel');
+        const copyButton = container.querySelector('.copy-btn');
+        const editorWrapper = container.querySelector('.editor-wrapper');
+        const editorButtons = container.querySelector('.editor-buttons');
+
+        // Ace Editor Initialization
+        const editor = ace.edit(editorElement);
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/rust");
+        editor.setOptions({
+            fontSize: "12pt",
+            maxLines: Infinity,
+            minLines: 10
+        });
+
+        editor.setValue(`{{ include.code | default: default_code }}`);
+        editor.clearSelection();
+
+        // Set styles for wrapper and buttons
+        editorWrapper.style.position = 'relative';
+        editorButtons.style.position = 'absolute';
+        editorButtons.style.top = '10px';
+        editorButtons.style.right = '10px';
+        editorButtons.style.zIndex = '10';
+        editorButtons.style.display = 'flex';
+        editorButtons.style.gap = '5px';
+
+        // Set initial output style
+        outputDiv.style.marginTop = '10px';
+        outputDiv.style.marginBottom = '20px';
+        outputDiv.style.padding = '10px';
+        outputDiv.style.border = '1px solid #ccc';
+        outputDiv.style.whiteSpace = 'pre-wrap';
+        outputDiv.style.fontSize = '14pt';
+        outputDiv.textContent = 'Output will appear here.';
+        outputDiv.style.display = 'none';
+
+        // Copy button
+        copyButton.addEventListener('click', function() {
+            navigator.clipboard.writeText(editor.getValue()).then(function() {
+                console.log('Code copied to clipboard');
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+            });
+        });
+
+        // Run button
+        runButton.addEventListener('click', async function() {
+            const code = editor.getValue();
+            outputDiv.style.display = 'block';
+            outputDiv.textContent = 'Sending to Rust Playground...\n\n';
+
+            try {
+                const response = await fetch('https://play.rust-lang.org/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        channel: "stable",
+                        mode: "debug",
+                        edition: "2021",
+                        crateType: "bin",
+                        code: code,
+                        tests: false
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    outputDiv.textContent =
+                        (result.stderr ? `Warnings:\n${result.stderr}` : '') +
+                        `\n${result.stdout || '(no stdout)'}`;
+                } else {
+                    outputDiv.textContent =
+                        `Error:${result.stderr || result.stdout || 'Unknown error'}`;
+                }
+
+            } catch (err) {
+                outputDiv.textContent = `Request failed: ${err.message}`;
+            }
+        });
+    })();
+</script>
