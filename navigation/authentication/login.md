@@ -87,6 +87,12 @@ show_reading_time: false
             <div class="form-group">
                 <input type="password" id="signupPassword" placeholder="Password" required>
             </div>
+            <div class="form-group">
+                <input type="text" id="signupStudentId" placeholder="Student ID (Optional)">
+            </div>
+            <div class="form-group">
+                <input type="text" id="signupGithubId" placeholder="GitHub ID (Optional)">
+            </div>
             <p>
                 <button type="submit" class="large primary submit-button">Sign Up</button>
             </p>
@@ -150,7 +156,7 @@ show_reading_time: false
                 if (data.user) {
                     localStorage.setItem('user', JSON.stringify(data.user));
                 }
-                // Redirect to profile or prototype room
+                // Redirect to Hardware Havoc
                 window.location.href = '{{site.baseurl}}/prototyperoomcode';
             })
             .catch(error => {
@@ -293,22 +299,34 @@ show_reading_time: false
         const username = document.getElementById("signupUid").value;
         const email = document.getElementById("signupEmail").value;
         const password = document.getElementById("signupPassword").value;
-        const nameField = document.getElementById("name");
-        const name = nameField ? nameField.value : username;
+        const studentId = document.getElementById("signupStudentId").value.trim();
+        const githubId = document.getElementById("signupGithubId").value.trim();
 
-        // Sign up to Prototype API first
+        // Sign up to Prototype API (integrated backend)
         const prototypeSignupURL = `${pythonURI}/api/auth/register`;
+
+        // Build request body with optional fields
+        const signupData = {
+            username: username,
+            email: email,
+            password: password
+        };
+
+        // Add optional fields if provided
+        if (studentId) {
+            signupData.student_id = studentId;
+        }
+        if (githubId) {
+            signupData.github_id = githubId;
+        }
+
         const prototypeSignupOptions = {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             credentials: "include",
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password
-            })
+            body: JSON.stringify(signupData)
         };
 
         fetch(prototypeSignupURL, prototypeSignupOptions)

@@ -20,19 +20,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const loginArea = document.getElementById('loginArea');
             if (data) { // Update the login area based on the data
                 const displayName = data.name || data.username || 'User';
+                const infoLines = [];
+
+                if (data.role) {
+                    infoLines.push(`Role: ${data.role}`);
+                }
+                if (data.student_id) {
+                    infoLines.push(`Student ID: ${data.student_id}`);
+                }
+                if (data.github_id) {
+                    infoLines.push(`GitHub: ${data.github_id}`);
+                }
+
+                const infoHtml = infoLines.length > 0
+                    ? `<div class="roles-list" style="padding: 8px 16px; color: #888; font-size: 0.95em;">
+                        ${infoLines.join('<br>')}
+                       </div>
+                       <hr style="margin: 4px 0;">`
+                    : '';
+
                 loginArea.innerHTML = `
                     <div class="dropdown">
                         <button class="dropbtn">${displayName}</button>
                         <div class="dropdown-content hidden">
-                            ${
-                                data.role
-                                    ? `<div class="roles-list" style="padding: 8px 16px; color: #888; font-size: 0.95em;">
-                                        Role: ${data.role}
-                                       </div>
-                                       <hr style="margin: 4px 0;">`
-                                    : ''
-                            }
-                            <a href="${baseurl}/prototyperoomcode">Prototype Room</a>
+                            ${infoHtml}
+                            <a href="${baseurl}/prototyperoomcode">Hardware Havoc</a>
                             <a href="javascript:void(0)" onclick="logout()">Logout</a>
                         </div>
                     </div>

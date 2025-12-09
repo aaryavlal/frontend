@@ -1,8 +1,8 @@
 ---
 toc: true
 layout: post
-title: Prototype of a Room Code system
-description: This is a prototype to test the join code feature
+title: Hardware Havoc
+description: Fix the cores, learn Computing, play the game!
 permalink: /prototyperoomcode
 breadcrumbs: true
 ---
@@ -640,16 +640,13 @@ breadcrumbs: true
   }
 
   .module-dialog {
-<<<<<<< HEAD
     width: min(1100px, 100%);
     min-height: calc(100vh - clamp(40px, 8vh, 96px));
     margin: 0 auto;
-=======
     max-width: none;
     width: 98%;
     max-height: calc(100vh - 20px);
     margin: 10px auto;
->>>>>>> d86f852 (Login integration)
     background: #0b1220;
     border-radius: 12px;
     overflow-y: auto;
@@ -1087,8 +1084,8 @@ breadcrumbs: true
 <div class="container">
   <div class="header">
     <div>
-      <h2>🖥️ Room System Test</h2>
-      <p>Parallel Computing Education Platform</p>
+      <h2>🖥️ Hardware Havoc!</h2>
+      <p>Computing Systems Education Quest</p>
     </div>
     <div id="userInfo" style="text-align: right; display: none;">
       <p style="margin: 0; color: #38bdf8; font-weight: 600;">👤 <span id="displayUsername"></span></p>
