@@ -17,7 +17,7 @@ In this module, you'll learn three essential computing architectures that power 
 
 ---
 
-## 🎯 Learning Objectives
+## Learning Objectives
 
 By the end of this module, you will be able to:
 - Define sequential, parallel, and distributed computing
@@ -28,7 +28,7 @@ By the end of this module, you will be able to:
 
 ---
 
-## 📚 Core Concepts
+## Core Concepts
 
 ### 1. Sequential Computing: One Thing at a Time
 
@@ -50,14 +50,14 @@ Task 1 → Task 2 → Task 3 → Task 4
 - Following a recipe step-by-step
 
 **Advantages**:
-- ✅ Simple to understand and debug
-- ✅ Predictable execution order
-- ✅ No coordination overhead
+- Simple to understand and debug
+- Predictable execution order
+- No coordination overhead
 
 **Disadvantages**:
-- ❌ Slow for large workloads
-- ❌ Resources sit idle (CPU waits during I/O operations)
-- ❌ Cannot take advantage of modern multi-core processors
+- Slow for large workloads
+- Resources sit idle (CPU waits during I/O operations)
+- Cannot take advantage of modern multi-core processors
 
 ---
 
@@ -96,14 +96,14 @@ When multiple threads/processes need the same resource (like memory, disk, or ne
 - Multiple programs sharing 1 hard drive
 
 **Advantages**:
-- ✅ Faster than sequential for large tasks
-- ✅ Better resource utilization
-- ✅ Can handle multiple users/requests
+- Faster than sequential for large tasks
+- Better resource utilization
+- Can handle multiple users/requests
 
 **Disadvantages**:
-- ❌ Shared resources create bottlenecks
-- ❌ Requires careful coordination (synchronization)
-- ❌ Debugging is harder (race conditions, deadlocks)
+- Shared resources create bottlenecks
+- Requires careful coordination (synchronization)
+- Debugging is harder (race conditions, deadlocks)
 
 ---
 
@@ -138,26 +138,26 @@ When multiple threads/processes need the same resource (like memory, disk, or ne
 Distributing work evenly across nodes so no single machine is overwhelmed while others sit idle.
 
 **Advantages**:
-- ✅ Scales horizontally (add more machines for more power)
-- ✅ Fault tolerant (if one node fails, others continue)
-- ✅ No resource contention between nodes
-- ✅ Geographic distribution (servers near users = faster)
+- Scales horizontally (add more machines for more power)
+- Fault tolerant (if one node fails, others continue)
+- No resource contention between nodes
+- Geographic distribution (servers near users = faster)
 
 **Disadvantages**:
-- ❌ Network latency (communication between nodes takes time)
-- ❌ Complex coordination (distributed consensus is hard)
-- ❌ Higher cost (more machines, more maintenance)
-- ❌ Data consistency challenges
+- Network latency (communication between nodes takes time)
+- Complex coordination (distributed consensus is hard)
+- Higher cost (more machines, more maintenance)
+- Data consistency challenges
 
 ---
 
-## 📊 Performance Comparison
+## Performance Comparison
 
 | Model | Speed | Scalability | Complexity | Cost |
 |-------|-------|-------------|------------|------|
-| **Sequential** | Slow | ❌ Limited | ✅ Simple | 💰 Low |
+| **Sequential** | Slow | Limited | Simple | 💰 Low |
 | **Parallel** | Fast | ⚡ Moderate | ⚠️ Medium | 💰💰 Medium |
-| **Distributed** | Very Fast | 🚀 High | ❌ Complex | 💰💰💰 High |
+| **Distributed** | Very Fast | 🚀 High | Complex | 💰💰💰 High |
 
 **When to use each**:
 - **Sequential**: Simple tasks, single-user programs, debugging
@@ -177,11 +177,11 @@ YouTube uses **all three models**:
    - Load balancers route requests to nearest data center
    - Content Delivery Networks (CDNs) cache popular videos closer to users
 
-**Result**: You can watch cat videos in 4K with no buffering! 🎥🐱
+**Result**: You can watch cat videos in 4K with no buffering!
 
 ---
 
-## ⚡ Interactive Learning: GPU Assembly Simulator
+## Interactive Learning: GPU Assembly Simulator
 
 Now it's time to experience these concepts hands-on with **Hardware Havoc**! The GPU Assembly Simulator lets you build graphics cards using different computing architectures.
 
@@ -205,25 +205,25 @@ Now it's time to experience these concepts hands-on with **Hardware Havoc**! The
 - Each factory has its own robots AND testing station (no sharing!)
 - **Learning Goal**: See how distributed computing eliminates bottlenecks
 
-### 🎮 Ready to Build?
+### Ready to Build?
 
 <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #1F2020 0%, #007ACC 50%, #4CAFEF 100%); border-radius: 12px; box-shadow: 0 10px 40px rgba(76,175,239,0.4); border: 2px solid #4CAFEF;">
   <h2 style="color: #4CAFEF; margin-bottom: 20px; font-size: 2.5rem; font-family: 'Courier New', monospace;">⚡ GPU ASSEMBLY SIMULATOR</h2>
   <p style="color: #F0F0F0; font-size: 1.2rem; margin-bottom: 30px; font-family: 'Courier New', monospace;">[ HARDWARE HAVOC :: COMPUTING LAB ]</p>
-  <a href="/gpu-assembly-simulator" style="display: inline-block; padding: 18px 48px; background: linear-gradient(135deg, #007ACC, #4CAFEF); color: white; text-decoration: none; border-radius: 8px; font-size: 1.3rem; font-weight: bold; box-shadow: 0 8px 25px rgba(0,0,0,0.3); transition: all 0.3s ease; font-family: 'Courier New', monospace; text-transform: uppercase;">
+  <a href="/frontend/gpu-assembly-simulator" style="display: inline-block; padding: 18px 48px; background: linear-gradient(135deg, #007ACC, #4CAFEF); color: white; text-decoration: none; border-radius: 8px; font-size: 1.3rem; font-weight: bold; box-shadow: 0 8px 25px rgba(0,0,0,0.3); transition: all 0.3s ease; font-family: 'Courier New', monospace; text-transform: uppercase;">
     ▶ START PRODUCTION
   </a>
 </div>
 
 **Pro Tips**:
-- 💎 Assemble 5 GPUs in each stage to unlock the next
-- 📊 Compare your performance times between stages
-- 🎯 Try to maximize GPUs/minute throughput
-- 🏆 Challenge: Achieve 10+ GPUs/min in Stage 3!
+- Assemble 5 GPUs in each stage to unlock the next
+- Compare your performance times between stages
+- Try to maximize GPUs/minute throughput
+- Challenge: Achieve 10+ GPUs/min in Stage 3!
 
 ---
 
-## ✅ Check Your Understanding
+## Check Your Understanding
 
 After playing the simulator, answer these questions:
 
@@ -241,7 +241,7 @@ After playing the simulator, answer these questions:
 
 ---
 
-## 🚀 Going Deeper (Optional)
+## Going Deeper (Optional)
 
 ### Amdahl's Law: The Limit of Parallelization
 
@@ -266,18 +266,18 @@ Your laptop actually uses **all three models**:
 
 ---
 
-## 📝 Activities
+## Activities
 
-1. ✅ Play through all 3 stages of the Pizza Shop Simulator
-2. ✅ Record your completion times for each stage
-3. ✅ Calculate the speedup: Stage1Time ÷ Stage3Time
+1. Play through all 3 stages of the Pizza Shop Simulator
+2. Record your completion times for each stage
+3. Calculate the speedup: Stage1Time ÷ Stage3Time
 4. 📊 Create a graph comparing your stage performance
 5. 💭 Write a short reflection: "Which computing model surprised you most and why?"
 6. 🔍 Find 3 apps on your phone and identify which computing model they primarily use
 
 ---
 
-## 🎓 Key Takeaways
+## Key Takeaways
 
 - **Sequential**: Simple but slow — one task at a time
 - **Parallel**: Faster with multiple workers, but shared resources create bottlenecks
@@ -287,7 +287,7 @@ Your laptop actually uses **all three models**:
 
 ---
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Video: How Do CPUs Use Multiple Cores?](https://www.youtube.com/watch?v=fKK933KuPhg) (3 min)
 - [Interactive: Visualizing Parallel Computing](https://www.cs.usfca.edu/~galles/visualization/ThreadedRecursion.html)
@@ -307,6 +307,6 @@ Ready to dive deeper?
 ---
 
 <div style="background: rgba(76,175,239,0.1); border-left: 5px solid #4CAFEF; padding: 20px; border-radius: 8px; margin-top: 40px; border: 2px solid #4CAFEF;">
-  <h3 style="color: #4CAFEF; margin-top: 0; font-family: 'Courier New', monospace;">⚡ HARDWARE CHALLENGE</h3>
+  <h3 style="color: #4CAFEF; margin-top: 0; font-family: 'Courier New', monospace;">HARDWARE CHALLENGE</h3>
   <p style="color: #F0F0F0;">Think you've mastered computing models? Try the <a href="/gpu-assembly-simulator" style="color: #4CAFEF; font-weight: bold;">GPU Assembly Simulator</a> and see if you can complete Stage 3 with a throughput of over 10 GPUs/minute!</p>
 </div>

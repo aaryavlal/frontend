@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: GPU Assembly Simulator - Hardware Havoc
 description: Learn Sequential, Parallel, and Distributed Computing by Building GPUs
@@ -262,23 +262,92 @@ body {
 .tutorial-box {
   background: #0f1419;
   border-bottom: 1px solid #00d4ff;
-  padding: 12px 20px;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
-.tutorial-box h3 {
+.tutorial-header {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.tutorial-header:hover {
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.tutorial-header h3 {
   color: #00d4ff;
   font-size: 0.7rem;
-  margin-bottom: 6px;
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 700;
 }
 
-.tutorial-box p {
+.tutorial-arrow {
+  color: #00d4ff;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.tutorial-box.expanded .tutorial-arrow {
+  transform: rotate(180deg);
+}
+
+.tutorial-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 20px;
+}
+
+.tutorial-box.expanded .tutorial-content {
+  max-height: 500px;
+  padding: 0 20px 15px 20px;
+  overflow-y: auto;
+}
+
+.tutorial-content h4 {
+  color: #00ff88;
+  font-size: 0.75rem;
+  margin: 12px 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.tutorial-content p {
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: #b8c5d6;
+  margin: 6px 0;
+}
+
+.tutorial-content ul {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+
+.tutorial-content li {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: #b8c5d6;
+  margin-bottom: 4px;
+}
+
+.tutorial-content strong {
+  color: #00d4ff;
+}
+
+.stage-brief {
   font-size: 0.75rem;
   line-height: 1.5;
   color: #b8c5d6;
+  padding: 12px 20px;
 }
 
 .assembly-area {
@@ -696,6 +765,96 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #5CBFFF;
 }
+
+/* Help Button */
+.help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  border: 2px solid #00d4ff;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #000;
+  font-weight: 900;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.5);
+  transition: all 0.3s ease;
+  z-index: 1500;
+}
+
+.help-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(0, 212, 255, 0.7);
+}
+
+.help-tooltip {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 350px;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 2px solid #00d4ff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 1400;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.help-tooltip.show,
+.help-button:hover + .help-tooltip,
+.help-tooltip:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.help-tooltip h3 {
+  color: #00d4ff;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.help-tooltip h4 {
+  color: #00ff88;
+  font-size: 0.9rem;
+  margin-top: 15px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.help-tooltip p {
+  color: #b8c5d6;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.help-tooltip ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.help-tooltip li {
+  color: #b8c5d6;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
 </style>
 <body>
 
@@ -763,9 +922,90 @@ body {
 
     <!-- Center Area -->
     <div class="center-area">
-      <div class="tutorial-box">
-        <h3>📡 Mission Briefing</h3>
-        <p id="tutorialText">Click START to begin assembly!</p>
+      <div class="tutorial-box" id="tutorialBox">
+        <div class="tutorial-header" onclick="toggleTutorial()">
+          <h3>📚 Learning Guide: Computing Models</h3>
+          <span class="tutorial-arrow">▼</span>
+        </div>
+        <div class="tutorial-content">
+          <h4>🎯 Learning Objectives</h4>
+          <ul>
+            <li>Define <strong>sequential, parallel, and distributed computing</strong></li>
+            <li>Identify real-world examples of each computing model</li>
+            <li>Explain the concept of <strong>resource contention</strong> in parallel systems</li>
+            <li>Compare performance trade-offs between different architectures</li>
+            <li>Apply computing models to solve problems efficiently</li>
+          </ul>
+
+          <h4>⚙️ Stage 1: Sequential Computing — One Thing at a Time</h4>
+          <p><strong>Definition:</strong> Executes instructions one after another in a single stream. Only one task runs at any moment.</p>
+          <p><strong>Analogy:</strong> Single chef making pizzas — must complete each step before starting next pizza.</p>
+          <p><strong>Real-World Examples:</strong> Early computers (1940s-1970s), simple calculators, single-threaded programs, following recipes</p>
+          <ul>
+            <li>✅ <strong>Advantages:</strong> Simple to understand, predictable execution, no coordination overhead</li>
+            <li>❌ <strong>Disadvantages:</strong> Slow for large workloads, resources sit idle, can't use multi-core processors</li>
+          </ul>
+
+          <h4>⚡ Stage 2: Parallel Computing — Many Hands Make Light Work</h4>
+          <p><strong>Definition:</strong> Divides tasks to execute simultaneously on multiple processors sharing the same memory and resources.</p>
+          <p><strong>Analogy:</strong> 3 chefs in one kitchen with 1 shared oven — they can work in parallel but bottleneck at testing!</p>
+          <p><strong>KEY CONCEPT — Resource Contention:</strong> When multiple threads compete for same resource, they must wait (the oven bottleneck).</p>
+          <p><strong>Real-World Examples:</strong> Multi-core CPUs (4-16 cores), GPUs (thousands of cores), web browsers, video games, scientific simulations</p>
+          <ul>
+            <li>✅ <strong>Advantages:</strong> Faster than sequential, better resource utilization, handles multiple users</li>
+            <li>❌ <strong>Disadvantages:</strong> Shared resources create bottlenecks, requires synchronization, harder debugging (race conditions)</li>
+          </ul>
+
+          <h4>🌐 Stage 3: Distributed Computing — Independent Powerhouses</h4>
+          <p><strong>Definition:</strong> Spreads tasks across multiple independent computers connected by network. Each has own CPU, memory, resources.</p>
+          <p><strong>Analogy:</strong> 3 separate pizza shops with own chefs and ovens — orders route to least busy shop. No sharing, no waiting!</p>
+          <p><strong>KEY CONCEPT — Load Balancing:</strong> Distributing work evenly so no machine is overwhelmed while others sit idle.</p>
+          <p><strong>Real-World Examples:</strong> Google Search (thousands of servers), Netflix CDN, blockchain networks, cloud computing (AWS/Azure), multiplayer games</p>
+          <ul>
+            <li>✅ <strong>Advantages:</strong> Scales horizontally (add more machines), fault tolerant, no resource contention, geographic distribution</li>
+            <li>❌ <strong>Disadvantages:</strong> Network latency, complex coordination, higher cost, data consistency challenges</li>
+          </ul>
+
+          <h4>📊 Performance Comparison</h4>
+          <p><strong>Sequential:</strong> Slow | Limited scaling | Simple | Low cost 💰</p>
+          <p><strong>Parallel:</strong> Fast ⚡ | Moderate scaling | Medium complexity ⚠️ | Medium cost 💰💰</p>
+          <p><strong>Distributed:</strong> Very Fast 🚀 | High scaling | Complex | High cost 💰💰💰</p>
+
+          <h4>🔍 Real-World Case Study: How YouTube Works</h4>
+          <p><strong>YouTube uses ALL THREE models:</strong></p>
+          <ul>
+            <li><strong>Sequential:</strong> Your browser processes HTML sequentially</li>
+            <li><strong>Parallel:</strong> Video encoding uses multiple CPU cores to compress faster</li>
+            <li><strong>Distributed:</strong> Millions of videos across thousands of servers worldwide with CDN caching</li>
+          </ul>
+          <p><strong>Result:</strong> You can watch 4K cat videos with no buffering!</p>
+
+          <h4>🎮 How to Play</h4>
+          <p><strong>Goal:</strong> Build 5 GPUs per stage as fast as possible</p>
+          <ul>
+            <li><strong>Stage 1:</strong> Click PCB → Cores → Memory → Test in order for each GPU</li>
+            <li><strong>Stage 2:</strong> Assign tasks to any available robot, but watch the testing bottleneck!</li>
+            <li><strong>Stage 3:</strong> Fully automated — observe load balancing route orders to least busy factory</li>
+          </ul>
+
+          <h4>💡 Key Insights</h4>
+          <ul>
+            <li><strong>Amdahl's Law:</strong> Not all programs can be perfectly parallelized — if only 50% can parallelize, max speedup is only 2x even with infinite processors!</li>
+            <li><strong>Throughput:</strong> Measure efficiency in GPUs/minute — try to reach 10+ in Stage 3!</li>
+            <li><strong>Trade-offs:</strong> More speed = more complexity and cost</li>
+            <li><strong>Modern systems:</strong> Your laptop uses all three models simultaneously!</li>
+          </ul>
+
+          <h4>🏆 Challenge Yourself</h4>
+          <ul>
+            <li>Complete all 3 stages and compare times</li>
+            <li>Calculate speedup: Stage1Time ÷ Stage3Time</li>
+            <li>Achieve 10+ GPUs/minute throughput in Stage 3</li>
+            <li>Unlock all achievements</li>
+            <li>Reflect: Which model surprised you most?</li>
+          </ul>
+        </div>
+        <div class="stage-brief" id="stageBrief">Click START to begin assembly!</div>
       </div>
 
       <div class="assembly-area">
@@ -801,7 +1041,10 @@ body {
   </div>
 </div>
 
-<script>
+<script type="module">
+// Import API configuration
+import { pythonURI, fetchOptions } from '{{ site.baseurl }}/assets/js/api/config.js';
+
 // Game State
 let currentStage = 1;
 let gameRunning = false;
@@ -814,7 +1057,7 @@ let workstations = [];
 let totalGPUsAllTime = 0;
 let fastestGPU = Infinity;
 let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-const API_URL = 'http://localhost:5000';
+const API_URL = pythonURI;
 
 let stageStats = {
   1: { completed: 0, time: 0, avgTime: 0 },
@@ -929,6 +1172,11 @@ function renderAchievements() {
   `).join('');
 }
 
+function toggleTutorial() {
+  const tutorialBox = document.getElementById('tutorialBox');
+  tutorialBox.classList.toggle('expanded');
+}
+
 function initGame() {
   renderAchievements();
   selectStage(1);
@@ -955,10 +1203,10 @@ function selectStage(stage) {
 
 function setupStage(stage) {
   workstations = [];
-  const tutorialText = document.getElementById('tutorialText');
+  const stageBrief = document.getElementById('stageBrief');
 
   if (stage === 1) {
-    tutorialText.textContent = 'SEQUENTIAL: One robot processes GPUs step-by-step. Click PCB → Cores → Memory → Test in order.';
+    stageBrief.textContent = 'SEQUENTIAL: One robot processes GPUs step-by-step. Click PCB → Cores → Memory → Test in order.';
     workstations.push({
       id: 1,
       name: 'Assembly Line',
@@ -966,7 +1214,7 @@ function setupStage(stage) {
       tester: { busy: false, timer: null, orderId: null }
     });
   } else if (stage === 2) {
-    tutorialText.textContent = 'PARALLEL: Three robots work together! But they share ONE testing station—this creates a bottleneck!';
+    stageBrief.textContent = 'PARALLEL: Three robots work together! But they share ONE testing station—this creates a bottleneck!';
     workstations.push({
       id: 1,
       name: 'Assembly Line',
@@ -978,7 +1226,7 @@ function setupStage(stage) {
       tester: { busy: false, timer: null, orderId: null }
     });
   } else if (stage === 3) {
-    tutorialText.textContent = 'DISTRIBUTED: Three independent factories with their own testing! Orders auto-route to least busy factory.';
+    stageBrief.textContent = 'DISTRIBUTED: Three independent factories with their own testing! Orders auto-route to least busy factory.';
     for (let i = 1; i <= 3; i++) {
       workstations.push({
         id: i,
@@ -1433,10 +1681,8 @@ async function logGameData() {
     console.log('📊 Logging game data:', gameData);
 
     const response = await fetch(`${API_URL}/api/game-logs/gpu-simulator`, {
+      ...fetchOptions,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify(gameData)
     });
 
@@ -1453,4 +1699,67 @@ async function logGameData() {
 }
 
 initGame();
+
+// Help tooltip toggle
+let helpTooltipTimeout;
+document.addEventListener('DOMContentLoaded', () => {
+  const helpButton = document.querySelector('.help-button');
+  const helpTooltip = document.querySelector('.help-tooltip');
+  
+  helpButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    helpTooltip.classList.toggle('show');
+  });
+  
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!helpButton.contains(e.target) && !helpTooltip.contains(e.target)) {
+      helpTooltip.classList.remove('show');
+    }
+  });
+  
+  // Keep tooltip open when hovering over it
+  helpTooltip.addEventListener('mouseenter', () => {
+    clearTimeout(helpTooltipTimeout);
+  });
+  
+  helpTooltip.addEventListener('mouseleave', () => {
+    helpTooltipTimeout = setTimeout(() => {
+      helpTooltip.classList.remove('show');
+    }, 300);
+  });
+});
 </script>
+
+<!-- Help Button -->
+<div class="help-button">?</div>
+<div class="help-tooltip">
+  <h3>How to Play</h3>
+
+  <h4>Goal</h4>
+  <p>Build 5 GPUs as fast as possible by completing all assembly steps for each order.</p>
+
+  <h4>Controls</h4>
+  <ul>
+    <li><strong>Start:</strong> Begin production and spawn orders</li>
+    <li><strong>Reset:</strong> Clear current stage and restart</li>
+    <li><strong>New Order:</strong> Manually add an order to the queue</li>
+  </ul>
+
+  <h4>Stage 1 - Sequential</h4>
+  <p>One robot processes each GPU step-by-step. Click the task buttons (PCB, Cores, Memory) in order, then Test when ready.</p>
+
+  <h4>Stage 2 - Parallel</h4>
+  <p>Three robots work simultaneously! Assign tasks to any available robot. Notice the shared testing station becomes a bottleneck.</p>
+
+  <h4>Stage 3 - Distributed</h4>
+  <p>Three independent factories with dedicated testers. Orders auto-route to the least busy factory. Fully automated!</p>
+
+  <h4>Tips</h4>
+  <ul>
+    <li>Complete tasks in order: PCB → Cores → Memory → Test</li>
+    <li>Watch for bottlenecks (red indicators)</li>
+    <li>Track progress in the Orders Queue panel</li>
+    <li>Unlock achievements for special accomplishments</li>
+  </ul>
+</div>
