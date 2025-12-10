@@ -112,3 +112,74 @@ fn main() {
 }' %}
 
 {% include rust-editor.html code=pass %}
+
+
+Application? Ok.
+
+{% assign work = 'use std::sync::mpsc::{self, Sender, Receiver};
+use std::thread;
+
+// The data we will be processing
+const DATA_LIST: [i32; 10] = [1, 5, 2, 8, 3, 9, 4, 7, 6, 10];
+
+/// This function takes a slice of integers and processes them
+/// to find the sum of all even numbers.
+fn process_data(data: &[i32]) -> i32 {
+    let mut even_sum = 0; // Sequencing: Start with initialization
+
+    println!("    -> Processor is iterating through the list: {:?}", data);
+    
+    // Iteration: Loop through every number in the slice
+    for num in data {
+        // Selection: Check if the number is even
+        if num % 2 == 0 {
+            // Sequencing: Add the number to the running sum
+            even_sum += num;
+            print!("{} + ", num); // Optional: show the numbers being summed
+        }
+    }
+    
+    // Cleanup the output line and return the result
+    println!("\n    -> Processing complete.");
+    even_sum
+}
+
+// This function moves the processing logic into a separate thread.
+fn sender_thread_function(tx: Sender<i32>) {
+    // 1. Spawn a new thread
+    thread::spawn(move || {
+        println!("\n[Sender Thread] Starting data processing...");
+        
+        // 2. Execute the algorithmic function
+        let result = process_data(&DATA_LIST);
+        
+        println!("[Sender Thread] Calculated sum: {}", result);
+        
+        // 3. Send the final result (the sum) through the channel
+        tx.send(result).unwrap(); 
+    });
+}
+
+// This function waits for the result from the sender thread.
+fn receiver_thread_function(rx: Receiver<i32>) -> i32 {
+    println!("\n[Receiver Function] Waiting for the processed data...");
+    
+    // Block until the value is received
+    let received_sum = rx.recv().unwrap(); 
+    
+    received_sum
+}
+
+fn main() {
+    // Create the channel for i32 data
+    let (tx, rx) = mpsc::channel();
+
+    // The sender function initiates the processing in a separate thread
+    sender_thread_function(tx);
+
+    // The receiver function waits for the result to come back
+    let final_sum = receiver_thread_function(rx);
+
+    println!("[Main Thread] Received Final Sum: {}", final_sum);
+}' %}
+{% include rust-editor.html code=work %}
