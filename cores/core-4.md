@@ -9,6 +9,52 @@ breadcrumbs: true
 [⬅ Back to Core 4 Overview](/cores/core-4)
 
 <style>
+  .m4-module-dropdown {
+    margin: 0;
+  }
+  .m4-dropdown-summary {
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: clamp(28px, 5vw, 60px) clamp(24px, 8vw, 140px);
+    margin: 0 0 18px 0;
+    background: linear-gradient(135deg, #020617 0%, #0f172a 45%, #020617 100%);
+    border: 1px solid rgba(14,165,233,0.55);
+    border-radius: 0;
+    box-shadow: 0 14px 40px rgba(2,6,23,0.75);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+  .m4-dropdown-summary::-webkit-details-marker {
+    display: none;
+  }
+  .m4-dropdown-summary::after {
+    content: "▾";
+    position: absolute;
+    right: clamp(16px, 4vw, 60px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.4em;
+    color: #38bdf8;
+    transition: transform 0.2s ease;
+  }
+  .m4-module-dropdown[open] .m4-dropdown-summary::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+  .m4-summary-title {
+    margin: 0;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    color: #38bdf8;
+  }
+  .m4-summary-hint {
+    margin: 0;
+    font-size: 0.95em;
+    color: #cbd5f5;
+  }
   .m4-shell {
     background: linear-gradient(135deg, #020617 0%, #0f172a 45%, #020617 100%);
     padding: clamp(40px, 6vw, 120px) clamp(24px, 8vw, 140px);
@@ -149,18 +195,21 @@ breadcrumbs: true
   }
 </style>
 
-<div class="m4-shell">
-  <div class="m4-shell-inner">
-    <h1 style="margin-top:0; font-size:2.4em; color:#38bdf8;">
-      ⚙️ Module 4: Execution Time Calculations
-    </h1>
-    <p style="font-size:1.05em; color:#cbd5f5; line-height:1.8;">
-      This module combines everything from Modules 1–3:
-      you already know what <strong>sequential vs parallel</strong> work looks like (Module 1),
-      why we chase parallelism at all (Module 2),
-      and how <strong>sequential bottlenecks</strong> and <strong>overhead</strong> limit us (Module 3).
-      Here you will turn those ideas into actual numbers by playing with a simple execution-time model.
-    </p>
+<details class="m4-module-dropdown" open>
+  <summary class="m4-dropdown-summary">
+    <h1 class="m4-summary-title">⚙️ Module 4: Execution Time Calculations</h1>
+    <p class="m4-summary-hint">Click to collapse or expand this module.</p>
+  </summary>
+
+  <div class="m4-shell">
+    <div class="m4-shell-inner">
+      <p style="font-size:1.05em; color:#cbd5f5; line-height:1.8;">
+        This module combines everything from Modules 1–3:
+        you already know what <strong>sequential vs parallel</strong> work looks like (Module 1),
+        why we chase parallelism at all (Module 2),
+        and how <strong>sequential bottlenecks</strong> and <strong>overhead</strong> limit us (Module 3).
+        Here you will turn those ideas into actual numbers by playing with a simple execution-time model.
+      </p>
 
     <div class="m4-section">
       <h3 style="color:#0ea5e9; font-size:1.3em;">
@@ -295,8 +344,9 @@ breadcrumbs: true
         and <strong>diminishing returns</strong> from Module 3 showing up in the math.
       </p>
     </div>
+    </div>
   </div>
-</div>
+</details>
 
 <script>
   const m4SeqSlider = document.getElementById('m4-seq-slider');
