@@ -14,6 +14,142 @@ try the code example below:
 
 {% include rust-editor.html %}
 
+We'll begin the idea of *sequential computing*, or executing tasks sequentially one by one. For example, we could have:
+```rs
+fn task() {
+    std::thread::sleep(Duration::from_millis(500))
+}
+
+fn main() {
+    task(1);
+    task(2);
+    task(3);
+}
+```
+<style>
+  #tasks-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .task-container {
+    margin-bottom: 15px;
+  }
+
+  .task-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+  }
+
+  .task-bar-frame {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 18px;
+  }
+
+  .task-bar {
+    width: 0%;
+    height: 100%;
+    background-color: #4caf50;
+    border-radius: 4px;
+  }
+
+  #run-button {
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+</style>
+
+<div id="tasks-container">
+  <button id="run-button">Run Simulation</button>
+  <div id="tasks"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script>
+async function initializeTasks() {
+    const container = document.getElementById('tasks');
+    
+    const response = await fetch('http://localhost:5001/api/compute/sequential');
+    const json = await response.json();
+    if (!json.success) {
+        alert('Failed to fetch tasks');
+        return;
+    }
+
+    const tasks = json.data;
+
+    tasks.forEach(task => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'task-container';
+
+        const label = document.createElement('div');
+        label.className = 'task-label';
+        label.textContent = `Task ${task.task_id} (Duration: ${task.duration_ms} ms)`;
+        wrapper.appendChild(label);
+
+        const frame = document.createElement('div');
+        frame.className = 'task-bar-frame';
+
+        const bar = document.createElement('div');
+        bar.className = 'task-bar';
+        bar.id = `task-${task.task_id}`;
+        bar.style.width = '0%';
+        bar.dataset.duration = task.duration_ms;
+        bar.dataset.startMs = task.start_ms;
+
+        frame.appendChild(bar);
+        wrapper.appendChild(frame);
+        container.appendChild(wrapper);
+    });
+
+    return tasks;
+}
+
+async function runSimulation() {
+    const tasks = document.querySelectorAll('.task-bar');
+    if (tasks.length === 0) return;
+
+    // Reset all bars to 0%
+    tasks.forEach(bar => bar.style.width = '0%');
+
+    // Animate bars sequentially
+    const timeline = anime.timeline({
+        easing: 'linear',
+        autoplay: true
+    });
+
+    tasks.forEach(bar => {
+        timeline.add({
+            targets: `#${bar.id}`,
+            width: [`0%`, `100%`],
+            duration: parseInt(bar.dataset.duration),
+            offset: parseInt(bar.dataset.startMs)
+        });
+    });
+}
+
+// Initialize tasks on page load
+initializeTasks();
+
+// Attach button
+document.getElementById('run-button').addEventListener('click', runSimulation);
+
+</script>
+
+
+
 
 For example, we could have this code:
 
