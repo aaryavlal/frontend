@@ -1,5 +1,4 @@
 ---
-toc: true
 layout: post
 title: Hardware Havoc
 description: Fix the cores, learn Computing, play the game!
@@ -8,1148 +7,793 @@ breadcrumbs: true
 ---
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  :root{
+    --bg: #0b1220;
+    --paper: #0f1a2e;
+    --surface: #111c33;
+    --surface-2: #0f1a2e;
+    --ink: #e6e9ef;
+    --muted: #b7c0d1;
+    --muted-2: #93a0b8;
+    --border: rgba(230,233,239,0.14);
+    --border-strong: rgba(230,233,239,0.22);
+    --accent: #c9a34a;     /* classic gold */
+    --accent-2: #6ea6d9;   /* subdued blue */
+    --success: #2f8f5b;
+    --warning: #b9832a;
+    --danger: #c44a4a;
+
+    --radius: 12px;
+    --radius-sm: 10px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.35);
+    --shadow-sm: 0 6px 18px rgba(0,0,0,0.25);
+
+    --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
   }
 
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #e2e8f0;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body{
+    font-family: var(--font);
+    background: radial-gradient(1200px 700px at 20% 0%, rgba(110,166,217,0.16), transparent 55%),
+                radial-gradient(900px 600px at 100% 20%, rgba(201,163,74,0.12), transparent 55%),
+                var(--bg);
+    color: var(--ink);
     min-height: 100vh;
-    padding: 20px;
+    padding: 22px;
+    line-height: 1.45;
   }
 
-  .container {
-    max-width: 1200px;
+  .container{
+    max-width: 1100px;
     margin: 0 auto;
   }
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 30px;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    border-radius: 15px;
-    border: 2px solid #38bdf8;
+  /* Header */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 18px;
+    margin-bottom: 26px;
+    padding: 22px 24px;
+    background: linear-gradient(180deg, rgba(17,28,51,0.92), rgba(15,26,46,0.92));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
   }
 
-  .header h1 {
-    color: #38bdf8;
-    font-size: 2.5em;
+  .header h2{
+    font-family: var(--serif);
+    letter-spacing: 0.2px;
+    color: var(--ink);
+    font-size: 2.0rem;
+    margin-bottom: 6px;
+    font-weight: 650;
+  }
+
+  .header p{
+    color: var(--muted);
+    font-size: 0.98rem;
+  }
+
+  /* Sections */
+  .section{
+    background: linear-gradient(180deg, rgba(17,28,51,0.92), rgba(15,26,46,0.92));
+    padding: 22px 24px;
+    border-radius: var(--radius);
+    margin-bottom: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .section h2{
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    color: var(--ink);
+    margin-bottom: 14px;
+    font-weight: 650;
+  }
+
+  .section h3{
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin: 16px 0 10px;
+    font-weight: 650;
+  }
+
+  .section h4{
+    font-size: 1.0rem;
+    color: var(--muted);
     margin-bottom: 10px;
+    font-weight: 600;
   }
 
-  .section {
-    background: #1e293b;
-    padding: 30px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    border-left: 4px solid #38bdf8;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  .config-section{
+    border-left: 4px solid var(--accent);
   }
 
-  .section h2 {
-    color: #38bdf8;
-    margin-bottom: 20px;
-    font-size: 1.8em;
+  /* Forms */
+  .form-group{ margin-bottom: 14px; }
+
+  label{
+    display:block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.92rem;
   }
 
-  .form-group {
-    margin-bottom: 20px;
+  input, textarea{
+    width:100%;
+    padding: 11px 12px;
+    background: rgba(11,18,32,0.65);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: 0.98rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: #94a3b8;
-    font-weight: 500;
-  }
-
-  .form-group input {
-    width: 100%;
-    padding: 12px;
-    background: #0f172a;
-    border: 2px solid #334155;
-    border-radius: 8px;
-    color: #e2e8f0;
-    font-size: 16px;
-    transition: border-color 0.3s;
-  }
-
-  .form-group input:focus {
+  input:focus, textarea:focus{
     outline: none;
-    border-color: #38bdf8;
+    border-color: rgba(201,163,74,0.55);
+    box-shadow: 0 0 0 3px rgba(201,163,74,0.14);
   }
 
-  .btn {
-    padding: 12px 30px;
-    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
-    color: #0f172a;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
+  textarea{ resize: vertical; }
+
+  .inline-inputs{
+    display:flex;
+    gap: 12px;
+    align-items:flex-end;
+    flex-wrap: wrap;
+  }
+
+  .inline-inputs .form-group{ flex: 1; min-width: 220px; }
+
+  /* Buttons */
+  .btn{
+    padding: 10px 16px;
+    background: rgba(201,163,74,0.95);
+    color: #121826;
+    border: 1px solid rgba(201,163,74,0.8);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.06s ease, box-shadow 0.15s ease, background 0.15s ease;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
   }
 
-  .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+  .btn:hover{ box-shadow: 0 10px 22px rgba(0,0,0,0.32); }
+  .btn:active{ transform: translateY(1px); }
+
+  .btn-secondary{
+    background: rgba(230,233,239,0.10);
+    color: var(--ink);
+    border: 1px solid var(--border-strong);
+    box-shadow: none;
   }
 
-  .btn:active {
-    transform: translateY(0);
+  .btn-secondary:hover{
+    background: rgba(230,233,239,0.14);
   }
 
-  .btn-secondary {
-    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-    color: #e2e8f0;
+  .btn-warning{
+    background: rgba(185,131,42,0.95);
+    border-color: rgba(185,131,42,0.75);
+    color: #121826;
   }
 
-  .btn-warning {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: white;
+  .btn-danger{
+    background: rgba(196,74,74,0.95);
+    border-color: rgba(196,74,74,0.75);
+    color: #121826;
   }
 
-  .btn-danger {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-  }
+  .btn-small{ padding: 8px 12px; font-size: 0.9rem; }
 
-  .status {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-weight: 500;
-  }
+  /* Utility */
+  .hidden{ display:none; }
 
-  .status.success {
-    background: rgba(34, 197, 94, 0.2);
-    border: 2px solid #22c55e;
-    color: #86efac;
-  }
-
-  .status.error {
-    background: rgba(239, 68, 68, 0.2);
-    border: 2px solid #ef4444;
-    color: #fca5a5;
-  }
-
-  .status.info {
-    background: rgba(56, 189, 248, 0.2);
-    border: 2px solid #38bdf8;
-    color: #7dd3fc;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  .room-info {
-    background: #0f172a;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-
-  .room-info h3 {
-    color: #38bdf8;
-    margin-bottom: 15px;
-  }
-
-  .room-info p {
-    margin: 10px 0;
-    color: #cbd5e1;
-  }
-
-  .room-code {
-    font-size: 2em;
-    font-weight: bold;
-    color: #38bdf8;
-    text-align: center;
-    padding: 20px;
-    background: #0f172a;
-    border-radius: 8px;
-    letter-spacing: 8px;
-    margin: 20px 0;
-  }
-
-  .members-list {
-    list-style: none;
-    margin-top: 15px;
-  }
-
-  .member-item {
-    background: #334155;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .member-name {
-    font-weight: bold;
-    color: #e2e8f0;
-  }
-
-  .member-progress {
-    color: #94a3b8;
-    font-size: 0.9em;
-  }
-
-  .progress-modules {
-    display: flex;
-    gap: 10px;
+  /* Room info */
+  .room-info{
+    background: rgba(11,18,32,0.55);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
     margin-top: 10px;
   }
 
-  .module-badge {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    border: 2px solid #334155;
-    background: #1e293b;
-    color: #64748b;
+  .room-info p{ margin: 8px 0; color: var(--muted); }
+
+  .room-code{
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-align:center;
+    padding: 14px 10px;
+    background: rgba(11,18,32,0.65);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    letter-spacing: 6px;
+    margin: 14px 0;
   }
 
-  .module-badge.completed {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: white;
-    border-color: #22c55e;
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+  /* Demo card */
+  .demo-card{
+    background: rgba(47,143,91,0.10);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(47,143,91,0.35);
+    margin-bottom: 16px;
   }
 
-  /* CPU Chip Layout */
-  .cpu-container {
+  .demo-card .demo-title{
+    color: rgba(47,143,91,1);
+    font-weight: 800;
+    margin: 0 0 8px 0;
+  }
+
+  .demo-pill{
+    background: rgba(11,18,32,0.65);
+    padding: 12px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: rgba(47,143,91,1);
+    letter-spacing: 3px;
+    border: 1px solid rgba(47,143,91,0.35);
+  }
+
+  /* CPU */
+  .cpu-container{
     position: relative;
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 40px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border-radius: 20px;
-    border: 3px solid #334155;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    transition: all 0.5s ease;
+    max-width: 640px;
+    margin: 22px auto 0;
+    padding: 28px;
+    background: rgba(11,18,32,0.60);
+    border-radius: 16px;
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow);
   }
 
-  .cpu-container.all-active {
-    border-color: #38bdf8;
-    background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%);
-    box-shadow: 0 0 60px rgba(56, 189, 248, 0.8), 0 10px 40px rgba(0, 0, 0, 0.5);
-    animation: cpuGlow 2s infinite;
-  }
-
-  @keyframes cpuGlow {
-    0%, 100% { 
-      box-shadow: 0 0 60px rgba(56, 189, 248, 0.8), 0 10px 40px rgba(0, 0, 0, 0.5);
-    }
-    50% { 
-      box-shadow: 0 0 80px rgba(56, 189, 248, 1), 0 10px 40px rgba(0, 0, 0, 0.5);
-    }
-  }
-
-  .cpu-label {
-    position: absolute;
-    top: 10px;
+  .cpu-label{
+    position:absolute;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 800;
     letter-spacing: 2px;
-    transition: color 0.5s;
+    color: var(--muted-2);
   }
 
-  .cpu-container.all-active .cpu-label {
-    color: #38bdf8;
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
-  }
-
-  .cpu-visualization {
-    display: grid;
+  .cpu-visualization{
+    display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    position: relative;
+    gap: 12px;
+    margin-top: 18px;
   }
 
-  /* Pin connectors on sides */
-  .cpu-pins {
-    position: absolute;
-    display: flex;
-    gap: 8px;
-  }
+  /* Pins */
+  .cpu-pins{ position:absolute; display:flex; gap: 8px; }
+  .cpu-pins.left{ left: -22px; top: 50%; transform: translateY(-50%); flex-direction: column; }
+  .cpu-pins.right{ right: -22px; top: 50%; transform: translateY(-50%); flex-direction: column; }
+  .cpu-pins.top{ top: -18px; left: 50%; transform: translateX(-50%); flex-direction: row; }
+  .cpu-pins.bottom{ bottom: -18px; left: 50%; transform: translateX(-50%); flex-direction: row; }
 
-  .cpu-pins.left {
-    left: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-  }
-
-  .cpu-pins.right {
-    right: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    flex-direction: column;
-  }
-
-  .cpu-pins.top {
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: row;
-  }
-
-  .cpu-pins.bottom {
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    flex-direction: row;
-  }
-
-  .pin {
-    width: 4px;
-    height: 15px;
-    background: #334155;
+  .pin{
+    width: 4px; height: 14px;
+    background: rgba(230,233,239,0.18);
     border-radius: 2px;
-    transition: background 0.5s;
+  }
+  .cpu-pins.left .pin, .cpu-pins.right .pin{ width: 14px; height: 4px; }
+
+  /* Node tiles */
+  .node{
+    background: rgba(17,28,51,0.78);
+    padding: 16px 14px;
+    border-radius: var(--radius-sm);
+    text-align:center;
+    border: 1px solid var(--border);
+    transition: border-color 0.15s ease, background 0.15s ease;
   }
 
-  .cpu-pins.left .pin,
-  .cpu-pins.right .pin {
-    width: 15px;
-    height: 4px;
+  .node-icon{
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    color: var(--muted-2);
   }
 
-  .cpu-container.all-active .pin {
-    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
-    box-shadow: 0 0 5px rgba(56, 189, 248, 0.8);
+  .node-label{
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 0.82rem;
+    color: var(--muted);
   }
 
-  .node {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    border: 2px solid #334155;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
+  .node.active{
+    border-color: rgba(201,163,74,0.55);
+    background: rgba(201,163,74,0.08);
+  }
+  .node.active .node-icon{ color: rgba(201,163,74,0.95); }
+  .node.active .node-label{ color: var(--ink); }
+
+  /* Fully lit state (subtle) */
+  .cpu-container.all-active{
+    border-color: rgba(201,163,74,0.55);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.45);
   }
 
-  .node::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(56, 189, 248, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .node.active::before {
-    opacity: 1;
-  }
-
-  .node.active {
-    border-color: #38bdf8;
-    background: linear-gradient(135deg, #1e293b 0%, #0c4a6e 100%);
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
-  }
-
-  .node-icon {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .node.active .node-icon {
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-  }
-
-  .node-label {
-    color: #94a3b8;
-    font-weight: bold;
-    font-size: 0.9em;
-    position: relative;
-    z-index: 1;
-  }
-
-  .node.active .node-label {
-    color: #38bdf8;
-  }
-
-  /* Circuit traces connecting nodes */
-  .circuit-trace {
-    position: absolute;
-    background: #334155;
-    transition: background 0.5s, box-shadow 0.5s;
-    z-index: 0;
-  }
-
-  .cpu-container.all-active .circuit-trace {
-    background: linear-gradient(90deg, #38bdf8 0%, #3b82f6 100%);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-  }
-
-  .trace-horizontal {
-    height: 2px;
-    width: 100%;
-    top: 50%;
-    left: 0;
-  }
-
-  .trace-vertical {
-    width: 2px;
-    height: 100%;
-    left: 50%;
-    top: 0;
-  }
-
-  .module-controls {
-    display: grid;
+  /* Module buttons */
+  .module-controls{
+    display:grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 14px;
   }
 
-  .module-btn {
-    padding: 15px;
-    background: #334155;
-    border: 2px solid #475569;
-    border-radius: 8px;
-    color: #e2e8f0;
-    cursor: pointer;
-    transition: all 0.3s;
+  .module-btn{
+    padding: 14px 14px;
+    background: rgba(11,18,32,0.55);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    cursor:pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    text-align:left;
   }
 
-  .module-btn:hover {
-    background: #475569;
-    border-color: #38bdf8;
+  .module-btn:hover{
+    background: rgba(230,233,239,0.06);
+    border-color: rgba(201,163,74,0.45);
   }
 
-  .module-btn.completed {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    border-color: #22c55e;
+  .module-btn .module-icon{
+    font-size: 1.1rem;
+    color: var(--muted-2);
+    margin-bottom: 6px;
+    font-weight: 800;
   }
 
-  .config-section {
-    background: rgba(245, 158, 11, 0.1);
-    border-left-color: #f59e0b;
+  .module-btn.completed{
+    background: rgba(47,143,91,0.10);
+    border-color: rgba(47,143,91,0.38);
   }
 
-  .config-section h2 {
-    color: #f59e0b;
+  /* Members list */
+  .members-list{ list-style:none; margin-top: 10px; }
+
+  .member-item{
+    background: rgba(11,18,32,0.55);
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    border: 1px solid var(--border);
+    gap: 12px;
   }
 
-  .inline-inputs {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end;
-  }
+  .member-name{ font-weight: 800; color: var(--ink); }
+  .member-progress{ color: var(--muted); font-size: 0.9rem; }
 
-  .inline-inputs .form-group {
-    flex: 1;
-  }
+  .progress-modules{ display:flex; gap: 8px; flex-wrap: wrap; justify-content:flex-end; }
 
-  /* Celebration Animations */
-  .celebration-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .celebration-card {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    border: 3px solid;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 500px;
-    text-align: center;
-    animation: slideUp 0.5s ease-out;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
-
-  @keyframes slideUp {
-    from {
-      transform: translateY(50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .celebration-card.personal {
-    border-color: #38bdf8;
-  }
-
-  .celebration-card.room-module {
-    border-color: #22c55e;
-  }
-
-  .celebration-card.room-complete {
-    border-color: #f59e0b;
-    background: linear-gradient(135deg, #1e293b 0%, #451a03 100%);
-  }
-
-  .celebration-icon {
-    font-size: 5em;
-    margin-bottom: 20px;
-    animation: bounce 0.6s ease-in-out;
-  }
-
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-
-  .celebration-title {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .celebration-card.room-module .celebration-title {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .celebration-card.room-complete .celebration-title {
-    background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .celebration-message {
-    color: #cbd5e1;
-    font-size: 1.1em;
-    margin-bottom: 25px;
-    line-height: 1.6;
-  }
-
-  .celebration-btn {
-    padding: 15px 40px;
-    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
-    color: #0f172a;
-    border: none;
+  .module-badge{
+    width: 36px; height: 36px;
     border-radius: 10px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    display:flex; align-items:center; justify-content:center;
+    font-weight: 800;
+    border: 1px solid var(--border);
+    background: rgba(17,28,51,0.78);
+    color: var(--muted-2);
   }
 
-  .celebration-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5);
+  .module-badge.completed{
+    background: rgba(47,143,91,0.16);
+    border-color: rgba(47,143,91,0.55);
+    color: var(--ink);
   }
 
-  /* Confetti Animation */
-  .confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: #38bdf8;
-    position: absolute;
-    animation: confetti-fall 3s linear forwards;
+  /* Module panel overlay */
+  body.module-panel-open{ overflow:hidden; }
+
+  .module-panel{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+    padding: clamp(18px, 4vh, 44px) clamp(14px, 5vw, 44px);
+    background: rgba(0,0,0,0.72);
+    z-index: 45000;
+    overflow-y:auto;
   }
 
-  @keyframes confetti-fall {
-    to {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-
-  /* Toast Notification */
-  .toast {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
-    color: #0f172a;
-    padding: 20px 30px;
-    border-radius: 12px;
-    font-weight: bold;
-    z-index: 999999;
-    animation: slideInRight 0.5s ease-out, slideOutRight 0.5s ease-out 2.5s forwards;
-    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.4);
-    pointer-events: none;
-  }
-
-  body.module-panel-open {
-    overflow: hidden;
-  }
-
-  /* Full-page Module Panel (centered, sits above cores) */
-  .module-panel {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    padding: clamp(20px, 4vh, 48px) clamp(16px, 5vw, 48px);
-    background: rgba(6, 10, 14, 0.92);
-    color: #e2e8f0;
-    z-index: 45000; /* above cores and other overlays */
-    overflow-y: auto;
-  }
-
-  .module-dialog {
+  .module-dialog{
     width: min(1100px, 100%);
-    min-height: calc(100vh - clamp(40px, 8vh, 96px));
     margin: 0 auto;
-    max-width: none;
-    width: 98%;
-    max-height: calc(100vh - 20px);
-    margin: 10px auto;
-    background: #0b1220;
-    border-radius: 12px;
+    background: rgba(15,26,46,0.98);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow);
+    position:relative;
+    /* keep dialog constrained to viewport and allow internal scrolling */
+    max-height: calc(100vh - 80px);
+  }
+
+  /* force internal content width */
+  #modulePanelContent{
+    width:100% !important;
+    max-width:none !important;
+    /* allow the content area to scroll when module content is tall */
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    position: relative;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 160px);
+    padding-right: 12px; /* room for scrollbar */
+  }
+  #modulePanelContent *{
+    max-width:none !important;
   }
 
-  /* Override content constraints inside module panel */
-  #modulePanelContent {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  #modulePanelContent *,
-  #modulePanelContent .container,
-  #modulePanelContent article,
-  #modulePanelContent #content,
-  #modulePanelContent .wrapper,
-  #modulePanelContent .post,
-  #modulePanelContent .post-content,
-  #modulePanelContent .opencs_root {
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  #modulePanelContent > * {
-    width: 100% !important;
-  }
-
-  @keyframes slideInRight {
-    from {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideOutRight {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-  }
-
-  /* Confirmation Modal */
-  .confirm-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+  /* Confirmation modal */
+  .confirm-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.72);
     z-index: 40000;
-    animation: fadeIn 0.2s ease-out;
+  }
+  .confirm-modal.show{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding: 18px;
   }
 
-  .confirm-modal.show {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .confirm-dialog{
+    background: rgba(15,26,46,0.98);
+    border: 1px solid rgba(196,74,74,0.55);
+    border-radius: var(--radius);
+    padding: 22px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: var(--shadow);
   }
 
-  .confirm-dialog {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    border: 3px solid #ef4444;
-    border-radius: 15px;
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 20px 60px rgba(239, 68, 68, 0.3);
-    animation: slideUp 0.3s ease-out;
-  }
-
-  @keyframes slideUp {
-    from {
-      transform: translateY(50px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .confirm-icon {
-    font-size: 4em;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .confirm-title {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #ef4444;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
-  .confirm-message {
-    color: #cbd5e1;
-    font-size: 1.1em;
-    line-height: 1.6;
-    text-align: center;
-    margin-bottom: 25px;
-  }
-
-  .confirm-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-  }
-
-  .confirm-btn {
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .confirm-btn:hover {
-    transform: translateY(-2px);
-  }
-
-  .confirm-btn.cancel {
-    background: #475569;
-    color: #e2e8f0;
-  }
-
-  .confirm-btn.cancel:hover {
-    background: #64748b;
-    box-shadow: 0 5px 15px rgba(71, 85, 105, 0.4);
-  }
-
-  .confirm-btn.confirm {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-  }
-
-  .confirm-btn.confirm:hover {
-    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.5);
-  }
-
-  /* Module Button Completion Animation */
-  .module-btn.completing {
-    animation: moduleComplete 0.6s ease-out;
-  }
-
-  @keyframes moduleComplete {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
-    100% { transform: scale(1); }
-  }
-
-  /* Node Activation Animation */
-  .node.activating {
-    animation: nodeActivate 0.8s ease-out;
-  }
-
-  @keyframes nodeActivate {
-    0% {
-      transform: scale(1);
-      box-shadow: 0 0 0 rgba(56, 189, 248, 0);
-    }
-    50% {
-      transform: scale(1.15);
-      box-shadow: 0 0 50px rgba(56, 189, 248, 0.8);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
-    }
-  }
-
-  /* Glossary Styles */
-  .glossary-entry {
-    background: #0f172a;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border-left: 4px solid #38bdf8;
-    transition: all 0.3s;
-  }
-
-  .glossary-entry:hover {
-    background: #1e293b;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
-  }
-
-  .glossary-term {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #38bdf8;
+  .confirm-icon{
+    font-size: 2.4rem;
+    text-align:center;
     margin-bottom: 10px;
+    color: rgba(196,74,74,0.95);
   }
 
-  .glossary-definition {
-    color: #e2e8f0;
+  .confirm-title{
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: var(--ink);
+    text-align:center;
+    margin-bottom: 8px;
+  }
+
+  .confirm-message{
+    color: var(--muted);
+    font-size: 1.0rem;
+    line-height: 1.55;
+    text-align:center;
+    margin-bottom: 16px;
+  }
+
+  .confirm-buttons{
+    display:flex;
+    gap: 10px;
+    justify-content:center;
+  }
+
+  .confirm-btn{
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    border: 1px solid var(--border-strong);
+    background: rgba(230,233,239,0.10);
+    color: var(--ink);
+    cursor:pointer;
+  }
+
+  .confirm-btn.confirm{
+    background: rgba(196,74,74,0.95);
+    border-color: rgba(196,74,74,0.75);
+    color: #121826;
+  }
+
+  /* Glossary */
+  .glossary-entry{
+    background: rgba(11,18,32,0.55);
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .glossary-term{
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 750;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .glossary-definition{
+    color: var(--muted);
     line-height: 1.6;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
 
-  .glossary-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #94a3b8;
-    font-size: 0.85em;
+  .glossary-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 10px;
+    color: var(--muted-2);
+    font-size: 0.88rem;
     padding-top: 10px;
-    border-top: 1px solid #334155;
+    border-top: 1px solid var(--border);
   }
 
-  .glossary-actions {
-    display: flex;
-    gap: 10px;
-  }
+  .glossary-actions{ display:flex; gap: 8px; }
 
-  .glossary-action-btn {
-    padding: 5px 12px;
-    font-size: 0.85em;
-    background: #334155;
-    border: 1px solid #475569;
-    border-radius: 5px;
-    color: #e2e8f0;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .glossary-action-btn:hover {
-    background: #475569;
-    border-color: #38bdf8;
-  }
-
-  .glossary-action-btn.delete {
-    border-color: #ef4444;
-  }
-
-  .glossary-action-btn.delete:hover {
-    background: #ef4444;
-    border-color: #ef4444;
-  }
-
-  .glossary-empty {
-    text-align: center;
-    padding: 40px;
-    color: #94a3b8;
-  }
-
-  .glossary-empty-icon {
-    font-size: 3em;
-    margin-bottom: 15px;
-  }
-
-  textarea {
-    width: 100%;
-    padding: 12px;
-    background: #0f172a;
-    border: 2px solid #334155;
-    border-radius: 8px;
-    color: #e2e8f0;
-    font-size: 16px;
-    transition: border-color 0.3s;
-  }
-
-  textarea:focus {
-    outline: none;
-    border-color: #38bdf8;
-  }
-
-  /* Edit Form Styles */
-  .edit-form {
-    background: #1e293b;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
-  }
-
-  .edit-form .form-group {
-    margin-bottom: 15px;
-  }
-
-  .edit-form-actions {
-    display: flex;
-    gap: 10px;
-  }
-
-  /* Admin Rooms Modal */
-  .admin-rooms-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 30000;
-    overflow-y: auto;
-    animation: fadeIn 0.3s ease-out;
-  }
-
-  .admin-rooms-modal.show {
-    display: block;
-  }
-
-  .admin-rooms-dialog {
-    max-width: 1200px;
-    margin: 40px auto;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    border-radius: 15px;
-    border: 3px solid #38bdf8;
-    padding: 30px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
-
-  .admin-rooms-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #334155;
-  }
-
-  .admin-rooms-header h2 {
-    color: #38bdf8;
-    margin: 0;
-  }
-
-  .admin-rooms-actions {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-
-  .room-card {
-    background: #0f172a;
+  .glossary-action-btn{
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    background: rgba(230,233,239,0.10);
+    border: 1px solid var(--border-strong);
     border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-left: 4px solid #334155;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s;
+    color: var(--ink);
+    cursor:pointer;
   }
 
-  .room-card:hover {
-    background: #1e293b;
-    border-left-color: #38bdf8;
+  .glossary-action-btn.delete{
+    border-color: rgba(196,74,74,0.65);
+  }
+  .glossary-action-btn.delete:hover{
+    background: rgba(196,74,74,0.15);
   }
 
-  .room-card.demo {
-    border-left-color: #22c55e;
+  .glossary-empty{
+    text-align:center;
+    padding: 26px;
+    color: var(--muted);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: rgba(11,18,32,0.35);
   }
 
-  .room-card-info {
-    flex: 1;
+  /* Admin rooms */
+  .admin-rooms-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.78);
+    z-index: 30000;
+    overflow-y:auto;
+    padding: 22px;
   }
 
-  .room-card-title {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #e2e8f0;
+  .admin-rooms-modal.show{ display:block; }
+
+  .admin-rooms-dialog{
+    max-width: 1100px;
+    margin: 22px auto;
+    background: rgba(15,26,46,0.98);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-strong);
+    padding: 22px;
+    box-shadow: var(--shadow);
+  }
+
+  .admin-rooms-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .admin-rooms-header h2{
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+  }
+
+  .admin-rooms-actions{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .room-stats-summary{
+    background: rgba(11,18,32,0.55);
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-item{ text-align:center; }
+  .stat-value{
+    font-family: var(--serif);
+    font-size: 2.0rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .stat-label{ color: var(--muted); margin-top: 4px; }
+
+  .room-card{
+    background: rgba(11,18,32,0.55);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 12px;
+  }
+
+  .room-card.demo{
+    border-color: rgba(47,143,91,0.38);
+  }
+
+  .room-card-title{
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 750;
+    color: var(--ink);
     margin-bottom: 10px;
   }
 
-  .room-card-details {
-    display: grid;
+  .room-card-details{
+    display:grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    color: #94a3b8;
-    font-size: 0.95em;
-  }
-
-  .room-card-detail {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .room-card-actions {
-    display: flex;
     gap: 10px;
-    align-items: center;
+    color: var(--muted);
+    font-size: 0.95rem;
   }
 
-  .btn-small {
-    padding: 8px 16px;
-    font-size: 0.9em;
+  .room-card-detail strong{ color: var(--ink); }
+
+  .room-card-actions{
+    display:flex;
+    gap: 10px;
+    align-items:center;
+    flex-wrap: wrap;
+    justify-content:flex-end;
   }
 
-  .room-checkbox {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+  .room-checkbox{ width: 18px; height: 18px; cursor:pointer; }
+
+  /* Toast */
+  .toast{
+    position:fixed;
+    top: 18px;
+    right: 18px;
+    background: rgba(15,26,46,0.98);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-sm);
+    z-index: 999999;
+    pointer-events:none;
+    animation: toastIn 0.18s ease-out, toastOut 0.22s ease-out 2.6s forwards;
+    max-width: min(420px, calc(100vw - 40px));
   }
 
-  .room-stats-summary {
-    background: #0f172a;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  @keyframes toastIn{
+    from{ transform: translateY(-6px); opacity: 0; }
+    to{ transform: translateY(0); opacity: 1; }
+  }
+  @keyframes toastOut{
+    from{ transform: translateY(0); opacity: 1; }
+    to{ transform: translateY(-6px); opacity: 0; }
   }
 
-  .stat-item {
-    text-align: center;
+  /* Small screens */
+  @media (max-width: 860px){
+    .module-controls{ grid-template-columns: repeat(2, 1fr); }
+    .header{ flex-direction: column; align-items: flex-start; }
   }
-
-  .stat-value {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #38bdf8;
-  }
-
-  .stat-label {
-    color: #94a3b8;
-    margin-top: 5px;
+  @media (max-width: 520px){
+    .module-controls{ grid-template-columns: 1fr; }
+    .room-code{ letter-spacing: 4px; }
   }
 </style>
 
 <div class="container">
   <div class="header">
     <div>
-      <h2>🖥️ Hardware Havoc!</h2>
+      <h2>Hardware Havoc</h2>
       <p>Computing Systems Education Quest</p>
     </div>
     <div id="userInfo" style="text-align: right; display: none;">
-      <p style="margin: 0; color: #38bdf8; font-weight: 600;">👤 <span id="displayUsername"></span></p>
-      <button class="btn btn-secondary" onclick="logout()" style="margin-top: 8px; padding: 6px 12px; font-size: 12px;">Logout</button>
+      <p style="margin: 0; color: var(--muted); font-weight: 700;">
+        User: <span id="displayUsername"></span>
+      </p>
+      <button class="btn btn-secondary" onclick="logout()" style="margin-top: 8px; padding: 7px 12px; font-size: 0.9rem;">Logout</button>
     </div>
   </div>
 
   <!-- Configuration Section -->
   <div class="section config-section">
-    <h2>⚙️ Configuration</h2>
+    <h2>Configuration</h2>
     <div class="form-group">
-      <label for="apiUrl">Backend API URL:</label>
+      <label for="apiUrl">Backend API URL</label>
       <input type="text" id="apiUrl" value="http://localhost:8587" placeholder="http://localhost:8587">
     </div>
   </div>
 
   <!-- Room Management Section -->
   <div class="section" id="roomSection" style="display: none;">
-    <h2>🏠 Step 1: Room Management</h2>
+    <h2>Step 1: Room Management</h2>
 
     <!-- Admin: Create Room -->
     <div id="createRoomSection" class="hidden">
       <h3>Create New Room (Admin Only)</h3>
       <div class="inline-inputs">
         <div class="form-group">
-          <label for="roomName">Room Name:</label>
+          <label for="roomName">Room Name</label>
           <input type="text" id="roomName" placeholder="e.g., Computer Science 101">
         </div>
         <button class="btn" onclick="createRoom()">Create Room</button>
       </div>
 
       <!-- Admin: Manage Active Rooms -->
-      <div style="margin-top: 30px;">
+      <div style="margin-top: 18px;">
         <h3>Manage Active Rooms</h3>
-        <button class="btn" onclick="showActiveRoomsModal()">📊 View & Delete Rooms</button>
+        <button class="btn" onclick="showActiveRoomsModal()">View and Delete Rooms</button>
       </div>
     </div>
 
     <!-- Join Room -->
     <div id="joinRoomSection">
       <h3>Join Room</h3>
-      
+
       <!-- Quick Join Demo Room -->
-      <div style="background: rgba(34, 197, 94, 0.1); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #22c55e;">
-        <h4 style="color: #22c55e; margin: 0 0 10px 0;">🎯 Try the Demo Room!</h4>
-        <p style="color: #94a3b8; margin-bottom: 15px;">
-          Join our permanent demo room - always available and auto-resets when complete!
+      <div class="demo-card">
+        <h4 class="demo-title">Try the Demo Room</h4>
+        <p style="color: var(--muted); margin-bottom: 12px;">
+          Join the permanent demo room. It is always available and can be reset when complete.
         </p>
-        <div style="display: flex; align-items: center; gap: 15px;">
-          <div style="background: #0f172a; padding: 15px 25px; border-radius: 8px; font-size: 1.5em; font-weight: bold; color: #22c55e; letter-spacing: 3px;">
-            DEMO01
-          </div>
-          <button class="btn" onclick="joinDemoRoom()" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+        <div style="display:flex; align-items:center; gap: 12px; flex-wrap: wrap;">
+          <div class="demo-pill">DEMO01</div>
+          <button class="btn" onclick="joinDemoRoom()" style="background: rgba(47,143,91,0.95); border-color: rgba(47,143,91,0.75);">
             Quick Join Demo Room
           </button>
         </div>
       </div>
-      
+
       <!-- Regular Room Join -->
-      <h4 style="color: #94a3b8; margin-bottom: 15px;">Or join another room:</h4>
+      <h4 style="margin-top: 6px;">Or join another room</h4>
       <div class="inline-inputs">
         <div class="form-group">
-          <label for="roomCode">Room Code:</label>
+          <label for="roomCode">Room Code</label>
           <input type="text" id="roomCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
         </div>
         <button class="btn" onclick="joinRoom()">Join Room</button>
@@ -1170,112 +814,95 @@ breadcrumbs: true
 
   <!-- CPU Visualization -->
   <div class="section" id="cpuSection" style="display: none;">
-    <h2>🖥️ Step 2: CPU Core Status</h2>
-    <p style="color: #94a3b8; margin-bottom: 20px; text-align: center;">
-      Each core lights up when ALL members complete the corresponding module
+    <h2>Step 2: CPU Core Status</h2>
+    <p style="color: var(--muted); margin-bottom: 12px; text-align: center;">
+      Each core activates when all members complete the corresponding module.
     </p>
-    
+
     <div class="cpu-container" id="cpuContainer">
       <div class="cpu-label">PARALLEL PROCESSOR</div>
-      
+
       <!-- CPU Pins -->
       <div class="cpu-pins left">
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
+        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
       </div>
       <div class="cpu-pins right">
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
+        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
       </div>
       <div class="cpu-pins top">
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
+        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
       </div>
       <div class="cpu-pins bottom">
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
-        <div class="pin"></div>
+        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
       </div>
-      
+
       <div class="cpu-visualization">
         <div class="node" id="node1">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">I</div>
           <div class="node-label">CORE 1</div>
         </div>
         <div class="node" id="node2">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">II</div>
           <div class="node-label">CORE 2</div>
         </div>
         <div class="node" id="node3">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">III</div>
           <div class="node-label">CORE 3</div>
         </div>
         <div class="node" id="node4">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">IV</div>
           <div class="node-label">CORE 4</div>
         </div>
         <div class="node" id="node5">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">V</div>
           <div class="node-label">CORE 5</div>
         </div>
         <div class="node" id="node6">
-          <div class="node-icon">⚡</div>
+          <div class="node-icon">VI</div>
           <div class="node-label">CORE 6</div>
         </div>
       </div>
     </div>
 
     <!-- Reset Button (only shows when CPU is fully lit) -->
-    <div id="resetSection" class="hidden" style="text-align: center; margin-top: 30px;">
-      <button class="btn btn-danger" onclick="resetProgress()">
-        🔄 Reset All Progress
-      </button>
-      <p style="color: #94a3b8; margin-top: 10px; font-size: 0.9em;">
-        This will clear all completed modules for everyone in the room
+    <div id="resetSection" class="hidden" style="text-align: center; margin-top: 18px;">
+      <button class="btn btn-danger" onclick="resetProgress()">Reset All Progress</button>
+      <p style="color: var(--muted); margin-top: 8px; font-size: 0.92rem;">
+        This clears completed modules for everyone in the room.
       </p>
     </div>
   </div>
 
   <!-- Module Completion Section -->
   <div class="section" id="moduleSection" style="display: none;">
-    <h2>📚 Step 3: Complete Modules</h2>
-    <p style="color: #94a3b8; margin-bottom: 20px;">
-      Complete modules to see nodes light up when ALL room members finish!
+    <h2>Step 3: Complete Modules</h2>
+    <p style="color: var(--muted); margin-bottom: 12px;">
+      Complete modules to light cores once all room members finish.
     </p>
+
     <div class="module-controls">
       <button class="module-btn" data-permalink="/cores/core-1" data-module="1" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">📖</div>
+        <div class="module-icon">Module</div>
         Module 1
       </button>
       <button class="module-btn" data-permalink="/cores/core-2" data-module="2" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">💻</div>
+        <div class="module-icon">Module</div>
         Module 2
       </button>
       <button class="module-btn" data-permalink="/cores/core-3" data-module="3" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">⚙️</div>
+        <div class="module-icon">Module</div>
         Module 3
       </button>
       <button class="module-btn" data-permalink="/cores/core-4" data-module="4" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">📊</div>
+        <div class="module-icon">Module</div>
         Module 4
       </button>
       <button class="module-btn" data-permalink="/cores/core-5" data-module="5" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">🚀</div>
+        <div class="module-icon">Module</div>
         Module 5
       </button>
       <button class="module-btn" data-permalink="/cores/core-6" data-module="6" onclick="openModule(this)">
-        <div style="font-size: 1.5em;">🎯</div>
+        <div class="module-icon">Module</div>
         Module 6
       </button>
     </div>
@@ -1283,16 +910,15 @@ breadcrumbs: true
     <!-- Full-page Module Overlay -->
     <div id="modulePanel" class="module-panel" style="display:none;">
       <div class="module-dialog">
-        <div style="padding:18px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; background:linear-gradient(90deg,#071226,#0b1220);">
-          <div style="font-weight:700; color:#38bdf8;">Module</div>
+        <div style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); background: rgba(11,18,32,0.55);">
+          <div style="font-weight:800; color: var(--ink); font-family: var(--serif);">Module</div>
           <div style="display:flex; gap:8px; align-items:center;">
             <button class="btn btn-secondary" id="moduleMarkBtn">Mark Complete</button>
             <button class="btn" id="moduleCloseBtn">Close</button>
           </div>
         </div>
-        <div id="modulePanelContent" style="padding:22px; min-height:320px;">
-          <!-- content loaded via AJAX -->
-          <p style="color:#94a3b8">Loading...</p>
+        <div id="modulePanelContent" style="padding:18px; min-height:320px;">
+          <p style="color: var(--muted);">Loading...</p>
         </div>
       </div>
     </div>
@@ -1300,46 +926,44 @@ breadcrumbs: true
 
   <!-- Members Progress Section -->
   <div class="section" id="membersSection" style="display: none;">
-    <h2>👥 Room Members Progress</h2>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <button id="refreshProgressBtn" class="btn btn-danger" onclick="resetProgressMidGame()">🔄 Reset Room Progress</button>
-      <div id="lastRefresh" style="color: #94a3b8; font-size: 0.9em;">
-        Click to reset all progress
-      </div>
+    <h2>Room Members Progress</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap;">
+      <button id="refreshProgressBtn" class="btn btn-danger" onclick="resetProgressMidGame()">Reset Room Progress</button>
+      <div id="lastRefresh" style="color: var(--muted); font-size: 0.92rem;">Click to reset all progress</div>
     </div>
     <ul class="members-list" id="membersList"></ul>
   </div>
 
   <!-- Glossary Section -->
   <div class="section" id="glossarySection" style="display: none;">
-    <h2>📖 Step 4: Room Glossary</h2>
-    <p style="color: #94a3b8; margin-bottom: 20px;">
-      Build a shared knowledge base with your team! Add terms and definitions as you learn.
+    <h2>Step 4: Room Glossary</h2>
+    <p style="color: var(--muted); margin-bottom: 12px;">
+      Build a shared knowledge base. Add terms and definitions as you learn.
     </p>
 
     <!-- Glossary Stats -->
-    <div class="glossary-stats" style="background: #0f172a; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around;">
-      <div style="text-align: center;">
-        <div style="font-size: 2em; color: #38bdf8; font-weight: bold;" id="glossaryTotalEntries">0</div>
-        <div style="color: #94a3b8; font-size: 0.9em;">Total Entries</div>
+    <div class="glossary-stats" style="background: rgba(11,18,32,0.55); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 14px; display:flex; justify-content:space-around; gap: 10px; border: 1px solid var(--border);">
+      <div style="text-align:center;">
+        <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryTotalEntries">0</div>
+        <div style="color: var(--muted); font-size: 0.92rem;">Total Entries</div>
       </div>
-      <div style="text-align: center;">
-        <div style="font-size: 2em; color: #22c55e; font-weight: bold;" id="glossaryContributors">0</div>
-        <div style="color: #94a3b8; font-size: 0.9em;">Contributors</div>
+      <div style="text-align:center;">
+        <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryContributors">0</div>
+        <div style="color: var(--muted); font-size: 0.92rem;">Contributors</div>
       </div>
     </div>
 
     <!-- Add Entry Form -->
-    <div class="glossary-form" style="background: #0f172a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-      <h3 style="color: #38bdf8; margin-bottom: 15px;">Add New Entry</h3>
+    <div class="glossary-form" style="background: rgba(11,18,32,0.55); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 14px; border: 1px solid var(--border);">
+      <h3 style="margin-top: 0;">Add New Entry</h3>
       <form id="addGlossaryForm" onsubmit="addGlossaryEntry(event)">
         <div class="form-group">
-          <label for="glossaryTerm">Term:</label>
+          <label for="glossaryTerm">Term</label>
           <input type="text" id="glossaryTerm" placeholder="e.g., Race Condition" required>
         </div>
         <div class="form-group">
-          <label for="glossaryDefinition">Definition:</label>
-          <textarea id="glossaryDefinition" placeholder="Enter a clear definition..." required style="min-height: 100px; resize: vertical; font-family: inherit;"></textarea>
+          <label for="glossaryDefinition">Definition</label>
+          <textarea id="glossaryDefinition" placeholder="Enter a clear definition..." required style="min-height: 100px; font-family: inherit;"></textarea>
         </div>
         <button type="submit" class="btn">Add to Glossary</button>
       </form>
@@ -1347,21 +971,19 @@ breadcrumbs: true
 
     <!-- Search Box -->
     <div class="form-group">
-      <label for="glossarySearch">Search Glossary:</label>
+      <label for="glossarySearch">Search Glossary</label>
       <input type="text" id="glossarySearch" placeholder="Search terms and definitions..." oninput="searchGlossary()">
     </div>
 
     <!-- Glossary Entries List -->
-    <div id="glossaryList" style="margin-top: 20px;">
-      <!-- Entries will be dynamically inserted here -->
-    </div>
+    <div id="glossaryList" style="margin-top: 14px;"></div>
   </div>
 </div>
 
 <!-- Confirmation Modal -->
 <div id="confirmModal" class="confirm-modal">
   <div class="confirm-dialog">
-    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-icon">!</div>
     <div class="confirm-title" id="confirmTitle">Confirm Action</div>
     <div class="confirm-message" id="confirmMessage">Are you sure?</div>
     <div class="confirm-buttons">
@@ -1375,8 +997,8 @@ breadcrumbs: true
 <div id="adminRoomsModal" class="admin-rooms-modal">
   <div class="admin-rooms-dialog">
     <div class="admin-rooms-header">
-      <h2>🔧 Manage Active Rooms</h2>
-      <button class="btn btn-secondary" onclick="closeAdminRoomsModal()">✖ Close</button>
+      <h2>Manage Active Rooms</h2>
+      <button class="btn btn-secondary" onclick="closeAdminRoomsModal()">Close</button>
     </div>
 
     <!-- Stats Summary -->
@@ -1397,14 +1019,14 @@ breadcrumbs: true
 
     <!-- Actions -->
     <div class="admin-rooms-actions">
-      <button class="btn" onclick="refreshActiveRooms()">🔄 Refresh</button>
-      <button class="btn btn-danger" onclick="deleteSelectedRooms()">🗑️ Delete Selected</button>
-      <button class="btn btn-danger" onclick="deleteAllNonDemoRooms()">🗑️ Delete All Non-Demo</button>
+      <button class="btn" onclick="refreshActiveRooms()">Refresh</button>
+      <button class="btn btn-danger" onclick="deleteSelectedRooms()">Delete Selected</button>
+      <button class="btn btn-danger" onclick="deleteAllNonDemoRooms()">Delete All Non-Demo</button>
     </div>
 
     <!-- Rooms List -->
     <div id="adminRoomsList">
-      <p style="color: #94a3b8; text-align: center;">Loading rooms...</p>
+      <p style="color: var(--muted); text-align: center;">Loading rooms...</p>
     </div>
   </div>
 </div>
@@ -1437,13 +1059,13 @@ breadcrumbs: true
     element.className = `status ${type}`;
   }
 
-  // Animation Helper Functions
+  // Toast
   function showToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
       toast.remove();
     }, 3000);
@@ -1451,33 +1073,26 @@ breadcrumbs: true
 
   // Confirmation Modal Functions
   function showConfirm(title, message, onConfirm) {
-    console.log('🔔 showConfirm called:', title);
     const modal = document.getElementById('confirmModal');
     const titleEl = document.getElementById('confirmTitle');
     const messageEl = document.getElementById('confirmMessage');
     const confirmBtn = document.getElementById('confirmButton');
 
     if (!modal) {
-      console.error('❌ Modal element not found!');
-      // Fallback to confirm() if modal doesn't exist
-      if (confirm(`${title}\n\n${message}`)) {
-        onConfirm();
-      }
+      if (confirm(`${title}\n\n${message}`)) onConfirm();
       return;
     }
 
-    console.log('✅ Modal found, showing...');
     titleEl.textContent = title;
     messageEl.textContent = message;
     modal.classList.add('show');
 
     // Remove old listeners and add new one
     const newConfirmBtn = confirmBtn.cloneNode(true);
-    newConfirmBtn.id = 'confirmButton';  // Set ID BEFORE replacing
+    newConfirmBtn.id = 'confirmButton';
     confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
 
     newConfirmBtn.addEventListener('click', () => {
-      console.log('✅ Confirm clicked, executing callback');
       closeConfirm();
       onConfirm();
     });
@@ -1493,15 +1108,12 @@ breadcrumbs: true
     const modal = document.getElementById('confirmModal');
     if (modal) {
       modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeConfirm();
-        }
+        if (e.target === modal) closeConfirm();
       });
     }
 
     // Auto-load user if token exists
     if (authToken) {
-      console.log('Token found in localStorage, fetching user info...');
       try {
         // Fetch current user info from backend
         const userData = await apiCall('/api/auth/me', 'GET');
@@ -1510,7 +1122,6 @@ breadcrumbs: true
         // Update localStorage with fresh user data
         localStorage.setItem('user', JSON.stringify(currentUser));
 
-        console.log('User loaded:', currentUser);
         updateUIAfterLogin();
 
         // If user is in a room, load it
@@ -1519,110 +1130,22 @@ breadcrumbs: true
         }
       } catch (error) {
         console.error('Failed to load user:', error);
-        // Token might be invalid, clear and redirect to login
         localStorage.removeItem('access_token');
         localStorage.removeItem('user');
         const baseurl = '{{site.baseurl}}';
         window.location.href = baseurl + '/login';
       }
     } else {
-      // No token - redirect to login page
-      console.log('No token found - redirecting to login');
       const baseurl = '{{site.baseurl}}';
       window.location.href = baseurl + '/login';
     }
   });
 
-  function showCelebration(type, moduleNumber, message) {
-    const overlay = document.createElement('div');
-    overlay.className = 'celebration-overlay';
-    
-    let icon, title, cardClass;
-    
-    if (type === 'personal') {
-      icon = '✅';
-      title = `Module ${moduleNumber} Complete!`;
-      cardClass = 'personal';
-    } else if (type === 'room-module') {
-      icon = '✨';
-      title = `Room Module ${moduleNumber} Complete!`;
-      cardClass = 'room-module';
-    } else if (type === 'room-complete') {
-      icon = '🎉';
-      title = 'ALL MODULES COMPLETE!';
-      cardClass = 'room-complete';
-    }
-    
-    overlay.innerHTML = `
-      <div class="celebration-card ${cardClass}">
-        <div class="celebration-icon">${icon}</div>
-        <div class="celebration-title">${title}</div>
-        <div class="celebration-message">${message}</div>
-        <button class="celebration-btn" onclick="closeCelebration()">Continue</button>
-      </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Add confetti for room completions
-    if (type === 'room-module' || type === 'room-complete') {
-      createConfetti();
-    }
-  }
-
-  function closeCelebration() {
-    const overlay = document.querySelector('.celebration-overlay');
-    if (overlay) {
-      overlay.remove();
-    }
-  }
-
-  function createConfetti() {
-    const colors = ['#38bdf8', '#22c55e', '#f59e0b', '#ef4444', '#a855f7', '#ec4899'];
-    
-    for (let i = 0; i < 50; i++) {
-      setTimeout(() => {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 0.5 + 's';
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => confetti.remove(), 3000);
-      }, i * 30);
-    }
-  }
-
-  function animateModuleButton(moduleNumber) {
-    const buttons = document.querySelectorAll('.module-btn');
-    const button = buttons[moduleNumber - 1];
-    button.classList.add('completing');
-    
-    setTimeout(() => {
-      button.classList.remove('completing');
-      button.classList.add('completed');
-    }, 600);
-  }
-
-  function animateNode(nodeNumber) {
-    const node = document.getElementById(`node${nodeNumber}`);
-    node.classList.add('activating');
-    
-    setTimeout(() => {
-      node.classList.remove('activating');
-      node.classList.add('active');
-    }, 800);
-  }
-
   async function apiCall(endpoint, method = 'GET', body = null) {
     const url = `${getApiUrl()}${endpoint}`;
     const options = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      headers: { 'Content-Type': 'application/json' }
     };
 
     if (authToken) {
@@ -1641,7 +1164,6 @@ breadcrumbs: true
       throw new Error(data.error || 'Request failed');
     }
 
-    // Log progress refresh specifically
     if (endpoint.includes('/progress')) {
       console.log('Progress data received:', data);
     }
@@ -1649,72 +1171,7 @@ breadcrumbs: true
     return data;
   }
 
-  async function register() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-
-    if (!username || !password) {
-      showStatus('authStatus', 'Please enter username and password', 'error');
-      return;
-    }
-
-    try {
-      const data = await apiCall('/api/auth/register', 'POST', {
-        username,
-        email: `${username}@example.com`,
-        password
-      });
-
-      authToken = data.access_token;
-      currentUser = data.user;
-
-      // Save to localStorage
-      localStorage.setItem('access_token', authToken);
-      localStorage.setItem('user', JSON.stringify(currentUser));
-
-      showStatus('authStatus', `Registered and logged in as ${username}!`, 'success');
-      updateUIAfterLogin();
-    } catch (error) {
-      showStatus('authStatus', `Registration failed: ${error.message}`, 'error');
-    }
-  }
-
-  async function login() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
-
-    if (!username || !password) {
-      showStatus('authStatus', 'Please enter username and password', 'error');
-      return;
-    }
-
-    try {
-      const data = await apiCall('/api/auth/login', 'POST', { username, password });
-
-      authToken = data.access_token;
-      currentUser = data.user;
-
-      // Save to localStorage
-      localStorage.setItem('access_token', authToken);
-      localStorage.setItem('user', JSON.stringify(currentUser));
-
-      console.log('Login successful! Token:', authToken ? 'Token received' : 'NO TOKEN');
-      console.log('User:', currentUser);
-      showStatus('authStatus', `Logged in as ${username}!`, 'success');
-      updateUIAfterLogin();
-      
-      // If user is in a room, load it
-      if (currentUser.current_room_id) {
-        await loadCurrentRoom();
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      showStatus('authStatus', `Login failed: ${error.message}`, 'error');
-    }
-  }
-
   function logout() {
-    // Leave room before logging out
     if (currentRoomId) {
       leaveRoomSilently();
     }
@@ -1725,11 +1182,9 @@ breadcrumbs: true
     currentRoomData = null;
     cpuFullyLit = false;
 
-    // Clear localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
 
-    // Hide user info and sections
     document.getElementById('userInfo').style.display = 'none';
     document.getElementById('roomSection').style.display = 'none';
     document.getElementById('cpuSection').style.display = 'none';
@@ -1737,15 +1192,12 @@ breadcrumbs: true
     document.getElementById('membersSection').style.display = 'none';
     document.getElementById('glossarySection').style.display = 'none';
 
-    // Redirect to login page
     const baseurl = '{{site.baseurl}}';
     window.location.href = baseurl + '/login';
   }
 
   async function leaveRoomSilently() {
-    // Leave room without confirmation or alerts
     if (!currentRoomId) return;
-    
     try {
       await apiCall(`/api/rooms/${currentRoomId}/leave`, 'POST');
       console.log('Left room automatically');
@@ -1758,8 +1210,6 @@ breadcrumbs: true
   function cleanupOnExit() {
     if (currentRoomId && authToken) {
       const url = `${getApiUrl()}/api/rooms/${currentRoomId}/leave`;
-
-      // Try fetch with keepalive first (most reliable with auth headers)
       try {
         fetch(url, {
           method: 'POST',
@@ -1768,38 +1218,18 @@ breadcrumbs: true
             'Authorization': `Bearer ${authToken}`
           },
           body: JSON.stringify({}),
-          keepalive: true  // Ensures request completes even if page closes
-        }).catch(err => console.log('Cleanup request sent via fetch'));
-      } catch (e) {
-        console.log('Fetch failed, user will be removed on next cleanup cycle');
-      }
+          keepalive: true
+        }).catch(() => {});
+      } catch (e) {}
     }
   }
 
-  // Multiple event listeners for better cross-browser support
   window.addEventListener('beforeunload', cleanupOnExit);
   window.addEventListener('pagehide', cleanupOnExit);
 
-  async function testToken() {
-    console.log('Testing token...');
-    console.log('Current authToken:', authToken);
-    
-    try {
-      const data = await apiCall('/api/test-auth', 'GET');
-      showToast('✅ Token is valid!');
-      console.log('Token test success:', data);
-    } catch (error) {
-      showToast('❌ Token is invalid!');
-      console.error('Token test failed:', error);
-    }
-  }
-
   function updateUIAfterLogin() {
-    // Show user info in header
     document.getElementById('userInfo').style.display = 'block';
     document.getElementById('displayUsername').textContent = currentUser.username;
-
-    // Show room section
     document.getElementById('roomSection').style.display = 'block';
 
     if (currentUser && currentUser.role === 'admin') {
@@ -1809,26 +1239,24 @@ breadcrumbs: true
 
   async function createRoom() {
     const roomName = document.getElementById('roomName').value.trim();
-
     if (!roomName) {
-      showToast('⚠️ Please enter a room name');
+      showToast('Please enter a room name.');
       return;
     }
 
     try {
       const data = await apiCall('/api/rooms', 'POST', { name: roomName });
-      showToast(`✅ Room created! Code: ${data.room.room_code}`);
+      showToast(`Room created. Code: ${data.room.room_code}`);
       document.getElementById('roomName').value = '';
     } catch (error) {
-      showToast(`❌ Failed to create room: ${error.message}`);
+      showToast(`Failed to create room: ${error.message}`);
     }
   }
 
   async function joinRoom() {
     const roomCode = document.getElementById('roomCode').value.trim().toUpperCase();
-
     if (!roomCode || roomCode.length !== 6) {
-      showToast('⚠️ Please enter a valid 6-character room code');
+      showToast('Please enter a valid 6-character room code.');
       return;
     }
 
@@ -1836,11 +1264,10 @@ breadcrumbs: true
       const data = await apiCall('/api/rooms/join', 'POST', { room_code: roomCode });
       currentRoomId = data.room.id;
       currentRoomData = data.room;
-      
-      showToast(`✅ Joined room: ${data.room.name}`);
+      showToast(`Joined room: ${data.room.name}`);
       await loadCurrentRoom();
     } catch (error) {
-      showToast(`❌ Failed to join room: ${error.message}`);
+      showToast(`Failed to join room: ${error.message}`);
     }
   }
 
@@ -1849,11 +1276,10 @@ breadcrumbs: true
       const data = await apiCall('/api/rooms/join', 'POST', { room_code: 'DEMO01' });
       currentRoomId = data.room.id;
       currentRoomData = data.room;
-      
-      showToast('✅ Joined Demo Room!');
+      showToast('Joined demo room.');
       await loadCurrentRoom();
     } catch (error) {
-      showToast(`❌ Failed to join demo room: ${error.message}`);
+      showToast(`Failed to join demo room: ${error.message}`);
     }
   }
 
@@ -1878,11 +1304,10 @@ breadcrumbs: true
       await loadRoomProgress();
       await loadGlossary();
     } catch (error) {
-      // Room doesn't exist or user is not a member - clear room state
-      console.log('⚠️ Failed to load room, clearing state:', error.message);
+      console.log('Failed to load room, clearing state:', error.message);
       currentRoomId = null;
       currentRoomData = null;
-      showToast(`⚠️ Room no longer available`);
+      showToast('Room no longer available.');
     }
   }
 
@@ -1890,17 +1315,15 @@ breadcrumbs: true
     if (!currentRoomId) return;
 
     showConfirm(
-      'Leave Room?',
+      'Leave Room',
       'Are you sure you want to leave this room? You will lose your current session.',
       async () => {
         try {
           await apiCall(`/api/rooms/${currentRoomId}/leave`, 'POST');
         } catch (error) {
-          console.log('Leave room API call failed (might already be removed):', error.message);
-          // Continue anyway - user might have been kicked out already
+          console.log('Leave room API call failed:', error.message);
         }
 
-        // Always clear the UI regardless of API success/failure
         currentRoomId = null;
         currentRoomData = null;
         cpuFullyLit = false;
@@ -1913,64 +1336,48 @@ breadcrumbs: true
         document.getElementById('glossarySection').style.display = 'none';
         document.getElementById('resetSection').classList.add('hidden');
 
-        // Reset CPU visualization
         const cpuContainer = document.getElementById('cpuContainer');
         cpuContainer.classList.remove('all-active');
         for (let i = 1; i <= 6; i++) {
           document.getElementById(`node${i}`).classList.remove('active');
         }
 
-        showToast('✅ Left room successfully');
+        showToast('Left room successfully.');
       }
     );
   }
 
   async function resetProgress() {
     showConfirm(
-      'RESET ALL PROGRESS?',
-      'This will delete ALL completed modules for EVERYONE in the room. This cannot be undone!',
+      'Reset All Progress',
+      'This will delete all completed modules for everyone in the room. This cannot be undone.',
       async () => {
         try {
-          // Call backend reset endpoint
           await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
-          
-          console.log('🔄 Backend reset successful, clearing UI...');
-          
-          // Reset local state
+
           cpuFullyLit = false;
-          
-          // Reset CPU visualization
+
           const cpuContainer = document.getElementById('cpuContainer');
           cpuContainer.classList.remove('all-active');
-          
+
           for (let i = 1; i <= 6; i++) {
             document.getElementById(`node${i}`).classList.remove('active');
           }
-          
-          // Hide reset button
+
           document.getElementById('resetSection').classList.add('hidden');
-          
-          // FORCE CLEAR all module buttons BEFORE reload
+
           const buttons = document.querySelectorAll('.module-btn');
           buttons.forEach(btn => btn.classList.remove('completed'));
-          
-          // FORCE CLEAR members list
+
           const membersList = document.getElementById('membersList');
           membersList.innerHTML = '';
-          
-          console.log('✅ UI cleared, reloading fresh data...');
-          
-          showToast('🔄 Progress reset for all members!');
-          
-          // Wait a moment for backend to process, then reload
+
+          showToast('Progress reset for all members.');
+
           await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Reload progress with cache-busting timestamp
           await loadRoomProgress();
-          
-          console.log('✅ Reset complete!');
         } catch (error) {
-          showToast(`❌ Failed to reset progress: ${error.message}`);
+          showToast(`Failed to reset progress: ${error.message}`);
           console.error('Reset error:', error);
         }
       }
@@ -1979,51 +1386,40 @@ breadcrumbs: true
 
   async function resetProgressMidGame() {
     showConfirm(
-      'RESET ALL PROGRESS?',
-      'This will delete ALL completed modules for EVERYONE in the room. Are you absolutely sure?',
+      'Reset Room Progress',
+      'This will delete all completed modules for everyone in the room. Are you sure?',
       async () => {
         const refreshBtn = document.getElementById('refreshProgressBtn');
         const originalText = refreshBtn ? refreshBtn.innerHTML : '';
-        
+
         if (refreshBtn) {
-          refreshBtn.innerHTML = '⏳ Resetting...';
+          refreshBtn.innerHTML = 'Resetting...';
           refreshBtn.disabled = true;
         }
 
         try {
-          // Call backend reset endpoint
           await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
-          
-          // Reset local state
           cpuFullyLit = false;
-          
-          // Reset CPU visualization
+
           const cpuContainer = document.getElementById('cpuContainer');
           cpuContainer.classList.remove('all-active');
-          
+
           for (let i = 1; i <= 6; i++) {
             document.getElementById(`node${i}`).classList.remove('active');
           }
-          
-          // Hide the post-completion reset button if it's showing
+
           const resetSection = document.getElementById('resetSection');
-          if (resetSection) {
-            resetSection.classList.add('hidden');
-          }
-          
-          // Reset all module buttons
+          if (resetSection) resetSection.classList.add('hidden');
+
           const buttons = document.querySelectorAll('.module-btn');
           buttons.forEach(btn => btn.classList.remove('completed'));
-          
-          showToast('🔄 All progress reset!');
-          
-          // Wait for backend to process
+
+          showToast('All progress reset.');
+
           await new Promise(resolve => setTimeout(resolve, 500));
-          
-          // Reload progress to sync with backend
           await loadRoomProgress();
         } catch (error) {
-          showToast(`❌ Failed to reset: ${error.message}`);
+          showToast(`Failed to reset: ${error.message}`);
         } finally {
           if (refreshBtn) {
             refreshBtn.innerHTML = originalText;
@@ -2034,93 +1430,63 @@ breadcrumbs: true
     );
   }
 
+  function animateModuleButton(moduleNumber) {
+    const buttons = document.querySelectorAll('.module-btn');
+    const button = buttons[moduleNumber - 1];
+    button.classList.add('completed');
+  }
+
+  function animateNode(nodeNumber) {
+    const node = document.getElementById(`node${nodeNumber}`);
+    node.classList.add('active');
+  }
+
   async function completeModule(moduleNumber) {
     try {
       const data = await apiCall('/api/progress/complete', 'POST', { module_number: moduleNumber });
-      
-      // Animate the button
+
       animateModuleButton(moduleNumber);
 
-      // Show appropriate celebration
       if (data.room_progress) {
         if (data.room_progress.room_complete) {
-          if (data.room_progress.is_demo) {
-            // Demo room - just celebrate, DON'T auto-reset
-            showCelebration('room-complete', moduleNumber, 
-              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\n✨ The CPU is fully lit!\n\nUse the Reset button below to start over.');
-            
-            // DON'T clear anything - let the CPU stay lit!
-            // The reset button will appear via loadRoomProgress()
-            await loadRoomProgress();
-          } else {
-            // Regular room - show celebration and stay in the room
-            showCelebration('room-complete', moduleNumber,
-              '🎊 CONGRATULATIONS!\n\nAll modules completed by everyone!\n\n✨ The CPU is fully lit!\n\nUse the Reset button below to start over or leave the room when ready.');
-
-            // DON'T reload - let users stay and see the celebration
-            // The reset button will appear via loadRoomProgress()
-            await loadRoomProgress();
-          }
+          showToast('All modules completed by everyone. The CPU is fully active.');
+          await loadRoomProgress();
         } else if (data.room_progress.module_complete) {
-          showCelebration('room-module', moduleNumber,
-            `🌟 Everyone in the room has completed Module ${moduleNumber}!\n\nNode ${moduleNumber} is now lit up!`);
-          
-          // Animate the corresponding node
-          setTimeout(() => {
-            animateNode(moduleNumber);
-          }, 500);
-          
+          showToast(`Everyone in the room has completed Module ${moduleNumber}.`);
+          setTimeout(() => animateNode(moduleNumber), 250);
           await loadRoomProgress();
         } else {
-          showCelebration('personal', moduleNumber,
-            `Great job! You completed Module ${moduleNumber}.\n\nWaiting for other members to finish...`);
+          showToast(`Module ${moduleNumber} completed. Waiting for other members.`);
           await loadRoomProgress();
         }
       } else {
-        showCelebration('personal', moduleNumber,
-          `Module ${moduleNumber} completed!`);
+        showToast(`Module ${moduleNumber} completed.`);
         await loadRoomProgress();
       }
     } catch (error) {
-      showToast(`❌ Failed to complete module: ${error.message}`);
+      showToast(`Failed to complete module: ${error.message}`);
     }
   }
 
   async function loadRoomProgress() {
     if (!currentRoomId) return;
 
-    console.log('🔍 Loading room progress...');
-    
-    // Show loading indicator - use ID for more reliable selection
     const refreshBtn = document.getElementById('refreshProgressBtn');
     const originalText = refreshBtn ? refreshBtn.innerHTML : '';
     if (refreshBtn) {
-      refreshBtn.innerHTML = '⏳ Refreshing...';
+      refreshBtn.innerHTML = 'Refreshing...';
       refreshBtn.disabled = true;
     }
 
     try {
-      // Add timestamp to prevent caching
       const data = await apiCall(`/api/rooms/${currentRoomId}/progress?t=${Date.now()}`);
 
-      console.log('📊 Room Progress Data:', {
-        total_members: data.total_members,
-        completed_modules: data.completed_modules,
-        member_progress: data.member_progress
-      });
-
-      // Check if current user is still a member of this room
       const currentUserId = currentUser.id;
-      console.log('🔍 Checking membership - Current User ID:', currentUserId);
-      console.log('🔍 Member Progress IDs:', data.member_progress.map(m => m.id));
       const isStillMember = data.member_progress.some(m => m.id === currentUserId);
-      console.log('✅ Is Still Member?', isStillMember);
 
       if (!isStillMember) {
-        console.log('⚠️ User is no longer a member of this room - forcing leave');
-        showToast('🚪 You have been removed from this room');
+        showToast('You have been removed from this room.');
 
-        // Force leave without API call (already removed server-side)
         currentRoomId = null;
         currentRoomData = null;
         cpuFullyLit = false;
@@ -2133,52 +1499,34 @@ breadcrumbs: true
         document.getElementById('glossarySection').style.display = 'none';
         document.getElementById('resetSection').classList.add('hidden');
 
-        return; // Exit early
+        return;
       }
 
-      // Update member count in room info
       document.getElementById('displayMemberCount').textContent = data.total_members;
 
-      // Only update CPU if not fully lit or if explicitly resetting
       if (!cpuFullyLit) {
-        // Update CPU nodes - RESET FIRST
-        console.log('💡 Resetting all CPU cores...');
         for (let i = 1; i <= 6; i++) {
-          const node = document.getElementById(`node${i}`);
-          node.classList.remove('active');
+          document.getElementById(`node${i}`).classList.remove('active');
         }
-        
-        // Then add active ones
-        console.log('⚡ Lighting up cores:', data.completed_modules);
+
         data.completed_modules.forEach(moduleNum => {
-          const node = document.getElementById(`node${moduleNum}`);
-          node.classList.add('active');
-          console.log(`  ✅ Core ${moduleNum} lit`);
+          document.getElementById(`node${moduleNum}`).classList.add('active');
         });
 
-        // Check if all 6 modules are complete
         if (data.completed_modules.length === 6) {
           cpuFullyLit = true;
-          const cpuContainer = document.getElementById('cpuContainer');
-          cpuContainer.classList.add('all-active');
+          document.getElementById('cpuContainer').classList.add('all-active');
           document.getElementById('resetSection').classList.remove('hidden');
-          console.log('🎉 CPU FULLY LIT!');
         }
-      } else {
-        console.log('🔒 CPU is fully lit - maintaining state until reset');
       }
 
-      // ALWAYS update members list and buttons (even when CPU is lit)
-      // This allows refresh button to show new members joining
-      
-      // Update members list
       const membersList = document.getElementById('membersList');
       membersList.innerHTML = '';
 
       data.member_progress.forEach(member => {
         const li = document.createElement('li');
         li.className = 'member-item';
-        
+
         const info = document.createElement('div');
         info.innerHTML = `
           <div class="member-name">${member.username}</div>
@@ -2191,9 +1539,7 @@ breadcrumbs: true
           const badge = document.createElement('div');
           badge.className = 'module-badge';
           badge.textContent = i;
-          if (member.completed_modules.includes(i)) {
-            badge.classList.add('completed');
-          }
+          if (member.completed_modules.includes(i)) badge.classList.add('completed');
           modules.appendChild(badge);
         }
 
@@ -2202,41 +1548,23 @@ breadcrumbs: true
         membersList.appendChild(li);
       });
 
-      // Update my completed modules - RESET FIRST
       const myProgress = await apiCall('/api/progress/my-progress');
-      console.log('👤 My Progress:', myProgress.completed_modules);
-      
       const buttons = document.querySelectorAll('.module-btn');
-      
-      // Reset ALL buttons first
-      console.log('🔄 Resetting all module buttons...');
       buttons.forEach(btn => btn.classList.remove('completed'));
-      
-      // Mark only the completed ones
-      console.log('✅ Marking completed modules:', myProgress.completed_modules);
       myProgress.completed_modules.forEach(moduleNum => {
         buttons[moduleNum - 1].classList.add('completed');
-        console.log(`  ✅ Button ${moduleNum} marked complete`);
       });
 
-      // Update last refresh time
       const now = new Date().toLocaleTimeString();
       const lastRefreshEl = document.getElementById('lastRefresh');
-      if (lastRefreshEl) {
-        lastRefreshEl.textContent = `Last updated: ${now}`;
-      }
-      console.log(`✅ Refresh complete at ${now}`);
-      console.log('='.repeat(60));
+      if (lastRefreshEl) lastRefreshEl.textContent = `Last updated: ${now}`;
 
     } catch (error) {
       console.error('Failed to load room progress:', error);
 
-      // If room was deleted or user was removed, clear the UI
       if (error.message.includes('Room not found') || error.message.includes('not found')) {
-        console.log('⚠️ Room no longer exists - forcing leave');
-        showToast('🚪 This room has been deleted');
+        showToast('This room has been deleted.');
 
-        // Force leave without API call
         currentRoomId = null;
         currentRoomData = null;
         cpuFullyLit = false;
@@ -2248,20 +1576,14 @@ breadcrumbs: true
         document.getElementById('membersSection').style.display = 'none';
         document.getElementById('glossarySection').style.display = 'none';
         document.getElementById('resetSection').classList.add('hidden');
-
-        return; // Exit early, skip the finally block restoration
+        return;
       }
 
-      showToast(`❌ Failed to refresh: ${error.message}`);
+      showToast(`Failed to refresh: ${error.message}`);
     } finally {
-      // ALWAYS restore button, even if there was an error
-      console.log('🔄 Restoring refresh button...');
       if (refreshBtn) {
         refreshBtn.innerHTML = originalText;
         refreshBtn.disabled = false;
-        console.log('✅ Button restored');
-      } else {
-        console.error('❌ Could not find refresh button to restore!');
       }
     }
   }
@@ -2274,13 +1596,12 @@ breadcrumbs: true
     }
   }, 5000);
 
-  // --- Full-page Module Overlay functions (AJAX load, stays on same permalink) ---
+  // Module overlay
   function openModule(btn) {
     try {
       const permalink = btn.getAttribute('data-permalink') || '/cores/core-1';
       const moduleNumber = parseInt(btn.getAttribute('data-module')) || 0;
 
-      // compute base prefix: if site served under /frontend, include it
       const firstSeg = window.location.pathname.split('/')[1];
       const base = firstSeg === 'frontend' ? '/frontend' : '';
       const url = base + permalink;
@@ -2291,34 +1612,26 @@ breadcrumbs: true
       const closeBtn = document.getElementById('moduleCloseBtn');
       const dialog = panel.querySelector('.module-dialog');
 
-      if (panel.parentElement !== document.body) {
-        document.body.appendChild(panel);
-      }
+      if (panel.parentElement !== document.body) document.body.appendChild(panel);
 
       document.body.classList.add('module-panel-open');
-
-      // show loading and display overlay
-      content.innerHTML = '<p style="color:#94a3b8">Loading...</p>';
+      content.innerHTML = '<p style="color: var(--muted);">Loading...</p>';
       panel.style.display = 'flex';
       panel.scrollTop = 0;
-      if (dialog) {
-        dialog.scrollTop = 0;
-      }
+      if (dialog) dialog.scrollTop = 0;
 
-      // wire mark complete
       markBtn.onclick = async () => {
         try {
           await completeModule(moduleNumber);
           closeModule();
-          showToast('Marked complete');
+          showToast('Marked complete.');
         } catch (e) {
           console.error('Mark complete failed', e);
           closeModule();
-          showToast('Login required to mark complete');
+          showToast('Login required to mark complete.');
         }
       };
 
-      // wire close
       if (closeBtn) closeBtn.onclick = closeModule;
 
       fetch(url, { credentials: 'same-origin' })
@@ -2327,33 +1640,22 @@ breadcrumbs: true
           try {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-
-            // Extract just the post-content div, which has the actual content
             const postContent = doc.querySelector('.post-content');
 
             if (postContent) {
-              // Clone the content to avoid reference issues
               const clonedContent = postContent.cloneNode(true);
-
-              // Remove all wrapper divs and just get the children
               content.innerHTML = '';
-
-              // Create a clean container without width constraints
               const cleanDiv = document.createElement('div');
               cleanDiv.style.width = '100%';
               cleanDiv.style.maxWidth = 'none';
               cleanDiv.innerHTML = clonedContent.innerHTML;
-
               content.appendChild(cleanDiv);
 
-              // Force expand any remaining wrapper elements
               setTimeout(() => {
                 const allElements = content.querySelectorAll('*');
                 allElements.forEach(el => {
                   const computed = window.getComputedStyle(el);
-                  if (computed.maxWidth && computed.maxWidth !== 'none') {
-                    el.style.maxWidth = 'none';
-                  }
+                  if (computed.maxWidth && computed.maxWidth !== 'none') el.style.maxWidth = 'none';
                   if (el.classList.contains('wrapper') || el.classList.contains('container')) {
                     el.style.maxWidth = 'none';
                     el.style.width = '100%';
@@ -2363,7 +1665,6 @@ breadcrumbs: true
                 });
               }, 10);
             } else {
-              // Fallback to old method
               const article = doc.querySelector('article') || doc.querySelector('.container') || doc.querySelector('#content') || doc.body;
               content.innerHTML = article ? article.innerHTML : html;
             }
@@ -2371,13 +1672,12 @@ breadcrumbs: true
             content.innerHTML = html;
           }
 
-          // ensure scroll starts at the top after content loads
-          if (dialog) {
-            dialog.scrollTop = 0;
-          }
-        }).catch(err => {
-          content.innerHTML = `<p style="color:#ef4444">Failed to load module: ${err.message}</p>`;
+          if (dialog) dialog.scrollTop = 0;
+        })
+        .catch(err => {
+          content.innerHTML = `<p style="color: rgba(196,74,74,0.95);">Failed to load module: ${err.message}</p>`;
         });
+
     } catch (err) {
       console.error('openModule error', err);
     }
@@ -2386,17 +1686,12 @@ breadcrumbs: true
   function closeModule() {
     const panel = document.getElementById('modulePanel');
     if (!panel) return;
-
-    // hide panel
     panel.style.display = 'none';
     document.body.classList.remove('module-panel-open');
-
-    // ensure scroll resets for next open
     panel.scrollTop = 0;
   }
 
   // ===== GLOSSARY FUNCTIONS =====
-
   let currentEditingEntryId = null;
 
   async function loadGlossary(searchTerm = '') {
@@ -2409,18 +1704,15 @@ breadcrumbs: true
 
       const data = await apiCall(url);
 
-      // Update stats
       document.getElementById('glossaryTotalEntries').textContent = data.stats.total_entries;
       document.getElementById('glossaryContributors').textContent = data.stats.contributors;
 
-      // Display entries
       const glossaryList = document.getElementById('glossaryList');
 
       if (data.entries.length === 0) {
         glossaryList.innerHTML = `
           <div class="glossary-empty">
-            <div class="glossary-empty-icon">📚</div>
-            <p>${searchTerm ? 'No entries found matching your search.' : 'No glossary entries yet. Be the first to add one!'}</p>
+            <p>${searchTerm ? 'No entries found matching your search.' : 'No glossary entries yet. Add the first one.'}</p>
           </div>
         `;
         return;
@@ -2428,7 +1720,7 @@ breadcrumbs: true
 
       glossaryList.innerHTML = data.entries.map(entry => createGlossaryEntryHTML(entry)).join('');
     } catch (error) {
-      showToast(`❌ Failed to load glossary: ${error.message}`);
+      showToast(`Failed to load glossary: ${error.message}`);
     }
   }
 
@@ -2445,8 +1737,8 @@ breadcrumbs: true
           <span>Added by ${escapeHtml(entry.author_name)} on ${formatDate(entry.created_at)}</span>
           ${canEdit ? `
             <div class="glossary-actions">
-              <button class="glossary-action-btn" onclick="startEditEntry(${entry.id})">✏️ Edit</button>
-              <button class="glossary-action-btn delete" onclick="deleteGlossaryEntry(${entry.id})">🗑️ Delete</button>
+              <button class="glossary-action-btn" onclick="startEditEntry(${entry.id})">Edit</button>
+              <button class="glossary-action-btn delete" onclick="deleteGlossaryEntry(${entry.id})">Delete</button>
             </div>
           ` : ''}
         </div>
@@ -2472,59 +1764,49 @@ breadcrumbs: true
     const definition = document.getElementById('glossaryDefinition').value.trim();
 
     if (!term || !definition) {
-      showToast('⚠️ Please fill in both term and definition');
+      showToast('Please fill in both term and definition.');
       return;
     }
 
     try {
       await apiCall(`/api/glossary/room/${currentRoomId}`, 'POST', { term, definition });
-
-      showToast('✅ Entry added to glossary!');
-
-      // Clear form
+      showToast('Entry added to glossary.');
       document.getElementById('glossaryTerm').value = '';
       document.getElementById('glossaryDefinition').value = '';
-
-      // Reload glossary
       await loadGlossary();
     } catch (error) {
-      showToast(`❌ Failed to add entry: ${error.message}`);
+      showToast(`Failed to add entry: ${error.message}`);
     }
   }
 
   async function startEditEntry(entryId) {
-    if (currentEditingEntryId) {
-      cancelEdit();
-    }
-
+    if (currentEditingEntryId) cancelEdit();
     currentEditingEntryId = entryId;
 
     try {
-      const data = await apiCall(`/api/glossary/${entryId}`);
-      const entry = data.entry;
-
+      await apiCall(`/api/glossary/${entryId}`);
       const entryElement = document.getElementById(`entry-${entryId}`);
       const term = entryElement.querySelector('.glossary-term').textContent;
       const definition = entryElement.querySelector('.glossary-definition').textContent;
 
       entryElement.innerHTML = `
-        <div class="edit-form">
+        <div class="edit-form" style="background: rgba(11,18,32,0.35); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
           <div class="form-group">
-            <label>Term:</label>
-            <input type="text" id="editTerm-${entryId}" value="${escapeHtml(term)}" class="form-control">
+            <label>Term</label>
+            <input type="text" id="editTerm-${entryId}" value="${escapeHtml(term)}">
           </div>
           <div class="form-group">
-            <label>Definition:</label>
+            <label>Definition</label>
             <textarea id="editDefinition-${entryId}" rows="4">${escapeHtml(definition)}</textarea>
           </div>
-          <div class="edit-form-actions">
-            <button class="btn" onclick="saveEdit(${entryId})">💾 Save</button>
-            <button class="btn btn-secondary" onclick="cancelEdit()">❌ Cancel</button>
+          <div class="edit-form-actions" style="display:flex; gap: 8px;">
+            <button class="btn" onclick="saveEdit(${entryId})">Save</button>
+            <button class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
           </div>
         </div>
       `;
     } catch (error) {
-      showToast(`❌ Failed to load entry: ${error.message}`);
+      showToast(`Failed to load entry: ${error.message}`);
     }
   }
 
@@ -2533,20 +1815,17 @@ breadcrumbs: true
     const definition = document.getElementById(`editDefinition-${entryId}`).value.trim();
 
     if (!term || !definition) {
-      showToast('⚠️ Term and definition cannot be empty');
+      showToast('Term and definition cannot be empty.');
       return;
     }
 
     try {
       await apiCall(`/api/glossary/${entryId}`, 'PUT', { term, definition });
-
-      showToast('✅ Entry updated successfully!');
+      showToast('Entry updated successfully.');
       currentEditingEntryId = null;
-
-      // Reload glossary
       await loadGlossary();
     } catch (error) {
-      showToast(`❌ Failed to update entry: ${error.message}`);
+      showToast(`Failed to update entry: ${error.message}`);
     }
   }
 
@@ -2557,18 +1836,15 @@ breadcrumbs: true
 
   async function deleteGlossaryEntry(entryId) {
     showConfirm(
-      'Delete Entry?',
+      'Delete Entry',
       'Are you sure you want to delete this glossary entry? This cannot be undone.',
       async () => {
         try {
           await apiCall(`/api/glossary/${entryId}`, 'DELETE');
-
-          showToast('✅ Entry deleted successfully!');
-
-          // Reload glossary
+          showToast('Entry deleted successfully.');
           await loadGlossary();
         } catch (error) {
-          showToast(`❌ Failed to delete entry: ${error.message}`);
+          showToast(`Failed to delete entry: ${error.message}`);
         }
       }
     );
@@ -2580,7 +1856,6 @@ breadcrumbs: true
   }
 
   // ===== ADMIN ROOMS MANAGEMENT =====
-
   let adminRoomsData = [];
 
   async function showActiveRoomsModal() {
@@ -2601,12 +1876,11 @@ breadcrumbs: true
       displayAdminRooms(adminRoomsData);
     } catch (error) {
       const roomsList = document.getElementById('adminRoomsList');
-      roomsList.innerHTML = `<p style="color: #ef4444; text-align: center;">❌ Failed to load rooms: ${error.message}</p>`;
+      roomsList.innerHTML = `<p style="color: rgba(196,74,74,0.95); text-align: center;">Failed to load rooms: ${error.message}</p>`;
     }
   }
 
   function displayAdminRooms(rooms) {
-    // Update stats
     const totalRooms = rooms.length;
     const deletableRooms = rooms.filter(r => r.can_delete).length;
     const totalMembers = rooms.reduce((sum, r) => sum + r.member_count, 0);
@@ -2615,11 +1889,10 @@ breadcrumbs: true
     document.getElementById('deletableRooms').textContent = deletableRooms;
     document.getElementById('totalMembers').textContent = totalMembers;
 
-    // Display rooms
     const roomsList = document.getElementById('adminRoomsList');
 
     if (rooms.length === 0) {
-      roomsList.innerHTML = '<p style="color: #94a3b8; text-align: center;">No rooms found.</p>';
+      roomsList.innerHTML = '<p style="color: var(--muted); text-align: center;">No rooms found.</p>';
       return;
     }
 
@@ -2631,40 +1904,26 @@ breadcrumbs: true
 
       return `
         <div class="room-card ${isDemo ? 'demo' : ''}">
-          <div class="room-card-info">
+          <div class="room-card-info" style="flex:1;">
             <div class="room-card-title">
               ${escapeHtml(room.name)}
-              ${isDemo ? '<span style="color: #22c55e; margin-left: 10px;">🔒 DEMO</span>' : ''}
+              ${isDemo ? '<span style="color: rgba(47,143,91,1); margin-left: 10px; font-weight: 800;">DEMO</span>' : ''}
             </div>
             <div class="room-card-details">
-              <div class="room-card-detail">
-                <strong>Code:</strong> ${room.room_code}
-              </div>
-              <div class="room-card-detail">
-                <strong>Members:</strong> ${room.member_count}
-              </div>
-              <div class="room-card-detail">
-                <strong>Progress:</strong> ${room.progress_percentage.toFixed(0)}% (${room.completed_modules.length}/6)
-              </div>
-              <div class="room-card-detail">
-                <strong>Creator:</strong> ${escapeHtml(room.creator_name)}
-              </div>
-              <div class="room-card-detail">
-                <strong>Created:</strong> ${new Date(room.created_at).toLocaleDateString()}
-              </div>
+              <div class="room-card-detail"><strong>Code:</strong> ${room.room_code}</div>
+              <div class="room-card-detail"><strong>Members:</strong> ${room.member_count}</div>
+              <div class="room-card-detail"><strong>Progress:</strong> ${room.progress_percentage.toFixed(0)}% (${room.completed_modules.length}/6)</div>
+              <div class="room-card-detail"><strong>Creator:</strong> ${escapeHtml(room.creator_name)}</div>
+              <div class="room-card-detail"><strong>Created:</strong> ${new Date(room.created_at).toLocaleDateString()}</div>
             </div>
           </div>
           <div class="room-card-actions">
             ${checkboxHtml}
-            <button class="btn btn-warning btn-small" onclick="shutdownRoom(${room.id})">
-              🚪 Shutdown
-            </button>
+            <button class="btn btn-warning btn-small" onclick="shutdownRoom(${room.id})">Shutdown</button>
             ${room.can_delete ? `
-              <button class="btn btn-danger btn-small" onclick="deleteSingleRoom(${room.id})">
-                🗑️ Delete
-              </button>
+              <button class="btn btn-danger btn-small" onclick="deleteSingleRoom(${room.id})">Delete</button>
             ` : `
-              <span style="color: #22c55e; font-weight: bold;">Protected</span>
+              <span style="color: rgba(47,143,91,1); font-weight: 800;">Protected</span>
             `}
           </div>
         </div>
@@ -2673,9 +1932,9 @@ breadcrumbs: true
   }
 
   async function refreshActiveRooms() {
-    showToast('🔄 Refreshing rooms...');
+    showToast('Refreshing rooms...');
     await loadActiveRooms();
-    showToast('✅ Rooms refreshed!');
+    showToast('Rooms refreshed.');
   }
 
   async function deleteSingleRoom(roomId) {
@@ -2683,15 +1942,15 @@ breadcrumbs: true
     if (!room) return;
 
     showConfirm(
-      'Delete Room?',
+      'Delete Room',
       `Are you sure you want to delete "${room.name}" (${room.room_code})? This will remove all members and progress.`,
       async () => {
         try {
           await apiCall(`/api/rooms/${roomId}`, 'DELETE');
-          showToast(`✅ Room "${room.name}" deleted successfully!`);
+          showToast(`Room "${room.name}" deleted successfully.`);
           await loadActiveRooms();
         } catch (error) {
-          showToast(`❌ Failed to delete room: ${error.message}`);
+          showToast(`Failed to delete room: ${error.message}`);
         }
       }
     );
@@ -2702,15 +1961,15 @@ breadcrumbs: true
     if (!room) return;
 
     showConfirm(
-      'Shutdown Room?',
-      `Are you sure you want to shutdown "${room.name}" (${room.room_code})? This will kick out all ${room.member_count} member(s) from the room.`,
+      'Shutdown Room',
+      `Are you sure you want to shutdown "${room.name}" (${room.room_code})? This will remove all ${room.member_count} member(s) from the room.`,
       async () => {
         try {
           const result = await apiCall(`/api/rooms/${roomId}/shutdown`, 'POST');
-          showToast(`✅ ${result.message}`);
+          showToast(`${result.message}`);
           await loadActiveRooms();
         } catch (error) {
-          showToast(`❌ Failed to shutdown room: ${error.message}`);
+          showToast(`Failed to shutdown room: ${error.message}`);
         }
       }
     );
@@ -2721,26 +1980,21 @@ breadcrumbs: true
     const roomIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.roomId));
 
     if (roomIds.length === 0) {
-      showToast('⚠️ No rooms selected');
+      showToast('No rooms selected.');
       return;
     }
 
     showConfirm(
-      'Delete Selected Rooms?',
+      'Delete Selected Rooms',
       `Are you sure you want to delete ${roomIds.length} selected room(s)? This cannot be undone.`,
       async () => {
         try {
           const result = await apiCall('/api/rooms/bulk-delete', 'POST', { room_ids: roomIds });
-
-          let message = `✅ ${result.message}\n`;
-          message += `Deleted: ${result.summary.deleted_count}, `;
-          message += `Protected: ${result.summary.protected_count}, `;
-          message += `Failed: ${result.summary.failed_count}`;
-
+          let message = `${result.message} Deleted: ${result.summary.deleted_count}. Protected: ${result.summary.protected_count}. Failed: ${result.summary.failed_count}.`;
           showToast(message);
           await loadActiveRooms();
         } catch (error) {
-          showToast(`❌ Bulk delete failed: ${error.message}`);
+          showToast(`Bulk delete failed: ${error.message}`);
         }
       }
     );
@@ -2750,28 +2004,23 @@ breadcrumbs: true
     const deletableRooms = adminRoomsData.filter(r => r.can_delete);
 
     if (deletableRooms.length === 0) {
-      showToast('✅ No deletable rooms found');
+      showToast('No deletable rooms found.');
       return;
     }
 
     showConfirm(
-      'DELETE ALL NON-DEMO ROOMS?',
-      `⚠️ WARNING: This will DELETE ALL ${deletableRooms.length} non-demo room(s)! This action CANNOT be undone!`,
+      'Delete All Non-Demo Rooms',
+      `This will delete all ${deletableRooms.length} non-demo room(s). This cannot be undone.`,
       async () => {
         try {
           const roomIds = deletableRooms.map(r => r.id);
           const result = await apiCall('/api/rooms/bulk-delete', 'POST', { room_ids: roomIds });
-
-          let message = `✅ ${result.message}\n`;
-          message += `Deleted: ${result.summary.deleted_count} room(s)`;
-
-          showToast(message);
+          showToast(`${result.message} Deleted: ${result.summary.deleted_count} room(s).`);
           await loadActiveRooms();
         } catch (error) {
-          showToast(`❌ Failed to delete rooms: ${error.message}`);
+          showToast(`Failed to delete rooms: ${error.message}`);
         }
       }
     );
   }
-
 </script>
