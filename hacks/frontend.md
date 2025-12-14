@@ -636,7 +636,7 @@ breadcrumbs: true
     padding: clamp(20px, 4vh, 48px) clamp(16px, 5vw, 48px);
     background: rgba(6, 10, 14, 0.92);
     color: #e2e8f0;
-    z-index: 45000; /* above cores and other overlays */
+    z-index: 4; /* above cores and other overlays */
     overflow-y: auto;
   }
 

@@ -146,7 +146,7 @@ permalink: /dummy-quiz
 </section>
 
 <script>
-  const API_URL = "http://localhost:5000/api/quiz/grade"; // change for production
+  const API_URL = "http://localhost:8587/api/quiz/grade"; // change for production
   const submitBtn = document.getElementById("submit-btn");
   const answerEl = document.getElementById("answer");
   const resultEl = document.getElementById("result");

@@ -10,7 +10,9 @@ breadcrumbs: true
 
 <style>
   .m4-module-dropdown {
-    margin: 0;
+    margin: clamp(12px, 4vw, 24px) auto;
+    display: block;
+    max-width: 960px;
   }
   .m4-dropdown-summary {
     cursor: pointer;
@@ -18,16 +20,18 @@ breadcrumbs: true
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: clamp(28px, 5vw, 60px) clamp(24px, 8vw, 140px);
-    margin: 0 0 18px 0;
+    gap: 4px;
+    padding: clamp(18px, 4vw, 36px) clamp(20px, 6vw, 64px);
+    margin: 0;
     background: linear-gradient(135deg, #020617 0%, #0f172a 45%, #020617 100%);
     border: 1px solid rgba(14,165,233,0.55);
-    border-radius: 0;
-    box-shadow: 0 14px 40px rgba(2,6,23,0.75);
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 12px 30px rgba(2,6,23,0.55);
+  }
+  @media (max-width: 640px) {
+    .m4-dropdown-summary {
+      padding: 18px 20px;
+    }
   }
   .m4-dropdown-summary::-webkit-details-marker {
     display: none;
@@ -47,7 +51,7 @@ breadcrumbs: true
   }
   .m4-summary-title {
     margin: 0;
-    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
     color: #38bdf8;
   }
   .m4-summary-hint {
@@ -56,16 +60,16 @@ breadcrumbs: true
     color: #cbd5f5;
   }
   .m4-shell {
-    background: linear-gradient(135deg, #020617 0%, #0f172a 45%, #020617 100%);
-    padding: clamp(40px, 6vw, 120px) clamp(24px, 8vw, 140px);
-    border-radius: 0;
+    background: linear-gradient(145deg, #020617 0%, #04102a 80%);
+    padding: clamp(26px, 4vw, 60px);
+    border-radius: 0 0 18px 18px;
     color: #e2e8f0;
     box-shadow: 0 18px 45px rgba(15,23,42,0.9);
     border: 2px solid #0ea5e9;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    min-height: 100vh;
+    border-top: none;
+    width: 100%;
+    margin: 0;
+    min-height: auto;
     position: relative;
     overflow: hidden;
   }
