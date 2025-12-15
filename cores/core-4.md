@@ -1,4 +1,5 @@
 ---
+toc: false
 layout: post
 title: "Core 4 — Module 4: Execution Time Calculations"
 description: "Interactive exploration of sequential vs parallel time, using ideas from Modules 1–3"

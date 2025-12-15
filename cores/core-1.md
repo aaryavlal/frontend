@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: "Core 1 — Module 1: Computing Models"
 description: "Module 1: Computing Models — an introduction to sequential and parallel models"

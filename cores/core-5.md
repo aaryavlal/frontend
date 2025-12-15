@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: "Core 5 — Module 5: Performance & Scaling"
 description: "Module 5: Measuring performance though speedup"

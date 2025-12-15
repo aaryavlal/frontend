@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: "Core 2 — Module 2: Why Parallel/Distributed?"
 description: "Module 2: Motivation for parallel and distributed computing"

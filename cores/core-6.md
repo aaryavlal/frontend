@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: "Core 6 — Module 6: Case Studies & Projects"
 description: "Module 6: Apply parallel concepts in practical projects"

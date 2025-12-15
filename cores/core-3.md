@@ -1,5 +1,5 @@
 ---
-toc: true
+toc: false
 layout: post
 title: "Core 3 — Module 3: Parallel Algorithms"
 description: "Module 3: Introduction to parallel algorithms and common patterns"
