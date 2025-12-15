@@ -443,7 +443,7 @@ breadcrumbs: true
     padding-right: 12px; /* room for scrollbar */
   }
   #modulePanelContent *{
-    max-width:none !important;
+    max-width:none !important; 
   }
 
   /* Confirmation modal */
