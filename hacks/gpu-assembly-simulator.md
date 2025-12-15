@@ -924,88 +924,80 @@ body {
     <div class="center-area">
       <div class="tutorial-box" id="tutorialBox">
         <div class="tutorial-header" onclick="toggleTutorial()">
-          <h3>📚 Learning Guide: Computing Models</h3>
+          <h3>📚 GPU Assembly Guide</h3>
           <span class="tutorial-arrow">▼</span>
         </div>
         <div class="tutorial-content">
-          <h4>🎯 Learning Objectives</h4>
+          <h4>🎯 Objective</h4>
+          <p>Assemble 5 GPUs per stage as quickly as possible. Each GPU requires 4 steps: PCB → Cores → Memory → Test</p>
+
+          <h4>⚙️ Stage 1: Sequential Assembly</h4>
+          <p><strong>1 Robot | 1 Testing Station</strong></p>
           <ul>
-            <li>Define <strong>sequential, parallel, and distributed computing</strong></li>
-            <li>Identify real-world examples of each computing model</li>
-            <li>Explain the concept of <strong>resource contention</strong> in parallel systems</li>
-            <li>Compare performance trade-offs between different architectures</li>
-            <li>Apply computing models to solve problems efficiently</li>
+            <li>Click task buttons in order: PCB → Cores → Memory → Test</li>
+            <li>Robot processes one task at a time</li>
+            <li>⚠️ <strong>Bottleneck:</strong> Entire assembly line is single-threaded</li>
+            <li><strong>Real-world:</strong> Early assembly lines, single-core processors</li>
           </ul>
 
-          <h4>⚙️ Stage 1: Sequential Computing — One Thing at a Time</h4>
-          <p><strong>Definition:</strong> Executes instructions one after another in a single stream. Only one task runs at any moment.</p>
-          <p><strong>Analogy:</strong> Single chef making pizzas — must complete each step before starting next pizza.</p>
-          <p><strong>Real-World Examples:</strong> Early computers (1940s-1970s), simple calculators, single-threaded programs, following recipes</p>
+          <h4>⚡ Stage 2: Parallel Assembly</h4>
+          <p><strong>3 Robots | 1 Shared Testing Station</strong></p>
           <ul>
-            <li>✅ <strong>Advantages:</strong> Simple to understand, predictable execution, no coordination overhead</li>
-            <li>❌ <strong>Disadvantages:</strong> Slow for large workloads, resources sit idle, can't use multi-core processors</li>
+            <li>Assign tasks to any available robot</li>
+            <li>Multiple robots work simultaneously on different tasks</li>
+            <li>⚠️ <strong>Bottleneck:</strong> All 3 robots share ONE testing station (resource contention!)</li>
+            <li><strong>Key insight:</strong> Parallel speedup limited by shared resources</li>
+            <li><strong>Real-world:</strong> Multi-core CPUs with shared memory bus</li>
           </ul>
 
-          <h4>⚡ Stage 2: Parallel Computing — Many Hands Make Light Work</h4>
-          <p><strong>Definition:</strong> Divides tasks to execute simultaneously on multiple processors sharing the same memory and resources.</p>
-          <p><strong>Analogy:</strong> 3 chefs in one kitchen with 1 shared oven — they can work in parallel but bottleneck at testing!</p>
-          <p><strong>KEY CONCEPT — Resource Contention:</strong> When multiple threads compete for same resource, they must wait (the oven bottleneck).</p>
-          <p><strong>Real-World Examples:</strong> Multi-core CPUs (4-16 cores), GPUs (thousands of cores), web browsers, video games, scientific simulations</p>
+          <h4>🌐 Stage 3: Distributed Factories</h4>
+          <p><strong>3 Factories | Each with 1 Robot + 1 Testing Station</strong></p>
           <ul>
-            <li>✅ <strong>Advantages:</strong> Faster than sequential, better resource utilization, handles multiple users</li>
-            <li>❌ <strong>Disadvantages:</strong> Shared resources create bottlenecks, requires synchronization, harder debugging (race conditions)</li>
+            <li>Fully automated — no manual task assignment needed</li>
+            <li>Orders auto-route to least busy factory (load balancing)</li>
+            <li>✅ <strong>No bottleneck:</strong> Each factory is independent</li>
+            <li><strong>Key insight:</strong> Distributed systems eliminate resource contention</li>
+            <li><strong>Real-world:</strong> Cloud computing, CDNs, distributed databases</li>
           </ul>
 
-          <h4>🌐 Stage 3: Distributed Computing — Independent Powerhouses</h4>
-          <p><strong>Definition:</strong> Spreads tasks across multiple independent computers connected by network. Each has own CPU, memory, resources.</p>
-          <p><strong>Analogy:</strong> 3 separate pizza shops with own chefs and ovens — orders route to least busy shop. No sharing, no waiting!</p>
-          <p><strong>KEY CONCEPT — Load Balancing:</strong> Distributing work evenly so no machine is overwhelmed while others sit idle.</p>
-          <p><strong>Real-World Examples:</strong> Google Search (thousands of servers), Netflix CDN, blockchain networks, cloud computing (AWS/Azure), multiplayer games</p>
+          <h4>📊 Assembly Process</h4>
+          <p><strong>GPU Components (in order):</strong></p>
           <ul>
-            <li>✅ <strong>Advantages:</strong> Scales horizontally (add more machines), fault tolerant, no resource contention, geographic distribution</li>
-            <li>❌ <strong>Disadvantages:</strong> Network latency, complex coordination, higher cost, data consistency challenges</li>
+            <li>🔲 <strong>PCB (Printed Circuit Board):</strong> Foundation layer</li>
+            <li>⚙️ <strong>Cores:</strong> Processing units installation</li>
+            <li>💾 <strong>Memory:</strong> VRAM chips attachment</li>
+            <li>🔬 <strong>Test:</strong> Quality assurance & burn-in</li>
           </ul>
 
-          <h4>📊 Performance Comparison</h4>
-          <p><strong>Sequential:</strong> Slow | Limited scaling | Simple | Low cost 💰</p>
-          <p><strong>Parallel:</strong> Fast ⚡ | Moderate scaling | Medium complexity ⚠️ | Medium cost 💰💰</p>
-          <p><strong>Distributed:</strong> Very Fast 🚀 | High scaling | Complex | High cost 💰💰💰</p>
-
-          <h4>🔍 Real-World Case Study: How YouTube Works</h4>
-          <p><strong>YouTube uses ALL THREE models:</strong></p>
+          <h4>🎮 Controls</h4>
           <ul>
-            <li><strong>Sequential:</strong> Your browser processes HTML sequentially</li>
-            <li><strong>Parallel:</strong> Video encoding uses multiple CPU cores to compress faster</li>
-            <li><strong>Distributed:</strong> Millions of videos across thousands of servers worldwide with CDN caching</li>
-          </ul>
-          <p><strong>Result:</strong> You can watch 4K cat videos with no buffering!</p>
-
-          <h4>🎮 How to Play</h4>
-          <p><strong>Goal:</strong> Build 5 GPUs per stage as fast as possible</p>
-          <ul>
-            <li><strong>Stage 1:</strong> Click PCB → Cores → Memory → Test in order for each GPU</li>
-            <li><strong>Stage 2:</strong> Assign tasks to any available robot, but watch the testing bottleneck!</li>
-            <li><strong>Stage 3:</strong> Fully automated — observe load balancing route orders to least busy factory</li>
+            <li><strong>▶ Start:</strong> Begin production timer & spawn orders</li>
+            <li><strong>↻ Reset:</strong> Clear stage and restart from 0 GPUs</li>
+            <li><strong>➕ New Order:</strong> Manually add a GPU order to queue</li>
+            <li><strong>Task Buttons:</strong> Assign specific task to robot (Stages 1-2)</li>
+            <li><strong>Test Button:</strong> Send completed GPU to testing station</li>
           </ul>
 
-          <h4>💡 Key Insights</h4>
+          <h4>📈 Performance Metrics</h4>
           <ul>
-            <li><strong>Amdahl's Law:</strong> Not all programs can be perfectly parallelized — if only 50% can parallelize, max speedup is only 2x even with infinite processors!</li>
-            <li><strong>Throughput:</strong> Measure efficiency in GPUs/minute — try to reach 10+ in Stage 3!</li>
-            <li><strong>Trade-offs:</strong> More speed = more complexity and cost</li>
-            <li><strong>Modern systems:</strong> Your laptop uses all three models simultaneously!</li>
+            <li><strong>GPUs Completed:</strong> Total finished units</li>
+            <li><strong>Time Elapsed:</strong> Production duration</li>
+            <li><strong>Avg Time/GPU:</strong> Efficiency per unit</li>
+            <li><strong>Throughput:</strong> GPUs per minute — aim for 10+ in Stage 3!</li>
           </ul>
 
-          <h4>🏆 Challenge Yourself</h4>
+          <h4>💡 Strategy Tips</h4>
           <ul>
-            <li>Complete all 3 stages and compare times</li>
-            <li>Calculate speedup: Stage1Time ÷ Stage3Time</li>
-            <li>Achieve 10+ GPUs/minute throughput in Stage 3</li>
-            <li>Unlock all achievements</li>
-            <li>Reflect: Which model surprised you most?</li>
+            <li><strong>Stage 1:</strong> Work through orders sequentially — no shortcuts!</li>
+            <li><strong>Stage 2:</strong> Keep all 3 robots busy; queue orders at testing station</li>
+            <li><strong>Stage 3:</strong> Watch load balancing distribute work automatically</li>
+            <li>Track order progress with colored status indicators (⚙️ = in progress, ✅ = complete)</li>
           </ul>
+
+          <h4>🏆 Success Criteria</h4>
+          <p>Complete 5 GPUs to finish each stage. Compare your times across stages to see the dramatic impact of parallel and distributed computing!</p>
         </div>
-        <div class="stage-brief" id="stageBrief">Click START to begin assembly!</div>
+        <div class="stage-brief" id="stageBrief">Select a stage to begin assembly!</div>
       </div>
 
       <div class="assembly-area">
