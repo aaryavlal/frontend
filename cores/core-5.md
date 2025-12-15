@@ -171,11 +171,65 @@ h1 {
 }
 
 /* Game Section */
+
 .game-card {
-    background: #1e293b;
-    padding: 25px;
-    border-radius: 12px;
-    border: 2px solid #334155;
+    background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(17,24,39,0.95));
+    padding: 28px;
+    border-radius: 14px;
+    border: 2px solid rgba(51,65,85,0.6);
+    box-shadow: 0 8px 24px rgba(2,6,23,0.6);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.game-card.featured {
+    border: 3px solid #fbbf24;
+    box-shadow: 0 18px 40px rgba(251,191,36,0.12);
+    transform: translateY(-6px);
+}
+
+/* Make the interactive activity pop visually */
+.game-card.highlight {
+    border: 3px solid #fbbf24;
+    box-shadow: 0 10px 30px rgba(251,191,36,0.12);
+    transform: translateY(-4px);
+}
+
+/* live visual speedup panel */
+.live-panel {
+    margin-top: 16px;
+    padding: 12px;
+    background: linear-gradient(90deg, rgba(59,130,246,0.06), rgba(249,115,22,0.03));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+.speed-big {
+    font-family: 'Courier New', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fbbf24;
+    min-width: 96px;
+    text-align: center;
+}
+.speed-bar {
+    flex: 1;
+    height: 18px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.speed-bar-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,#10b981,#38bdf8,#fbbf24);
+    transition: width 450ms ease;
+}
+.speed-label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    min-width: 140px;
 }
 
 .controls {
@@ -375,36 +429,23 @@ h1 {
     <h1>⚡ Speedup Formula</h1>
     <p class="subtitle">Interactive Learning Module: Understanding Parallel Computing Performance</p>
 
-    <!-- Educational Content -->
+    <!-- Educational Content collapsed so the activity leads learning -->
     <div class="section">
-        <h2>What is Speedup?</h2>
-        <p>In parallel computing, <strong>speedup</strong> measures how much faster a parallel implementation runs compared to a serial (sequential) implementation. It's one of the most important metrics for evaluating parallel performance.</p>
-        
-        <div class="formula-box">
-            <p style="text-align: center; color: #94a3b8; margin-bottom: 10px;">The Speedup Formula:</p>
+        <h2>Quick idea</h2>
+        <p>Speedup compares a fully sequential run to a parallel arrangement — try the activity below and watch the live visual feedback.</p>
+
+        <details style="margin-top:12px; background:#0f172a; padding:12px; border-radius:8px;">
+            <summary style="color:#94a3b8; cursor:pointer;">More about speedup (click to expand)</summary>
+            <div style="margin-top:10px; color:#cbd5e1;">
+                <p><strong>T<sub>serial</sub> (Serial Time):</strong> The total time when all tasks run one after another, sequentially. This is your baseline.</p>
+                <p><strong>T<sub>parallel</sub> (Parallel Time):</strong> The time when some tasks run simultaneously — equals the series time plus the longest parallel task.</p>
+                <p><strong>Speedup:</strong> Speedup = T<sub>serial</sub> / T<sub>parallel</sub>. A value &gt;1 means your parallel arrangement is faster.</p>
+            </div>
+        </details>
+
+        <div class="formula-box" style="margin-top:12px;">
+            <p style="text-align: center; color: #94a3b8; margin-bottom: 6px;">Formula</p>
             <div class="formula">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
-        </div>
-
-        <div class="interactive-formula">
-            <div class="formula-part" onclick="toggleExplanation('serial')">T<sub>serial</sub></div>
-            <div style="color: #fbbf24; font-size: 1.5em;">/</div>
-            <div class="formula-part" onclick="toggleExplanation('parallel')">T<sub>parallel</sub></div>
-            <div style="color: #fbbf24; font-size: 1.5em;">=</div>
-            <div class="formula-part" onclick="toggleExplanation('speedup')">Speedup</div>
-        </div>
-
-        <div id="exp-serial" class="explanation">
-            <strong>T<sub>serial</sub> (Serial Time):</strong> The total time when all tasks run one after another, sequentially. This is your baseline - how long it takes without any parallelism.
-        </div>
-        <div id="exp-parallel" class="explanation">
-            <strong>T<sub>parallel</sub> (Parallel Time):</strong> The time when some tasks run simultaneously. It equals the serial tasks time PLUS the longest parallel task (since parallel tasks run at the same time).
-        </div>
-        <div id="exp-speedup" class="explanation">
-            <strong>Speedup:</strong> The ratio showing performance improvement. A speedup of 2× means your parallel version is twice as fast. Higher is better!
-        </div>
-
-        <div class="tip">
-            <strong>Example:</strong> If a task takes 100 seconds serially but only 25 seconds with parallelism, your speedup is 100/25 = 4×
         </div>
     </div>
 
@@ -463,60 +504,37 @@ h1 {
         </div>
     </div>
 
-    <!-- Help Section -->
-    <button class="help-toggle" onclick="toggleHelp()">How to Use This Interactive Game</button>
-    <div id="helpContent" class="help-content">
-        <h3 style="color: #a78bfa; margin-bottom: 15px;">Instructions:</h3>
-        
-        <div class="step">
-            <span class="step-number">Step 1:</span> Add tasks by entering time values and clicking "Add Task". Each number represents execution time units.
-        </div>
+    <!-- Help content will be moved inside the interactive game so learners see the activity first -->
 
-        <div class="step">
-            <span class="step-number">Step 2:</span> Drag tasks into rows based on dependencies:
-            <ul style="margin-left: 20px; margin-top: 5px;">
-                <li><strong>Series Row:</strong> Tasks that must run sequentially (have dependencies)</li>
-                <li><strong>Parallel Row:</strong> Independent tasks that can execute simultaneously</li>
-            </ul>
-        </div>
-
-        <div class="step">
-            <span class="step-number">Step 3:</span> Valid drop zones highlight in yellow when dragging. Click "Compute Speedup" to see results.
-        </div>
-
-        <div class="step">
-            <span class="step-number">Step 4:</span> Experiment with different arrangements and save configurations to compare speedup values.
-        </div>
-
-        <div class="tip">
-            <strong>Goal:</strong> Maximize speedup by parallelizing independent tasks while keeping dependent tasks in series.
-        </div>
-    </div>
-
-    <!-- Interactive Game -->
+    <!-- Interactive Game (featured) -->
     <div class="section">
         <h2>Interactive Speedup Game</h2>
         
-        <div class="game-card">
-            <div class="controls">
-                <label style="color: #94a3b8;">Task Time:</label>
-                <input id="newTaskTime" type="number" min="1" placeholder="e.g. 5, 10, 15">
-                <button class="add-btn" onclick="addTask()">Add Task</button>
+        <div class="game-card featured" id="mainGameCard">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <label style="color: #94a3b8;">Task Time:</label>
+                    <input id="newTaskTime" type="number" min="1" placeholder="e.g. 5, 10, 15">
+                    <button class="add-btn" onclick="addTask()">Add Task</button>
+                </div>
+                <div style="text-align:right; color:#9ca3af; font-size:0.95em;">Tip: Drag tasks into rows to model dependencies and test arrangements.</div>
             </div>
 
-            <div class="row" id="taskPool">
-                <div class="row-title">Task Pool</div>
-                <div class="row-hint">Drag tasks from here into the rows below</div>
+            <div style="display:flex; gap:12px; margin-bottom:12px;">
+                <div class="row" id="taskPool" style="flex:1;">
+                    <div class="row-title">Task Pool</div>
+                    <div class="row-hint">Drag tasks from here into the rows below</div>
+                </div>
             </div>
 
             <div class="row" id="seriesRow" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <div class="row-title">Series Row</div>
-                <div class="row-hint">Tasks that must run one after another (sequential)</div>
+                <div class="row-hint">Run sequentially (dependent tasks)</div>
             </div>
 
             <div class="row" id="parallelRow" ondrop="drop(event)" ondragover="allowDrop(event)">
                 <div class="row-title">Parallel Row</div>
-                <div class="row-hint">Tasks that can run simultaneously (parallel)</div>
+                <div class="row-hint">Run concurrently (independent tasks)</div>
             </div>
 
             <div class="action-buttons">
@@ -525,9 +543,37 @@ h1 {
                 <button class="show-btn" onclick="showSavedRuns()">Show Saved Runs</button>
             </div>
 
-            <div id="results" class="results">Results will appear here after you compute speedup...</div>
+            <div style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+                <div class="live-panel" id="livePanel" aria-live="polite" style="flex:1; min-width:280px;">
+                    <div class="speed-big" id="speedBig">—</div>
+                    <div class="speed-bar" aria-hidden="true" style="margin:0 12px; flex:1;"><div class="speed-bar-inner" id="speedBarInner"></div></div>
+                    <div class="speed-label" id="speedLabel">No data yet — compute speedup</div>
+                </div>
+                <div style="width:280px;">
+                    <button class="help-toggle" onclick="toggleHelp()" style="width:100%;">How to Use</button>
+                    <div id="helpContent" class="help-content" style="margin-top:10px;">
+                        <div class="step"><span class="step-number">1.</span> Add tasks with times and drag them into rows.</div>
+                        <div class="step"><span class="step-number">2.</span> Series = sequential; Parallel = independent.</div>
+                        <div class="step"><span class="step-number">3.</span> Click Compute to see speedup and save runs for comparison.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="results" style="margin-top:14px;">Results will appear here after you compute speedup...</div>
             <div id="savedRuns" class="saved-runs" style="display:none;">No runs saved yet</div>
         </div>
+    </div>
+
+    <!-- Technical Details moved below the interactive game and collapsed -->
+    <div class="section">
+        <details open style="background:#0f172a; padding:16px; border-radius:8px;">
+            <summary style="color:#94a3b8; cursor:pointer; font-size:1.1em;">How Parallel vs Serial Execution Works (details)</summary>
+            <div style="margin-top:12px; color:#cbd5e1;">
+                <p><strong>Parallel Execution:</strong> Multiple CPU cores execute tasks simultaneously. Advantages: reduces time, uses cores efficiently. Disadvantages: communication and synchronization overhead.</p>
+                <p><strong>Serial Execution:</strong> Tasks run one after another. Advantages: simpler, no coordination cost. Disadvantages: uses only one core and can be slower overall.</p>
+                <p style="margin-top:10px;"><strong>Amdahl's Law:</strong> Theoretical limit on speedup due to serial portions of a program. Identify parallelizable parts to maximize gains.</p>
+            </div>
+        </details>
     </div>
 </div>
 
@@ -648,6 +694,20 @@ function computeSpeedup() {
         `Parallel Time (with parallelism): ${parallelTime} units\n\n` +
         `Speedup: ${speedup.toFixed(3)}×\n\n` +
         `${speedup > 1 ? 'Success! You achieved speedup through parallelization.' : 'No speedup gained - try moving more tasks to parallel row.'}`; 
+
+    // update live visual panel
+    const speedBig = document.getElementById('speedBig');
+    const speedBarInner = document.getElementById('speedBarInner');
+    const speedLabel = document.getElementById('speedLabel');
+    const pct = Math.min(200, Math.max(0, Math.round(speedup * 50))); // scale factor for bar (50% per 1x)
+    speedBig.textContent = speedup > 0 ? `${speedup.toFixed(2)}×` : '—';
+    speedBarInner.style.width = pct + '%';
+    speedLabel.textContent = speedup > 1 ? 'Nice — parallelism helped!' : 'No speedup yet — try moving tasks to parallel.';
+
+    // lightly highlight the game card to show result
+    const gameCard = document.querySelector('.game-card');
+    gameCard.classList.add('highlight');
+    setTimeout(()=> gameCard.classList.remove('highlight'), 900);
 
     window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
 }
