@@ -1039,6 +1039,69 @@ breadcrumbs: true
   let currentRoomData = null;
   let cpuFullyLit = false; // Track if all cores are active
 
+  const moduleQuizRequirements = {
+    4: {
+      minRatio: 1 / 3,
+      lockedMessage: 'Score above one-third of the available points (at least 2 out of 3) on the Module 4 quiz before marking this module complete.'
+    }
+  };
+
+  function getModuleQuizProgress(moduleNumber) {
+    try {
+      const stored = localStorage.getItem('moduleQuizProgress') || '{}';
+      const parsed = JSON.parse(stored);
+      return parsed[moduleNumber] || null;
+    } catch (err) {
+      console.warn('Failed to parse stored quiz progress', err);
+      return null;
+    }
+  }
+
+  function moduleQuizRequirementMet(moduleNumber) {
+    const requirement = moduleQuizRequirements[moduleNumber];
+    if (!requirement) return true;
+
+    const progress = getModuleQuizProgress(moduleNumber);
+    if (!progress || !progress.maxScore) return false;
+
+    const ratio = progress.score / progress.maxScore;
+    return ratio > requirement.minRatio;
+  }
+
+  function getModuleRequirementMessage(moduleNumber) {
+    const requirement = moduleQuizRequirements[moduleNumber];
+    if (!requirement) return '';
+    return requirement.lockedMessage || `Complete the Module ${moduleNumber} quiz with more than one-third of the available points to unlock.`;
+  }
+
+  function updateModuleMarkBtnState(moduleNumber) {
+    const markBtn = document.getElementById('moduleMarkBtn');
+    if (!markBtn) return;
+
+    if (!markBtn.dataset.defaultLabel) {
+      markBtn.dataset.defaultLabel = markBtn.textContent.trim() || 'Mark Complete';
+    }
+
+    const requirement = moduleQuizRequirements[moduleNumber];
+    const unlocked = moduleQuizRequirementMet(moduleNumber);
+
+    markBtn.dataset.locked = !requirement || unlocked ? 'false' : 'true';
+
+    if (requirement) {
+      markBtn.disabled = !unlocked;
+      markBtn.textContent = unlocked ? markBtn.dataset.defaultLabel : 'Pass Quiz to Unlock';
+      markBtn.title = unlocked ? '' : getModuleRequirementMessage(moduleNumber);
+    } else {
+      markBtn.disabled = false;
+      markBtn.textContent = markBtn.dataset.defaultLabel;
+      markBtn.title = '';
+    }
+  }
+
+  function canMarkModule(moduleNumber) {
+    return moduleQuizRequirementMet(moduleNumber);
+  }
+
   // Load user from localStorage if it exists
   const storedUser = localStorage.getItem('user');
   if (storedUser) {
@@ -1069,6 +1132,23 @@ breadcrumbs: true
     setTimeout(() => {
       toast.remove();
     }, 3000);
+  }
+
+  function executeEmbeddedScripts(container) {
+    if (!container) return;
+    const scripts = container.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      if (oldScript.src) {
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      oldScript.replaceWith(newScript);
+    });
   }
 
   // Confirmation Modal Functions
@@ -1442,6 +1522,12 @@ breadcrumbs: true
   }
 
   async function completeModule(moduleNumber) {
+    if (!canMarkModule(moduleNumber)) {
+      showToast(getModuleRequirementMessage(moduleNumber) || 'Complete the required quiz to unlock this module.');
+      updateModuleMarkBtnState(moduleNumber);
+      return;
+    }
+
     try {
       const data = await apiCall('/api/progress/complete', 'POST', { module_number: moduleNumber });
 
@@ -1613,6 +1699,7 @@ breadcrumbs: true
       const dialog = panel.querySelector('.module-dialog');
 
       if (panel.parentElement !== document.body) document.body.appendChild(panel);
+      panel.dataset.activeModule = moduleNumber.toString();
 
       document.body.classList.add('module-panel-open');
       content.innerHTML = '<p style="color: var(--muted);">Loading...</p>';
@@ -1621,6 +1708,11 @@ breadcrumbs: true
       if (dialog) dialog.scrollTop = 0;
 
       markBtn.onclick = async () => {
+        if (!canMarkModule(moduleNumber)) {
+          showToast(getModuleRequirementMessage(moduleNumber) || 'Complete the required quiz first.');
+          updateModuleMarkBtnState(moduleNumber);
+          return;
+        }
         try {
           await completeModule(moduleNumber);
           closeModule();
@@ -1631,6 +1723,8 @@ breadcrumbs: true
           showToast('Login required to mark complete.');
         }
       };
+
+      updateModuleMarkBtnState(moduleNumber);
 
       if (closeBtn) closeBtn.onclick = closeModule;
 
@@ -1650,6 +1744,7 @@ breadcrumbs: true
               cleanDiv.style.maxWidth = 'none';
               cleanDiv.innerHTML = clonedContent.innerHTML;
               content.appendChild(cleanDiv);
+              executeEmbeddedScripts(cleanDiv);
 
               setTimeout(() => {
                 const allElements = content.querySelectorAll('*');
@@ -1667,9 +1762,11 @@ breadcrumbs: true
             } else {
               const article = doc.querySelector('article') || doc.querySelector('.container') || doc.querySelector('#content') || doc.body;
               content.innerHTML = article ? article.innerHTML : html;
+              executeEmbeddedScripts(content);
             }
           } catch (e) {
             content.innerHTML = html;
+            executeEmbeddedScripts(content);
           }
 
           if (dialog) dialog.scrollTop = 0;
@@ -1689,7 +1786,22 @@ breadcrumbs: true
     panel.style.display = 'none';
     document.body.classList.remove('module-panel-open');
     panel.scrollTop = 0;
+    panel.dataset.activeModule = '';
   }
+
+  window.addEventListener('moduleQuizScored', event => {
+    if (!event || !event.detail) return;
+    const moduleNumber = parseInt(event.detail.module, 10);
+    if (!moduleNumber) return;
+
+    const panel = document.getElementById('modulePanel');
+    if (panel) {
+      const activeModule = parseInt(panel.dataset.activeModule || '0', 10);
+      if (activeModule === moduleNumber) {
+        updateModuleMarkBtnState(moduleNumber);
+      }
+    }
+  });
 
   // ===== GLOSSARY FUNCTIONS =====
   let currentEditingEntryId = null;

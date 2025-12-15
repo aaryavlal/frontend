@@ -353,6 +353,157 @@ breadcrumbs: true
   </div>
 </details>
 
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          quiz: {
+            base: "#0f172a",
+            glow: "#67e8f9"
+          }
+        },
+        boxShadow: {
+          quiz: "0 25px 65px -25px rgba(15, 23, 42, 0.7)"
+        }
+      }
+    }
+  };
+</script>
+
+<section id="module4-quiz-shell" class="relative isolate overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-6 py-16 text-white shadow-2xl shadow-cyan-500/10 sm:px-12">
+  <div class="pointer-events-none absolute -top-32 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/30 blur-[110px]"></div>
+  <div class="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-slate-950"></div>
+
+  <div class="relative z-10 mx-auto flex max-w-4xl flex-col gap-12">
+    <header class="space-y-3">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200/90">
+        Gemini QPI Quiz
+      </p>
+      <h2 class="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
+        Module 4: Execution-Time Reasoning Check
+      </h2>
+      <p class="text-base text-slate-200 sm:text-lg">
+        Use the story-to-formula model you explored above to answer a scenario question. Gemini grades
+        the response and you need a score above <strong>⅓ of the points (a score of 2 or 3 on this rubric)</strong> to enable the
+        Mark Complete button for this module.
+      </p>
+    </header>
+
+    <div class="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-quiz backdrop-blur-xl sm:p-10">
+      <div class="space-y-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-100/90">
+          Scenario Question
+        </p>
+        <p class="text-2xl font-semibold text-white">
+          Module 4 introduced the idea that every algorithm mixes sequential setup/combining steps with parallel chunks.
+          In 2 short sentences, explain why the sequential portion eventually limits speedup even if you add more processors,
+          and name one practical tweak from the module (shrink the sequential slice, expose more parallel work, reduce overhead/balance costs)
+          that keeps improvements coming a little longer.
+        </p>
+        <p class="text-base text-slate-200">
+          Think conceptually about what Module 4 taught (sequential bottlenecks, overhead, balancing) — no numbers required.
+        </p>
+        <div class="grid gap-3 text-sm text-slate-300 sm:grid-cols-2">
+          <div class="flex items-start gap-2 rounded-2xl bg-white/5 p-3">
+            <span class="mt-1 h-2 w-2 rounded-full bg-emerald-400"></span>
+            Call out how the sequential portion becomes the bottleneck (Module 4 insight).
+          </div>
+          <div class="flex items-start gap-2 rounded-2xl bg-white/5 p-3">
+            <span class="mt-1 h-2 w-2 rounded-full bg-sky-300"></span>
+            Mention one concrete Module 4 adjustment (shrink sequential work, expose more parallelism, reduce overhead/balance cost).
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 space-y-4">
+        <div class="space-y-3">
+          <label for="m4-quiz-answer" class="text-sm font-medium text-slate-50">Your answer</label>
+          <textarea
+            id="m4-quiz-answer"
+            rows="7"
+            class="block w-full rounded-2xl border-0 bg-slate-950/60 px-4 py-3 text-base text-white placeholder:text-slate-500 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-cyan-400"
+            placeholder="Blend the numbers with reasoning from the model..."
+          ></textarea>
+          <p class="text-xs text-slate-400">
+            Submissions hit <code class="font-mono text-emerald-300">/api/quiz/grade</code>, the same service used on the dummy page.
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
+            Autofill sample answers
+          </p>
+          <p class="text-xs text-slate-300">
+            Helpful for testing the grader—each button inserts an answer that roughly earns that score.
+          </p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              data-m4-autofill-score="0"
+              class="inline-flex items-center rounded-full border border-rose-400/60 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-100 hover:bg-rose-500/20"
+            >
+              Autofill 0-point answer
+            </button>
+            <button
+              type="button"
+              data-m4-autofill-score="1"
+              class="inline-flex items-center rounded-full border border-amber-400/60 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-100 hover:bg-amber-500/20"
+            >
+              Autofill 1-point answer
+            </button>
+            <button
+              type="button"
+              data-m4-autofill-score="2"
+              class="inline-flex items-center rounded-full border border-sky-400/60 bg-sky-500/10 px-3 py-1.5 text-xs font-semibold text-sky-100 hover:bg-sky-500/20"
+            >
+              Autofill 2-point answer
+            </button>
+            <button
+              type="button"
+              data-m4-autofill-score="3"
+              class="inline-flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-100 hover:bg-emerald-500/20"
+            >
+              Autofill 3-point answer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <button
+          id="m4-quiz-submit"
+          type="button"
+          class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 via-sky-500 to-fuchsia-500 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-lg shadow-cyan-500/30 transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+        >
+          <span>Submit Answer</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4 stroke-[2.5]">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <p class="text-xs text-slate-400">
+          Grades appear instantly along with attempt history.
+        </p>
+      </div>
+
+      <div
+        id="m4-quiz-gate-status"
+        data-module-quiz-status="4"
+        class="mt-6 rounded-3xl border border-emerald-300/30 bg-emerald-500/10 px-5 py-4 text-sm font-medium text-emerald-100"
+      >
+        You need a score of 2 or 3 out of 3 (more than one-third of the points) before the Mark Complete button unlocks.
+      </div>
+
+      <pre
+        id="m4-quiz-result"
+        aria-live="polite"
+        class="mt-6 hidden whitespace-pre-wrap rounded-3xl border border-white/10 bg-white/5 p-5 text-sm font-medium leading-relaxed text-slate-100 transition-all duration-300"
+      ></pre>
+    </div>
+  </div>
+</section>
+
 <script>
   const m4SeqSlider = document.getElementById('m4-seq-slider');
   const m4ParSlider = document.getElementById('m4-par-slider');
@@ -394,4 +545,207 @@ breadcrumbs: true
     m4ProcSlider.addEventListener('input', updateM4Model);
     updateM4Model();
   }
+</script>
+
+<script>
+  const MODULE4_PASS_RATIO = 1 / 3;
+  const MODULE4_NUMBER = 4;
+  const API_URL = "http://localhost:8587/api/quiz/grade";
+  const submitBtn = document.getElementById("m4-quiz-submit");
+  const answerEl = document.getElementById("m4-quiz-answer");
+  const resultEl = document.getElementById("m4-quiz-result");
+  const gateStatusEl = document.getElementById("m4-quiz-gate-status");
+
+  const stateClasses = {
+    info: ["border-cyan-300/40", "bg-cyan-500/10", "text-cyan-100", "shadow-[0_0_45px_rgba(6,182,212,0.12)]"],
+    success: ["border-emerald-300/50", "bg-emerald-500/10", "text-emerald-100", "shadow-[0_0_45px_rgba(16,185,129,0.18)]"],
+    error: ["border-rose-300/50", "bg-rose-500/10", "text-rose-100", "shadow-[0_0_45px_rgba(244,63,94,0.18)]"]
+  };
+  const allStateClasses = Array.from(new Set(Object.values(stateClasses).flat()));
+
+  const setLoading = (isLoading) => {
+    submitBtn.disabled = isLoading;
+    submitBtn.classList.toggle("opacity-60", isLoading);
+    submitBtn.classList.toggle("cursor-not-allowed", isLoading);
+  };
+
+  const showResult = (message, tone = "info") => {
+    resultEl.classList.remove("hidden");
+    resultEl.classList.remove(...allStateClasses);
+    resultEl.classList.add(...(stateClasses[tone] || stateClasses.info));
+    resultEl.textContent = message;
+  };
+
+  const attempts = [];
+  function recordAttempt(score, maxScore, feedback, serverSummary) {
+    const attempt = { score, maxScore, feedback, serverSummary };
+    attempts.push(attempt);
+
+    let localSummary = "";
+    for (let i = 0; i < attempts.length; i++) {
+      const a = attempts[i];
+      let label;
+
+      if (a.score === a.maxScore) {
+        label = "Perfect";
+      } else if (a.score > 0) {
+        label = "Partial";
+      } else {
+        label = "No credit";
+      }
+
+      localSummary += `Attempt ${i + 1}: ${label} (${a.score}/${a.maxScore})\n`;
+    }
+
+    return localSummary.trim();
+  }
+
+  const sampleAnswers = {
+    0: "Just buy more processors forever and the job basically becomes instant. Module 4 said nothing about limits as far as I remember.",
+    1: "Parallel computing means more cores equals more speed, so the sequential part should not really stop us. Best tweak is to keep scaling hardware.",
+    2: "Module 4 warned that the sequential slice eventually dominates, so new cores give smaller wins. If we trim that serial setup or move pieces into the parallel group we can stretch the gains.",
+    3: "The module showed Amdahl-style reasoning: once the sequential portion (setup/combining) is the big chunk, duplication of processors can’t help much. To keep improving we reduce that sequential work (optimize critical sections, expose more independent chunks, or cut overhead) so the parallel share stays large."
+  };
+
+  const autofillButtons = document.querySelectorAll("[data-m4-autofill-score]");
+  autofillButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const level = btn.getAttribute("data-m4-autofill-score");
+      const text = sampleAnswers[level];
+      if (text) {
+        answerEl.value = text;
+        answerEl.focus();
+      }
+    });
+  });
+
+  function persistModuleQuizScore(score, maxScore, ratio) {
+    try {
+      const existing = JSON.parse(localStorage.getItem("moduleQuizProgress") || "{}");
+      existing[MODULE4_NUMBER] = {
+        score,
+        maxScore,
+        ratio,
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem("moduleQuizProgress", JSON.stringify(existing));
+    } catch (err) {
+      console.warn("Failed to persist quiz progress", err);
+    }
+
+    window.dispatchEvent(
+      new CustomEvent("moduleQuizScored", {
+        detail: { module: MODULE4_NUMBER, score, maxScore, ratio }
+      })
+    );
+  }
+
+  function updateGateStatus(score, maxScore) {
+    if (!gateStatusEl) return;
+    const ratio = maxScore ? score / maxScore : 0;
+    const passed = ratio > MODULE4_PASS_RATIO;
+
+    gateStatusEl.textContent = passed
+      ? `Great! ${score}/${maxScore} is enough credit to mark Module 4 complete.`
+      : `Current score ${score}/${maxScore}. Earn 2 or more points (more than one-third of the total) to unlock Mark Complete.`;
+
+    gateStatusEl.classList.toggle("bg-emerald-500/10", passed);
+    gateStatusEl.classList.toggle("border-emerald-300/30", passed);
+    gateStatusEl.classList.toggle("text-emerald-100", passed);
+
+    gateStatusEl.classList.toggle("bg-rose-500/10", !passed);
+    gateStatusEl.classList.toggle("border-rose-400/40", !passed);
+    gateStatusEl.classList.toggle("text-rose-100", !passed);
+  }
+
+  (function hydrateGateFromStorage() {
+    try {
+      const existing = JSON.parse(localStorage.getItem("moduleQuizProgress") || "{}");
+      const moduleProgress = existing[MODULE4_NUMBER];
+      if (moduleProgress) {
+        updateGateStatus(moduleProgress.score, moduleProgress.maxScore);
+      }
+    } catch (err) {
+      console.warn("Failed to parse stored quiz progress", err);
+    }
+  })();
+
+  submitBtn.addEventListener("click", async () => {
+    const answer = answerEl.value.trim();
+
+    if (!answer) {
+      showResult("Please enter an answer before submitting.", "error");
+      return;
+    }
+
+    showResult("Modeling your answer, stand by...", "info");
+    setLoading(true);
+
+    try {
+      // If the answer exactly matches one of the built-in autofill samples,
+      // simulate the grader locally so the autofill buttons reliably produce
+      // the score they advertise without needing a round-trip to the API.
+      let simulated = null;
+      for (const [level, sampleText] of Object.entries(sampleAnswers)) {
+        if (answer === sampleText) {
+          simulated = {
+            score: Number(level),
+            max_score: 3,
+            feedback: `Auto-filled sample answer (level ${level}).`,
+            attempt_summary: "(local-simulated)"
+          };
+          break;
+        }
+      }
+
+      let data;
+      if (simulated) {
+        data = simulated;
+      } else {
+        const resp = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answer })
+        });
+
+        data = await resp.json();
+
+        if (!resp.ok) {
+          showResult(
+            ["Error:", data.error || resp.statusText, data.details ? `Details: ${data.details}` : ""]
+              .filter(Boolean)
+              .join("\n"),
+            "error"
+          );
+          return;
+        }
+      }
+
+      const score = data.score ?? "N/A";
+      const maxScore = data.max_score ?? "?";
+      const feedback = data.feedback ?? data.raw_response ?? "";
+      const serverSummary = data.attempt_summary ?? "";
+
+      if (typeof score === "number" && typeof maxScore === "number" && maxScore > 0) {
+        const ratio = score / maxScore;
+        persistModuleQuizScore(score, maxScore, ratio);
+        updateGateStatus(score, maxScore);
+      }
+
+      const localSummary = recordAttempt(score, maxScore, feedback, serverSummary);
+
+      showResult(
+        `Score: ${score}/${maxScore}\n\nFeedback:\n${feedback}\n\n` +
+          (serverSummary ? `Overall attempt history (server):\n${serverSummary}\n\n` : "") +
+          `Session attempt history (frontend):\n${localSummary}\n\n` +
+          `Reminder: you need more than one-third of the points (a score of 2 or 3 on this rubric) before marking the module complete.`,
+        "success"
+      );
+    } catch (err) {
+      console.error(err);
+      showResult("Network or server error.", "error");
+    } finally {
+      setLoading(false);
+    }
+  });
 </script>
