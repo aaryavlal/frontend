@@ -53,52 +53,43 @@ body {
 }
 
 .sidebar-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
     background: rgba(56, 189, 248, 0.2);
     color: #38bdf8;
     border: 2px solid #38bdf8;
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 10px 16px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     transition: all 0.3s;
+    font-weight: 600;
 }
 
 .sidebar-toggle:hover {
     background: rgba(56, 189, 248, 0.3);
     box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
 }
 
 .hamburger-icon {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
 }
 
 .hamburger-icon span {
     display: block;
-    width: 20px;
+    width: 18px;
     height: 2px;
     background: #38bdf8;
     transition: all 0.3s;
-}
-
-.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(2) {
-    opacity: 0;
-}
-
-.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+    border-radius: 2px;
 }
 
 .sidebar-header {
@@ -266,13 +257,14 @@ body {
 /* MAIN CONTENT AREA */
 .main-content {
     flex: 1;
-    padding: 20px 8px;
+    padding: 20px 20px;
     overflow-y: auto;
     max-width: calc(100vw - 220px);
-    transition: max-width 0.3s ease;
+    transition: max-width 0.3s ease, padding 0.3s ease;
+    position: relative;
 }
 
-.info-sidebar.collapsed ~ .main-content {
+.page-wrapper:has(.info-sidebar.collapsed) .main-content {
     max-width: 100vw;
 }
 
@@ -302,9 +294,11 @@ body {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     border: 2px solid #38bdf8;
     border-radius: 16px;
-    padding: 20px 8px;
+    padding: 24px;
+    padding-top: 70px; /* Extra padding at top for button */
     margin-bottom: 24px;
     box-shadow: 0 8px 32px rgba(56, 189, 248, 0.2);
+    position: relative;
 }
 
 .activity-title {
@@ -485,7 +479,7 @@ body {
 
 .game-card {
     background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(17,24,39,0.95));
-    padding: 20px 12px;
+    padding: 24px;
     border-radius: 14px;
     border: 2px solid rgba(51,65,85,0.6);
     box-shadow: 0 8px 24px rgba(2,6,23,0.6);
@@ -942,7 +936,27 @@ body {
     
     .main-content {
         max-width: 100%;
-        padding: 16px 12px;
+        padding: 16px;
+    }
+    
+    .activity-card {
+        padding: 20px;
+        padding-top: 65px; /* Space for button on mobile */
+    }
+    
+    .sidebar-toggle {
+        top: 12px;
+        left: 12px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .toggle-text {
+        font-size: 0.8rem;
+    }
+    
+    .hamburger-icon span {
+        width: 16px;
     }
     
     .content-header h1 {
@@ -1283,7 +1297,7 @@ body {
 
 <div class="page-wrapper">
     <!-- LEFT SIDEBAR with Information Panels -->
-    <div class="info-sidebar">
+    <div class="info-sidebar collapsed">
         <div class="sidebar-header">
             <h2>📚 Learning Guide</h2>
             <p>Essential Concepts</p>
@@ -1454,6 +1468,16 @@ body {
 
     <!-- MAIN CONTENT AREA -->
     <div class="main-content">
+        <!-- Sidebar Toggle Button -->
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <div class="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <span class="toggle-text">Learning Guide</span>
+        </button>
+
         <div class="content-header">
             <h1>⚡ Interactive Speedup Calculator</h1>
             <p class="subtitle">Explore parallel computing performance through hands-on experimentation</p>
@@ -1538,6 +1562,12 @@ body {
 <script>
 // Initialize global variables
 window.currentScore = null;
+
+// Sidebar toggle function
+function toggleSidebar() {
+    const sidebar = document.querySelector('.info-sidebar');
+    sidebar.classList.toggle('collapsed');
+}
 
 // Panel toggle function for sidebar
 function togglePanel(header) {
