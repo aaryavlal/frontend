@@ -443,7 +443,16 @@ breadcrumbs: true
     padding-right: 12px; /* room for scrollbar */
   }
   #modulePanelContent *{
-    max-width:none !important; 
+    max-width:none !important;
+  }
+  /* Zoom out iframes in module panel */
+  #modulePanelContent iframe{
+    transform: scale(0.8);
+    transform-origin: top left;
+  }
+  /* Zoom out and push iframe to the right for core-6 */
+  #modulePanel[data-active-module="6"] #modulePanelContent iframe{
+    transform: scale(0.8) translateX(250px);
   }
 
   /* Confirmation modal */
@@ -736,7 +745,10 @@ breadcrumbs: true
       <p style="margin: 0; color: var(--muted); font-weight: 700;">
         User: <span id="displayUsername"></span>
       </p>
-      <button class="btn btn-secondary" onclick="logout()" style="margin-top: 8px; padding: 7px 12px; font-size: 0.9rem;">Logout</button>
+      <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <button class="btn btn-secondary" onclick="showTutorial()" style="padding: 7px 12px; font-size: 0.9rem;">Tutorial</button>
+        <button class="btn btn-secondary" onclick="logout()" style="padding: 7px 12px; font-size: 0.9rem;">Logout</button>
+      </div>
     </div>
   </div>
 
@@ -993,6 +1005,24 @@ breadcrumbs: true
   </div>
 </div>
 
+<!-- Tutorial Modal -->
+<div id="tutorialModal" class="confirm-modal" style="display: none;">
+  <div class="confirm-dialog">
+    <div style="padding: 20px; text-align: center;">
+      <div class="confirm-title" id="tutorialTitle" style="margin-bottom: 12px;">Welcome to Hardware Havoc</div>
+      <div id="tutorialContent" class="confirm-message" style="text-align: left; line-height: 1.6; margin-bottom: 16px;">
+        <p><strong>Step 1: Room Management</strong> - Create or join a room to get started.</p>
+        <p><strong>Step 2: Quiz Completion</strong> - Complete quizzes to unlock modules.</p>
+        <p><strong>Step 3: Module Completion</strong> - Work through modules once all members finish their quizzes.</p>
+        <p><strong>Step 4: Glossary</strong> - Build a shared knowledge base with your room members.</p>
+      </div>
+      <div class="confirm-buttons">
+        <button class="confirm-btn confirm" onclick="closeTutorial()">Got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Admin Rooms Management Modal -->
 <div id="adminRoomsModal" class="admin-rooms-modal">
   <div class="admin-rooms-dialog">
@@ -1183,12 +1213,39 @@ breadcrumbs: true
     modal.classList.remove('show');
   }
 
+  // Tutorial Modal Functions
+  function showTutorial() {
+    const modal = document.getElementById('tutorialModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.classList.add('show');
+      localStorage.removeItem('tutorialDismissed');
+    }
+  }
+
+  function closeTutorial() {
+    const modal = document.getElementById('tutorialModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+      localStorage.setItem('tutorialDismissed', 'true');
+    }
+  }
+
   // Close modal on background click
   document.addEventListener('DOMContentLoaded', async () => {
     const modal = document.getElementById('confirmModal');
     if (modal) {
       modal.addEventListener('click', (e) => {
         if (e.target === modal) closeConfirm();
+      });
+    }
+
+    // Tutorial modal background click handler
+    const tutorialModal = document.getElementById('tutorialModal');
+    if (tutorialModal) {
+      tutorialModal.addEventListener('click', (e) => {
+        if (e.target === tutorialModal) closeTutorial();
       });
     }
 

@@ -13,6 +13,6 @@ breadcrumbs: false
 
 Build the right computing infrastructure for different scenarios!
 
-<iframe src="{{site.baseurl}}/assets/computing-game.html" style="width: 100%; height: 850px; border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></iframe>
+<iframe src="{{site.baseurl}}/assets/computing-game.html" style="width: 1250px; height: 850px; border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: block; margin: 0 auto 0 -225px;"></iframe>
 
 [Back to Prototype Room](/prototyperoomcode)

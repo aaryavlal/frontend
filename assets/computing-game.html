@@ -415,10 +415,297 @@
             color: #fde047;
         }
 
+        .metrics-panel {
+            background: #0f172a;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            margin-top: 10px;
+        }
+
+        .metrics-panel h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #38bdf8;
+            font-size: 13px;
+        }
+
+        .metric-bar {
+            margin: 8px 0;
+        }
+
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            margin-bottom: 3px;
+            color: #e2e8f0;
+        }
+
+        .metric-value {
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .bar-container {
+            background: #1e293b;
+            border-radius: 4px;
+            height: 16px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .bar-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .bar-throughput {
+            background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+        }
+
+        .bar-cost {
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .bar-latency {
+            background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .bar-utilization {
+            background: linear-gradient(90deg, #38bdf8 0%, #0ea5e9 100%);
+        }
+
+        .amdahl-section {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            padding: 8px;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+
+        .amdahl-section h4 {
+            margin: 0 0 6px 0;
+            font-size: 12px;
+            color: #38bdf8;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted #38bdf8;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 2px solid #38bdf8;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .challenge-mode {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid #fbbf24;
+            border-radius: 6px;
+            padding: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        .challenge-constraints {
+            display: flex;
+            gap: 15px;
+            margin-top: 6px;
+        }
+
+        .constraint-item {
+            flex: 1;
+            text-align: center;
+            padding: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .constraint-label {
+            font-size: 9px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .constraint-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .toggle-switch {
+            display: inline-block;
+            position: relative;
+            width: 40px;
+            height: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #475569;
+            transition: 0.3s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #22c55e;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
         @media (max-width: 1200px) {
             .game-layout {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Tutorial Modal Styles */
+        .tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-overlay.active {
+            display: flex;
+        }
+
+        .tutorial-modal {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 3px solid #38bdf8;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .tutorial-modal h2 {
+            color: #38bdf8;
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .tutorial-modal h3 {
+            color: #38bdf8;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .tutorial-modal p {
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: #e2e8f0;
+        }
+
+        .tutorial-modal ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .tutorial-modal li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        .tutorial-step {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid #38bdf8;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+
+        .tutorial-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .tutorial-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .tutorial-progress {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .tutorial-highlight {
+            color: #fbbf24;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -429,7 +716,29 @@
         <div class="scenario-display">
             <div class="scenario-header">
                 <h2>Current Scenario</h2>
-                <button id="new-scenario-btn" class="btn btn-tertiary">New Scenario</button>
+                <div>
+                    <label style="font-size: 11px;">
+                        Challenge Mode
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="challenge-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </label>
+                    <button id="new-scenario-btn" class="btn btn-tertiary" style="margin-left: 10px;">New Scenario</button>
+                </div>
+            </div>
+            <div id="challenge-display" class="challenge-mode" style="display: none;">
+                <div style="font-weight: 600; margin-bottom: 6px;">Challenge Constraints:</div>
+                <div class="challenge-constraints">
+                    <div class="constraint-item">
+                        <div class="constraint-label">Budget</div>
+                        <div class="constraint-value" id="budget-value">$1000</div>
+                    </div>
+                    <div class="constraint-item">
+                        <div class="constraint-label">Max Latency</div>
+                        <div class="constraint-value" id="latency-limit">100ms</div>
+                    </div>
+                </div>
             </div>
             <div id="scenario-text" class="scenario-text"></div>
             <div id="scenario-type" class="scenario-type"></div>
@@ -495,7 +804,71 @@
                 <div id="inspector-content" class="inspector-content">
                     <p class="inspector-hint">Click on a component to inspect it</p>
                 </div>
+
+                <!-- Performance Metrics -->
+                <div class="metrics-panel">
+                    <h3>Performance Metrics</h3>
+                    <div class="metric-bar">
+                        <div class="metric-label">
+                            <span class="tooltip">Throughput
+                                <span class="tooltiptext">How much work can be processed per unit time. Higher is better for parallel tasks.</span>
+                            </span>
+                            <span class="metric-value" id="throughput-value">0/s</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill bar-throughput" id="throughput-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-label">
+                            <span class="tooltip">Latency
+                                <span class="tooltiptext">Time delay between request and response. Lower is better for user experience.</span>
+                            </span>
+                            <span class="metric-value" id="latency-value">0ms</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill bar-latency" id="latency-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-label">
+                            <span class="tooltip">Cost Efficiency
+                                <span class="tooltiptext">Resource cost vs. performance. Lower cost for same performance is better.</span>
+                            </span>
+                            <span class="metric-value" id="cost-value">$0</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill bar-cost" id="cost-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-label">
+                            <span class="tooltip">Resource Utilization
+                                <span class="tooltiptext">How efficiently resources are being used. Aim for 70-90% for optimal performance.</span>
+                            </span>
+                            <span class="metric-value" id="utilization-value">0%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill bar-utilization" id="utilization-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Amdahl's Law Section -->
+                    <div class="amdahl-section" id="amdahl-section" style="display: none;">
+                        <h4 class="tooltip">Amdahl's Law Analysis
+                            <span class="tooltiptext">Theoretical speedup limit based on the portion of work that can be parallelized.</span>
+                        </h4>
+                        <div id="amdahl-content"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+        <div class="tutorial-modal" id="tutorial-modal">
+            <div id="tutorial-content"></div>
         </div>
     </div>
 
