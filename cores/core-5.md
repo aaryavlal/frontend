@@ -39,17 +39,17 @@ body {
     background: #0f1419;
     border-right: 2px solid #1e293b;
     overflow-y: auto;
-    position: sticky;
-    top: 0;
+    position: relative;
     height: 100vh;
     flex-shrink: 0;
-    transition: transform 0.3s ease, width 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .info-sidebar.collapsed {
     width: 0;
-    transform: translateX(-100%);
+    min-width: 0;
     border-right: none;
+    overflow: hidden;
 }
 
 .sidebar-toggle {
@@ -1503,7 +1503,7 @@ window.currentScore = null;
 // Initialize default tasks
 function initializeDefaultTasks() {
     const taskPool = document.getElementById("taskPool");
-    const defaultTasks = [3, 5, 2, 8, 4, 6, 1, 7];
+    const defaultTasks = [3, 5, 8, 4, 6];
     
     defaultTasks.forEach((time, index) => {
         const block = document.createElement("div");
@@ -2069,18 +2069,9 @@ function showSavedRuns() {
     savedRunsElem.style.display = "block";
 }
 
-// Add some initial example tasks
+// Initialize tasks when page loads
 window.addEventListener('load', function() {
-    const examples = [10, 5, 8, 3];
-    examples.forEach(val => {
-        const block = document.createElement("div");
-        block.className = "block";
-        block.id = "task" + Date.now() + Math.random();
-        block.draggable = true;
-        block.ondragstart = drag;
-        block.textContent = val;
-        document.getElementById("taskPool").appendChild(block);
-    });
+    initializeDefaultTasks();
 });
 </script>
 </body>
