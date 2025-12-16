@@ -2,7 +2,7 @@
 toc: false
 layout: post
 title: "Core 5 — Module 5: Performance & Scaling"
-description: "Module 5: Measuring performance though speedup"
+description: "Module 5: Measuring performance through speedup"
 permalink: /cores/core-5
 breadcrumbs: true
 ---
@@ -18,86 +18,296 @@ breadcrumbs: true
     margin: 0;
     padding: 0;
 }
+
 body {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
     color: #e2e8f0;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    padding: 20px;
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+    max-width: 100vw;
 }
 
-h1 {
+/* LEFT SIDEBAR - Information Panels */
+.info-sidebar {
+    width: 220px;
+    background: #0f1419;
+    border-right: 2px solid #1e293b;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 2px solid #38bdf8;
+}
+
+.sidebar-header h2 {
     color: #38bdf8;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 2.5em;
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+    font-weight: 700;
 }
 
-.subtitle {
-    text-align: center;
+.sidebar-header p {
     color: #94a3b8;
-    margin-bottom: 30px;
-    font-size: 1.1em;
+    font-size: 0.85rem;
 }
 
-/* Educational Section */
-.section {
-    background: #1e293b;
-    padding: 25px;
-    border-radius: 12px;
-    margin-bottom: 25px;
-    border: 2px solid #334155;
+.info-panel {
+    border-bottom: 1px solid #1e293b;
+    overflow: hidden;
 }
 
-.section h2 {
-    color: #38bdf8;
-    margin-bottom: 15px;
-    font-size: 1.8em;
-}
-
-.formula-box {
+.panel-header {
+    padding: 16px 20px;
     background: #0f172a;
-    padding: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+}
+
+.panel-header:hover {
+    background: #1a2332;
+    border-left-color: #38bdf8;
+}
+
+.panel-header h3 {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.panel-arrow {
+    color: #38bdf8;
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+}
+
+.info-panel.expanded .panel-arrow {
+    transform: rotate(180deg);
+}
+
+.panel-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #0a0e1a;
+}
+
+.info-panel.expanded .panel-content {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.panel-body {
+    padding: 16px 20px;
+}
+
+.panel-body h4 {
+    color: #38bdf8;
+    font-size: 0.9rem;
+    margin: 12px 0 8px 0;
+    font-weight: 600;
+}
+
+.panel-body p {
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.panel-body ul {
+    margin: 8px 0 12px 20px;
+}
+
+.panel-body li {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.panel-body strong {
+    color: #e2e8f0;
+}
+
+.highlight-box {
+    background: rgba(56, 189, 248, 0.1);
+    border-left: 3px solid #38bdf8;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 4px;
+}
+
+.formula-display {
+    background: #1e293b;
+    padding: 16px;
+    border-radius: 6px;
+    text-align: center;
+    margin: 12px 0;
+    border: 1px solid #334155;
+}
+
+.formula-display .formula-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+    flex: 1;
+    padding: 20px 8px;
+    overflow-y: auto;
+    max-width: calc(100vw - 220px);
+}
+
+.content-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #1e293b;
+}
+
+.content-header h1 {
+    color: #38bdf8;
+    font-size: 2.8rem;
+    margin-bottom: 12px;
+    font-weight: 800;
+    text-shadow: 0 2px 20px rgba(56, 189, 248, 0.3);
+}
+
+.content-header .subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* ACTIVITY CARD - Main Focus */
+.activity-card {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 2px solid #38bdf8;
+    border-radius: 16px;
+    padding: 20px 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(56, 189, 248, 0.2);
+}
+
+.activity-title {
+    color: #38bdf8;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.activity-intro {
+    background: rgba(56, 189, 248, 0.05);
+    padding: 16px;
     border-radius: 8px;
-    margin: 15px 0;
+    margin-bottom: 24px;
     border-left: 4px solid #38bdf8;
 }
 
-.formula {
-    font-size: 1.5em;
-    text-align: center;
-    color: #fbbf24;
-    font-family: 'Courier New', monospace;
-    margin: 15px 0;
+.activity-intro p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.7;
 }
 
-.interactive-formula {
+/* Live Speedup Panel */
+.live-panel {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #10b981;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.2);
+}
+
+.live-panel-title {
+    color: #10b981;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.speed-display {
+    padding: 16px;
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 10px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+    gap: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.formula-part {
-    padding: 12px 20px;
-    background: #334155;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 2px solid transparent;
+.speed-big {
+    font-family: 'Courier New', monospace;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fbbf24;
+    min-width: 120px;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
 }
 
-.formula-part:hover {
-    background: #475569;
-    border-color: #38bdf8;
-    transform: scale(1.05);
+.speed-bar {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.speed-bar-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #10b981, #38bdf8, #fbbf24);
+    transition: width 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+}
+
+.speed-label {
+    font-size: 1rem;
+    color: #cbd5e1;
+    min-width: 180px;
+    font-weight: 500;
+}
+
+/* Game Area */
+.game-area {
+    background: #0a0e1a;
+    padding: 28px;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+}
+
+.game-section-title {
+    color: #38bdf8;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1e293b;
 }
 
 .formula-part.active {
@@ -174,7 +384,7 @@ h1 {
 
 .game-card {
     background: linear-gradient(180deg, rgba(30,41,59,0.98), rgba(17,24,39,0.95));
-    padding: 28px;
+    padding: 20px 12px;
     border-radius: 14px;
     border: 2px solid rgba(51,65,85,0.6);
     box-shadow: 0 8px 24px rgba(2,6,23,0.6);
@@ -319,6 +529,13 @@ h1 {
     animation: pulse 1s infinite;
 }
 
+.drag-area.highlight-target {
+    border-color: #10b981;
+    border-style: solid;
+    background: rgba(16, 185, 129, 0.1);
+    animation: pulse 1s infinite;
+}
+
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
@@ -339,8 +556,8 @@ h1 {
 
 .action-buttons {
     display: flex;
-    gap: 10px;
-    margin: 20px 0;
+    gap: 8px;
+    margin: 16px 0;
     flex-wrap: wrap;
 }
 
@@ -422,188 +639,462 @@ h1 {
     font-weight: bold;
     margin-right: 8px;
 }
+
+/* Additional Styles */
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.controls input {
+    padding: 12px 16px;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 1rem;
+    width: 160px;
+    transition: all 0.3s;
+}
+
+.controls input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.controls button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.compute-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.compute-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    color: white;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+}
+
+.show-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+}
+
+.show-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Task Blocks */
+.block {
+    padding: 14px 20px;
+    margin: 6px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: grab;
+    user-select: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.block:hover {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.block:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
+
+.block.dragging {
+    opacity: 0.4;
+    transform: rotate(5deg);
+}
+
+/* Drag & Drop Areas */
+.drag-area {
+    background: rgba(30, 41, 59, 0.5);
+    padding: 24px;
+    border-radius: 12px;
+    min-height: 140px;
+    margin-bottom: 20px;
+    border: 2px dashed #334155;
+    transition: all 0.3s;
+}
+
+.drag-area:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: #475569;
+}
+
+.drag-area.drag-over {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: #38bdf8;
+    border-style: solid;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.area-label {
+    display: block;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#taskPool .area-label {
+    color: #10b981;
+}
+
+#seriesRow .area-label {
+    color: #f59e0b;
+}
+
+#parallelRow .area-label {
+    color: #10b981;
+}
+
+.area-hint {
+    color: #64748b;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .info-sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        max-width: calc(100vw - 200px);
+        padding: 20px 8px;
+    }
+}
+
+@media (max-width: 968px) {
+    .page-wrapper {
+        flex-direction: column;
+    }
+    
+    .info-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 2px solid #1e293b;
+    }
+    
+    .main-content {
+        max-width: 100%;
+        padding: 16px 12px;
+    }
+    
+    .content-header h1 {
+        font-size: 2.2rem;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0e1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
 </style>
 </head>
 <body>
-<div class="container">
-    <h1>⚡ Speedup Formula</h1>
-    <p class="subtitle">Interactive Learning Module: Understanding Parallel Computing Performance</p>
 
-    <!-- Educational Content collapsed so the activity leads learning -->
-    <div class="section">
-        <h2>Quick idea</h2>
-        <p>Speedup compares a fully sequential run to a parallel arrangement — try the activity below and watch the live visual feedback.</p>
-
-        <details style="margin-top:12px; background:#0f172a; padding:12px; border-radius:8px;">
-            <summary style="color:#94a3b8; cursor:pointer;">More about speedup (click to expand)</summary>
-            <div style="margin-top:10px; color:#cbd5e1;">
-                <p><strong>T<sub>serial</sub> (Serial Time):</strong> The total time when all tasks run one after another, sequentially. This is your baseline.</p>
-                <p><strong>T<sub>parallel</sub> (Parallel Time):</strong> The time when some tasks run simultaneously — equals the series time plus the longest parallel task.</p>
-                <p><strong>Speedup:</strong> Speedup = T<sub>serial</sub> / T<sub>parallel</sub>. A value &gt;1 means your parallel arrangement is faster.</p>
-            </div>
-        </details>
-
-        <div class="formula-box" style="margin-top:12px;">
-            <p style="text-align: center; color: #94a3b8; margin-bottom: 6px;">Formula</p>
-            <div class="formula">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
-        </div>
-    </div>
-
-    <!-- Technical Details -->
-    <div class="section">
-        <h2>How Parallel vs Serial Execution Works</h2>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div style="background: #0f172a; padding: 20px; border-radius: 8px; border-left: 4px solid #10b981;">
-                <h3 style="color: #10b981; margin-bottom: 10px;">Parallel Execution</h3>
-                <p><strong>How it works:</strong> Multiple CPU cores execute tasks simultaneously.</p>
-                <p style="margin-top: 10px;"><strong>Advantages:</strong></p>
-                <ul style="margin-left: 20px;">
-                    <li>Dramatically reduces execution time</li>
-                    <li>Uses multiple CPU cores efficiently</li>
-                    <li>Ideal for independent tasks</li>
-                </ul>
-                <p style="margin-top: 10px;"><strong>Disadvantages:</strong></p>
-                <ul style="margin-left: 20px;">
-                    <li>Communication overhead between cores</li>
-                    <li>Synchronization costs for coordination</li>
-                    <li>Requires task independence</li>
-                    <li>Diminishing returns with more cores</li>
-                </ul>
-            </div>
-
-            <div style="background: #0f172a; padding: 20px; border-radius: 8px; border-left: 4px solid #f59e0b;">
-                <h3 style="color: #f59e0b; margin-bottom: 10px;">Serial Execution</h3>
-                <p><strong>How it works:</strong> Tasks execute one after another on a single CPU core.</p>
-                <p style="margin-top: 10px;"><strong>Advantages:</strong></p>
-                <ul style="margin-left: 20px;">
-                    <li>No communication overhead</li>
-                    <li>Simpler to implement and debug</li>
-                    <li>Faster for small tasks</li>
-                </ul>
-                <p style="margin-top: 10px;"><strong>Disadvantages:</strong></p>
-                <ul style="margin-left: 20px;">
-                    <li>Uses only one CPU core</li>
-                    <li>Total time is sum of all tasks</li>
-                    <li>Wastes multi-core potential</li>
-                </ul>
-            </div>
+<div class="page-wrapper">
+    <!-- LEFT SIDEBAR with Information Panels -->
+    <div class="info-sidebar">
+        <div class="sidebar-header">
+            <h2>📚 Learning Guide</h2>
+            <p>Essential Concepts</p>
         </div>
 
-        <div class="tip">
-            <strong>Key Insight:</strong> Parallel isn't always faster. For small tasks, coordination overhead can exceed time saved. Serial execution is often more efficient when tasks are quick or dependent on each other.
-        </div>
-
-        <div style="background: #0f172a; padding: 20px; border-radius: 8px; margin-top: 15px;">
-            <h3 style="color: #38bdf8; margin-bottom: 10px;">Amdahl's Law: The Parallel Computing Reality Check</h3>
-            <p>Even with infinite processors, you can't achieve infinite speedup. Why? Because some parts of your program must run serially. If 10% of your code must be serial, your maximum possible speedup is 10×, no matter how many cores you have.</p>
-            <div class="formula" style="font-size: 1.2em; margin: 15px 0;">
-                Maximum Speedup = 1 / (serial_fraction + parallel_fraction / num_processors)
+        <!-- Panel 1: What is Speedup? -->
+        <div class="info-panel expanded">
+            <div class="panel-header" onclick="togglePanel(this)">
+                <h3>⚡ What is Speedup?</h3>
+                <span class="panel-arrow">▼</span>
             </div>
-            <p style="color: #94a3b8; font-style: italic;">This is why identifying which tasks can truly run in parallel is crucial for performance optimization.</p>
-        </div>
-    </div>
-
-    <!-- Help content will be moved inside the interactive game so learners see the activity first -->
-
-    <!-- Interactive Game (featured) -->
-    <div class="section">
-        <h2>Interactive Speedup Game</h2>
-        
-        <div class="game-card featured" id="mainGameCard">
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <label style="color: #94a3b8;">Task Time:</label>
-                    <input id="newTaskTime" type="number" min="1" placeholder="e.g. 5, 10, 15">
-                    <button class="add-btn" onclick="addTask()">Add Task</button>
-                </div>
-                <div style="text-align:right; color:#9ca3af; font-size:0.95em;">Tip: Drag tasks into rows to model dependencies and test arrangements.</div>
-            </div>
-
-            <div style="display:flex; gap:12px; margin-bottom:12px;">
-                <div class="row" id="taskPool" style="flex:1;">
-                    <div class="row-title">Task Pool</div>
-                    <div class="row-hint">Drag tasks from here into the rows below</div>
+            <div class="panel-content">
+                <div class="panel-body">
+                    <p><strong>Speedup</strong> measures how much faster a parallel implementation runs compared to a sequential one.</p>
+                    
+                    <div class="formula-display">
+                        <div class="formula-text">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
+                    </div>
+                    
+                    <h4>Key Terms</h4>
+                    <ul>
+                        <li><strong>T<sub>serial</sub></strong>: Total time if all tasks run sequentially (one after another)</li>
+                        <li><strong>T<sub>parallel</sub></strong>: Time with parallelization (some tasks run simultaneously)</li>
+                        <li><strong>Speedup > 1</strong>: Parallel is faster!</li>
+                        <li><strong>Speedup = 1</strong>: No improvement</li>
+                        <li><strong>Speedup < 1</strong>: Parallel is slower (overhead costs)</li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <div class="row" id="seriesRow" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div class="row-title">Series Row</div>
-                <div class="row-hint">Run sequentially (dependent tasks)</div>
+        <!-- Panel 2: How It Works -->
+        <div class="info-panel">
+            <div class="panel-header" onclick="togglePanel(this)">
+                <h3>🔧 How It Works</h3>
+                <span class="panel-arrow">▼</span>
             </div>
-
-            <div class="row" id="parallelRow" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <div class="row-title">Parallel Row</div>
-                <div class="row-hint">Run concurrently (independent tasks)</div>
-            </div>
-
-            <div class="action-buttons">
-                <button class="compute-btn" onclick="computeSpeedup()">Compute Speedup</button>
-                <button class="save-btn" onclick="saveRun()">Save Run</button>
-                <button class="show-btn" onclick="showSavedRuns()">Show Saved Runs</button>
-            </div>
-
-            <div style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
-                <div class="live-panel" id="livePanel" aria-live="polite" style="flex:1; min-width:280px;">
-                    <div class="speed-big" id="speedBig">—</div>
-                    <div class="speed-bar" aria-hidden="true" style="margin:0 12px; flex:1;"><div class="speed-bar-inner" id="speedBarInner"></div></div>
-                    <div class="speed-label" id="speedLabel">No data yet — compute speedup</div>
-                </div>
-                <div style="width:280px;">
-                    <button class="help-toggle" onclick="toggleHelp()" style="width:100%;">How to Use</button>
-                    <div id="helpContent" class="help-content" style="margin-top:10px;">
-                        <div class="step"><span class="step-number">1.</span> Add tasks with times and drag them into rows.</div>
-                        <div class="step"><span class="step-number">2.</span> Series = sequential; Parallel = independent.</div>
-                        <div class="step"><span class="step-number">3.</span> Click Compute to see speedup and save runs for comparison.</div>
+            <div class="panel-content">
+                <div class="panel-body">
+                    <h4>Serial Execution</h4>
+                    <p>All tasks execute one after another on a single processor. Total time = sum of all task times.</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Example:</strong> Tasks [10, 5, 8, 3]<br>
+                        Serial Time = 10 + 5 + 8 + 3 = 26 units</p>
+                    </div>
+                    
+                    <h4>Parallel Execution</h4>
+                    <p>Some tasks can run simultaneously on multiple processors. Series tasks still run sequentially, but parallel tasks overlap.</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Example:</strong> Series [10] + Parallel [5, 8, 3]<br>
+                        Parallel Time = 10 + max(5, 8, 3) = 10 + 8 = 18 units<br>
+                        <strong>Speedup = 26 / 18 = 1.44×</strong></p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div id="results" class="results" style="margin-top:14px;">Results will appear here after you compute speedup...</div>
-            <div id="savedRuns" class="saved-runs" style="display:none;">No runs saved yet</div>
+        <!-- Panel 3: Parallel vs Serial -->
+        <div class="info-panel">
+            <div class="panel-header" onclick="togglePanel(this)">
+                <h3>⚙️ Parallel vs Serial</h3>
+                <span class="panel-arrow">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="panel-body">
+                    <h4>Parallel Computing</h4>
+                    <p><strong>Advantages:</strong></p>
+                    <ul>
+                        <li>Faster execution for large tasks</li>
+                        <li>Utilizes multiple CPU cores</li>
+                        <li>Ideal for independent operations</li>
+                    </ul>
+                    <p><strong>Disadvantages:</strong></p>
+                    <ul>
+                        <li>Communication overhead</li>
+                        <li>Synchronization costs</li>
+                        <li>Not all tasks can parallelize</li>
+                    </ul>
+
+                    <h4>Serial Computing</h4>
+                    <p><strong>Advantages:</strong></p>
+                    <ul>
+                        <li>Simple to implement</li>
+                        <li>No coordination overhead</li>
+                        <li>Faster for small tasks</li>
+                    </ul>
+                    <p><strong>Disadvantages:</strong></p>
+                    <ul>
+                        <li>Uses only one processor</li>
+                        <li>Slow for large workloads</li>
+                        <li>Wastes available cores</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 4: Amdahl's Law -->
+        <div class="info-panel">
+            <div class="panel-header" onclick="togglePanel(this)">
+                <h3>📊 Amdahl's Law</h3>
+                <span class="panel-arrow">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="panel-body">
+                    <p><strong>Amdahl's Law</strong> shows the theoretical speedup limit based on the portion of code that can be parallelized.</p>
+                    
+                    <div class="formula-display">
+                        <div class="formula-text" style="font-size: 0.9rem;">Speedup = 1 / [(1 - P) + (P / N)]</div>
+                    </div>
+                    
+                    <p><strong>Where:</strong></p>
+                    <ul>
+                        <li><strong>P</strong> = Fraction that can be parallelized (0 to 1)</li>
+                        <li><strong>N</strong> = Number of processors</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Key Insight:</strong> If only 50% of your program can be parallelized, even with infinite processors, max speedup is only 2×!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 5: Real-World Examples -->
+        <div class="info-panel">
+            <div class="panel-header" onclick="togglePanel(this)">
+                <h3>🌍 Real-World Use</h3>
+                <span class="panel-arrow">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="panel-body">
+                    <h4>Where Parallel Computing Shines</h4>
+                    <ul>
+                        <li><strong>Video Rendering:</strong> Process each frame independently</li>
+                        <li><strong>Scientific Simulations:</strong> Run calculations simultaneously</li>
+                        <li><strong>Web Servers:</strong> Handle multiple requests at once</li>
+                        <li><strong>Machine Learning:</strong> Train models with parallel processing</li>
+                        <li><strong>Graphics (GPUs):</strong> Thousands of cores rendering pixels</li>
+                    </ul>
+                    
+                    <h4>When Serial is Better</h4>
+                    <ul>
+                        <li>Small, quick tasks (overhead > benefit)</li>
+                        <li>Sequential dependencies (step 2 needs step 1 result)</li>
+                        <li>Simple programs on single-core systems</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Technical Details moved below the interactive game and collapsed -->
-    <div class="section">
-        <details open style="background:#0f172a; padding:16px; border-radius:8px;">
-            <summary style="color:#94a3b8; cursor:pointer; font-size:1.1em;">How Parallel vs Serial Execution Works (details)</summary>
-            <div style="margin-top:12px; color:#cbd5e1;">
-                <p><strong>Parallel Execution:</strong> Multiple CPU cores execute tasks simultaneously. Advantages: reduces time, uses cores efficiently. Disadvantages: communication and synchronization overhead.</p>
-                <p><strong>Serial Execution:</strong> Tasks run one after another. Advantages: simpler, no coordination cost. Disadvantages: uses only one core and can be slower overall.</p>
-                <p style="margin-top:10px;"><strong>Amdahl's Law:</strong> Theoretical limit on speedup due to serial portions of a program. Identify parallelizable parts to maximize gains.</p>
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-content">
+        <div class="content-header">
+            <h1>⚡ Interactive Speedup Calculator</h1>
+            <p class="subtitle">Explore parallel computing performance through hands-on experimentation</p>
+        </div>
+
+        <!-- Main Activity Card -->
+        <div class="activity-card">
+            <h2 class="activity-title">🎮 Drag & Drop Activity</h2>
+            
+            <div class="activity-intro">
+                <p><strong>How to use:</strong> Create tasks by entering a time value and clicking "Add Task". Then drag tasks from the Task Pool into either the Series Row (sequential) or Parallel Row (simultaneous). Click "Compute Speedup" to see the performance improvement!</p>
             </div>
-        </details>
+
+            <!-- Live Speedup Display -->
+            <div class="live-panel">
+                <div class="live-panel-title">🔴 LIVE SPEEDUP MONITOR</div>
+                <div class="speed-display">
+                    <div class="speed-big" id="speedBig">—</div>
+                    <div class="speed-bar">
+                        <div class="speed-bar-inner" id="speedBarInner"></div>
+                    </div>
+                    <div class="speed-label" id="speedLabel">Ready to compute</div>
+                </div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="game-area">
+                <div class="controls">
+                    <input type="number" id="newTaskTime" placeholder="Task time" min="1" value="10">
+                    <button class="add-btn" onclick="addTask()">➕ Add Task</button>
+                    <button class="compute-btn" onclick="computeSpeedup()">⚡ Compute Speedup</button>
+                    <button class="save-btn" onclick="saveRun()">💾 Save Run</button>
+                    <button class="show-btn" onclick="showSavedRuns()">📊 Show Saved</button>
+                </div>
+
+                <h3 class="game-section-title">📦 Task Pool</h3>
+                <div class="drag-area" id="taskPool" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <span class="area-label">Available Tasks</span>
+                    <span class="area-hint">Drag tasks from here to series or parallel rows below</span>
+                </div>
+
+                <h3 class="game-section-title">🔄 Series Row (Sequential)</h3>
+                <div class="drag-area" id="seriesRow" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <span class="area-label">Series Tasks (Run One After Another)</span>
+                    <span class="area-hint">These tasks execute sequentially - total time = sum of all</span>
+                </div>
+
+                <h3 class="game-section-title">⚡ Parallel Row (Simultaneous)</h3>
+                <div class="drag-area" id="parallelRow" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <span class="area-label">Parallel Tasks (Run At Same Time)</span>
+                    <span class="area-hint">These tasks execute simultaneously - time = longest task</span>
+                </div>
+
+                <div id="results" class="results"></div>
+                <div id="savedRuns" class="saved-runs"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+// Panel toggle function for sidebar
+function togglePanel(header) {
+    const panel = header.parentElement;
+    panel.classList.toggle('expanded');
+}
+
+// Drag and Drop Functionality
 let savedRuns = [];
 let currentlyDragging = null;
 
-function toggleExplanation(type) {
-    const explanations = ['serial', 'parallel', 'speedup'];
-    explanations.forEach(exp => {
-        const elem = document.getElementById(`exp-${exp}`);
-        const part = document.querySelector(`.formula-part[onclick="toggleExplanation('${exp}')"]`);
-        if (exp === type) {
-            elem.classList.toggle('visible');
-            part.classList.toggle('active');
-        } else {
-            elem.classList.remove('visible');
-            part.classList.remove('active');
-        }
-    });
-}
-
-function toggleHelp() {
-    const helpContent = document.getElementById('helpContent');
-    helpContent.classList.toggle('visible');
-}
-
 function allowDrop(ev) {
     ev.preventDefault();
-    ev.currentTarget.classList.add('drag-over');
+    // Find the closest drag-area container and add drag-over class
+    let targetArea = ev.target.closest('.drag-area');
+    if (targetArea) {
+        targetArea.classList.add('drag-over');
+    }
 }
 
 function drag(ev) {
@@ -614,30 +1105,30 @@ function drag(ev) {
     // Highlight valid drop zones
     document.getElementById('seriesRow').classList.add('highlight-target');
     document.getElementById('parallelRow').classList.add('highlight-target');
+    document.getElementById('taskPool').classList.add('highlight-target');
 }
 
 function drop(ev) {
     ev.preventDefault();
-    ev.currentTarget.classList.remove('drag-over');
     
     let data = ev.dataTransfer.getData("text");
     let elem = document.getElementById(data);
     
-    // Only append if dropping on a row, not on another block
-    if (ev.target.classList.contains('row') || ev.target.classList.contains('row-title') || ev.target.classList.contains('row-hint')) {
-        let targetRow = ev.target.closest('.row');
-        if (targetRow) {
-            targetRow.appendChild(elem);
-        }
+    // Find the closest drag-area container
+    let targetArea = ev.target.closest('.drag-area');
+    
+    // If we found a drag area, append the element to it
+    if (targetArea && elem) {
+        targetArea.appendChild(elem);
+        elem.classList.remove('dragging');
     }
     
-    elem.classList.remove('dragging');
     removeHighlights();
 }
 
 function removeHighlights() {
-    document.querySelectorAll('.row').forEach(row => {
-        row.classList.remove('drag-over', 'highlight-target');
+    document.querySelectorAll('.drag-area').forEach(area => {
+        area.classList.remove('drag-over', 'highlight-target');
     });
 }
 
@@ -646,6 +1137,14 @@ document.addEventListener('dragend', function(ev) {
     if (ev.target.classList.contains('block')) {
         ev.target.classList.remove('dragging');
         removeHighlights();
+    }
+});
+
+// Remove drag-over when leaving a drop zone
+document.addEventListener('dragleave', function(ev) {
+    let targetArea = ev.target.closest('.drag-area');
+    if (targetArea) {
+        targetArea.classList.remove('drag-over');
     }
 });
 
