@@ -21,7 +21,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 body {
@@ -31,27 +31,30 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
 }
 
 .page-container {
   display: flex;
-  gap: 20px;
-  max-width: 1800px;
+  gap: 15px;
+  max-width: 100%;
   width: 100%;
   align-items: flex-start;
+  overflow-x: hidden;
+  flex-direction: row-reverse;
 }
 
 .educational-sidebar {
-  flex: 0 0 350px;
+  flex: 0 0 280px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   position: sticky;
-  top: 20px;
-  max-height: calc(100vh - 40px);
+  top: 10px;
+  max-height: calc(100vh - 20px);
   overflow-y: auto;
+  order: -1;
 }
 
 .edu-panel {
@@ -172,10 +175,10 @@ body {
 
 .game-frame {
   flex: 1;
-  min-width: 800px;
-  max-width: 1200px;
-  height: 90vh;
-  max-height: 850px;
+  min-width: 0;
+  max-width: 1100px;
+  height: 85vh;
+  max-height: 800px;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border: 2px solid #00d4ff;
   border-radius: 12px;
@@ -248,7 +251,7 @@ body {
 
 /* Left Sidebar */
 .left-sidebar {
-  width: 260px;
+  width: 200px;
   background: #0f1419;
   border-right: 1px solid #1e2936;
   display: flex;
@@ -402,10 +405,11 @@ body {
   border-bottom: 1px solid #00d4ff;
   flex-shrink: 0;
   overflow: hidden;
+  max-height: 35vh;
 }
 
 .tutorial-header {
-  padding: 12px 20px;
+  padding: 10px 20px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -444,8 +448,8 @@ body {
 }
 
 .tutorial-box.expanded .tutorial-content {
-  max-height: 500px;
-  padding: 0 20px 15px 20px;
+  max-height: 300px;
+  padding: 0 20px 12px 20px;
   overflow-y: auto;
 }
 
@@ -482,40 +486,50 @@ body {
 }
 
 .stage-brief {
-  font-size: 0.75rem;
-  line-height: 1.5;
+  font-size: 0.7rem;
+  line-height: 1.4;
   color: #b8c5d6;
-  padding: 12px 20px;
+  padding: 10px 20px;
+  background: rgba(0, 212, 255, 0.05);
+  border-bottom: 1px solid #1e2936;
 }
 
 .assembly-area {
   flex: 1;
-  padding: 20px;
+  padding: 15px;
   overflow-y: auto;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .assembly-area h3 {
   font-size: 0.8rem;
   color: #7a8ba0;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .workstations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  flex: 1;
+  align-content: start;
 }
 
 .workstation {
   background: #1a2332;
   border: 1px solid #2a3f5f;
   border-radius: 8px;
-  padding: 16px;
+  padding: 12px;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .workstation:hover {
@@ -524,15 +538,16 @@ body {
 }
 
 .workstation-header {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
   border-bottom: 2px solid #333;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #F0F0F0;
+  flex-shrink: 0;
 }
 
 .station-load {
@@ -545,9 +560,9 @@ body {
 
 .robot {
   background: #0f1419;
-  padding: 14px;
+  padding: 10px;
   border-radius: 6px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   border: 1px solid #1e2936;
   position: relative;
   overflow: hidden;
@@ -647,7 +662,7 @@ body {
 
 /* Right Sidebar */
 .right-sidebar {
-  width: 300px;
+  width: 230px;
   background: rgba(30, 30, 40, 0.8);
   border-left: 2px solid #333;
   display: flex;
@@ -995,7 +1010,7 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   .page-container {
     flex-direction: column;
     align-items: center;
@@ -1004,242 +1019,50 @@ body {
   .educational-sidebar {
     flex: 0 0 auto;
     width: 100%;
-    max-width: 800px;
+    max-width: 100%;
     position: static;
     max-height: none;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    order: 0;
   }
   
   .game-frame {
     width: 100%;
+    max-width: 100%;
     min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 5px;
+  }
+  
+  .game-frame {
+    height: 80vh;
+  }
+  
+  .left-sidebar {
+    width: 160px;
+  }
+  
+  .right-sidebar {
+    width: 180px;
+  }
+  
+  .workstations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .educational-sidebar {
+    flex: 0 0 auto;
   }
 }
 </style>
 <body>
 
 <div class="page-container">
-  <!-- Educational Sidebar -->
-  <div class="educational-sidebar">
-    <!-- Sequential Computing Panel -->
-    <div class="edu-panel" id="eduSequential">
-      <div class="edu-panel-header" onclick="toggleEduPanel('eduSequential')">
-        <h3>🤖 Sequential Computing</h3>
-        <span class="edu-panel-arrow">▼</span>
-      </div>
-      <div class="edu-panel-content">
-        <h4>What Is It?</h4>
-        <p>Sequential computing executes instructions one after another in a single stream. Only one task runs at any given moment.</p>
-        
-        <h4>Real-World Analogy</h4>
-        <p>Imagine a single chef making pizzas. They must complete each step (knead dough, add sauce, add cheese, bake) before moving to the next pizza. No matter how fast the chef works, they can only do one thing at a time.</p>
-        
-        <div class="edu-highlight-box">
-          <strong>Key Concept:</strong> Single-threaded execution means tasks wait in line, even if resources are idle.
-        </div>
-        
-        <h4>Examples</h4>
-        <ul>
-          <li>Early computers (1940s-1970s)</li>
-          <li>Simple calculators</li>
-          <li>Single-threaded programs</li>
-          <li>Following a recipe step-by-step</li>
-        </ul>
-        
-        <h4>Advantages</h4>
-        <ul>
-          <li>✅ Simple to understand and debug</li>
-          <li>✅ Predictable execution order</li>
-          <li>✅ No coordination overhead</li>
-        </ul>
-        
-        <h4>Disadvantages</h4>
-        <ul>
-          <li>❌ Slow for large workloads</li>
-          <li>❌ Resources sit idle during waits</li>
-          <li>❌ Cannot use multi-core processors</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Parallel Computing Panel -->
-    <div class="edu-panel" id="eduParallel">
-      <div class="edu-panel-header" onclick="toggleEduPanel('eduParallel')">
-        <h3>⚡ Parallel Computing</h3>
-        <span class="edu-panel-arrow">▼</span>
-      </div>
-      <div class="edu-panel-content">
-        <h4>What Is It?</h4>
-        <p>Parallel computing divides a task into smaller subtasks that execute simultaneously on multiple processors or cores. All processors typically share the same memory and resources.</p>
-        
-        <h4>Real-World Analogy</h4>
-        <p>Now you have 3 chefs in one kitchen! While Chef 1 makes dough, Chef 2 adds sauce to a different pizza, and Chef 3 adds cheese. But wait — there's only <strong>one oven</strong>, so they have to take turns baking. This is called <strong>resource contention</strong>.</p>
-        
-        <div class="edu-highlight-box">
-          <strong>Resource Contention:</strong> When multiple threads compete for the same shared resource (like memory, disk, or network), causing delays and bottlenecks.
-        </div>
-        
-        <h4>Examples</h4>
-        <ul>
-          <li>Multi-core processors (4-16 cores in laptops)</li>
-          <li>Graphics cards (GPUs with 1000s of cores)</li>
-          <li>Multi-threaded applications (browsers, games)</li>
-          <li>Scientific simulations</li>
-        </ul>
-        
-        <h4>Advantages</h4>
-        <ul>
-          <li>✅ Faster than sequential for large tasks</li>
-          <li>✅ Better resource utilization</li>
-          <li>✅ Can handle multiple users/requests</li>
-        </ul>
-        
-        <h4>Disadvantages</h4>
-        <ul>
-          <li>❌ Shared resources create bottlenecks</li>
-          <li>❌ Requires careful coordination</li>
-          <li>❌ Harder to debug (race conditions)</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Distributed Computing Panel -->
-    <div class="edu-panel" id="eduDistributed">
-      <div class="edu-panel-header" onclick="toggleEduPanel('eduDistributed')">
-        <h3>🌐 Distributed Computing</h3>
-        <span class="edu-panel-arrow">▼</span>
-      </div>
-      <div class="edu-panel-content">
-        <h4>What Is It?</h4>
-        <p>Distributed computing spreads tasks across multiple independent computers connected by a network. Each computer (node) has its own processor, memory, and resources.</p>
-        
-        <h4>Real-World Analogy</h4>
-        <p>Instead of 3 chefs in one kitchen, you now have <strong>3 separate pizza shops</strong>, each with their own chef and oven. Orders get routed to whichever shop is least busy. No sharing, no waiting!</p>
-        
-        <div class="edu-highlight-box">
-          <strong>Load Balancing:</strong> Distributing work evenly across nodes so no single machine is overwhelmed while others sit idle.
-        </div>
-        
-        <h4>Examples</h4>
-        <ul>
-          <li>Google Search (1000s of servers working together)</li>
-          <li>Netflix streaming (distributed CDN)</li>
-          <li>Blockchain networks (Bitcoin, Ethereum)</li>
-          <li>Cloud computing (AWS, Azure, Google Cloud)</li>
-        </ul>
-        
-        <h4>Advantages</h4>
-        <ul>
-          <li>✅ Scales horizontally (add more machines)</li>
-          <li>✅ Fault tolerant (if one node fails, others continue)</li>
-          <li>✅ No resource contention between nodes</li>
-          <li>✅ Geographic distribution for speed</li>
-        </ul>
-        
-        <h4>Disadvantages</h4>
-        <ul>
-          <li>❌ Network latency (communication takes time)</li>
-          <li>❌ Complex coordination required</li>
-          <li>❌ Higher cost (more machines)</li>
-          <li>❌ Data consistency challenges</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Performance Comparison Panel -->
-    <div class="edu-panel" id="eduComparison">
-      <div class="edu-panel-header" onclick="toggleEduPanel('eduComparison')">
-        <h3>📊 Performance Comparison</h3>
-        <span class="edu-panel-arrow">▼</span>
-      </div>
-      <div class="edu-panel-content">
-        <table class="edu-comparison-table">
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>Speed</th>
-              <th>Scalability</th>
-              <th>Complexity</th>
-              <th>Cost</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Sequential</strong></td>
-              <td>Slow</td>
-              <td>Limited</td>
-              <td>Simple</td>
-              <td>💰 Low</td>
-            </tr>
-            <tr>
-              <td><strong>Parallel</strong></td>
-              <td>Fast ⚡</td>
-              <td>Moderate</td>
-              <td>Medium ⚠️</td>
-              <td>💰💰 Medium</td>
-            </tr>
-            <tr>
-              <td><strong>Distributed</strong></td>
-              <td>Very Fast 🚀</td>
-              <td>High</td>
-              <td>Complex</td>
-              <td>💰💰💰 High</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <h4>When to Use Each</h4>
-        <ul>
-          <li><strong>Sequential:</strong> Simple tasks, single-user programs, debugging</li>
-          <li><strong>Parallel:</strong> CPU-intensive tasks on one machine (video rendering, scientific computing)</li>
-          <li><strong>Distributed:</strong> Web services at scale, big data processing, global applications</li>
-        </ul>
-        
-        <h4>Real-World Case: YouTube</h4>
-        <p>YouTube uses <strong>all three models</strong>:</p>
-        <ul>
-          <li><strong>Sequential:</strong> Your browser processes HTML sequentially</li>
-          <li><strong>Parallel:</strong> Video encoding uses multiple CPU cores</li>
-          <li><strong>Distributed:</strong> Millions of videos stored across thousands of servers worldwide with load balancing and CDNs</li>
-        </ul>
-        
-        <div class="edu-highlight-box">
-          <strong>Key Insight:</strong> Modern systems combine all three approaches for optimal performance!
-        </div>
-      </div>
-    </div>
-
-    <!-- Learning Objectives Panel -->
-    <div class="edu-panel" id="eduLearning">
-      <div class="edu-panel-header" onclick="toggleEduPanel('eduLearning')">
-        <h3>🎯 Learning Objectives</h3>
-        <span class="edu-panel-arrow">▼</span>
-      </div>
-      <div class="edu-panel-content">
-        <h4>By completing this simulator, you will:</h4>
-        <ul>
-          <li>✅ Understand how sequential execution creates bottlenecks</li>
-          <li>✅ Experience resource contention in parallel systems</li>
-          <li>✅ See how distributed computing eliminates shared bottlenecks</li>
-          <li>✅ Compare performance metrics across computing models</li>
-          <li>✅ Apply load balancing concepts</li>
-        </ul>
-        
-        <h4>Challenge Goals</h4>
-        <ul>
-          <li>🥇 Complete each stage (5 GPUs per stage)</li>
-          <li>⚡ Achieve 10+ GPUs/min in Stage 3</li>
-          <li>📈 Compare your Stage 1 vs Stage 3 times</li>
-          <li>🏆 Unlock all achievements</li>
-        </ul>
-        
-        <div class="edu-highlight-box">
-          <strong>Tip:</strong> Pay attention to how bottlenecks change in each stage. This directly relates to Amdahl's Law and parallel computing limitations!
-        </div>
-      </div>
-    </div>
-  </div>
-
+  
 <div class="game-frame">
   <!-- Header -->
   <div class="game-header">
