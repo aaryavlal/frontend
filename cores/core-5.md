@@ -54,16 +54,16 @@ body {
 
 .sidebar-toggle {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 20px;
+    left: 20px;
     z-index: 100;
-    background: rgba(56, 189, 248, 0.2);
-    color: #38bdf8;
-    border: 2px solid #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.25);
     border-radius: 8px;
     padding: 10px 16px;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -72,8 +72,8 @@ body {
 }
 
 .sidebar-toggle:hover {
-    background: rgba(56, 189, 248, 0.3);
-    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    background: rgba(56, 189, 248, 0.15);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
     transform: translateY(-2px);
 }
 
@@ -295,7 +295,7 @@ body {
     border: 2px solid #38bdf8;
     border-radius: 16px;
     padding: 24px;
-    padding-top: 70px; /* Extra padding at top for button */
+    padding-top: 90px; /* More space at top for button */
     margin-bottom: 24px;
     box-shadow: 0 8px 32px rgba(56, 189, 248, 0.2);
     position: relative;
@@ -305,6 +305,7 @@ body {
     color: #38bdf8;
     font-size: 1.6rem;
     margin-bottom: 20px;
+    margin-top: 16px; /* Extra space from button */
     font-weight: 700;
     text-align: center;
 }
@@ -429,9 +430,9 @@ body {
 
 /* Help Section */
 .help-toggle {
-    background: rgba(168, 85, 247, 0.2);
-    color: #a855f7;
-    border: 2px solid #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.3);
     padding: 12px 24px;
     border-radius: 8px;
     cursor: pointer;
@@ -444,9 +445,9 @@ body {
 }
 
 .help-toggle:hover {
-    background: rgba(168, 85, 247, 0.3);
+    background: rgba(168, 85, 247, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
 }
 
 .help-content {
@@ -566,23 +567,23 @@ body {
 }
 
 .add-btn {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-    border: 2px solid #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .add-btn:hover {
-    background: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
 .block {
     padding: 12px 18px;
     margin: 5px;
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
-    border: 2px solid #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.3);
     border-radius: 8px;
     display: inline-block;
     cursor: grab;
@@ -595,8 +596,8 @@ body {
 
 .block:hover {
     transform: scale(1.05);
-    background: rgba(56, 189, 248, 0.25);
-    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.5);
+    background: rgba(56, 189, 248, 0.18);
+    box-shadow: 0 6px 12px rgba(56, 189, 248, 0.3);
 }
 
 .block:active {
@@ -671,40 +672,40 @@ body {
 }
 
 .compute-btn {
-    background: rgba(56, 189, 248, 0.2);
-    color: #38bdf8;
-    border: 2px solid #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.3);
     flex: 1;
 }
 
 .compute-btn:hover {
-    background: rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
 }
 
 .save-btn {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
-    border: 2px solid #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .save-btn:hover {
-    background: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
 .show-btn {
-    background: rgba(168, 85, 247, 0.2);
-    color: #a855f7;
-    border: 2px solid #a855f7;
+    background: rgba(168, 85, 247, 0.1);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.3);
 }
 
 .show-btn:hover {
-    background: rgba(168, 85, 247, 0.3);
+    background: rgba(168, 85, 247, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.25);
 }
 
 .results {
@@ -909,61 +910,6 @@ body {
     font-style: italic;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .info-sidebar {
-        width: 200px;
-    }
-    
-    .main-content {
-        max-width: calc(100vw - 200px);
-        padding: 20px 8px;
-    }
-}
-
-@media (max-width: 968px) {
-    .page-wrapper {
-        flex-direction: column;
-    }
-    
-    .info-sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        border-right: none;
-        border-bottom: 2px solid #1e293b;
-    }
-    
-    .main-content {
-        max-width: 100%;
-        padding: 16px;
-    }
-    
-    .activity-card {
-        padding: 20px;
-        padding-top: 65px; /* Space for button on mobile */
-    }
-    
-    .sidebar-toggle {
-        top: 12px;
-        left: 12px;
-        padding: 8px 12px;
-        font-size: 0.85rem;
-    }
-    
-    .toggle-text {
-        font-size: 0.8rem;
-    }
-    
-    .hamburger-icon span {
-        width: 16px;
-    }
-    
-    .content-header h1 {
-        font-size: 2.2rem;
-    }
-}
-
 /* Modal/Popup Styles */
 .modal-overlay {
     display: none;
@@ -1111,9 +1057,9 @@ body {
 }
 
 .view-more-btn {
-    background: rgba(56, 189, 248, 0.15);
-    color: #38bdf8;
-    border: 1px solid #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.25);
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.85rem;
@@ -1123,8 +1069,8 @@ body {
 }
 
 .view-more-btn:hover {
-    background: rgba(56, 189, 248, 0.25);
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.15);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
 }
 
 /* Scrollbar Styling */
@@ -1282,15 +1228,6 @@ body {
     margin-top: 0;
 }
 
-@media (max-width: 768px) {
-    .modal-body .comparison-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .modal-content {
-        padding: 20px;
-    }
-}
 </style>
 </head>
 <body>
@@ -1562,6 +1499,22 @@ body {
 <script>
 // Initialize global variables
 window.currentScore = null;
+
+// Initialize default tasks
+function initializeDefaultTasks() {
+    const taskPool = document.getElementById("taskPool");
+    const defaultTasks = [3, 5, 2, 8, 4, 6, 1, 7];
+    
+    defaultTasks.forEach((time, index) => {
+        const block = document.createElement("div");
+        block.className = "block";
+        block.id = "task-default-" + index;
+        block.draggable = true;
+        block.ondragstart = drag;
+        block.textContent = time;
+        taskPool.appendChild(block);
+    });
+}
 
 // Sidebar toggle function
 function toggleSidebar() {
@@ -2063,19 +2016,31 @@ function computeSpeedup() {
     speedBarInner.style.width = pct + '%';
     speedLabel.textContent = speedup > 1 ? 'Nice — parallelism helped!' : 'No speedup yet — try moving tasks to parallel.';
 
-    // lightly highlight the game card to show result
-    const gameCard = document.querySelector('.game-card');
-    gameCard.classList.add('highlight');
-    setTimeout(()=> gameCard.classList.remove('highlight'), 900);
-
     window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+    console.log('✅ currentScore set:', window.currentScore);
 }
 
 function saveRun() {
-    if(!window.currentScore || window.currentScore.speedup === undefined || window.currentScore.speedup === null) {
+    console.log('=== SAVE RUN DEBUG ===');
+    console.log('window.currentScore:', window.currentScore);
+    console.log('Type of currentScore:', typeof window.currentScore);
+    
+    if (!window.currentScore) {
+        console.log('❌ FAILED: currentScore is null/undefined');
         alert("Please compute speedup first before saving!");
         return;
     }
+    
+    console.log('speedup value:', window.currentScore.speedup);
+    console.log('speedup type:', typeof window.currentScore.speedup);
+    
+    if (typeof window.currentScore.speedup !== 'number') {
+        console.log('❌ FAILED: speedup is not a number');
+        alert("Please compute speedup first before saving!");
+        return;
+    }
+    
+    console.log('✅ PASSED validation, showing prompt');
     const name = prompt("Enter a name for this run:");
     if(!name) return;
 
