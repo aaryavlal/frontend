@@ -224,32 +224,6 @@ breadcrumbs: true
     margin: 14px 0;
   }
 
-  /* Demo card */
-  .demo-card{
-    background: rgba(47,143,91,0.10);
-    padding: 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(47,143,91,0.35);
-    margin-bottom: 16px;
-  }
-
-  .demo-card .demo-title{
-    color: rgba(47,143,91,1);
-    font-weight: 800;
-    margin: 0 0 8px 0;
-  }
-
-  .demo-pill{
-    background: rgba(11,18,32,0.65);
-    padding: 12px 18px;
-    border-radius: var(--radius-sm);
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: rgba(47,143,91,1);
-    letter-spacing: 3px;
-    border: 1px solid rgba(47,143,91,0.35);
-  }
-
   /* CPU */
   .cpu-container{
     position: relative;
@@ -666,10 +640,6 @@ breadcrumbs: true
     gap: 12px;
   }
 
-  .room-card.demo{
-    border-color: rgba(47,143,91,0.38);
-  }
-
   .room-card-title{
     font-family: var(--serif);
     font-size: 1.1rem;
@@ -787,22 +757,6 @@ breadcrumbs: true
     <div id="joinRoomSection">
       <h3>Join Room</h3>
 
-      <!-- Quick Join Demo Room -->
-      <div class="demo-card">
-        <h4 class="demo-title">Try the Demo Room</h4>
-        <p style="color: var(--muted); margin-bottom: 12px;">
-          Join the permanent demo room. It is always available and can be reset when complete.
-        </p>
-        <div style="display:flex; align-items:center; gap: 12px; flex-wrap: wrap;">
-          <div class="demo-pill">DEMO01</div>
-          <button class="btn" onclick="joinDemoRoom()" style="background: rgba(47,143,91,0.95); border-color: rgba(47,143,91,0.75);">
-            Quick Join Demo Room
-          </button>
-        </div>
-      </div>
-
-      <!-- Regular Room Join -->
-      <h4 style="margin-top: 6px;">Or join another room</h4>
       <div class="inline-inputs">
         <div class="form-group">
           <label for="roomCode">Room Code</label>
@@ -1051,7 +1005,7 @@ breadcrumbs: true
     <div class="admin-rooms-actions">
       <button class="btn" onclick="refreshActiveRooms()">Refresh</button>
       <button class="btn btn-danger" onclick="deleteSelectedRooms()">Delete Selected</button>
-      <button class="btn btn-danger" onclick="deleteAllNonDemoRooms()">Delete All Non-Demo</button>
+      <button class="btn btn-danger" onclick="deleteAllDeletableRooms()">Delete All Deletable</button>
     </div>
 
     <!-- Rooms List -->
@@ -1405,18 +1359,6 @@ breadcrumbs: true
       await loadCurrentRoom();
     } catch (error) {
       showToast(`Failed to join room: ${error.message}`);
-    }
-  }
-
-  async function joinDemoRoom() {
-    try {
-      const data = await apiCall('/api/rooms/join', 'POST', { room_code: 'DEMO01' });
-      currentRoomId = data.room.id;
-      currentRoomData = data.room;
-      showToast('Joined demo room.');
-      await loadCurrentRoom();
-    } catch (error) {
-      showToast(`Failed to join demo room: ${error.message}`);
     }
   }
 
@@ -2066,17 +2008,15 @@ breadcrumbs: true
     }
 
     roomsList.innerHTML = rooms.map(room => {
-      const isDemo = room.is_demo;
       const checkboxHtml = room.can_delete
         ? `<input type="checkbox" class="room-checkbox" data-room-id="${room.id}">`
         : '';
 
       return `
-        <div class="room-card ${isDemo ? 'demo' : ''}">
+        <div class="room-card">
           <div class="room-card-info" style="flex:1;">
             <div class="room-card-title">
               ${escapeHtml(room.name)}
-              ${isDemo ? '<span style="color: rgba(47,143,91,1); margin-left: 10px; font-weight: 800;">DEMO</span>' : ''}
             </div>
             <div class="room-card-details">
               <div class="room-card-detail"><strong>Code:</strong> ${room.room_code}</div>
@@ -2169,7 +2109,7 @@ breadcrumbs: true
     );
   }
 
-  async function deleteAllNonDemoRooms() {
+  async function deleteAllDeletableRooms() {
     const deletableRooms = adminRoomsData.filter(r => r.can_delete);
 
     if (deletableRooms.length === 0) {
@@ -2178,8 +2118,8 @@ breadcrumbs: true
     }
 
     showConfirm(
-      'Delete All Non-Demo Rooms',
-      `This will delete all ${deletableRooms.length} non-demo room(s). This cannot be undone.`,
+      'Delete All Deletable Rooms',
+      `This will delete all ${deletableRooms.length} deletable room(s). This cannot be undone.`,
       async () => {
         try {
           const roomIds = deletableRooms.map(r => r.id);
