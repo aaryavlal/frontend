@@ -43,6 +43,62 @@ body {
     top: 0;
     height: 100vh;
     flex-shrink: 0;
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.info-sidebar.collapsed {
+    width: 0;
+    transform: translateX(-100%);
+    border-right: none;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 2px solid #38bdf8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.sidebar-toggle:hover {
+    background: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.hamburger-icon span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #38bdf8;
+    transition: all 0.3s;
+}
+
+.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.info-sidebar.collapsed + * .sidebar-toggle .hamburger-icon span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
 }
 
 .sidebar-header {
@@ -77,6 +133,7 @@ body {
     align-items: center;
     transition: all 0.2s;
     border-left: 3px solid transparent;
+    gap: 8px;
 }
 
 .panel-header:hover {
@@ -87,7 +144,44 @@ body {
 .panel-header h3 {
     color: #cbd5e1;
     font-size: 0.95rem;
+    margin: 0;
     font-weight: 600;
+    flex: 1;
+    cursor: pointer;
+}
+
+.panel-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+    font-weight: 600;
+    flex: 1;
+}
+
+.panel-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.view-more-btn {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 1px solid #38bdf8;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.view-more-btn:hover {
+    background: rgba(56, 189, 248, 0.3);
+    transform: translateY(-1px);
 }
 
 .panel-arrow {
@@ -175,6 +269,11 @@ body {
     padding: 20px 8px;
     overflow-y: auto;
     max-width: calc(100vw - 220px);
+    transition: max-width 0.3s ease;
+}
+
+.info-sidebar.collapsed ~ .main-content {
+    max-width: 100vw;
 }
 
 .content-header {
@@ -336,10 +435,10 @@ body {
 
 /* Help Section */
 .help-toggle {
-    background: #8b5cf6;
-    color: white;
+    background: rgba(168, 85, 247, 0.2);
+    color: #a855f7;
+    border: 2px solid #a855f7;
     padding: 12px 24px;
-    border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.1em;
@@ -347,11 +446,13 @@ body {
     margin-bottom: 20px;
     display: block;
     width: 100%;
-    transition: background 0.3s;
+    transition: all 0.3s;
 }
 
 .help-toggle:hover {
-    background: #7c3aed;
+    background: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
 }
 
 .help-content {
@@ -471,20 +572,23 @@ body {
 }
 
 .add-btn {
-    background: #10b981;
-    color: white;
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 2px solid #10b981;
 }
 
 .add-btn:hover {
-    background: #059669;
+    background: rgba(16, 185, 129, 0.3);
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
 }
 
 .block {
     padding: 12px 18px;
     margin: 5px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 2px solid #38bdf8;
     border-radius: 8px;
     display: inline-block;
     cursor: grab;
@@ -492,12 +596,13 @@ body {
     font-weight: bold;
     font-size: 1.1em;
     transition: all 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .block:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    background: rgba(56, 189, 248, 0.25);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.5);
 }
 
 .block:active {
@@ -572,32 +677,40 @@ body {
 }
 
 .compute-btn {
-    background: #38bdf8;
-    color: #0f172a;
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 2px solid #38bdf8;
     flex: 1;
 }
 
 .compute-btn:hover {
-    background: #0ea5e9;
+    background: rgba(56, 189, 248, 0.3);
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
 }
 
 .save-btn {
-    background: #10b981;
-    color: white;
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 2px solid #10b981;
 }
 
 .save-btn:hover {
-    background: #059669;
+    background: rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
 }
 
 .show-btn {
-    background: #2196F3;
-    color: white;
+    background: rgba(168, 85, 247, 0.2);
+    color: #a855f7;
+    border: 2px solid #a855f7;
 }
 
 .show-btn:hover {
-    background: #1976D2;
+    background: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
 }
 
 .results {
@@ -837,6 +950,169 @@ body {
     }
 }
 
+/* Modal/Popup Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 2px solid #38bdf8;
+    border-radius: 16px;
+    max-width: 900px;
+    max-height: 85vh;
+    width: 100%;
+    overflow-y: auto;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(56, 189, 248, 0.3);
+    animation: slideUp 0.3s ease;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 2px solid #ef4444;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    color: #38bdf8;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    padding-right: 50px;
+}
+
+.modal-body h4 {
+    color: #38bdf8;
+    font-size: 1.2rem;
+    margin: 20px 0 12px 0;
+}
+
+.modal-body p {
+    color: #cbd5e1;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.modal-body ul {
+    color: #cbd5e1;
+    margin: 12px 0 12px 20px;
+}
+
+.modal-body li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.modal-highlight {
+    background: rgba(56, 189, 248, 0.1);
+    border-left: 3px solid #38bdf8;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 6px;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.comparison-card {
+    background: rgba(30, 41, 59, 0.5);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid;
+}
+
+.comparison-card.parallel {
+    border-color: #10b981;
+}
+
+.comparison-card.serial {
+    border-color: #f59e0b;
+}
+
+.comparison-card h5 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.comparison-card.parallel h5 {
+    color: #10b981;
+}
+
+.comparison-card.serial h5 {
+    color: #f59e0b;
+}
+
+.view-more-btn {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid #38bdf8;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 10px;
+}
+
+.view-more-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 10px;
@@ -855,6 +1131,152 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #475569;
 }
+
+/* Modal/Popup Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s;
+}
+
+.modal-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 2px solid #38bdf8;
+    border-radius: 16px;
+    max-width: 900px;
+    max-height: 85vh;
+    width: 100%;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #334155;
+}
+
+.modal-header h2 {
+    color: #38bdf8;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.modal-close {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 2px solid #ef4444;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    color: #cbd5e1;
+    line-height: 1.8;
+}
+
+.modal-body h3 {
+    color: #38bdf8;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+}
+
+.modal-body h4 {
+    color: #10b981;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.modal-body ul {
+    margin-left: 24px;
+    margin-top: 8px;
+}
+
+.modal-body li {
+    margin-bottom: 8px;
+}
+
+.modal-body .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.modal-body .comparison-card {
+    background: rgba(30, 41, 59, 0.5);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid;
+}
+
+.modal-body .comparison-card.parallel {
+    border-color: #10b981;
+}
+
+.modal-body .comparison-card.serial {
+    border-color: #f59e0b;
+}
+
+.modal-body .comparison-card h4 {
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .modal-body .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        padding: 20px;
+    }
+}
 </style>
 </head>
 <body>
@@ -869,9 +1291,12 @@ body {
 
         <!-- Panel 1: What is Speedup? -->
         <div class="info-panel expanded">
-            <div class="panel-header" onclick="togglePanel(this)">
-                <h3>⚡ What is Speedup?</h3>
-                <span class="panel-arrow">▼</span>
+            <div class="panel-header">
+                <h3 onclick="togglePanel(this.parentElement)">⚡ What is Speedup?</h3>
+                <div class="panel-actions">
+                    <button class="view-more-btn" onclick="openModal('speedup'); event.stopPropagation();">View More</button>
+                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                </div>
             </div>
             <div class="panel-content">
                 <div class="panel-body">
@@ -895,9 +1320,12 @@ body {
 
         <!-- Panel 2: How It Works -->
         <div class="info-panel">
-            <div class="panel-header" onclick="togglePanel(this)">
-                <h3>🔧 How It Works</h3>
-                <span class="panel-arrow">▼</span>
+            <div class="panel-header">
+                <h3 onclick="togglePanel(this.parentElement)">🔧 How It Works</h3>
+                <div class="panel-actions">
+                    <button class="view-more-btn" onclick="openModal('howitworks'); event.stopPropagation();">View More</button>
+                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                </div>
             </div>
             <div class="panel-content">
                 <div class="panel-body">
@@ -923,9 +1351,12 @@ body {
 
         <!-- Panel 3: Parallel vs Serial -->
         <div class="info-panel">
-            <div class="panel-header" onclick="togglePanel(this)">
-                <h3>⚙️ Parallel vs Serial</h3>
-                <span class="panel-arrow">▼</span>
+            <div class="panel-header">
+                <h3 onclick="togglePanel(this.parentElement)">⚙️ Parallel vs Serial</h3>
+                <div class="panel-actions">
+                    <button class="view-more-btn" onclick="openModal('comparison'); event.stopPropagation();">View More</button>
+                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                </div>
             </div>
             <div class="panel-content">
                 <div class="panel-body">
@@ -962,9 +1393,12 @@ body {
 
         <!-- Panel 4: Amdahl's Law -->
         <div class="info-panel">
-            <div class="panel-header" onclick="togglePanel(this)">
-                <h3>📊 Amdahl's Law</h3>
-                <span class="panel-arrow">▼</span>
+            <div class="panel-header">
+                <h3 onclick="togglePanel(this.parentElement)">📊 Amdahl's Law</h3>
+                <div class="panel-actions">
+                    <button class="view-more-btn" onclick="openModal('amdahl'); event.stopPropagation();">View More</button>
+                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                </div>
             </div>
             <div class="panel-content">
                 <div class="panel-body">
@@ -989,9 +1423,12 @@ body {
 
         <!-- Panel 5: Real-World Examples -->
         <div class="info-panel">
-            <div class="panel-header" onclick="togglePanel(this)">
-                <h3>🌍 Real-World Use</h3>
-                <span class="panel-arrow">▼</span>
+            <div class="panel-header">
+                <h3 onclick="togglePanel(this.parentElement)">🌍 Real-World Use</h3>
+                <div class="panel-actions">
+                    <button class="view-more-btn" onclick="openModal('realworld'); event.stopPropagation();">View More</button>
+                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                </div>
             </div>
             <div class="panel-content">
                 <div class="panel-body">
@@ -1077,11 +1514,404 @@ body {
     </div>
 </div>
 
+<!-- Modal Overlay for Detailed Information -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 id="modalTitle">Title</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Content will be dynamically inserted -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal for expanded panel content -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
 <script>
+// Initialize global variables
+window.currentScore = null;
+
 // Panel toggle function for sidebar
 function togglePanel(header) {
     const panel = header.parentElement;
     panel.classList.toggle('expanded');
+}
+
+// Modal functions
+function openModal(panelId) {
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalBody = document.getElementById('modalBody');
+    
+    const content = getModalContent(panelId);
+    modalBody.innerHTML = content;
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modalOverlay = document.getElementById('modalOverlay');
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+function getModalContent(panelId) {
+    const contents = {
+        'speedup': `
+            <h2 class="modal-title">⚡ What is Speedup?</h2>
+            <div class="modal-body">
+                <p><strong>Speedup</strong> is a fundamental metric in parallel computing that quantifies performance improvement. It measures how much faster a parallel implementation executes compared to a sequential version of the same program.</p>
+                
+                <div class="modal-highlight">
+                    <h4>The Speedup Formula</h4>
+                    <div class="formula-display">
+                        <div class="formula-text" style="font-size: 1.4rem;">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
+                    </div>
+                </div>
+                
+                <h4>Understanding the Terms</h4>
+                <ul>
+                    <li><strong>T<sub>serial</sub> (Serial Time):</strong> The total execution time when all tasks run sequentially, one after another on a single processor. This is your baseline measurement.</li>
+                    <li><strong>T<sub>parallel</sub> (Parallel Time):</strong> The execution time when tasks are distributed across multiple processors and some run simultaneously. This equals the serial portion plus the longest parallel task.</li>
+                </ul>
+                
+                <h4>Interpreting Speedup Values</h4>
+                <ul>
+                    <li><strong>Speedup > 1:</strong> Success! Your parallel implementation is faster than serial. For example, 2× speedup means the program runs twice as fast.</li>
+                    <li><strong>Speedup = 1:</strong> No performance gain. The parallel and serial versions take the same time.</li>
+                    <li><strong>Speedup < 1:</strong> Parallel is actually slower due to coordination overhead, communication costs, or poorly parallelizable code.</li>
+                </ul>
+                
+                <div class="modal-highlight">
+                    <h4>Real-World Example</h4>
+                    <p>Imagine processing 100 images:</p>
+                    <ul>
+                        <li><strong>Serial:</strong> One processor takes 100 seconds (1 second per image)</li>
+                        <li><strong>Parallel (4 cores):</strong> Four processors take 25 seconds</li>
+                        <li><strong>Speedup = 100 / 25 = 4×</strong> — You achieved near-perfect scaling!</li>
+                    </ul>
+                </div>
+                
+                <h4>Why It Matters</h4>
+                <p>Speedup helps you evaluate whether parallelization is worth the effort. High speedup justifies the complexity of parallel programming, while low speedup suggests you might need a different approach or that your problem isn't well-suited for parallelization.</p>
+            </div>
+        `,
+        'howitworks': `
+            <h2 class="modal-title">🔧 How It Works</h2>
+            <div class="modal-body">
+                <p>Understanding how to calculate speedup is essential for evaluating parallel performance. Let's break down the calculation process step by step.</p>
+                
+                <h4>Step 1: Calculate Serial Time</h4>
+                <p>Add up the execution time of ALL tasks as if they ran sequentially:</p>
+                <div class="modal-highlight">
+                    <code style="font-size: 1.1rem;">T<sub>serial</sub> = task1 + task2 + task3 + ... + taskN</code>
+                </div>
+                <p><strong>Example:</strong> If you have tasks taking 5, 10, 8, and 12 units:</p>
+                <p><code>T<sub>serial</sub> = 5 + 10 + 8 + 12 = 35 units</code></p>
+                
+                <h4>Step 2: Calculate Parallel Time</h4>
+                <p>Parallel time consists of two parts:</p>
+                <ul>
+                    <li><strong>Serial portion:</strong> Tasks that MUST run sequentially (dependencies, critical sections)</li>
+                    <li><strong>Parallel portion:</strong> Tasks that CAN run simultaneously on different processors</li>
+                </ul>
+                
+                <div class="modal-highlight">
+                    <code style="font-size: 1.1rem;">T<sub>parallel</sub> = T<sub>serial_portion</sub> + max(T<sub>parallel_tasks</sub>)</code>
+                </div>
+                
+                <p><strong>Example:</strong> From our tasks above:</p>
+                <ul>
+                    <li>Series tasks: 5, 10 (must run sequentially) = 15 units</li>
+                    <li>Parallel tasks: 8, 12 (run simultaneously) = max(8, 12) = 12 units</li>
+                    <li><code>T<sub>parallel</sub> = 15 + 12 = 27 units</code></li>
+                </ul>
+                
+                <h4>Step 3: Calculate Speedup</h4>
+                <div class="modal-highlight">
+                    <code style="font-size: 1.1rem;">Speedup = T<sub>serial</sub> / T<sub>parallel</sub> = 35 / 27 = 1.30×</code>
+                </div>
+                <p>This means the parallel version is 1.30 times faster — a 30% performance improvement!</p>
+                
+                <h4>Key Insight: The Parallel Bottleneck</h4>
+                <p>When tasks run in parallel, the execution time is determined by the <strong>slowest (longest) task</strong>. Even if you have 10 parallel tasks, if one takes 20 units and the others take 5 units each, you still wait 20 units for the parallel portion to complete.</p>
+                
+                <div class="modal-highlight">
+                    <p><strong>💡 Pro Tip:</strong> To maximize speedup, try to balance parallel tasks so they take similar amounts of time. Unbalanced loads waste processor time!</p>
+                </div>
+            </div>
+        `,
+        'comparison': `
+            <h2 class="modal-title">⚖️ Parallel vs Serial</h2>
+            <div class="modal-body">
+                <p>Let's dive deep into the fundamental differences between parallel and serial execution, including their advantages, disadvantages, and when to use each approach.</p>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card parallel">
+                        <h5>⚡ Parallel Execution</h5>
+                        <p><strong>Definition:</strong> Multiple tasks execute simultaneously across multiple CPU cores or processors.</p>
+                        
+                        <h4>How It Works</h4>
+                        <p>Tasks are distributed to different processing units that work concurrently. When one core processes Task A, another core simultaneously processes Task B.</p>
+                        
+                        <h4>✅ Advantages</h4>
+                        <ul>
+                            <li><strong>Speed:</strong> Dramatically reduces execution time for large workloads</li>
+                            <li><strong>Efficiency:</strong> Utilizes all available CPU cores instead of leaving them idle</li>
+                            <li><strong>Scalability:</strong> Performance improves as you add more processors</li>
+                            <li><strong>Throughput:</strong> Can process more work in the same amount of time</li>
+                            <li><strong>Real-time responsiveness:</strong> Background tasks don't block UI</li>
+                        </ul>
+                        
+                        <h4>❌ Disadvantages</h4>
+                        <ul>
+                            <li><strong>Complexity:</strong> Harder to write, debug, and maintain parallel code</li>
+                            <li><strong>Communication overhead:</strong> Cores must coordinate and share data</li>
+                            <li><strong>Synchronization costs:</strong> Locks, barriers, and thread management add overhead</li>
+                            <li><strong>Race conditions:</strong> Bugs from simultaneous access to shared resources</li>
+                            <li><strong>Load balancing:</strong> Uneven work distribution wastes resources</li>
+                            <li><strong>Not always faster:</strong> For small tasks, overhead exceeds benefits</li>
+                        </ul>
+                        
+                        <h4>Best For</h4>
+                        <ul>
+                            <li>Large datasets (image/video processing, data analysis)</li>
+                            <li>Independent tasks (web scraping, batch processing)</li>
+                            <li>CPU-intensive computations (simulations, rendering)</li>
+                            <li>Real-time systems requiring responsiveness</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-card serial">
+                        <h5>🔄 Serial Execution</h5>
+                        <p><strong>Definition:</strong> Tasks execute one after another in sequence on a single CPU core.</p>
+                        
+                        <h4>How It Works</h4>
+                        <p>Each task must complete before the next one begins. The processor focuses entirely on one task at a time, following a linear execution path.</p>
+                        
+                        <h4>✅ Advantages</h4>
+                        <ul>
+                            <li><strong>Simplicity:</strong> Easy to write, understand, and debug</li>
+                            <li><strong>No overhead:</strong> No synchronization or communication costs</li>
+                            <li><strong>Predictable:</strong> Deterministic execution order and timing</li>
+                            <li><strong>No race conditions:</strong> No concurrency bugs to worry about</li>
+                            <li><strong>Better for small tasks:</strong> Faster when overhead would dominate</li>
+                            <li><strong>Sequential dependencies:</strong> Natural fit for dependent operations</li>
+                        </ul>
+                        
+                        <h4>❌ Disadvantages</h4>
+                        <ul>
+                            <li><strong>Slow:</strong> Total time is sum of all task times</li>
+                            <li><strong>Underutilization:</strong> Wastes available CPU cores</li>
+                            <li><strong>No scalability:</strong> Can't benefit from additional processors</li>
+                            <li><strong>Blocking:</strong> Long tasks prevent other work from starting</li>
+                            <li><strong>Poor responsiveness:</strong> UI freezes during heavy computation</li>
+                        </ul>
+                        
+                        <h4>Best For</h4>
+                        <ul>
+                            <li>Small, quick tasks where overhead matters</li>
+                            <li>Operations with dependencies (must run in order)</li>
+                            <li>Simple scripts and prototypes</li>
+                            <li>I/O-bound operations (disk, network)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="modal-highlight">
+                    <h4>🎯 Choosing the Right Approach</h4>
+                    <p><strong>Use Parallel When:</strong></p>
+                    <ul>
+                        <li>Tasks are independent (no dependencies)</li>
+                        <li>Tasks are large enough that overhead is negligible</li>
+                        <li>You have multiple cores available</li>
+                        <li>Performance is critical</li>
+                    </ul>
+                    <p><strong>Use Serial When:</strong></p>
+                    <ul>
+                        <li>Tasks have dependencies (must run in order)</li>
+                        <li>Tasks are very small (overhead would dominate)</li>
+                        <li>Simplicity and maintainability are priorities</li>
+                        <li>You're prototyping or debugging</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        'amdahl': `
+            <h2 class="modal-title">📊 Amdahl's Law</h2>
+            <div class="modal-body">
+                <p><strong>Amdahl's Law</strong> is the fundamental theoretical limit on speedup in parallel computing. It reveals a sobering truth: even with infinite processors, you can't achieve infinite speedup.</p>
+                
+                <div class="modal-highlight">
+                    <h4>The Law</h4>
+                    <div class="formula-display">
+                        <div class="formula-text" style="font-size: 1.3rem;">
+                            Maximum Speedup = 1 / (S + P/N)
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px;">Where:</p>
+                    <ul>
+                        <li><strong>S</strong> = Fraction of program that must be serial (0 to 1)</li>
+                        <li><strong>P</strong> = Fraction of program that can be parallelized (0 to 1)</li>
+                        <li><strong>N</strong> = Number of processors</li>
+                        <li><strong>S + P = 1</strong> (they must sum to 100%)</li>
+                    </ul>
+                </div>
+                
+                <h4>Why This Matters</h4>
+                <p>The serial portion of your program creates a fundamental bottleneck. No matter how many processors you add, you're still limited by the time spent in the serial section.</p>
+                
+                <div class="modal-highlight">
+                    <h4>Example: The 10% Serial Bottleneck</h4>
+                    <p>Suppose 10% of your program must run serially, and 90% can be parallelized:</p>
+                    <ul>
+                        <li><strong>With 2 processors:</strong> Speedup = 1 / (0.1 + 0.9/2) = 1.82×</li>
+                        <li><strong>With 10 processors:</strong> Speedup = 1 / (0.1 + 0.9/10) = 5.26×</li>
+                        <li><strong>With 100 processors:</strong> Speedup = 1 / (0.1 + 0.9/100) = 9.17×</li>
+                        <li><strong>With ∞ processors:</strong> Speedup = 1 / 0.1 = <strong>10× maximum!</strong></li>
+                    </ul>
+                    <p><strong>Key Insight:</strong> Even with unlimited processors, that 10% serial portion caps your speedup at 10×. You can never exceed this limit!</p>
+                </div>
+                
+                <h4>The Brutal Reality</h4>
+                <p>Let's see how different serial fractions limit maximum speedup:</p>
+                <ul>
+                    <li><strong>1% serial:</strong> Max speedup = 100× (excellent!)</li>
+                    <li><strong>5% serial:</strong> Max speedup = 20× (good)</li>
+                    <li><strong>10% serial:</strong> Max speedup = 10× (okay)</li>
+                    <li><strong>25% serial:</strong> Max speedup = 4× (disappointing)</li>
+                    <li><strong>50% serial:</strong> Max speedup = 2× (barely worth it)</li>
+                </ul>
+                
+                <div class="modal-highlight">
+                    <h4>💡 Practical Implications</h4>
+                    <ul>
+                        <li><strong>Optimize the serial portion first:</strong> Reducing serial execution time has the biggest impact on maximum speedup</li>
+                        <li><strong>Identify parallelizable sections:</strong> Profile your code to find what can actually run in parallel</li>
+                        <li><strong>Don't over-parallelize:</strong> Adding more processors has diminishing returns</li>
+                        <li><strong>Focus on algorithms:</strong> Sometimes a better serial algorithm beats a parallel one</li>
+                    </ul>
+                </div>
+                
+                <h4>Real-World Example: Video Encoding</h4>
+                <p>Video encoding is highly parallelizable, but still has serial portions:</p>
+                <ul>
+                    <li><strong>Serial (5%):</strong> File I/O, initialization, final output writing</li>
+                    <li><strong>Parallel (95%):</strong> Encoding individual frames</li>
+                    <li><strong>Maximum speedup:</strong> 20× with infinite cores</li>
+                    <li><strong>In practice:</strong> With 16 cores, you achieve ~13× speedup, which is 65% of the theoretical maximum</li>
+                </ul>
+                
+                <p>This is why optimizing I/O and reducing serial bottlenecks is crucial in video processing pipelines!</p>
+            </div>
+        `,
+        'realworld': `
+            <h2 class="modal-title">🌍 Real-World Applications</h2>
+            <div class="modal-body">
+                <p>Speedup and parallel computing aren't just theoretical concepts — they power the technology we use every day. Let's explore real-world applications where parallelization makes a dramatic difference.</p>
+                
+                <h4>1. Video Games & Graphics Rendering 🎮</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Modern games render millions of polygons and pixels 60-120 times per second.</p>
+                    <p><strong>Parallel Solution:</strong> GPUs have thousands of cores that process pixels simultaneously.</p>
+                    <ul>
+                        <li><strong>Serial approach:</strong> Would take seconds to render a single frame</li>
+                        <li><strong>Parallel (GPU):</strong> Renders complex frames in 8-16ms</li>
+                        <li><strong>Speedup:</strong> 100-1000× depending on scene complexity</li>
+                    </ul>
+                    <p><strong>Example:</strong> A GPU with 3,000 cores can process 3,000 pixels simultaneously, making real-time ray tracing possible.</p>
+                </div>
+                
+                <h4>2. Machine Learning & AI 🤖</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Training neural networks involves billions of mathematical operations.</p>
+                    <p><strong>Parallel Solution:</strong> Distribute computations across multiple GPUs or TPUs.</p>
+                    <ul>
+                        <li><strong>Serial approach:</strong> Training GPT-3 would take decades on a single CPU</li>
+                        <li><strong>Parallel (1000+ GPUs):</strong> Completes in weeks to months</li>
+                        <li><strong>Speedup:</strong> 10,000-100,000×</li>
+                    </ul>
+                    <p><strong>Example:</strong> Meta's LLaMA models trained on clusters with 2,000+ GPUs, reducing training time from years to weeks.</p>
+                </div>
+                
+                <h4>3. Weather Forecasting 🌤️</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Simulating atmospheric conditions requires solving millions of differential equations.</p>
+                    <p><strong>Parallel Solution:</strong> Divide the globe into grid cells, each processed by different cores.</p>
+                    <ul>
+                        <li><strong>Serial approach:</strong> Next-day forecast would arrive next week</li>
+                        <li><strong>Parallel (supercomputers):</strong> 7-day forecast in hours</li>
+                        <li><strong>Speedup:</strong> 1,000-10,000×</li>
+                    </ul>
+                    <p><strong>Example:</strong> NOAA's supercomputers use 8,000+ cores to run weather models, processing 30 petabytes of data daily.</p>
+                </div>
+                
+                <h4>4. Movie Visual Effects 🎬</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Rendering photorealistic CGI requires ray tracing millions of light paths.</p>
+                    <p><strong>Parallel Solution:</strong> Render farms with thousands of servers process frames in parallel.</p>
+                    <ul>
+                        <li><strong>Serial approach:</strong> A single frame could take days</li>
+                        <li><strong>Parallel (render farm):</strong> Complete movie in weeks</li>
+                        <li><strong>Speedup:</strong> 10,000-100,000×</li>
+                    </ul>
+                    <p><strong>Example:</strong> Pixar's RenderMan uses 2,000+ servers. A single frame of "Toy Story 4" took 60-100 hours on one core, but with parallelization, they rendered the entire movie in manageable time.</p>
+                </div>
+                
+                <h4>5. Scientific Simulations 🔬</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Simulating molecular interactions, galaxy formation, or protein folding.</p>
+                    <p><strong>Parallel Solution:</strong> Supercomputers with millions of cores work on different parts of the simulation.</p>
+                    <ul>
+                        <li><strong>Example - Protein Folding (Folding@home):</strong> Distributed computing across 1 million+ devices achieved speedup equivalent to 100,000-1,000,000× over a single machine</li>
+                        <li><strong>Example - Black Hole Simulation:</strong> Took months on 128 supercomputer nodes to generate the first black hole image</li>
+                    </ul>
+                </div>
+                
+                <h4>6. Web Search Engines 🔍</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Indexing billions of web pages and serving results in milliseconds.</p>
+                    <p><strong>Parallel Solution:</strong> Distributed search across thousands of servers, with each handling a portion of the index.</p>
+                    <ul>
+                        <li><strong>Google's approach:</strong> Your search query hits 1,000+ servers simultaneously</li>
+                        <li><strong>Result:</strong> Searches across 40+ billion pages in under 200ms</li>
+                        <li><strong>Speedup:</strong> Would be impossible serially</li>
+                    </ul>
+                </div>
+                
+                <h4>7. Financial Trading 💰</h4>
+                <div class="modal-highlight">
+                    <p><strong>The Challenge:</strong> Analyzing market data and executing trades in microseconds.</p>
+                    <p><strong>Parallel Solution:</strong> FPGAs and multi-core systems process market feeds in parallel.</p>
+                    <ul>
+                        <li><strong>High-frequency trading:</strong> Analyzes millions of data points simultaneously</li>
+                        <li><strong>Speedup advantage:</strong> Being 1 microsecond faster than competitors means millions in profit</li>
+                    </ul>
+                </div>
+                
+                <div class="modal-highlight">
+                    <h4>💡 The Bottom Line</h4>
+                    <p>In all these applications, parallelization isn't just about making things faster — it makes previously impossible problems solvable. Without parallel computing:</p>
+                    <ul>
+                        <li>We wouldn't have modern video games or movies</li>
+                        <li>AI and machine learning would still be science fiction</li>
+                        <li>Weather forecasts would be useless</li>
+                        <li>Scientific breakthroughs would take decades longer</li>
+                    </ul>
+                    <p><strong>Understanding speedup helps you recognize when and how to apply parallelization to solve real-world problems efficiently.</strong></p>
+                </div>
+            </div>
+        `
+    };
+    
+    return contents[panelId] || '<p>Content not found</p>';
 }
 
 // Drag and Drop Functionality
@@ -1212,15 +2042,15 @@ function computeSpeedup() {
 }
 
 function saveRun() {
-    if(!window.currentScore) {
-        alert("Please compute speedup first");
+    if(!window.currentScore || window.currentScore.speedup === undefined || window.currentScore.speedup === null) {
+        alert("Please compute speedup first before saving!");
         return;
     }
     const name = prompt("Enter a name for this run:");
     if(!name) return;
 
     savedRuns.push({name, ...window.currentScore, timestamp: new Date().toLocaleString()});
-    alert("Run saved successfully");
+    alert(`✅ Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
 }
 
 function showSavedRuns() {
