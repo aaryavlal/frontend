@@ -4,7 +4,7 @@ layout: post
 title: "Core 4 — Module 4: Execution Time Calculations"
 description: "Interactive exploration of sequential vs parallel time, using ideas from Modules 1–3"
 permalink: /cores/core-4
-breadcrumbs: true
+breadcrumbs: false
 ---
 
 [⬅ Back to Core 4 Overview](/cores/core-4)

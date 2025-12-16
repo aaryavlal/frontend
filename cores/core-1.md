@@ -4,7 +4,7 @@ layout: post
 title: "Core 1 — Module 1: Computing Models"
 description: "Module 1: Computing Models — an introduction to sequential and parallel models"
 permalink: /cores/core-1
-breadcrumbs: true
+breadcrumbs: false
 ---
 
 ## Module 1 — Computing Models

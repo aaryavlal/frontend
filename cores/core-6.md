@@ -4,7 +4,7 @@ layout: post
 title: "Core 6 — Module 6: Case Studies & Projects"
 description: "Module 6: Apply parallel concepts in practical projects"
 permalink: /cores/core-6
-breadcrumbs: true
+breadcrumbs: false
 ---
 
 ## Module 6 — Case Studies & Projects

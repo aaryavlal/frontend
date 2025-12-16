@@ -4,7 +4,7 @@ layout: post
 title: "Core 5 — Module 5: Performance & Scaling"
 description: "Module 5: Measuring performance through speedup"
 permalink: /cores/core-5
-breadcrumbs: true
+breadcrumbs: false
 ---
 
 <html lang="en">

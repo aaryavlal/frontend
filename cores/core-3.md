@@ -4,7 +4,7 @@ layout: post
 title: "Core 3 — Module 3: Parallel Algorithms"
 description: "Module 3: Introduction to parallel algorithms and common patterns"
 permalink: /cores/core-3
-breadcrumbs: true
+breadcrumbs: false
 ---
 
 ## Module 3 — Parallel Algorithms
