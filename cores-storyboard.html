@@ -1,0 +1,1519 @@
+---
+layout: default
+title: Hardware Havoc - Interactive Storyboard
+permalink: /cores-storyboard
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Havoc - Interactive Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #121212;
+            color: rgba(255, 255, 255, 0.87);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e1e1e 0%, #121212 50%, #0a0a0a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(52, 199, 89, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(75, 186, 255, 0.08) 0%, transparent 40%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #007aff, #4bbfff, #34c759);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .scroll-indicator span::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            margin-left: -3px;
+            background: #007aff;
+            border-radius: 50%;
+            animation: scrollWheel 2s infinite;
+        }
+
+        @keyframes scrollWheel {
+            0% { opacity: 1; top: 8px; }
+            100% { opacity: 0; top: 28px; }
+        }
+
+        .cores-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .cores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .core-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .core-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .core-card:hover {
+            transform: translateY(-10px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 80px var(--accent-color-alpha);
+            border-color: var(--accent-color);
+        }
+
+        .core-card:hover::before {
+            opacity: 1;
+        }
+
+        .core-card[data-core="1"] {
+            --accent-color: #007aff;
+            --accent-color-alpha: rgba(0, 122, 255, 0.2);
+        }
+
+        .core-card[data-core="2"] {
+            --accent-color: #34c759;
+            --accent-color-alpha: rgba(52, 199, 89, 0.2);
+        }
+
+        .core-card[data-core="3"] {
+            --accent-color: #ff9500;
+            --accent-color-alpha: rgba(255, 149, 0, 0.2);
+        }
+
+        .core-card[data-core="4"] {
+            --accent-color: #af52de;
+            --accent-color-alpha: rgba(175, 82, 222, 0.2);
+        }
+
+        .core-card[data-core="5"] {
+            --accent-color: #ff3b30;
+            --accent-color-alpha: rgba(255, 59, 48, 0.2);
+        }
+
+        .core-card[data-core="6"] {
+            --accent-color: #4bbfff;
+            --accent-color-alpha: rgba(75, 186, 255, 0.2);
+        }
+
+        .core-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            opacity: 0.2;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            line-height: 1;
+        }
+
+        .core-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .core-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .core-description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: var(--accent-color-alpha);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .backend-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .backend-info h4 {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .backend-info p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--accent-color-alpha);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color-alpha);
+        }
+
+        .connections-section {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .architecture-diagram {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .architecture-diagram h3 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: #007aff;
+        }
+
+        .connection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .flow-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .flow-item::after {
+            content: '→';
+            position: absolute;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: rgba(0, 122, 255, 0.5);
+        }
+
+        .flow-item:last-child::after {
+            display: none;
+        }
+
+        .flow-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .flow-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #007aff;
+        }
+
+        .flow-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .cores-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .connection-flow {
+                flex-direction: column;
+            }
+
+            .flow-item::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -2rem;
+                transform: translateX(50%);
+            }
+        }
+
+        .interactive-features {
+            background: #0a0a0a;
+            padding: 4rem 2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #007aff;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #007aff;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Philosophy Section Styles */
+        .philosophy-section {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1e1e1e 50%, #0a0a0a 100%);
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .philosophy-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(52, 199, 89, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(75, 186, 255, 0.1) 0%, transparent 60%);
+            animation: philosophyGlow 12s ease-in-out infinite;
+        }
+
+        @keyframes philosophyGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .philosophy-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .philosophy-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .philosophy-header h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #34c759, #007aff, #4bbfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            animation: fadeInScale 1s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .philosophy-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .philosophy-quote {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .manifesto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .manifesto-card {
+            background: linear-gradient(135deg, rgba(52, 199, 89, 0.05) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .manifesto-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                var(--card-accent) 20%,
+                transparent 40%,
+                transparent 60%,
+                var(--card-accent) 80%,
+                transparent 100%
+            );
+            animation: rotate 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .manifesto-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            border-radius: 18px;
+            z-index: 1;
+        }
+
+        .manifesto-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--card-accent);
+            box-shadow: 0 20px 60px var(--card-glow);
+        }
+
+        .manifesto-card:hover::before {
+            opacity: 1;
+        }
+
+        .manifesto-card[data-principle="collaboration"] {
+            --card-accent: #34c759;
+            --card-glow: rgba(52, 199, 89, 0.4);
+        }
+
+        .manifesto-card[data-principle="distributed"] {
+            --card-accent: #007aff;
+            --card-glow: rgba(0, 122, 255, 0.4);
+        }
+
+        .manifesto-card[data-principle="parallel"] {
+            --card-accent: #4bbfff;
+            --card-glow: rgba(75, 186, 255, 0.4);
+        }
+
+        .manifesto-card[data-principle="synergy"] {
+            --card-accent: #ff9500;
+            --card-glow: rgba(255, 149, 0, 0.4);
+        }
+
+        .manifesto-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .manifesto-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .manifesto-card[data-principle="collaboration"] .manifesto-icon {
+            animation-delay: 0s;
+        }
+
+        .manifesto-card[data-principle="distributed"] .manifesto-icon {
+            animation-delay: 0.5s;
+        }
+
+        .manifesto-card[data-principle="parallel"] .manifesto-icon {
+            animation-delay: 1s;
+        }
+
+        .manifesto-card[data-principle="synergy"] .manifesto-icon {
+            animation-delay: 1.5s;
+        }
+
+        .manifesto-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--card-accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .manifesto-description {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .manifesto-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .manifesto-points li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        .manifesto-points li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--card-accent);
+            font-weight: bold;
+        }
+
+        .dramatic-statement {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(52, 199, 89, 0.1) 100%);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dramatic-statement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                transparent 30%,
+                rgba(0, 122, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .dramatic-statement h3 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 30px rgba(0, 122, 255, 0.5);
+        }
+
+        .dramatic-statement p {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-metrics {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #34c759, #007aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Hardware Havoc</h1>
+            <p class="hero-subtitle">Interactive Journey Through Parallel & Distributed Computing</p>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy-section" id="philosophy">
+        <div class="philosophy-content">
+            <div class="philosophy-header">
+                <h2>The Philosophy of Distributed Collaboration</h2>
+                <p class="philosophy-subtitle">"Alone we are fast. Together we are unstoppable."</p>
+                <p class="philosophy-quote">
+                    Just as processors achieve exponential speedup through parallel execution,
+                    human teams unlock unprecedented potential when they collaborate, distribute tasks,
+                    and synchronize toward a shared vision. This is not just computer science—this is
+                    <strong>the architecture of collective greatness</strong>.
+                </p>
+            </div>
+
+            <div class="manifesto-grid">
+                <div class="manifesto-card" data-principle="collaboration">
+                    <div class="manifesto-content">
+                        <span class="manifesto-icon">🤝</span>
+                        <h3 class="manifesto-title">Collaboration</h3>
+                        <p class="manifesto-description">
+                            Like threads in concurrent execution, team members work on independent tasks
+                            simultaneously, multiplying output without multiplying time.
+                        </p>
+                        <ul class="manifesto-points">
+                            <li>Each person becomes a processing core</li>
+                            <li>Shared memory through communication</li>
+                            <li>Lock-free knowledge sharing</li>
+                            <li>Reduced serial bottlenecks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="manifesto-card" data-principle="distributed">
+                    <div class="manifesto-content">
+                        <span class="manifesto-icon">🌐</span>
+                        <h3 class="manifesto-title">Distributed Work</h3>
+                        <p class="manifesto-description">
+                            Distributed systems eliminate single points of failure. When teams distribute
+                            responsibilities, they achieve fault tolerance and horizontal scaling.
+                        </p>
+                        <ul class="manifesto-points">
+                            <li>Geographic independence enables 24/7 progress</li>
+                            <li>Load balancing prevents burnout</li>
+                            <li>Redundancy ensures continuity</li>
+                            <li>Consensus protocols align vision</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="manifesto-card" data-principle="parallel">
+                    <div class="manifesto-content">
+                        <span class="manifesto-icon">⚡</span>
+                        <h3 class="manifesto-title">Parallel Thinking</h3>
+                        <p class="manifesto-description">
+                            Diverse perspectives processing problems simultaneously reveal solutions that
+                            sequential thinking could never discover.
+                        </p>
+                        <ul class="manifesto-points">
+                            <li>Multiple minds = multiple approaches</li>
+                            <li>Parallel debugging of ideas</li>
+                            <li>Simultaneous exploration of solution space</li>
+                            <li>Cross-pollination accelerates innovation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="manifesto-card" data-principle="synergy">
+                    <div class="manifesto-content">
+                        <span class="manifesto-icon">🔥</span>
+                        <h3 class="manifesto-title">Exponential Synergy</h3>
+                        <p class="manifesto-description">
+                            The speedup formula isn't just math—it's proof that collaboration creates
+                            value greater than the sum of individual contributions.
+                        </p>
+                        <ul class="manifesto-points">
+                            <li>Speedup = T_serial / T_parallel</li>
+                            <li>Amdahl's Law: Minimize serial dependencies</li>
+                            <li>Shared success > Individual achievement</li>
+                            <li>Collective intelligence compounds</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dramatic-statement">
+                <h3>🚀 GROUP WORK IS DISTRIBUTED COMPUTING FOR HUMANS</h3>
+                <p>
+                    When you work in a team, you're not just dividing labor—you're creating a human
+                    supercomputer. Each member is a processor. Communication is your network. Trust is
+                    your synchronization protocol. And your shared goal? That's the program you're
+                    executing at a scale no individual could achieve alone.
+                </p>
+                <p style="font-weight: 600; font-size: 1.2em; color: #34c759;">
+                    The same principles that power Netflix, Google Search, and weather forecasting
+                    also power successful teams. Learn parallel computing, and you're learning
+                    how to collaborate at the speed of innovation.
+                </p>
+
+                <div class="team-metrics">
+                    <div class="metric">
+                        <span class="metric-value">10×</span>
+                        <span class="metric-label">Speedup Potential</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">∞</span>
+                        <span class="metric-label">Scalability</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">100%</span>
+                        <span class="metric-label">Greater Together</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cores Grid Section -->
+    <section class="cores-container">
+        <div class="section-header">
+            <h2>Explore the Cores</h2>
+            <p>Six comprehensive modules covering computing models, performance, and real-world applications</p>
+        </div>
+
+        <div class="cores-grid">
+            <!-- Core 1 -->
+            <div class="core-card" data-core="1">
+                <div class="core-number">01</div>
+                <h3 class="core-title">Computing Models</h3>
+                <p class="core-subtitle">Module 1: Sequential, Parallel & Distributed</p>
+                <p class="core-description">
+                    Discover how computers execute tasks using different models. Learn the fundamental differences
+                    between sequential, parallel, and distributed computing with interactive simulations.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Sequential Processing</span>
+                    <span class="tech-badge">Parallel Computing</span>
+                    <span class="tech-badge">Distributed Systems</span>
+                    <span class="tech-badge">Resource Contention</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>No backend required - Pure frontend demonstration with interactive GPU assembly simulator</p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-1" class="btn btn-primary">Explore Module</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+
+            <!-- Core 2 -->
+            <div class="core-card" data-core="2">
+                <div class="core-number">02</div>
+                <h3 class="core-title">Why Parallel/Distributed?</h3>
+                <p class="core-subtitle">Module 2: Concurrency vs Parallelism</p>
+                <p class="core-description">
+                    Experience the power of concurrent execution with live Mandelbrot set generation. Compare
+                    sequential vs parallel rendering in real-time with WebSocket streaming.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">WebSockets</span>
+                    <span class="tech-badge">Rust FFI</span>
+                    <span class="tech-badge">Flask-SocketIO</span>
+                    <span class="tech-badge">Mandelbrot Sets</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>
+                        <strong>Socket Server:</strong> backend/socket/socket_server.py<br>
+                        <strong>Compute Engine:</strong> Rust-powered parallel computation<br>
+                        <strong>Port:</strong> 8500 (WebSocket)<br>
+                        <strong>Events:</strong> compute_sequential_stream, compute_concurrent_stream
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-2" class="btn btn-primary">Explore Module</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+
+            <!-- Core 3 -->
+            <div class="core-card" data-core="3">
+                <div class="core-number">03</div>
+                <h3 class="core-title">Computing Models Quiz</h3>
+                <p class="core-subtitle">Module 3: Test Your Knowledge</p>
+                <p class="core-description">
+                    Validate your understanding of computing models through interactive quizzes. Test yourself on
+                    sequential vs parallel computing, resource contention, and distributed systems.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Interactive Quiz</span>
+                    <span class="tech-badge">Knowledge Check</span>
+                    <span class="tech-badge">Case Studies</span>
+                    <span class="tech-badge">Reflection</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>Frontend-only quiz with local state management. No backend API calls required for basic quiz functionality.</p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-3" class="btn btn-primary">Take Quiz</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+
+            <!-- Core 4 -->
+            <div class="core-card" data-core="4">
+                <div class="core-number">04</div>
+                <h3 class="core-title">Execution Time Calculations</h3>
+                <p class="core-subtitle">Module 4: Performance Metrics</p>
+                <p class="core-description">
+                    Master execution time formulas with interactive sliders. Explore how sequential bottlenecks
+                    limit speedup and learn to calculate parallel performance with Gemini-powered quiz validation.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Gemini API</span>
+                    <span class="tech-badge">Quiz Grading</span>
+                    <span class="tech-badge">Performance Modeling</span>
+                    <span class="tech-badge">TailwindCSS</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>
+                        <strong>Quiz API:</strong> backend/api/quiz_api.py<br>
+                        <strong>AI Grading:</strong> Gemini 2.5 Flash integration<br>
+                        <strong>Endpoint:</strong> /api/quiz/grade (POST)<br>
+                        <strong>Storage:</strong> localStorage for progress tracking
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-4" class="btn btn-primary">Calculate</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+
+            <!-- Core 5 -->
+            <div class="core-card" data-core="5">
+                <div class="core-number">05</div>
+                <h3 class="core-title">Performance & Scaling</h3>
+                <p class="core-subtitle">Module 5: Speedup Formula</p>
+                <p class="core-description">
+                    Build intuition for speedup calculations through drag-and-drop task allocation. Visualize
+                    serial vs parallel execution and see Amdahl's Law in action with real-time metrics.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Drag & Drop</span>
+                    <span class="tech-badge">Speedup Calc</span>
+                    <span class="tech-badge">Amdahl's Law</span>
+                    <span class="tech-badge">Flask API</span>
+                    <span class="tech-badge">Interactive Learning</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>
+                        <strong>API:</strong> backend/Quest/routes/speedup.py<br>
+                        <strong>Endpoints:</strong><br>
+                        • POST /api/speedup/quiz - Speedup knowledge quiz with scoring<br>
+                        • POST /api/speedup/sort - Serial vs parallel sorting demo<br>
+                        • GET /api/speedup/leaderboard - Top quiz scores<br>
+                        <strong>Features:</strong> Bubble sort (serial) vs merge sort (parallel), quiz validation, leaderboard tracking
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-5" class="btn btn-primary">Explore Module</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+
+            <!-- Core 6 -->
+            <div class="core-card" data-core="6">
+                <div class="core-number">06</div>
+                <h3 class="core-title">Case Studies & Projects</h3>
+                <p class="core-subtitle">Module 6: Apply Your Knowledge</p>
+                <p class="core-description">
+                    Apply everything you've learned by building computing infrastructure for real-world scenarios.
+                    Design solutions for different workloads in the Computing Infrastructure Builder Game.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Game-Based Learning</span>
+                    <span class="tech-badge">Infrastructure Design</span>
+                    <span class="tech-badge">Scenario Planning</span>
+                    <span class="tech-badge">Decision Making</span>
+                </div>
+                <div class="backend-info">
+                    <h4>Backend Components</h4>
+                    <p>
+                        Frontend-only embedded game. No backend API required - all game logic runs client-side with HTML5 Canvas.
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    <a href="{{site.baseurl}}/cores/core-6" class="btn btn-primary">Play Game</a>
+                    <a href="#architecture" class="btn btn-secondary">View Architecture</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication System Card -->
+        <div class="section-header" style="margin-top: 6rem;">
+            <h2>Platform Infrastructure</h2>
+            <p>Core backend systems powering user authentication and data management</p>
+        </div>
+
+        <div class="cores-grid">
+            <!-- Authentication System -->
+            <div class="core-card" data-core="1" style="grid-column: 1 / -1; max-width: 100%;">
+                <div class="core-number">🔐</div>
+                <h3 class="core-title">Authentication & User Management System</h3>
+                <p class="core-subtitle">Secure Login, JWT Tokens & Role-Based Access Control</p>
+                <p class="core-description">
+                    A comprehensive authentication system built with Flask, JWT tokens, and bcrypt encryption.
+                    Supports user registration, login, session management, and secure API access with token-based
+                    authorization. Provides role-based permissions and secure session management across the platform.
+                </p>
+                <div class="tech-stack">
+                    <span class="tech-badge">Flask-Login</span>
+                    <span class="tech-badge">JWT (Flask-JWT-Extended)</span>
+                    <span class="tech-badge">bcrypt</span>
+                    <span class="tech-badge">SQLite/SQLAlchemy</span>
+                    <span class="tech-badge">Rate Limiting</span>
+                    <span class="tech-badge">Session Management</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="backend-info">
+                        <h4>Quest Authentication API</h4>
+                        <p>
+                            <strong>Location:</strong> backend/Quest/routes/auth.py<br>
+                            <strong>Endpoints:</strong><br>
+                            • POST /api/auth/register - User registration with validation<br>
+                            • POST /api/auth/login - JWT token generation<br>
+                            • POST /api/auth/logout - Session termination<br>
+                            • GET /api/auth/verify - Token verification<br>
+                            <strong>Features:</strong> Email validation, password strength checking, username sanitization, rate limiting
+                        </p>
+                    </div>
+
+                    <div class="backend-info">
+                        <h4>Main User API</h4>
+                        <p>
+                            <strong>Location:</strong> backend/api/user.py<br>
+                            <strong>Endpoints:</strong><br>
+                            • GET /api/user/id - Get current user (token required)<br>
+                            • POST /api/user - Create user<br>
+                            • POST /api/user/bulk - Bulk user creation<br>
+                            • PUT /api/user - Update user profile<br>
+                            • DELETE /api/user - Delete user account<br>
+                            <strong>Security:</strong> @token_required decorator for protected routes
+                        </p>
+                    </div>
+
+                    <div class="backend-info">
+                        <h4>JWT Authorization Module</h4>
+                        <p>
+                            <strong>Location:</strong> backend/api/jwt_authorize.py<br>
+                            <strong>Function:</strong> Token validation middleware<br>
+                            <strong>Features:</strong><br>
+                            • Token expiration checking<br>
+                            • User identity extraction<br>
+                            • Request context injection (g.current_user)<br>
+                            • Cookie and header token support<br>
+                            <strong>Integration:</strong> Used across all protected API endpoints
+                        </p>
+                    </div>
+
+                    <div class="backend-info">
+                        <h4>User Data Model</h4>
+                        <p>
+                            <strong>Location:</strong> backend/model/user.py<br>
+                            <strong>Database:</strong> SQLite with SQLAlchemy ORM<br>
+                            <strong>Schema:</strong><br>
+                            • Encrypted passwords (bcrypt)<br>
+                            • User roles and permissions<br>
+                            • Section assignments<br>
+                            • GitHub integration<br>
+                            • Profile metadata<br>
+                            <strong>Methods:</strong> create(), read(), update(), delete()
+                        </p>
+                    </div>
+
+                    <div class="backend-info">
+                        <h4>Session & Token Management</h4>
+                        <p>
+                            <strong>Storage:</strong> backend/instance/saved_runs.json<br>
+                            <strong>Features:</strong><br>
+                            • JWT token lifecycle management<br>
+                            • Session persistence and cleanup<br>
+                            • Token refresh mechanism<br>
+                            • Secure cookie handling<br>
+                            <strong>Security:</strong> httpOnly cookies prevent XSS attacks
+                        </p>
+                    </div>
+
+                    <div class="backend-info">
+                        <h4>Frontend Integration</h4>
+                        <p>
+                            <strong>Login UI:</strong> frontend/login.css<br>
+                            <strong>Features:</strong><br>
+                            • Responsive login forms<br>
+                            • Real-time validation feedback<br>
+                            • Session persistence<br>
+                            • Remember me functionality<br>
+                            <strong>Storage:</strong> JWT tokens in httpOnly cookies + localStorage
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: rgba(0, 122, 255, 0.1); border-left: 4px solid #007aff; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                    <h4 style="color: #007aff; margin-top: 0;">🔒 Security Features</h4>
+                    <ul style="color: rgba(255, 255, 255, 0.7); line-height: 1.8;">
+                        <li><strong>Password Hashing:</strong> bcrypt with salt for secure password storage</li>
+                        <li><strong>Token Expiration:</strong> Configurable JWT token lifetime with refresh capability</li>
+                        <li><strong>Rate Limiting:</strong> Flask-Limiter prevents brute force attacks</li>
+                        <li><strong>CORS Protection:</strong> Configured allowed origins for API access</li>
+                        <li><strong>Input Validation:</strong> Custom validators prevent injection attacks</li>
+                        <li><strong>Session Security:</strong> httpOnly cookies prevent XSS token theft</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 2rem;">
+                    <a href="#architecture" class="btn btn-primary">View Full Architecture</a>
+                    <a href="{{site.baseurl}}/login" class="btn btn-secondary">Try Login System</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Diagram Section -->
+    <section class="connections-section" id="architecture">
+        <div class="architecture-diagram">
+            <h3>🏗️ System Architecture Overview</h3>
+            <p style="text-align: center; color: rgba(255, 255, 255, 0.6); margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                A comprehensive full-stack platform combining Jekyll frontend, Flask backend APIs, Quest database system,
+                and specialized compute engines for parallel computing education.
+            </p>
+
+            <!-- Core System Flow -->
+            <div style="margin-bottom: 4rem;">
+                <h4 style="text-align: center; color: #34c759; margin-bottom: 2rem; font-size: 1.5rem;">Core System Components</h4>
+                <div class="connection-flow">
+                    <div class="flow-item">
+                        <div class="flow-icon">🌐</div>
+                        <div class="flow-title">Frontend Layer</div>
+                        <div class="flow-description">
+                            <strong>Location:</strong> frontend/<br>
+                            <strong>Tech:</strong> Jekyll 4.3 + Markdown + SCSS<br>
+                            <strong>Features:</strong> 6 interactive cores, Socket.IO client, responsive design<br>
+                            <strong>Assets:</strong> JavaScript modules, CSS styling, interactive games
+                        </div>
+                    </div>
+                    <div class="flow-item">
+                        <div class="flow-icon">🔧</div>
+                        <div class="flow-title">Backend APIs</div>
+                        <div class="flow-description">
+                            <strong>Location:</strong> backend/<br>
+                            <strong>Framework:</strong> Flask + Flask-RESTful<br>
+                            <strong>Port:</strong> 8587 (main) + 8500 (WebSocket)<br>
+                            <strong>APIs:</strong> User, Auth, Quiz, Compute, Analytics
+                        </div>
+                    </div>
+                    <div class="flow-item">
+                        <div class="flow-icon">💾</div>
+                        <div class="flow-title">Database Layer</div>
+                        <div class="flow-description">
+                            <strong>Primary DB:</strong> backend/Quest/database.db<br>
+                            <strong>ORM:</strong> SQLAlchemy<br>
+                            <strong>Schema:</strong> Users, Progress, Game Logs, Glossary<br>
+                            <strong>Storage:</strong> backend/instance/ (sessions, uploads)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specialized Services -->
+            <div>
+                <h4 style="text-align: center; color: #007aff; margin-bottom: 2rem; font-size: 1.5rem;">Specialized Compute & AI Services</h4>
+                <div class="connection-flow">
+                    <div class="flow-item">
+                        <div class="flow-icon">🦀</div>
+                        <div class="flow-title">Rust Compute Engine</div>
+                        <div class="flow-description">
+                            <strong>Location:</strong> backend/rust/<br>
+                            <strong>Purpose:</strong> High-performance parallel Mandelbrot rendering<br>
+                            <strong>Integration:</strong> Python FFI bindings<br>
+                            <strong>Used by:</strong> Core 2 concurrent demos
+                        </div>
+                    </div>
+                    <div class="flow-item">
+                        <div class="flow-icon">🤖</div>
+                        <div class="flow-title">Gemini AI Service</div>
+                        <div class="flow-description">
+                            <strong>API:</strong> Gemini 2.5 Flash<br>
+                            <strong>Endpoint:</strong> backend/api/gemini_api.py<br>
+                            <strong>Purpose:</strong> Intelligent quiz grading & feedback<br>
+                            <strong>Used by:</strong> Core 4 assessment system
+                        </div>
+                    </div>
+                    <div class="flow-item">
+                        <div class="flow-icon">⚡</div>
+                        <div class="flow-title">WebSocket Server</div>
+                        <div class="flow-description">
+                            <strong>Server:</strong> backend/socket/socket_server.py<br>
+                            <strong>Port:</strong> 8500<br>
+                            <strong>Events:</strong> compute_sequential, compute_concurrent<br>
+                            <strong>Used by:</strong> Core 2 real-time rendering
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Flow Diagram -->
+            <div style="margin-top: 4rem; background: rgba(0, 0, 0, 0.3); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <h4 style="text-align: center; color: #4bbfff; margin-bottom: 2rem; font-size: 1.5rem;">📡 Request Flow Example</h4>
+                <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1rem;">
+                    <div style="background: rgba(52, 199, 89, 0.1); padding: 1rem 1.5rem; border-radius: 10px; border: 1px solid #34c759;">
+                        <strong style="color: #34c759;">1. User Action</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">Frontend interaction</span>
+                    </div>
+                    <span style="color: #007aff; font-size: 2rem;">→</span>
+                    <div style="background: rgba(0, 122, 255, 0.1); padding: 1rem 1.5rem; border-radius: 10px; border: 1px solid #007aff;">
+                        <strong style="color: #007aff;">2. API Request</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">JWT auth + validation</span>
+                    </div>
+                    <span style="color: #007aff; font-size: 2rem;">→</span>
+                    <div style="background: rgba(75, 186, 255, 0.1); padding: 1rem 1.5rem; border-radius: 10px; border: 1px solid #4bbfff;">
+                        <strong style="color: #4bbfff;">3. Processing</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">Rust/Gemini/Database</span>
+                    </div>
+                    <span style="color: #007aff; font-size: 2rem;">→</span>
+                    <div style="background: rgba(255, 149, 0, 0.1); padding: 1rem 1.5rem; border-radius: 10px; border: 1px solid #ff9500;">
+                        <strong style="color: #ff9500;">4. Response</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">JSON/WebSocket data</span>
+                    </div>
+                    <span style="color: #007aff; font-size: 2rem;">→</span>
+                    <div style="background: rgba(175, 82, 222, 0.1); padding: 1rem 1.5rem; border-radius: 10px; border: 1px solid #af52de;">
+                        <strong style="color: #af52de;">5. UI Update</strong><br>
+                        <span style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">Live visualization</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Stack Summary -->
+            <div style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <div style="background: rgba(52, 199, 89, 0.05); border: 1px solid #34c759; padding: 1.5rem; border-radius: 12px;">
+                    <h5 style="color: #34c759; margin-bottom: 1rem; font-size: 1.1rem;">🎨 Frontend Stack</h5>
+                    <ul style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ Jekyll Static Site Generator</li>
+                        <li>✓ Markdown + Liquid Templating</li>
+                        <li>✓ SCSS/CSS Modules</li>
+                        <li>✓ Socket.IO Client</li>
+                        <li>✓ Vanilla JavaScript + Canvas</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(0, 122, 255, 0.05); border: 1px solid #007aff; padding: 1.5rem; border-radius: 12px;">
+                    <h5 style="color: #007aff; margin-bottom: 1rem; font-size: 1.1rem;">⚙️ Backend Stack</h5>
+                    <ul style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ Flask + Flask-RESTful</li>
+                        <li>✓ Flask-SocketIO (WebSockets)</li>
+                        <li>✓ Flask-Login + JWT Auth</li>
+                        <li>✓ SQLAlchemy ORM</li>
+                        <li>✓ bcrypt Password Hashing</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(75, 186, 255, 0.05); border: 1px solid #4bbfff; padding: 1.5rem; border-radius: 12px;">
+                    <h5 style="color: #4bbfff; margin-bottom: 1rem; font-size: 1.1rem;">💾 Data Layer</h5>
+                    <ul style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ SQLite (Quest database)</li>
+                        <li>✓ JSON storage (sessions)</li>
+                        <li>✓ File uploads (instance/)</li>
+                        <li>✓ localStorage (frontend cache)</li>
+                        <li>✓ httpOnly cookies (JWT)</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255, 149, 0, 0.05); border: 1px solid #ff9500; padding: 1.5rem; border-radius: 12px;">
+                    <h5 style="color: #ff9500; margin-bottom: 1rem; font-size: 1.1rem;">🚀 Compute Services</h5>
+                    <ul style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.8; list-style: none; padding: 0;">
+                        <li>✓ Rust (parallel processing)</li>
+                        <li>✓ Gemini 2.5 Flash API</li>
+                        <li>✓ Python multiprocessing</li>
+                        <li>✓ WebSocket streaming</li>
+                        <li>✓ Real-time data sync</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Features Section -->
+    <section class="interactive-features">
+        <div class="section-header">
+            <h2>Interactive Learning Features</h2>
+            <p>Hands-on experiences that bring parallel computing concepts to life</p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h4 class="feature-title">GPU Assembly Simulator</h4>
+                <p class="feature-description">
+                    Build graphics cards across three stages: sequential, parallel, and distributed.
+                    Experience resource contention and watch throughput increase as you unlock better architectures.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h4 class="feature-title">Live Mandelbrot Rendering</h4>
+                <p class="feature-description">
+                    Watch in real-time as sequential vs concurrent algorithms generate fractals.
+                    Adjust thread count and see performance scale with WebSocket streaming updates.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h4 class="feature-title">Drag & Drop Speedup Calculator</h4>
+                <p class="feature-description">
+                    Allocate tasks to serial vs parallel rows and instantly see speedup metrics.
+                    Build intuition for performance optimization through hands-on experimentation.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h4 class="feature-title">AI-Powered Quiz Grading</h4>
+                <p class="feature-description">
+                    Get intelligent feedback on your understanding with Gemini API integration.
+                    Receive detailed explanations and track progress across modules.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🏗️</div>
+                <h4 class="feature-title">Infrastructure Builder Game</h4>
+                <p class="feature-description">
+                    Make architectural decisions for real-world scenarios. Choose between sequential,
+                    parallel, and distributed systems based on workload requirements.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h4 class="feature-title">Performance Visualization</h4>
+                <p class="feature-description">
+                    Interactive sliders and live charts show how execution time changes with different
+                    configurations. See Amdahl's Law limits in real-time.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.core-card, .feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add parallax effect to hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - (scrolled / window.innerHeight);
+            }
+        });
+
+        // Card click to navigate
+        document.querySelectorAll('.core-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking a button
+                if (e.target.classList.contains('btn')) return;
+
+                const primaryBtn = card.querySelector('.btn-primary');
+                if (primaryBtn) {
+                    window.location.href = primaryBtn.getAttribute('href');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
