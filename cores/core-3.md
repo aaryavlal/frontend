@@ -20,22 +20,22 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) Parallel computing uses less power than sequential computing</summary>
-<p>❌ Incorrect. Parallel computing typically uses MORE power because multiple processors run simultaneously.</p>
+<p>Incorrect. Parallel computing typically uses MORE power because multiple processors run simultaneously.</p>
 </details>
 
 <details>
 <summary>B) Parallel computing divides tasks to execute simultaneously on multiple processors</summary>
-<p>✅ Correct! This is the core definition of parallel computing — splitting work across multiple cores/processors to speed up execution.</p>
+<p>Correct! This is the core definition of parallel computing — splitting work across multiple cores/processors to speed up execution.</p>
 </details>
 
 <details>
 <summary>C) Parallel computing eliminates the need for programming</summary>
-<p>❌ Incorrect. Parallel computing requires careful programming to manage multiple threads and avoid conflicts.</p>
+<p>Incorrect. Parallel computing requires careful programming to manage multiple threads and avoid conflicts.</p>
 </details>
 
 <details>
 <summary>D) Parallel computing works on single-core processors</summary>
-<p>❌ Incorrect. Parallel computing requires multiple processors or cores to execute tasks simultaneously.</p>
+<p>Incorrect. Parallel computing requires multiple processors or cores to execute tasks simultaneously.</p>
 </details>
 
 ---
@@ -45,22 +45,22 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) The robots aren't programmed correctly</summary>
-<p>❌ Incorrect. The problem isn't with the robots themselves.</p>
+<p>Incorrect. The problem isn't with the robots themselves.</p>
 </details>
 
 <details>
 <summary>B) All 3 robots share ONE testing station, creating a bottleneck (resource contention)</summary>
-<p>✅ Correct! When multiple workers compete for the same resource, the slower shared resource limits overall performance. This is called resource contention.</p>
+<p>Correct! When multiple workers compete for the same resource, the slower shared resource limits overall performance. This is called resource contention.</p>
 </details>
 
 <details>
 <summary>C) Stage 2 is intentionally designed to be slower</summary>
-<p>❌ Incorrect. Stage 2 demonstrates the real-world issue of shared resources.</p>
+<p>Incorrect. Stage 2 demonstrates the real-world issue of shared resources.</p>
 </details>
 
 <details>
 <summary>D) Robots can't work at the same time</summary>
-<p>❌ Incorrect. The robots CAN work simultaneously on different tasks.</p>
+<p>Incorrect. The robots CAN work simultaneously on different tasks.</p>
 </details>
 
 ---
@@ -70,22 +70,22 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) Distributed computing is always faster</summary>
-<p>❌ Incorrect. Distributed computing is faster for certain problems but not always.</p>
+<p>Incorrect. Distributed computing is faster for certain problems but not always.</p>
 </details>
 
 <details>
 <summary>B) Distributed systems use multiple independent computers with their own resources; parallel systems share resources</summary>
-<p>✅ Correct! In distributed systems (Stage 3), each factory has its own robot and testing station. In parallel systems (Stage 2), robots share resources, causing contention.</p>
+<p>Correct! In distributed systems (Stage 3), each factory has its own robot and testing station. In parallel systems (Stage 2), robots share resources, causing contention.</p>
 </details>
 
 <details>
 <summary>C) Parallel computing requires the internet; distributed doesn't</summary>
-<p>❌ Incorrect. The opposite is more accurate — distributed systems often use networks.</p>
+<p>Incorrect. The opposite is more accurate — distributed systems often use networks.</p>
 </details>
 
 <details>
 <summary>D) There is no real difference between them</summary>
-<p>❌ Incorrect. They have fundamental architectural differences.</p>
+<p>Incorrect. They have fundamental architectural differences.</p>
 </details>
 
 ---
@@ -95,22 +95,22 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) Your laptop's 8-core processor running a video game</summary>
-<p>❌ Incorrect. This is parallel computing — multiple cores on one machine sharing memory.</p>
+<p>Incorrect. This is parallel computing — multiple cores on one machine sharing memory.</p>
 </details>
 
 <details>
 <summary>B) Netflix streaming video from thousands of servers worldwide to millions of users</summary>
-<p>✅ Correct! Netflix uses distributed computing — data centers (independent computers) around the world handle requests independently, then use load balancing to route users optimally.</p>
+<p>Correct! Netflix uses distributed computing — data centers (independent computers) around the world handle requests independently, then use load balancing to route users optimally.</p>
 </details>
 
 <details>
 <summary>C) A calculator performing addition sequentially</summary>
-<p>❌ Incorrect. This is sequential computing.</p>
+<p>Incorrect. This is sequential computing.</p>
 </details>
 
 <details>
 <summary>D) Rendering a movie with OpenGL shaders</summary>
-<p>❌ Incorrect. While GPUs are powerful, this is primarily parallel computing on local hardware.</p>
+<p>Incorrect. While GPUs are powerful, this is primarily parallel computing on local hardware.</p>
 </details>
 
 ---
@@ -120,22 +120,22 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) The robots work faster without the testing station</summary>
-<p>❌ Incorrect. Robot speed doesn't change; the testing still happens.</p>
+<p>Incorrect. Robot speed doesn't change; the testing still happens.</p>
 </details>
 
 <details>
 <summary>B) Each factory has independent resources, eliminating resource contention and allowing true parallelism</summary>
-<p>✅ Correct! When each factory (distributed node) has its own testing station, robots don't compete for the same resource. All 3 factories can test simultaneously, achieving much higher throughput.</p>
+<p>Correct! When each factory (distributed node) has its own testing station, robots don't compete for the same resource. All 3 factories can test simultaneously, achieving much higher throughput.</p>
 </details>
 
 <details>
 <summary>C) Stage 3 GPUs are built faster by nature</summary>
-<p>❌ Incorrect. Task times are the same; the difference is in architecture.</p>
+<p>Incorrect. Task times are the same; the difference is in architecture.</p>
 </details>
 
 <details>
 <summary>D) Testing is optional in Stage 3</summary>
-<p>❌ Incorrect. Testing still occurs and is required.</p>
+<p>Incorrect. Testing still occurs and is required.</p>
 </details>
 
 ---
@@ -145,7 +145,7 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>A) Sequential computing — process one image at a time</summary>
-<p>❌ Incorrect. Sequential would be extremely slow for 1 million images.</p>
+<p>Incorrect. Sequential would be extremely slow for 1 million images.</p>
 </details>
 
 <details>
@@ -155,12 +155,12 @@ Test your understanding of sequential, parallel, and distributed computing! Revi
 
 <details>
 <summary>C) Distributed computing — use multiple cloud servers to process images in parallel, with load balancing distributing work</summary>
-<p>✅ Best answer! Distributed computing scales horizontally — you can add more servers as needed. Each server processes images independently with no resource contention, and load balancing ensures even distribution.</p>
+<p>Best answer! Distributed computing scales horizontally — you can add more servers as needed. Each server processes images independently with no resource contention, and load balancing ensures even distribution.</p>
 </details>
 
 <details>
 <summary>D) A combination of all three models depending on the image type</summary>
-<p>❌ Incorrect. While modern systems do use hybrid approaches, distributed computing is the clear primary choice for massive workloads.</p>
+<p>Incorrect. While modern systems do use hybrid approaches, distributed computing is the clear primary choice for massive workloads.</p>
 </details>
 
 ---
@@ -192,10 +192,10 @@ After completing this quiz, consider:
 ## 📊 Your Score
 
 After answering all 6 questions, you should understand:
-- ✅ The definition and trade-offs of each computing model
-- ✅ Why resource contention limits parallel performance
-- ✅ How distributed systems eliminate bottlenecks through independence
-- ✅ When to apply each model to real-world problems
+- The definition and trade-offs of each computing model
+- Why resource contention limits parallel performance
+- How distributed systems eliminate bottlenecks through independence
+- When to apply each model to real-world problems
 
 ---
 
