@@ -166,6 +166,12 @@ pub fn concurrent(width: usize, height: usize, tile_w: usize, tile_h: usize, num
   <div id="concurrent-mandelbrot-info" class="info-display">Click "Run Concurrent Simulation" to start</div>
 </div>
 
+## So Why Go Concurrent/Parallel?
+
+As we've demonstrated here, parallelization can definitely speed up processes by distributing work. Yet, there's also times where you don't need parallelization, and as we'll see, it gives diminishing returns the more resources you throw at it.
+
+Nonetheless, it is an incredibly important concept for any computer system you'll be building.
+
 <script>
 let sequentialSocket = null;
 let concurrentSocket = null;
