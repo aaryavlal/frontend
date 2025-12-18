@@ -8,23 +8,29 @@ breadcrumbs: false
 ---
 
 <style>
-/* ===== APREQS2 — New UI (clean, modern, readable) ===== */
+/* ===========================
+   APREQS2 — Full Recode
+   Fixes:
+   - Code shows fully (no clipping)
+   - No side-to-side scrolling
+   - Cards + layout polished
+=========================== */
+
 :root{
   --bg0:#060814;
   --bg1:#070a18;
-  --panel:rgba(255,255,255,.05);
-  --panel2:rgba(255,255,255,.07);
-  --stroke:rgba(148,163,184,.14);
-  --stroke2:rgba(129,140,248,.22);
+
+  --panel:rgba(255,255,255,.06);
+  --panel2:rgba(255,255,255,.08);
+  --stroke:rgba(148,163,184,.16);
+  --stroke2:rgba(129,140,248,.28);
 
   --text:#e5e7eb;
   --muted:#a3adc2;
   --dim:#7b86a0;
 
-  --accent:#7c3aed;          /* purple */
-  --accent2:#22d3ee;         /* cyan */
-  --good:#22c55e;
-  --warn:#f59e0b;
+  --accent:#7c3aed;
+  --accent2:#22d3ee;
 
   --r:18px;
   --shadow: 0 10px 30px rgba(0,0,0,.35);
@@ -38,7 +44,7 @@ html{ scroll-behavior:smooth; }
 
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   color:var(--text);
   background:
     radial-gradient(1200px 700px at 15% -10%, rgba(124,58,237,.28), transparent 55%),
@@ -52,6 +58,7 @@ main{
   max-width:var(--max);
   margin:0 auto;
   padding: clamp(22px, 3vw, 42px) clamp(16px, 3vw, 26px) 64px;
+  position:relative;
 }
 
 /* subtle grid */
@@ -64,7 +71,7 @@ main::before{
     linear-gradient(to right, rgba(148,163,184,.06) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(148,163,184,.06) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: radial-gradient( circle at 50% 15%, rgba(0,0,0,.9), rgba(0,0,0,.2) 55%, transparent 75%);
+  mask-image: radial-gradient(circle at 50% 15%, rgba(0,0,0,.9), rgba(0,0,0,.2) 55%, transparent 75%);
   opacity:.35;
   z-index:0;
 }
@@ -79,7 +86,7 @@ header{
   padding: 26px 24px;
   border:1px solid var(--stroke);
   border-radius: calc(var(--r) + 6px);
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
   box-shadow: var(--shadow);
   overflow:hidden;
 }
@@ -89,8 +96,8 @@ header::after{
   position:absolute;
   inset:-2px;
   background:
-    radial-gradient(500px 180px at 15% 0%, rgba(124,58,237,.25), transparent 60%),
-    radial-gradient(500px 180px at 85% 0%, rgba(34,211,238,.22), transparent 60%);
+    radial-gradient(520px 200px at 15% 0%, rgba(124,58,237,.25), transparent 60%),
+    radial-gradient(520px 200px at 85% 0%, rgba(34,211,238,.22), transparent 60%);
   pointer-events:none;
   opacity:.9;
 }
@@ -148,7 +155,7 @@ ul.tags li::before{
   box-shadow: 0 0 0 3px rgba(124,58,237,.12);
 }
 
-/* ===== Sticky mini-nav ===== */
+/* ===== Sticky nav ===== */
 nav{
   margin: 18px 0 24px;
   position: sticky;
@@ -172,7 +179,7 @@ nav ul{
 }
 
 nav ul li:first-child{
-  font-weight:800;
+  font-weight:900;
   color:rgba(229,231,235,.92);
   padding: 8px 10px;
   border-radius: 12px;
@@ -228,7 +235,7 @@ section::before{
   position:absolute;
   inset:-1px;
   pointer-events:none;
-  background: radial-gradient(600px 220px at 20% 0%, rgba(124,58,237,.16), transparent 60%);
+  background: radial-gradient(650px 240px at 20% 0%, rgba(124,58,237,.16), transparent 60%);
   opacity:.9;
 }
 
@@ -237,20 +244,13 @@ section:hover{
   border-color: rgba(129,140,248,.28);
 }
 
-/* Titles */
+section[id]{ scroll-margin-top: 84px; }
+
 h2{
   margin: 0 0 10px;
   font-size: clamp(1.35rem, 2.6vw, 2rem);
   letter-spacing:-0.02em;
   font-weight:900;
-}
-
-h3{
-  margin: 12px 0 8px;
-  font-size: 1.05rem;
-  letter-spacing:-0.01em;
-  font-weight:800;
-  color: rgba(255,255,255,.92);
 }
 
 p{
@@ -259,7 +259,15 @@ p{
   max-width: 78ch;
 }
 
-/* ===== Grid of cards ===== */
+h3{
+  margin: 12px 0 8px;
+  font-size: 1.05rem;
+  letter-spacing:-0.01em;
+  font-weight:900;
+  color: rgba(255,255,255,.92);
+}
+
+/* ===== Grid ===== */
 section.grid{
   display:grid;
   grid-template-columns: repeat(12, 1fr);
@@ -267,9 +275,7 @@ section.grid{
   padding: 14px;
 }
 
-section.grid article{
-  grid-column: span 6;
-}
+section.grid article{ grid-column: span 6; }
 
 @media (max-width: 980px){
   section.grid{ grid-template-columns: 1fr; }
@@ -281,7 +287,7 @@ article{
   border:1px solid rgba(148,163,184,.14);
   border-radius: var(--r);
   background:
-    radial-gradient(500px 180px at 20% 0%, rgba(34,211,238,.08), transparent 60%),
+    radial-gradient(520px 200px at 20% 0%, rgba(34,211,238,.08), transparent 60%),
     rgba(255,255,255,.03);
   padding: 16px 16px 14px;
   min-width:0;
@@ -303,7 +309,7 @@ article:hover{
   transform: translateY(-2px);
   border-color: rgba(129,140,248,.28);
   background:
-    radial-gradient(500px 180px at 20% 0%, rgba(34,211,238,.12), transparent 60%),
+    radial-gradient(520px 200px at 20% 0%, rgba(34,211,238,.12), transparent 60%),
     rgba(255,255,255,.04);
 }
 
@@ -316,7 +322,7 @@ small{
   border:1px solid rgba(148,163,184,.14);
   background: rgba(255,255,255,.03);
   color: var(--dim);
-  font-weight:800;
+  font-weight:900;
   font-size:.72rem;
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -331,36 +337,30 @@ small::before{
   background: linear-gradient(180deg, var(--accent), var(--accent2));
 }
 
-/* ===== Lists ===== */
-ul:not(.tags):not(nav ul){
-  list-style:none;
-  padding:0;
-  margin: 10px 0 0;
+/* ===== Inline code ===== */
+p code, li code, article code{
+  display:inline;
+  padding: .18rem .45rem;
+  border-radius: 8px;
+  border:1px solid rgba(129,140,248,.20);
+  background: rgba(124,58,237,.10);
+  color: rgba(224,231,255,.95);
+  white-space: nowrap;
 }
 
-ul:not(.tags):not(nav ul) li{
-  display:flex;
-  gap:10px;
-  margin: 8px 0;
-  color: var(--muted);
-}
-
-ul:not(.tags):not(nav ul) li::before{
-  content:"✓";
-  color: rgba(34,211,238,.95);
-  font-weight:900;
-  margin-top:1px;
-}
-
-/* ===== Code blocks (high readability) ===== */
+/* ===== Code blocks — FULLY EXPANDED + WRAPS LINES ===== */
 pre{
   margin: 12px 0 0;
   border-radius: 14px;
   border:1px solid rgba(148,163,184,.18);
   background: #050712;
   box-shadow: 0 10px 20px rgba(0,0,0,.35);
-  overflow:auto;
-  padding: 0;
+
+  /* key fixes */
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  overflow-x: hidden !important;
 }
 
 pre::before{
@@ -396,24 +396,18 @@ pre::after{
 
 pre{ position:relative; }
 
-code{
+pre code{
   display:block;
   padding: 12px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: .86rem;
   line-height: 1.55;
   color: rgba(229,231,235,.92);
-  white-space: pre;
-}
 
-p code, li code, article code{
-  display:inline;
-  padding: .18rem .45rem;
-  border-radius: 8px;
-  border:1px solid rgba(129,140,248,.20);
-  background: rgba(124,58,237,.10);
-  color: rgba(224,231,255,.95);
-  white-space: nowrap;
+  /* no sideways scroll, wrap long lines */
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 
 /* ===== Callouts ===== */
@@ -458,11 +452,6 @@ blockquote a:hover{
   border-bottom-color:#fff;
 }
 
-/* ===== Utility: nicer anchors offset for sticky nav ===== */
-section[id]{
-  scroll-margin-top: 84px;
-}
-
 /* ===== Mobile polish ===== */
 @media (max-width: 640px){
   header{ padding: 20px 16px; }
@@ -470,7 +459,7 @@ section[id]{
   section{ padding: 18px; }
   section.grid{ padding: 12px; }
   article{ padding: 14px; }
-  code{ font-size: .83rem; }
+  pre code{ font-size: .83rem; }
 }
 </style>
 
@@ -505,7 +494,7 @@ section[id]{
       <p>The Python frontend calls a single procedure with all user-controlled parameters.</p>
       <pre data-lang="Rust"><code>#[pyfunction]
 pub fn concurrent(
-    py: Python<'_'>,
+    py: Python&lt;'_&gt;,
     width: usize,
     height: usize,
     tile_w: usize,
@@ -514,7 +503,7 @@ pub fn concurrent(
     emit_tile: PyObject,
     time_limit_ms: u64,
     num_threads: usize,
-) -> PyResult&lt;Vec&lt;TaskRecord&gt;&gt; { ... }</code></pre>
+) -&gt; PyResult&lt;Vec&lt;TaskRecord&gt;&gt; { ... }</code></pre>
     </article>
 
     <article>
