@@ -10,42 +10,35 @@ show_reading_time: false
 ---
 
 <style>
-* {
+#gpu-simulator-app {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
   background: #0f0f23;
   color: #e0e0e0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 10px;
-  overflow-y: auto;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.page-container {
+#gpu-simulator-app * {
+  box-sizing: border-box;
+}
+
+#gpu-simulator-app .page-container {
   display: flex;
   gap: 15px;
-  max-width: 100%;
+  max-width: 1800px;
   width: 100%;
+  margin: 0 auto;
+  padding: 20px;
   align-items: flex-start;
   overflow-x: hidden;
   flex-direction: row-reverse;
 }
 
-.educational-sidebar {
+#gpu-simulator-app .educational-sidebar {
   flex: 0 0 280px;
   display: flex;
   flex-direction: column;
@@ -57,7 +50,7 @@ body {
   order: -1;
 }
 
-.edu-panel {
+#gpu-simulator-app .edu-panel {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border: 2px solid #00d4ff;
   border-radius: 12px;
@@ -65,7 +58,7 @@ body {
   box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
 }
 
-.edu-panel-header {
+#gpu-simulator-app .edu-panel-header {
   background: linear-gradient(90deg, #0f1419 0%, #1a2332 100%);
   padding: 15px 20px;
   cursor: pointer;
@@ -76,11 +69,11 @@ body {
   transition: background 0.2s ease;
 }
 
-.edu-panel-header:hover {
+#gpu-simulator-app .edu-panel-header:hover {
   background: rgba(0, 212, 255, 0.1);
 }
 
-.edu-panel-header h3 {
+#gpu-simulator-app .edu-panel-header h3 {
   color: #00d4ff;
   font-size: 0.9rem;
   margin: 0;
@@ -89,30 +82,30 @@ body {
   font-weight: 700;
 }
 
-.edu-panel-arrow {
+#gpu-simulator-app .edu-panel-arrow {
   color: #00d4ff;
   font-size: 1.2rem;
   transition: transform 0.3s ease;
 }
 
-.edu-panel.expanded .edu-panel-arrow {
+#gpu-simulator-app .edu-panel.expanded .edu-panel-arrow {
   transform: rotate(180deg);
 }
 
-.edu-panel-content {
+#gpu-simulator-app .edu-panel-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
   padding: 0 20px;
 }
 
-.edu-panel.expanded .edu-panel-content {
+#gpu-simulator-app .edu-panel.expanded .edu-panel-content {
   max-height: 800px;
   padding: 15px 20px;
   overflow-y: auto;
 }
 
-.edu-panel-content h4 {
+#gpu-simulator-app .edu-panel-content h4 {
   color: #00ff88;
   font-size: 0.85rem;
   margin: 15px 0 8px 0;
@@ -121,30 +114,30 @@ body {
   font-weight: 700;
 }
 
-.edu-panel-content p {
+#gpu-simulator-app .edu-panel-content p {
   font-size: 0.8rem;
   line-height: 1.6;
   color: #b8c5d6;
   margin: 8px 0;
 }
 
-.edu-panel-content ul {
+#gpu-simulator-app .edu-panel-content ul {
   margin: 10px 0;
   padding-left: 20px;
 }
 
-.edu-panel-content li {
+#gpu-simulator-app .edu-panel-content li {
   font-size: 0.8rem;
   line-height: 1.5;
   color: #b8c5d6;
   margin-bottom: 6px;
 }
 
-.edu-panel-content strong {
+#gpu-simulator-app .edu-panel-content strong {
   color: #00d4ff;
 }
 
-.edu-highlight-box {
+#gpu-simulator-app .edu-highlight-box {
   background: rgba(76, 175, 239, 0.1);
   border-left: 3px solid #4CAFEF;
   padding: 12px;
@@ -152,14 +145,14 @@ body {
   border-radius: 4px;
 }
 
-.edu-comparison-table {
+#gpu-simulator-app .edu-comparison-table {
   width: 100%;
   margin: 10px 0;
   border-collapse: collapse;
   font-size: 0.75rem;
 }
 
-.edu-comparison-table th {
+#gpu-simulator-app .edu-comparison-table th {
   background: rgba(0, 212, 255, 0.2);
   color: #00d4ff;
   padding: 8px;
@@ -167,13 +160,13 @@ body {
   border: 1px solid #2a3f5f;
 }
 
-.edu-comparison-table td {
+#gpu-simulator-app .edu-comparison-table td {
   padding: 6px 8px;
   border: 1px solid #2a3f5f;
   color: #b8c5d6;
 }
 
-.game-frame {
+#gpu-simulator-app .game-frame {
   flex: 1;
   min-width: 0;
   max-width: 1100px;
@@ -189,7 +182,7 @@ body {
 }
 
 /* Header */
-.game-header {
+#gpu-simulator-app .game-header {
   background: linear-gradient(90deg, #0f1419 0%, #1a2332 100%);
   padding: 18px 30px;
   border-bottom: 1px solid #00d4ff;
@@ -199,7 +192,7 @@ body {
   flex-shrink: 0;
 }
 
-.title-section h1 {
+#gpu-simulator-app .title-section h1 {
   font-size: 1.6rem;
   color: #00d4ff;
   text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
@@ -208,7 +201,7 @@ body {
   letter-spacing: 1px;
 }
 
-.title-section p {
+#gpu-simulator-app .title-section p {
   font-size: 0.7rem;
   color: #7a8ba0;
   text-transform: uppercase;
@@ -216,16 +209,16 @@ body {
   font-weight: 600;
 }
 
-.header-stats {
+#gpu-simulator-app .header-stats {
   display: flex;
   gap: 20px;
 }
 
-.header-stat {
+#gpu-simulator-app .header-stat {
   text-align: center;
 }
 
-.header-stat-value {
+#gpu-simulator-app .header-stat-value {
   font-size: 1.5rem;
   font-weight: 900;
   color: #00ff88;
@@ -233,7 +226,7 @@ body {
   text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
-.header-stat-label {
+#gpu-simulator-app .header-stat-label {
   font-size: 0.65rem;
   color: #7a8ba0;
   text-transform: uppercase;
@@ -243,14 +236,14 @@ body {
 }
 
 /* Main Content Area */
-.game-content {
+#gpu-simulator-app .game-content {
   display: flex;
   flex: 1;
   min-height: 0;
 }
 
 /* Left Sidebar */
-.left-sidebar {
+#gpu-simulator-app .left-sidebar {
   width: 200px;
   background: #0f1419;
   border-right: 1px solid #1e2936;
@@ -260,12 +253,12 @@ body {
   overflow-y: auto;
 }
 
-.stage-selector {
+#gpu-simulator-app .stage-selector {
   padding: 15px;
   border-bottom: 2px solid #333;
 }
 
-.stage-selector h3 {
+#gpu-simulator-app .stage-selector h3 {
   font-size: 0.75rem;
   color: #7a8ba0;
   margin-bottom: 12px;
@@ -274,7 +267,7 @@ body {
   font-weight: 700;
 }
 
-.stage-btn {
+#gpu-simulator-app .stage-btn {
   width: 100%;
   padding: 14px 12px;
   margin-bottom: 6px;
@@ -292,52 +285,52 @@ body {
   gap: 12px;
 }
 
-.stage-btn:hover:not(.locked) {
+#gpu-simulator-app .stage-btn:hover:not(.locked) {
   background: #1e2d42;
   border-color: #00d4ff;
   transform: translateX(3px);
 }
 
-.stage-btn.active {
+#gpu-simulator-app .stage-btn.active {
   background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   border-color: #00d4ff;
   color: #000;
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
 }
 
-.stage-btn.locked {
+#gpu-simulator-app .stage-btn.locked {
   opacity: 0.4;
   cursor: not-allowed;
   border-color: #1e2936;
 }
 
-.stage-icon {
+#gpu-simulator-app .stage-icon {
   font-size: 1.5rem;
 }
 
-.stage-info {
+#gpu-simulator-app .stage-info {
   flex: 1;
 }
 
-.stage-name {
+#gpu-simulator-app .stage-name {
   font-weight: 700;
   font-size: 0.85rem;
   color: inherit;
 }
 
-.stage-type {
+#gpu-simulator-app .stage-type {
   font-size: 0.65rem;
   color: #7a8ba0;
   opacity: 0.8;
 }
 
-.achievements-panel {
+#gpu-simulator-app .achievements-panel {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
 }
 
-.achievements-panel h3 {
+#gpu-simulator-app .achievements-panel h3 {
   font-size: 0.9rem;
   color: #4CAFEF;
   margin-bottom: 10px;
@@ -345,7 +338,7 @@ body {
   letter-spacing: 1px;
 }
 
-.achievement {
+#gpu-simulator-app .achievement {
   background: rgba(42, 45, 45, 0.5);
   padding: 10px;
   border-radius: 6px;
@@ -357,17 +350,17 @@ body {
   transition: all 0.3s ease;
 }
 
-.achievement.unlocked {
+#gpu-simulator-app .achievement.unlocked {
   background: rgba(52, 199, 89, 0.15);
   border-color: #34c759;
 }
 
-.achievement-icon {
+#gpu-simulator-app .achievement-icon {
   font-size: 1.8rem;
   filter: grayscale(1) brightness(0.4);
 }
 
-.achievement.unlocked .achievement-icon {
+#gpu-simulator-app .achievement.unlocked .achievement-icon {
   filter: grayscale(0) brightness(1);
   animation: bounce 0.5s ease;
 }
@@ -377,30 +370,30 @@ body {
   50% { transform: scale(1.2); }
 }
 
-.achievement-info {
+#gpu-simulator-app .achievement-info {
   flex: 1;
 }
 
-.achievement-name {
+#gpu-simulator-app .achievement-name {
   font-size: 0.8rem;
   font-weight: 700;
   color: #F0F0F0;
 }
 
-.achievement-desc {
+#gpu-simulator-app .achievement-desc {
   font-size: 0.7rem;
   color: #888;
 }
 
 /* Center Area */
-.center-area {
+#gpu-simulator-app .center-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.tutorial-box {
+#gpu-simulator-app .tutorial-box {
   background: #0f1419;
   border-bottom: 1px solid #00d4ff;
   flex-shrink: 0;
@@ -408,7 +401,7 @@ body {
   max-height: 35vh;
 }
 
-.tutorial-header {
+#gpu-simulator-app .tutorial-header {
   padding: 10px 20px;
   cursor: pointer;
   display: flex;
@@ -417,11 +410,11 @@ body {
   transition: background 0.2s ease;
 }
 
-.tutorial-header:hover {
+#gpu-simulator-app .tutorial-header:hover {
   background: rgba(0, 212, 255, 0.05);
 }
 
-.tutorial-header h3 {
+#gpu-simulator-app .tutorial-header h3 {
   color: #00d4ff;
   font-size: 0.7rem;
   margin: 0;
@@ -430,30 +423,30 @@ body {
   font-weight: 700;
 }
 
-.tutorial-arrow {
+#gpu-simulator-app .tutorial-arrow {
   color: #00d4ff;
   font-size: 1rem;
   transition: transform 0.3s ease;
 }
 
-.tutorial-box.expanded .tutorial-arrow {
+#gpu-simulator-app .tutorial-box.expanded .tutorial-arrow {
   transform: rotate(180deg);
 }
 
-.tutorial-content {
+#gpu-simulator-app .tutorial-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
   padding: 0 20px;
 }
 
-.tutorial-box.expanded .tutorial-content {
+#gpu-simulator-app .tutorial-box.expanded .tutorial-content {
   max-height: 300px;
   padding: 0 20px 12px 20px;
   overflow-y: auto;
 }
 
-.tutorial-content h4 {
+#gpu-simulator-app .tutorial-content h4 {
   color: #00ff88;
   font-size: 0.75rem;
   margin: 12px 0 6px 0;
@@ -462,30 +455,30 @@ body {
   font-weight: 700;
 }
 
-.tutorial-content p {
+#gpu-simulator-app .tutorial-content p {
   font-size: 0.7rem;
   line-height: 1.5;
   color: #b8c5d6;
   margin: 6px 0;
 }
 
-.tutorial-content ul {
+#gpu-simulator-app .tutorial-content ul {
   margin: 6px 0;
   padding-left: 18px;
 }
 
-.tutorial-content li {
+#gpu-simulator-app .tutorial-content li {
   font-size: 0.7rem;
   line-height: 1.4;
   color: #b8c5d6;
   margin-bottom: 4px;
 }
 
-.tutorial-content strong {
+#gpu-simulator-app .tutorial-content strong {
   color: #00d4ff;
 }
 
-.stage-brief {
+#gpu-simulator-app .stage-brief {
   font-size: 0.7rem;
   line-height: 1.4;
   color: #b8c5d6;
@@ -494,7 +487,7 @@ body {
   border-bottom: 1px solid #1e2936;
 }
 
-.assembly-area {
+#gpu-simulator-app .assembly-area {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
@@ -503,7 +496,7 @@ body {
   flex-direction: column;
 }
 
-.assembly-area h3 {
+#gpu-simulator-app .assembly-area h3 {
   font-size: 0.8rem;
   color: #7a8ba0;
   margin-bottom: 12px;
@@ -513,7 +506,7 @@ body {
   flex-shrink: 0;
 }
 
-.workstations-grid {
+#gpu-simulator-app .workstations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
@@ -521,7 +514,7 @@ body {
   align-content: start;
 }
 
-.workstation {
+#gpu-simulator-app .workstation {
   background: #1a2332;
   border: 1px solid #2a3f5f;
   border-radius: 8px;
@@ -532,12 +525,12 @@ body {
   min-height: 0;
 }
 
-.workstation:hover {
+#gpu-simulator-app .workstation:hover {
   border-color: #00d4ff;
   box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
 }
 
-.workstation-header {
+#gpu-simulator-app .workstation-header {
   font-size: 0.9rem;
   font-weight: 700;
   margin-bottom: 10px;
@@ -550,7 +543,7 @@ body {
   flex-shrink: 0;
 }
 
-.station-load {
+#gpu-simulator-app .station-load {
   font-size: 0.7rem;
   color: #4CAFEF;
   background: rgba(76, 175, 239, 0.1);
@@ -558,7 +551,7 @@ body {
   border-radius: 12px;
 }
 
-.robot {
+#gpu-simulator-app .robot {
   background: #0f1419;
   padding: 10px;
   border-radius: 6px;
@@ -568,12 +561,12 @@ body {
   overflow: hidden;
 }
 
-.robot.busy {
+#gpu-simulator-app .robot.busy {
   border-color: #00ff88;
   box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
 }
 
-.robot.busy::before {
+#gpu-simulator-app .robot.busy::before {
   content: '';
   position: absolute;
   top: 0;
@@ -588,7 +581,7 @@ body {
   to { width: 100%; }
 }
 
-.robot-name {
+#gpu-simulator-app .robot-name {
   font-weight: 700;
   font-size: 0.8rem;
   color: #00d4ff;
@@ -599,7 +592,7 @@ body {
   text-transform: uppercase;
 }
 
-.robot-status {
+#gpu-simulator-app .robot-status {
   font-size: 0.75rem;
   color: #b8c5d6;
   position: relative;
@@ -607,7 +600,7 @@ body {
   line-height: 1.4;
 }
 
-.task-buttons {
+#gpu-simulator-app .task-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
@@ -616,7 +609,7 @@ body {
   z-index: 1;
 }
 
-.task-btn {
+#gpu-simulator-app .task-btn {
   padding: 10px 8px;
   background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   color: #000;
@@ -629,19 +622,19 @@ body {
   transition: all 0.2s ease;
 }
 
-.task-btn:hover:not(:disabled) {
+#gpu-simulator-app .task-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.5);
 }
 
-.task-btn:disabled {
+#gpu-simulator-app .task-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   background: #1e2936;
   color: #4a5568;
 }
 
-.testing-station {
+#gpu-simulator-app .testing-station {
   background: rgba(229, 62, 62, 0.1);
   border: 2px solid #E53E3E;
   border-radius: 8px;
@@ -649,11 +642,11 @@ body {
   margin-top: 10px;
 }
 
-.testing-station.busy {
+#gpu-simulator-app .testing-station.busy {
   box-shadow: 0 0 15px rgba(229, 62, 62, 0.4);
 }
 
-.testing-status {
+#gpu-simulator-app .testing-status {
   font-weight: 700;
   font-size: 0.85rem;
   color: #E53E3E;
@@ -661,7 +654,7 @@ body {
 }
 
 /* Right Sidebar */
-.right-sidebar {
+#gpu-simulator-app .right-sidebar {
   width: 230px;
   background: rgba(30, 30, 40, 0.8);
   border-left: 2px solid #333;
@@ -670,12 +663,12 @@ body {
   flex-shrink: 0;
 }
 
-.controls-panel {
+#gpu-simulator-app .controls-panel {
   padding: 15px;
   border-bottom: 2px solid #333;
 }
 
-.controls-panel h3 {
+#gpu-simulator-app .controls-panel h3 {
   font-size: 0.9rem;
   color: #4CAFEF;
   margin-bottom: 10px;
@@ -683,7 +676,7 @@ body {
   letter-spacing: 1px;
 }
 
-.btn {
+#gpu-simulator-app .btn {
   width: 100%;
   padding: 14px 12px;
   margin-bottom: 8px;
@@ -700,28 +693,28 @@ body {
   letter-spacing: 1px;
 }
 
-.btn:hover {
+#gpu-simulator-app .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
 }
 
-.btn-success {
+#gpu-simulator-app .btn-success {
   background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
   color: #000;
 }
 
-.btn-warning {
+#gpu-simulator-app .btn-warning {
   background: linear-gradient(135deg, #ff9500 0%, #cc7700 100%);
   color: #000;
 }
 
-.orders-panel {
+#gpu-simulator-app .orders-panel {
   flex: 1;
   padding: 15px;
   overflow-y: auto;
 }
 
-.orders-panel h3 {
+#gpu-simulator-app .orders-panel h3 {
   font-size: 0.9rem;
   color: #4CAFEF;
   margin-bottom: 10px;
@@ -729,7 +722,7 @@ body {
   letter-spacing: 1px;
 }
 
-.order-card {
+#gpu-simulator-app .order-card {
   background: rgba(42, 45, 45, 0.8);
   border: 2px solid #333;
   padding: 12px;
@@ -738,31 +731,31 @@ body {
   transition: all 0.3s ease;
 }
 
-.order-card:hover {
+#gpu-simulator-app .order-card:hover {
   border-color: #4CAFEF;
   transform: translateY(-2px);
 }
 
-.order-id {
+#gpu-simulator-app .order-id {
   font-weight: 700;
   font-size: 0.95rem;
   color: #4CAFEF;
   margin-bottom: 8px;
 }
 
-.order-factory {
+#gpu-simulator-app .order-factory {
   font-size: 0.75rem;
   color: #888;
   margin-bottom: 8px;
 }
 
-.order-progress {
+#gpu-simulator-app .order-progress {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
 
-.progress-step {
+#gpu-simulator-app .progress-step {
   aspect-ratio: 1;
   background: rgba(20, 20, 30, 0.9);
   border-radius: 6px;
@@ -774,7 +767,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.progress-step.completed {
+#gpu-simulator-app .progress-step.completed {
   background: rgba(52, 199, 89, 0.3);
   border-color: #34c759;
   box-shadow: 0 0 10px rgba(52, 199, 89, 0.4);
@@ -787,7 +780,7 @@ body {
 }
 
 /* Game Over Modal */
-.modal-overlay {
+#gpu-simulator-app .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.9);
@@ -799,7 +792,7 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
-.modal-overlay.show {
+#gpu-simulator-app .modal-overlay.show {
   display: flex;
 }
 
@@ -808,7 +801,7 @@ body {
   to { opacity: 1; }
 }
 
-.modal-content {
+#gpu-simulator-app .modal-content {
   background: linear-gradient(135deg, #1a1a2e, #16213e);
   border: 3px solid #4CAFEF;
   border-radius: 16px;
@@ -823,18 +816,18 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
-.modal-emoji {
+#gpu-simulator-app .modal-emoji {
   font-size: 80px;
   margin-bottom: 20px;
 }
 
-.modal-content h2 {
+#gpu-simulator-app .modal-content h2 {
   font-size: 2rem;
   color: #4CAFEF;
   margin-bottom: 20px;
 }
 
-.results-box {
+#gpu-simulator-app .results-box {
   background: rgba(76, 175, 239, 0.1);
   border: 2px solid #4CAFEF;
   border-radius: 10px;
@@ -842,7 +835,7 @@ body {
   margin: 20px 0;
 }
 
-.result-row {
+#gpu-simulator-app .result-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
@@ -850,11 +843,11 @@ body {
   font-size: 1rem;
 }
 
-.result-row:last-child {
+#gpu-simulator-app .result-row:last-child {
   border-bottom: none;
 }
 
-.improvement-box {
+#gpu-simulator-app .improvement-box {
   background: rgba(52, 199, 89, 0.1);
   border: 2px solid #34c759;
   border-radius: 10px;
@@ -862,13 +855,13 @@ body {
   margin-top: 20px;
 }
 
-.improvement-box h3 {
+#gpu-simulator-app .improvement-box h3 {
   color: #34c759;
   font-size: 1.3rem;
   margin-bottom: 15px;
 }
 
-.improvement-value {
+#gpu-simulator-app .improvement-value {
   font-size: 2rem;
   color: #34c759;
   font-weight: 900;
@@ -876,7 +869,7 @@ body {
 }
 
 /* Toast */
-.toast {
+#gpu-simulator-app .toast {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -897,30 +890,30 @@ body {
   to { transform: translateX(0); opacity: 1; }
 }
 
-.toast.success { border-color: #34c759; }
-.toast.warning { border-color: #FBBF24; }
-.toast.info { border-color: #4CAFEF; }
+#gpu-simulator-app .toast.success { border-color: #34c759; }
+#gpu-simulator-app .toast.warning { border-color: #FBBF24; }
+#gpu-simulator-app .toast.info { border-color: #4CAFEF; }
 
 /* Scrollbar styling */
-::-webkit-scrollbar {
+#gpu-simulator-app ::-webkit-scrollbar {
   width: 8px;
 }
 
-::-webkit-scrollbar-track {
+#gpu-simulator-app ::-webkit-scrollbar-track {
   background: rgba(20, 20, 30, 0.5);
 }
 
-::-webkit-scrollbar-thumb {
+#gpu-simulator-app ::-webkit-scrollbar-thumb {
   background: #4CAFEF;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+#gpu-simulator-app ::-webkit-scrollbar-thumb:hover {
   background: #5CBFFF;
 }
 
 /* Help Button */
-.help-button {
+#gpu-simulator-app .help-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -941,12 +934,12 @@ body {
   z-index: 1500;
 }
 
-.help-button:hover {
+#gpu-simulator-app .help-button:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 25px rgba(0, 212, 255, 0.7);
 }
 
-.help-tooltip {
+#gpu-simulator-app .help-tooltip {
   position: fixed;
   bottom: 80px;
   right: 20px;
@@ -965,15 +958,15 @@ body {
   overflow-y: auto;
 }
 
-.help-tooltip.show,
-.help-button:hover + .help-tooltip,
-.help-tooltip:hover {
+#gpu-simulator-app .help-tooltip.show,
+#gpu-simulator-app .help-button:hover + .help-tooltip,
+#gpu-simulator-app .help-tooltip:hover {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.help-tooltip h3 {
+#gpu-simulator-app .help-tooltip h3 {
   color: #00d4ff;
   font-size: 1.1rem;
   margin-bottom: 15px;
@@ -981,7 +974,7 @@ body {
   letter-spacing: 1px;
 }
 
-.help-tooltip h4 {
+#gpu-simulator-app .help-tooltip h4 {
   color: #00ff88;
   font-size: 0.9rem;
   margin-top: 15px;
@@ -990,19 +983,19 @@ body {
   letter-spacing: 0.5px;
 }
 
-.help-tooltip p {
+#gpu-simulator-app .help-tooltip p {
   color: #b8c5d6;
   font-size: 0.8rem;
   line-height: 1.6;
   margin-bottom: 10px;
 }
 
-.help-tooltip ul {
+#gpu-simulator-app .help-tooltip ul {
   margin: 10px 0;
   padding-left: 20px;
 }
 
-.help-tooltip li {
+#gpu-simulator-app .help-tooltip li {
   color: #b8c5d6;
   font-size: 0.75rem;
   line-height: 1.5;
@@ -1011,12 +1004,12 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1600px) {
-  .page-container {
+  #gpu-simulator-app .page-container {
     flex-direction: column;
     align-items: center;
   }
-  
-  .educational-sidebar {
+
+  #gpu-simulator-app .educational-sidebar {
     flex: 0 0 auto;
     width: 100%;
     max-width: 100%;
@@ -1025,8 +1018,8 @@ body {
     margin-bottom: 15px;
     order: 0;
   }
-  
-  .game-frame {
+
+  #gpu-simulator-app .game-frame {
     width: 100%;
     max-width: 100%;
     min-width: auto;
@@ -1034,35 +1027,133 @@ body {
 }
 
 @media (max-width: 768px) {
-  body {
-    padding: 5px;
+  #gpu-simulator-app {
+    padding: 10px;
   }
-  
-  .game-frame {
+
+  #gpu-simulator-app .game-frame {
     height: 80vh;
   }
-  
-  .left-sidebar {
+
+  #gpu-simulator-app .left-sidebar {
     width: 160px;
   }
-  
-  .right-sidebar {
+
+  #gpu-simulator-app .right-sidebar {
     width: 180px;
   }
-  
-  .workstations-grid {
+
+  #gpu-simulator-app .workstations-grid {
     grid-template-columns: 1fr;
   }
-  
-  .educational-sidebar {
+
+  #gpu-simulator-app .educational-sidebar {
     flex: 0 0 auto;
   }
 }
 </style>
-<body>
+
+<div id="gpu-simulator-app">
 
 <div class="page-container">
-  
+
+<!-- Educational Sidebar -->
+<div class="educational-sidebar">
+  <div class="edu-panel" id="sequentialPanel">
+    <div class="edu-panel-header" onclick="toggleEduPanel('sequentialPanel')">
+      <h3>Sequential Computing</h3>
+      <span class="edu-panel-arrow">▼</span>
+    </div>
+    <div class="edu-panel-content">
+      <h4>What is it?</h4>
+      <p>Tasks execute one after another in a single stream. Only one operation happens at a time.</p>
+
+      <h4>Real-World Examples</h4>
+      <ul>
+        <li>Early computers (1940s-1990s)</li>
+        <li>Single-core processors</li>
+        <li>Assembly line with one worker</li>
+      </ul>
+
+      <div class="edu-highlight-box">
+        <strong>Key Limitation:</strong> No matter how fast the worker, throughput is limited by processing one task at a time.
+      </div>
+    </div>
+  </div>
+
+  <div class="edu-panel" id="parallelPanel">
+    <div class="edu-panel-header" onclick="toggleEduPanel('parallelPanel')">
+      <h3>Parallel Computing</h3>
+      <span class="edu-panel-arrow">▼</span>
+    </div>
+    <div class="edu-panel-content">
+      <h4>What is it?</h4>
+      <p>Multiple processing units work simultaneously on different parts of the same problem.</p>
+
+      <h4>Real-World Examples</h4>
+      <ul>
+        <li>Multi-core CPUs (2-128 cores)</li>
+        <li>GPU processing (thousands of cores)</li>
+        <li>Team assembly line</li>
+      </ul>
+
+      <div class="edu-highlight-box">
+        <strong>Bottleneck:</strong> Shared resources (memory, I/O, testing stations) create contention and limit speedup.
+      </div>
+
+      <table class="edu-comparison-table">
+        <tr>
+          <th>Cores</th>
+          <th>Speedup</th>
+          <th>Why Not Linear?</th>
+        </tr>
+        <tr>
+          <td>2 cores</td>
+          <td>~1.8x</td>
+          <td>Coordination overhead</td>
+        </tr>
+        <tr>
+          <td>4 cores</td>
+          <td>~3.2x</td>
+          <td>Shared cache/memory</td>
+        </tr>
+        <tr>
+          <td>8 cores</td>
+          <td>~5.5x</td>
+          <td>Resource contention</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="edu-panel" id="distributedPanel">
+    <div class="edu-panel-header" onclick="toggleEduPanel('distributedPanel')">
+      <h3>Distributed Computing</h3>
+      <span class="edu-panel-arrow">▼</span>
+    </div>
+    <div class="edu-panel-content">
+      <h4>What is it?</h4>
+      <p>Independent systems work on separate tasks without sharing resources. Near-linear scaling possible.</p>
+
+      <h4>Real-World Examples</h4>
+      <ul>
+        <li>Cloud data centers</li>
+        <li>CDNs (Content Delivery Networks)</li>
+        <li>Blockchain networks</li>
+        <li>Multi-factory manufacturing</li>
+      </ul>
+
+      <div class="edu-highlight-box">
+        <strong>Key Advantage:</strong> Each node has dedicated resources, eliminating most bottlenecks. Scaling is limited mainly by coordination costs.
+      </div>
+
+      <h4>Trade-offs</h4>
+      <p><strong>Pros:</strong> Near-linear scaling, fault tolerance, geographic distribution</p>
+      <p><strong>Cons:</strong> Network latency, data consistency challenges, higher complexity</p>
+    </div>
+  </div>
+</div>
+
 <div class="game-frame">
   <!-- Header -->
   <div class="game-header">
@@ -1218,6 +1309,7 @@ body {
         <button class="btn btn-success" onclick="startGame()">▶ Start</button>
         <button class="btn btn-warning" onclick="resetGame()">↻ Reset</button>
         <button class="btn" onclick="addOrder()">➕ New Order</button>
+        <button class="btn" id="autoFillBtn" onclick="toggleAutoFill()" style="display: none;">🤖 Auto Fill: OFF</button>
       </div>
 
       <div class="orders-panel">
@@ -1255,6 +1347,8 @@ let totalGPUsAllTime = 0;
 let fastestGPU = Infinity;
 let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 const API_URL = pythonURI;
+let autoFillEnabled = false;
+let autoFillInterval = null;
 
 let stageStats = {
   1: { completed: 0, time: 0, avgTime: 0 },
@@ -1407,6 +1501,17 @@ function selectStage(stage) {
 function setupStage(stage) {
   workstations = [];
   const stageBrief = document.getElementById('stageBrief');
+  const autoFillBtn = document.getElementById('autoFillBtn');
+
+  // Show auto-fill button only for stages 1 and 2
+  if (stage === 1 || stage === 2) {
+    autoFillBtn.style.display = 'block';
+  } else {
+    autoFillBtn.style.display = 'none';
+    if (autoFillEnabled) {
+      toggleAutoFill(); // Turn off if it was on
+    }
+  }
 
   if (stage === 1) {
     stageBrief.textContent = 'SEQUENTIAL: One robot processes GPUs step-by-step. Click PCB → Cores → Memory → Test in order.';
@@ -1845,6 +1950,17 @@ function resetGame() {
   timeElapsed = 0;
   orderCounter = 1;
 
+  // Stop auto-fill if running
+  if (autoFillEnabled) {
+    stopAutoFill();
+    autoFillEnabled = false;
+    const btn = document.getElementById('autoFillBtn');
+    if (btn) {
+      btn.textContent = '🤖 Auto Fill: OFF';
+      btn.classList.remove('btn-success');
+    }
+  }
+
   workstations.forEach(station => {
     station.robots.forEach(robot => {
       if (robot.timer) clearTimeout(robot.timer);
@@ -1862,6 +1978,80 @@ function resetGame() {
   renderOrders();
   renderWorkstations();
   showToast('↻ Reset complete', 'info');
+}
+
+// Auto-fill feature functions
+function toggleAutoFill() {
+  autoFillEnabled = !autoFillEnabled;
+  const btn = document.getElementById('autoFillBtn');
+
+  if (autoFillEnabled) {
+    btn.textContent = '🤖 Auto Fill: ON';
+    btn.classList.add('btn-success');
+    showToast('🤖 Auto-fill enabled!', 'info');
+    startAutoFill();
+  } else {
+    btn.textContent = '🤖 Auto Fill: OFF';
+    btn.classList.remove('btn-success');
+    showToast('🤖 Auto-fill disabled', 'info');
+    stopAutoFill();
+  }
+}
+
+function startAutoFill() {
+  if (currentStage === 3) return; // Stage 3 is already automated
+
+  // Run auto-fill logic every 100ms
+  autoFillInterval = setInterval(() => {
+    if (!gameRunning || !autoFillEnabled) {
+      stopAutoFill();
+      return;
+    }
+
+    processAutoFillTasks();
+  }, 100);
+}
+
+function stopAutoFill() {
+  if (autoFillInterval) {
+    clearInterval(autoFillInterval);
+    autoFillInterval = null;
+  }
+}
+
+function processAutoFillTasks() {
+  const station = workstations[0]; // Stage 1 & 2 only have one station
+
+  // Try to assign test tasks first (highest priority)
+  if (!station.tester.busy) {
+    for (let order of orders) {
+      if (!order.steps.test && order.steps.pcb && order.steps.cores && order.steps.memory) {
+        assignTest(1);
+        return;
+      }
+    }
+  }
+
+  // Try to assign assembly tasks to idle robots
+  const tasks = ['pcb', 'cores', 'memory'];
+
+  for (let robot of station.robots) {
+    if (robot.busy) continue;
+
+    // Find the next task that needs to be done
+    for (let order of orders) {
+      for (let task of tasks) {
+        if (!order.steps[task]) {
+          // Check prerequisites
+          const taskIndex = tasks.indexOf(task);
+          if (taskIndex === 0 || order.steps[tasks[taskIndex - 1]]) {
+            assignTask(1, robot.id, task);
+            return; // Process one assignment at a time
+          }
+        }
+      }
+    }
+  }
 }
 
 // Backend logging function
@@ -1911,38 +2101,39 @@ window.addOrder = addOrder;
 window.assignTask = assignTask;
 window.assignTest = assignTest;
 window.nextStage = nextStage;
+window.toggleAutoFill = toggleAutoFill;
 
 initGame();
 
 // Help tooltip toggle
 let helpTooltipTimeout;
-document.addEventListener('DOMContentLoaded', () => {
-  const helpButton = document.querySelector('.help-button');
-  const helpTooltip = document.querySelector('.help-tooltip');
-  
+const helpButton = document.querySelector('.help-button');
+const helpTooltip = document.querySelector('.help-tooltip');
+
+if (helpButton && helpTooltip) {
   helpButton.addEventListener('click', (e) => {
     e.stopPropagation();
     helpTooltip.classList.toggle('show');
   });
-  
+
   // Close when clicking outside
   document.addEventListener('click', (e) => {
     if (!helpButton.contains(e.target) && !helpTooltip.contains(e.target)) {
       helpTooltip.classList.remove('show');
     }
   });
-  
+
   // Keep tooltip open when hovering over it
   helpTooltip.addEventListener('mouseenter', () => {
     clearTimeout(helpTooltipTimeout);
   });
-  
+
   helpTooltip.addEventListener('mouseleave', () => {
     helpTooltipTimeout = setTimeout(() => {
       helpTooltip.classList.remove('show');
     }, 300);
   });
-});
+}
 </script>
 
 <!-- Help Button -->
@@ -1980,5 +2171,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </div> <!-- End page-container -->
 
-</body>
-</html>
+</div> <!-- End gpu-simulator-app -->
