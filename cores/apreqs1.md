@@ -395,65 +395,140 @@ a:focus, button:focus {
   </nav>
 
   <section id="dual-db">
-    <h2>Dual-Database Authentication Bridge</h2>
-    <p>The login flow bridges our main Flask database with Quest's legacy users. It preserves the redirect safety checks while automatically syncing a Quest account the first time they sign in—no bulk migration required.</p>
+    <h2>Login System: AP CSP Component A Requirements</h2>
+    <p>This document demonstrates how the dual-database authentication system meets all AP Computer Science Principles Component A (Program Code Requirements).</p>
   </section>
 
   <section class="grid">
     <article>
-      <small>Baseline Pattern</small>
-      <h3>1. Original Login Route</h3>
-      <p>Started with a single-database route: query, validate via <code>is_password()</code>, run <code>login_user()</code>, and protect redirects with <code>is_safe_url()</code>.</p>
-      <pre data-lang="Python"><code>@app.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    next_page = request.args.get('next', '') or request.form.get('next', '')
-    if request.method == 'POST':
-        user = User.query.filter_by(_uid=request.form['username']).first()
-        if user and user.is_password(request.form['password']):
-            login_user(user)
-            if not is_safe_url(next_page):
-                return abort(400)
-            return redirect(next_page or url_for('index'))
-        else:
-            error = 'Invalid username or password.'
-    return render_template("login.html", error=error, next=next_page)</code></pre>
+      <small>Requirement 1</small>
+      <h3>Instructions for Input</h3>
+      <p><strong>Requirement:</strong> Instructions for input from one of the following: the user, a device, an online data stream, or a file</p>
+      <pre data-lang="Python"><code>username = request.form['username']
+password = request.form['password']</code></pre>
+      <p><strong>Explanation:</strong> User enters credentials through HTML form. User actions (clicking login button) trigger authentication event. Input is captured from POST request form data.</p>
     </article>
 
     <article>
-      <small>Integration Requirements</small>
-      <h3>2. Why Extend It?</h3>
-      <p>The bridge had to:</p>
+      <small>Requirement 2</small>
+      <h3>Use of a List or Collection Type</h3>
+      <p><strong>Requirement:</strong> Use of at least one list (or other collection type) to represent a collection of data that is stored and used to manage program complexity</p>
+      <pre data-lang="Python"><code># Database tables are collections of user objects
+user = User.query.filter_by(_uid=username).first()
+
+# Quest database also contains collection of users
+quest_user = check_quest_user(username, password)</code></pre>
+      <p><strong>Explanation:</strong> Database tables (<code>User</code> and <code>QuestUser</code>) store collections of user records. Each query operates on these collections to find matching entries. Collections manage complexity by organizing multiple user accounts with their credentials and metadata.</p>
+    </article>
+
+    <article>
+      <small>Database Schema</small>
+      <h3>Collection Architecture</h3>
+      <p>The dual-database system integrates with a comprehensive relational database structure:</p>
+      <img src="{{ site.baseurl }}/images/DBflow.png" alt="Database Schema Diagram" style="width: 100%; max-width: 800px; margin: 1.5rem auto; display: block; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
+      <p><strong>Core Authentication Tables:</strong></p>
       <ul>
-        <li>Check the primary database first for performance.</li>
-        <li>Fall back to Quest only when the user is missing.</li>
-        <li>Sync Quest users into the main DB after first login.</li>
-        <li>Keep the main DB as the source of truth going forward.</li>
+        <li><strong>users</strong> - Main user authentication table storing credentials and profile information</li>
+        <li><strong>room_members</strong> - Junction table linking users to educational rooms</li>
+      </ul>
+      <p><strong>Progress Tracking Tables:</strong></p>
+      <ul>
+        <li><strong>user_progress</strong> - Individual student progress through course modules</li>
+        <li><strong>room_progress</strong> - Aggregate progress metrics for classroom groups</li>
+      </ul>
+      <p><strong>Content Management Tables:</strong></p>
+      <ul>
+        <li><strong>rooms</strong> - Educational spaces containing lessons and members</li>
+        <li><strong>glossary</strong> - Technical terminology and definitions</li>
       </ul>
     </article>
 
     <article>
-      <small>Current Implementation</small>
-      <h3>3. Dual-DB Login</h3>
-      <p>Main DB gets priority; if not found or password mismatch, consult Quest, sync, then log in with the new record.</p>
+      <small>Requirement 3</small>
+      <h3>At Least One Procedure</h3>
+      <p><strong>Requirement:</strong> At least one procedure that contributes to the program's intended purpose, with defined name, return type, and parameters</p>
+      <p><strong>Procedure 1:</strong> <code>check_quest_user</code></p>
+      <pre data-lang="Python"><code>def check_quest_user(username, password):
+    """Query Quest database for user credentials"""
+    # Parameters: username (string), password (string)
+    # Return type: QuestUser object or None
+
+    quest_db_users = QuestUser.query.all()
+
+    for user in quest_db_users:
+        if user.username == username and user.verify_password(password):
+            return user
+
+    return None</code></pre>
+      <ul>
+        <li><strong>Name:</strong> check_quest_user</li>
+        <li><strong>Parameters:</strong> username, password</li>
+        <li><strong>Return type:</strong> QuestUser object or None</li>
+        <li><strong>Purpose:</strong> Authenticates user against Quest legacy database</li>
+      </ul>
+    </article>
+
+    <article>
+      <small>Requirement 3 (continued)</small>
+      <h3>Procedure 2: sync_quest_user_to_main</h3>
+      <pre data-lang="Python"><code>def sync_quest_user_to_main(quest_user, password):
+    """Create user in main database from Quest data"""
+    # Parameters: quest_user (QuestUser object), password (string)
+    # Return type: User object or None
+
+    try:
+        new_user = User(
+            _uid=quest_user.username,
+            _name=quest_user.name,
+            _password=password
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user
+    except:
+        db.session.rollback()
+        return None</code></pre>
+      <ul>
+        <li><strong>Name:</strong> sync_quest_user_to_main</li>
+        <li><strong>Parameters:</strong> quest_user, password</li>
+        <li><strong>Return type:</strong> User object or None</li>
+        <li><strong>Purpose:</strong> Migrates Quest user to main database on first login</li>
+      </ul>
+    </article>
+
+    <article>
+      <small>Requirement 4</small>
+      <h3>Algorithm with Sequencing, Selection, and Iteration</h3>
+      <p><strong>Requirement:</strong> An algorithm that includes sequencing, selection, and iteration</p>
+      <p><strong>Full Algorithm in login() function:</strong></p>
       <pre data-lang="Python"><code>@app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     next_page = request.args.get('next', '') or request.form.get('next', '')
+
     if request.method == 'POST':
+        # SEQUENCING: Steps execute in order
         username = request.form['username']
         password = request.form['password']
 
+        # Step 1: Check main database
         user = User.query.filter_by(_uid=username).first()
+
+        # SELECTION: Conditional branches
         if user and user.is_password(password):
+            # Main database authentication successful
             login_user(user)
             if not is_safe_url(next_page):
                 return abort(400)
             return redirect(next_page or url_for('index'))
 
+        # Step 2: Check Quest database if main auth fails
         quest_user = check_quest_user(username, password)
+
         if quest_user:
+            # Quest user found - sync to main database
             synced_user = sync_quest_user_to_main(quest_user, password)
+
             if synced_user:
                 login_user(synced_user)
                 if not is_safe_url(next_page):
@@ -468,49 +543,141 @@ def login():
     </article>
 
     <article>
-      <small>Control Logic</small>
-      <h3>4. Flow Diagram</h3>
-      <pre data-lang="Diagram"><code>User Login Attempt
-       ↓
-Check Main Database
-       ↓
-   Found? ────YES───→ Authenticate → Login ✓
-       ↓
-       NO
-       ↓
-Check Quest Database
-       ↓
-   Found? ────YES───→ Sync to Main DB → Login ✓
-       ↓
-       NO
-       ↓
-   Error: Invalid Credentials</code></pre>
-      <p>Sequencing + selection paths make the flow explicit for reviewers.</p>
+      <small>Algorithm Breakdown</small>
+      <h3>Sequencing, Selection, Iteration</h3>
+      <p><strong>SEQUENCING:</strong> Steps execute in order:</p>
+      <ol>
+        <li>Get username and password from form</li>
+        <li>Query main database for user</li>
+        <li>Validate credentials</li>
+        <li>If not found, query Quest database</li>
+        <li>Sync user if found in Quest</li>
+        <li>Log in user and redirect</li>
+      </ol>
+      <p><strong>SELECTION:</strong> Multiple conditional branches:</p>
+      <ul>
+        <li><code>if request.method == 'POST'</code> - Check if form submitted</li>
+        <li><code>if user and user.is_password(password)</code> - Validate main database credentials</li>
+        <li><code>if quest_user</code> - Check if Quest user exists</li>
+        <li><code>if synced_user</code> - Verify sync succeeded</li>
+        <li><code>if not is_safe_url(next_page)</code> - Security check</li>
+      </ul>
+      <p><strong>ITERATION:</strong> Explicit iteration in check_quest_user:</p>
+      <pre data-lang="Python"><code>quest_db_users = QuestUser.query.all()
+
+# ITERATION: Loop through Quest database users
+for user in quest_db_users:
+    if user.username == username and user.verify_password(password):
+        return user
+
+return None</code></pre>
+      <p>The login system iterates through main database User table to find matching _uid, and Quest database QuestUser table to find matching username.</p>
     </article>
 
     <article>
-      <small>Helper Functions</small>
-      <h3>5. Supporting Procedures</h3>
-      <p>Both helpers encapsulate the cross-database logic.</p>
-      <pre data-lang="Python"><code>def check_quest_user(username, password):
-    """Query Quest database for user credentials."""
-    # Returns user object if valid, None otherwise
+      <small>Requirement 5</small>
+      <h3>Calls to Student-Developed Procedure</h3>
+      <p><strong>Requirement:</strong> Calls to your student-developed procedure</p>
+      <pre data-lang="Python"><code># Call to check_quest_user procedure
+quest_user = check_quest_user(username, password)
 
-def sync_quest_user_to_main(quest_user, password):
-    """Create user in main database from Quest data."""
-    # Creates new User record
-    # Returns synced user object or None on failure</code></pre>
+# Call to sync_quest_user_to_main procedure
+synced_user = sync_quest_user_to_main(quest_user, password)</code></pre>
+      <p><strong>Both procedures are:</strong></p>
+      <ul>
+        <li>Defined by student</li>
+        <li>Called within main login algorithm</li>
+        <li>Essential to program functionality</li>
+        <li>Used to manage dual-database complexity</li>
+      </ul>
     </article>
 
     <article>
-      <small>Performance · Migration · Security</small>
-      <h3>6. Benefits & Real Use</h3>
-      <p>Fast path hits one database, new users pay the dual lookup only once, and passwords are re-hashed in our stack. This is a migration bridge pattern used when integrating institutional systems or staging enterprise rollovers.</p>
+      <small>Requirement 6</small>
+      <h3>Instructions for Output</h3>
+      <p><strong>Requirement:</strong> Instructions for output (tactile, audible, visual, or textual) based on input and program functionality</p>
+      <p><strong>Success Output:</strong></p>
+      <pre data-lang="Python"><code>login_user(user)
+return redirect(next_page or url_for('index'))</code></pre>
+      <ul>
+        <li><strong>Visual output:</strong> Redirects to authenticated page</li>
+        <li><strong>Based on input:</strong> Successful username/password combination</li>
+      </ul>
+      <p><strong>Error Output:</strong></p>
+      <pre data-lang="Python"><code>error = 'Invalid username or password.'
+return render_template("login.html", error=error, next=next_page)</code></pre>
+      <ul>
+        <li><strong>Visual/textual output:</strong> Error message displayed to user</li>
+        <li><strong>Based on input:</strong> Failed authentication attempt</li>
+      </ul>
+      <p><strong>Sync Error Output:</strong></p>
+      <pre data-lang="Python"><code>error = 'Error syncing user account. Please try again.'
+return render_template("login.html", error=error, next=next_page)</code></pre>
+      <ul>
+        <li><strong>Visual/textual output:</strong> Specific sync failure message</li>
+        <li><strong>Based on program functionality:</strong> Failed database synchronization</li>
+      </ul>
+    </article>
+
+    <article>
+      <small>Summary</small>
+      <h3>All Requirements Met</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid var(--border-hover);">
+            <th style="text-align: left; padding: 0.5rem; color: var(--accent-bright);">Requirement</th>
+            <th style="text-align: left; padding: 0.5rem; color: var(--accent-bright);">Implementation</th>
+            <th style="text-align: center; padding: 0.5rem; color: var(--accent-bright);">✓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Input from user</td>
+            <td style="padding: 0.5rem;">Form data (username, password)</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">List/collection</td>
+            <td style="padding: 0.5rem;">Database tables (User, QuestUser)</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Procedure with parameters</td>
+            <td style="padding: 0.5rem;">check_quest_user(), sync_quest_user_to_main()</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Sequencing</td>
+            <td style="padding: 0.5rem;">Steps execute in order</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Selection</td>
+            <td style="padding: 0.5rem;">Multiple if/else branches</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Iteration</td>
+            <td style="padding: 0.5rem;">Database queries loop through records</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.5rem;">Procedure calls</td>
+            <td style="padding: 0.5rem;">Both procedures called in login flow</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.5rem;">Output based on input</td>
+            <td style="padding: 0.5rem;">Error messages and redirects</td>
+            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          </tr>
+        </tbody>
+      </table>
     </article>
   </section>
 
   <blockquote>
-    <strong>Migration bridge in practice:</strong> No bulk import, no double accounts—Quest users sign in once and the system promotes them to the main database while keeping the original login safeguards intact.
+    <strong>Complete AP CSP Coverage:</strong> The dual-database authentication system demonstrates all required programming concepts: user input through forms, collections via database tables, student-developed procedures with clear parameters and return types, sequencing through ordered steps, selection via conditional logic, iteration through database queries, procedure calls in the main algorithm, and output based on authentication results.
   </blockquote>
 
   <section id="hardware-havoc">
