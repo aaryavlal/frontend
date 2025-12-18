@@ -8,224 +8,449 @@ breadcrumbs: false
 ---
 
 <style>
-:root {
-  --bg: #0a0e27;
-  --surface: #131829;
-  --surface-hover: #1a1f3a;
-  --border: rgba(99, 102, 241, 0.12);
-  --border-hover: rgba(99, 102, 241, 0.3);
-  
-  --text: #e2e8f0;
-  --text-dim: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #6366f1;
-  --accent-bright: #818cf8;
-  --accent-glow: rgba(99, 102, 241, 0.15);
-  
+/* ===========================
+   APREQS1 — Matching Part 2
+   Same visual style as apreqs2
+=========================== */
+
+:root{
+  --bg0:#060814;
+  --bg1:#070a18;
+
+  --panel:rgba(255,255,255,.06);
+  --panel2:rgba(255,255,255,.08);
+  --stroke:rgba(148,163,184,.16);
+  --stroke2:rgba(129,140,248,.28);
+
+  --text:#e5e7eb;
+  --muted:#a3adc2;
+  --dim:#7b86a0;
+
+  --accent:#7c3aed;
+  --accent2:#22d3ee;
   --success: #10b981;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  
-  --radius: 12px;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+
+  --r:18px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --shadow2: 0 18px 60px rgba(0,0,0,.55);
+
+  --max: 1180px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 700px at 15% -10%, rgba(124,58,237,.28), transparent 55%),
+    radial-gradient(900px 600px at 85% 10%, rgba(34,211,238,.22), transparent 55%),
+    radial-gradient(900px 700px at 50% 110%, rgba(124,58,237,.18), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  line-height:1.65;
 }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-  font-size: 16px;
+main{
+  max-width:var(--max);
+  margin:0 auto;
+  padding: clamp(22px, 3vw, 42px) clamp(16px, 3vw, 26px) 64px;
+  position:relative;
 }
 
-main {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
+/* subtle grid */
+main::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(148,163,184,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148,163,184,.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 15%, rgba(0,0,0,.9), rgba(0,0,0,.2) 55%, transparent 75%);
+  opacity:.35;
+  z-index:0;
 }
 
-/* Typography */
-h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--text) 0%, var(--accent-bright) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+main > *{ position:relative; z-index:1; }
+
+/* ===== Header ===== */
+header{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding: 26px 24px;
+  border:1px solid var(--stroke);
+  border-radius: calc(var(--r) + 6px);
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035));
+  box-shadow: var(--shadow);
+  overflow:hidden;
 }
 
-h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 700;
-  margin: 3rem 0 1.5rem;
-  color: var(--text);
-  letter-spacing: -0.02em;
+header::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(520px 200px at 15% 0%, rgba(124,58,237,.25), transparent 60%),
+    radial-gradient(520px 200px at 85% 0%, rgba(34,211,238,.22), transparent 60%);
+  pointer-events:none;
+  opacity:.9;
 }
 
-h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 1.5rem 0 0.75rem;
-  color: var(--accent-bright);
+h1{
+  margin:0;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height:1.08;
+  letter-spacing:-0.03em;
+  font-weight:900;
+  background: linear-gradient(90deg, #fff, rgba(255,255,255,.78), rgba(34,211,238,.9));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
 
-p {
-  margin-bottom: 1rem;
-  color: var(--text-dim);
-  max-width: 75ch;
-}
-
-/* Header Section */
-header {
-  margin-bottom: 3rem;
-}
-
-header p {
-  font-size: 1.125rem;
-  color: var(--text-muted);
+header p{
+  margin:0;
   max-width: 80ch;
+  color:var(--muted);
+  font-size: 1.05rem;
 }
 
-/* Navigation */
-nav {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin: 2rem 0;
+/* ===== Tags ===== */
+ul.tags{
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:0;
+  margin: 8px 0 0;
+}
+
+ul.tags li{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border:1px solid var(--stroke);
+  background: rgba(255,255,255,.04);
+  color: rgba(229,231,235,.92);
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-size:.72rem;
+}
+
+ul.tags li::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 0 3px rgba(124,58,237,.12);
+}
+
+/* ===== Sticky nav ===== */
+nav{
+  margin: 18px 0 24px;
+  position: sticky;
+  top: 12px;
+  z-index: 10;
+  border:1px solid var(--stroke);
+  border-radius: calc(var(--r) + 6px);
+  background: rgba(10,12,28,.72);
+  backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
+nav ul{
+  list-style:none;
+  margin:0;
+  padding: 12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
 }
 
-nav ul li:first-child {
-  font-weight: 600;
-  color: var(--text);
-  margin-right: 0.5rem;
+nav ul li:first-child{
+  font-weight:900;
+  color:rgba(229,231,235,.92);
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(148,163,184,.14);
 }
 
-nav a {
-  display: inline-block;
-  padding: 0.5rem 1.25rem;
-  background: var(--surface-hover);
-  border: 1px solid var(--border);
+nav a{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding: 9px 12px;
   border-radius: 999px;
-  color: var(--text-dim);
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  text-decoration:none;
+  color: var(--muted);
+  border:1px solid rgba(148,163,184,.14);
+  background: rgba(255,255,255,.03);
+  transition: transform .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
 }
 
-nav a:hover {
-  background: var(--accent-glow);
-  border-color: var(--accent);
-  color: var(--accent-bright);
+nav a::before{
+  content:"↳";
+  color: rgba(34,211,238,.95);
+  font-weight:900;
+}
+
+nav a:hover{
   transform: translateY(-1px);
+  border-color: var(--stroke2);
+  background: rgba(124,58,237,.10);
+  color: rgba(255,255,255,.92);
 }
 
-/* Tags */
-ul.tags {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 1.5rem 0;
+nav a:focus{
+  outline:2px solid rgba(34,211,238,.75);
+  outline-offset:2px;
 }
 
-ul.tags li {
-  padding: 0.4rem 1rem;
-  background: var(--accent-glow);
-  border: 1px solid var(--border-hover);
+/* ===== Sections ===== */
+section{
+  border:1px solid var(--stroke);
+  border-radius: calc(var(--r) + 6px);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+  box-shadow: var(--shadow);
+  padding: 22px;
+  margin: 20px 0;
+  position:relative;
+  overflow:hidden;
+}
+
+section::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  pointer-events:none;
+  background: radial-gradient(650px 240px at 20% 0%, rgba(124,58,237,.16), transparent 60%);
+  opacity:.9;
+}
+
+section:hover{
+  box-shadow: var(--shadow2);
+  border-color: rgba(129,140,248,.28);
+}
+
+section[id]{ scroll-margin-top: 84px; }
+
+h2{
+  margin: 0 0 10px;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  letter-spacing:-0.02em;
+  font-weight:900;
+}
+
+p{
+  margin: 0 0 10px;
+  color: var(--muted);
+  max-width: 78ch;
+}
+
+h3{
+  margin: 12px 0 8px;
+  font-size: 1.05rem;
+  letter-spacing:-0.01em;
+  font-weight:900;
+  color: rgba(255,255,255,.92);
+}
+
+/* ===== Grid ===== */
+section.grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+  padding: 14px;
+}
+
+section.grid article{ grid-column: span 6; }
+
+@media (max-width: 980px){
+  section.grid{ grid-template-columns: 1fr; }
+  section.grid article{ grid-column: auto; }
+}
+
+/* ===== Cards ===== */
+article{
+  border:1px solid rgba(148,163,184,.14);
+  border-radius: var(--r);
+  background:
+    radial-gradient(520px 200px at 20% 0%, rgba(34,211,238,.08), transparent 60%),
+    rgba(255,255,255,.03);
+  padding: 16px 16px 14px;
+  min-width:0;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  overflow:hidden;
+  position:relative;
+}
+
+article::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(135deg, rgba(124,58,237,.06), transparent 40%, rgba(34,211,238,.06));
+  opacity:.9;
+}
+
+article:hover{
+  transform: translateY(-2px);
+  border-color: rgba(129,140,248,.28);
+  background:
+    radial-gradient(520px 200px at 20% 0%, rgba(34,211,238,.12), transparent 60%),
+    rgba(255,255,255,.04);
+}
+
+small{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 6px 10px;
   border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent-bright);
+  border:1px solid rgba(148,163,184,.14);
+  background: rgba(255,255,255,.03);
+  color: var(--dim);
+  font-weight:900;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom: 10px;
 }
 
-/* Sections */
-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.5rem;
-  margin: 2rem 0;
-  box-shadow: var(--shadow-lg);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+small::before{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
 }
 
-section:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+/* ===== Inline code ===== */
+p code, li code, article code{
+  display:inline;
+  padding: .18rem .45rem;
+  border-radius: 8px;
+  border:1px solid rgba(129,140,248,.20);
+  background: rgba(124,58,237,.10);
+  color: rgba(224,231,255,.95);
+  white-space: nowrap;
 }
 
-/* Grid Layout */
-section.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem;
+/* ===== Code blocks — FULLY EXPANDED + WRAPS LINES ===== */
+pre{
+  margin: 12px 0 0;
+  border-radius: 14px;
+  border:1px solid rgba(148,163,184,.18);
+  background: #050712;
+  box-shadow: 0 10px 20px rgba(0,0,0,.35);
+
+  /* key fixes */
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  overflow-x: hidden !important;
 }
 
-@media (max-width: 1200px) {
-  section.grid {
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  }
+pre::before{
+  content: attr(data-lang);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(148,163,184,.14);
+  color: rgba(229,231,235,.75);
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-size: .7rem;
+  background: rgba(255,255,255,.02);
 }
 
-@media (max-width: 900px) {
-  section.grid {
-    grid-template-columns: 1fr;
-  }
+/* faux window dots */
+pre::after{
+  content:"";
+  position:absolute;
+  width: 54px;
+  height: 10px;
+  right: 12px;
+  top: 12px;
+  background:
+    radial-gradient(circle, rgba(239,68,68,.9) 3px, transparent 4px) 0 0/18px 10px,
+    radial-gradient(circle, rgba(245,158,11,.9) 3px, transparent 4px) 18px 0/18px 10px,
+    radial-gradient(circle, rgba(34,197,94,.9) 3px, transparent 4px) 36px 0/18px 10px;
+  pointer-events:none;
+  opacity:.9;
 }
 
-/* Articles (Cards) */
-article {
-  background: var(--surface-hover);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem;
-  transition: all 0.2s ease;
-  min-width: 0;
-  overflow: hidden;
+pre{ position:relative; }
+
+pre code{
+  display:block;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .86rem;
+  line-height: 1.55;
+  color: rgba(229,231,235,.92);
+
+  /* no sideways scroll, wrap long lines */
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
 
-article:hover {
-  border-color: var(--border-hover);
-  background: linear-gradient(135deg, var(--surface-hover) 0%, rgba(99, 102, 241, 0.05) 100%);
-  transform: translateY(-2px);
+/* ===== Callouts ===== */
+blockquote{
+  margin: 20px 0;
+  padding: 18px 18px 16px;
+  border-radius: calc(var(--r) + 6px);
+  border: 1px solid rgba(129,140,248,.22);
+  background:
+    radial-gradient(700px 220px at 15% 0%, rgba(124,58,237,.18), transparent 60%),
+    radial-gradient(700px 220px at 85% 0%, rgba(34,211,238,.14), transparent 60%),
+    rgba(255,255,255,.03);
+  box-shadow: var(--shadow);
 }
 
-article h3 {
-  margin-top: 0;
-  font-size: 1.15rem;
-  word-wrap: break-word;
+blockquote strong{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-weight:900;
+  color: rgba(255,255,255,.92);
 }
 
-article p {
-  font-size: 0.95rem;
-  line-height: 1.7;
-  word-wrap: break-word;
+blockquote strong::before{
+  content:"★";
+  color: rgba(34,211,238,.95);
 }
 
-/* Lists */
+blockquote p{
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+blockquote a{
+  color: rgba(34,211,238,.95);
+  text-decoration:none;
+  border-bottom: 1px solid rgba(34,211,238,.45);
+}
+
+blockquote a:hover{
+  color:#fff;
+  border-bottom-color:#fff;
+}
+
+/* ===== Lists ===== */
 ul:not(.tags):not(nav ul) {
   list-style: none;
   padding-left: 0;
@@ -236,142 +461,69 @@ ul:not(.tags):not(nav ul) li {
   padding-left: 1.5rem;
   margin: 0.5rem 0;
   position: relative;
-  color: var(--text-dim);
+  color: var(--muted);
 }
 
 ul:not(.tags):not(nav ul) li::before {
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--accent);
+  color: var(--accent2);
   font-weight: bold;
 }
 
-/* Code Blocks */
-pre {
-  background: #0d1117;
-  border: 1px solid var(--border-hover);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  overflow-x: auto;
-  box-shadow: var(--shadow);
-  max-width: 100%;
+ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+  color: var(--muted);
 }
 
-code {
-  font-family: 'Fira Code', 'Courier New', monospace;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #e2e8f0;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-p code, li code, article code {
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid var(--border-hover);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.85em;
-  color: var(--accent-bright);
-}
-
-/* Code Labels */
-pre::before {
-  content: attr(data-lang);
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Callouts */
-blockquote {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
-  border-left: 4px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 1.5rem 2rem;
-  margin: 2rem 0;
-  box-shadow: var(--shadow);
-}
-
-blockquote strong {
-  color: var(--accent-bright);
-  font-weight: 600;
-}
-
-blockquote p {
+ol li {
   margin: 0.5rem 0;
 }
 
-blockquote a {
-  color: var(--accent-bright);
-  text-decoration: none;
-  border-bottom: 1px solid var(--accent);
-  transition: all 0.2s ease;
+/* ===== Tables ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
 }
 
-blockquote a:hover {
-  color: var(--text);
-  border-bottom-color: var(--text);
+table thead tr {
+  border-bottom: 2px solid var(--stroke2);
 }
 
-/* Meta Labels */
-small {
+table th {
+  text-align: left;
+  padding: 0.5rem;
+  color: rgba(34,211,238,.95);
+  font-weight: 900;
+}
+
+table tbody tr {
+  border-bottom: 1px solid var(--stroke);
+}
+
+table td {
+  padding: 0.5rem;
+  color: var(--muted);
+}
+
+/* ===== Images ===== */
+img {
+  max-width: 100%;
+  height: auto;
   display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--warning);
-  margin-bottom: 0.5rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  main {
-    padding: 2rem 1rem;
-  }
-  
-  section {
-    padding: 1.5rem;
-  }
-  
-  section.grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  article {
-    padding: 1.5rem;
-  }
-  
-  nav ul {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  nav a {
-    display: block;
-    text-align: center;
-  }
-}
-
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Focus States */
-a:focus, button:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* ===== Mobile polish ===== */
+@media (max-width: 640px){
+  header{ padding: 20px 16px; }
+  nav ul{ padding: 10px; }
+  section{ padding: 18px; }
+  section.grid{ padding: 12px; }
+  article{ padding: 14px; }
+  pre code{ font-size: .83rem; }
 }
 </style>
 
@@ -388,7 +540,7 @@ a:focus, button:focus {
 
   <nav>
     <ul>
-      <li>Quick Links:</li>
+      <li>Quick Links</li>
       <li><a href="#dual-db">Dual DB</a></li>
       <li><a href="#hardware-havoc">Hardware Havoc</a></li>
     </ul>
@@ -425,7 +577,7 @@ quest_user = check_quest_user(username, password)</code></pre>
       <small>Database Schema</small>
       <h3>Collection Architecture</h3>
       <p>The dual-database system integrates with a comprehensive relational database structure:</p>
-      <img src="{{ site.baseurl }}/images/DBflow.png" alt="Database Schema Diagram" style="width: 100%; max-width: 800px; margin: 1.5rem auto; display: block; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow);">
+      <img src="{{ site.baseurl }}/images/DBflow.png" alt="Database Schema Diagram" style="max-width: 800px; margin: 1.5rem auto; border-radius: var(--r); border: 1px solid var(--stroke); box-shadow: var(--shadow);">
       <p><strong>Core Authentication Tables:</strong></p>
       <ul>
         <li><strong>users</strong> - Main user authentication table storing credentials and profile information</li>
@@ -622,54 +774,54 @@ return render_template("login.html", error=error, next=next_page)</code></pre>
     <article>
       <small>Summary</small>
       <h3>All Requirements Met</h3>
-      <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+      <table>
         <thead>
-          <tr style="border-bottom: 2px solid var(--border-hover);">
-            <th style="text-align: left; padding: 0.5rem; color: var(--accent-bright);">Requirement</th>
-            <th style="text-align: left; padding: 0.5rem; color: var(--accent-bright);">Implementation</th>
-            <th style="text-align: center; padding: 0.5rem; color: var(--accent-bright);">✓</th>
+          <tr>
+            <th>Requirement</th>
+            <th>Implementation</th>
+            <th style="text-align: center;">✓</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Input from user</td>
-            <td style="padding: 0.5rem;">Form data (username, password)</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">List/collection</td>
-            <td style="padding: 0.5rem;">Database tables (User, QuestUser)</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Procedure with parameters</td>
-            <td style="padding: 0.5rem;">check_quest_user(), sync_quest_user_to_main()</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Sequencing</td>
-            <td style="padding: 0.5rem;">Steps execute in order</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Selection</td>
-            <td style="padding: 0.5rem;">Multiple if/else branches</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Iteration</td>
-            <td style="padding: 0.5rem;">Database queries loop through records</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
-          </tr>
-          <tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 0.5rem;">Procedure calls</td>
-            <td style="padding: 0.5rem;">Both procedures called in login flow</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+          <tr>
+            <td>Input from user</td>
+            <td>Form data (username, password)</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
           </tr>
           <tr>
-            <td style="padding: 0.5rem;">Output based on input</td>
-            <td style="padding: 0.5rem;">Error messages and redirects</td>
-            <td style="text-align: center; padding: 0.5rem; color: var(--success);">✅</td>
+            <td>List/collection</td>
+            <td>Database tables (User, QuestUser)</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Procedure with parameters</td>
+            <td>check_quest_user(), sync_quest_user_to_main()</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Sequencing</td>
+            <td>Steps execute in order</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Selection</td>
+            <td>Multiple if/else branches</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Iteration</td>
+            <td>Database queries loop through records</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Procedure calls</td>
+            <td>Both procedures called in login flow</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
+          </tr>
+          <tr>
+            <td>Output based on input</td>
+            <td>Error messages and redirects</td>
+            <td style="text-align: center; color: var(--success);">✅</td>
           </tr>
         </tbody>
       </table>

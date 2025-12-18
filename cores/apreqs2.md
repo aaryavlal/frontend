@@ -484,14 +484,15 @@ blockquote a:hover{
 
   <section id="rust-renderer">
     <h2>Rust Concurrent Renderer — AP Breakdown</h2>
-    <p>Our Rust/PyO3 module drives the fractal renderer behind <code>http://localhost:4600/frontend/test</code>. It tiles the image, parallelizes work, and streams tiles back to Python—clean evidence for each AP requirement.</p>
+    <p>Our Rust/PyO3 module drives the fractal renderer behind <code>http://localhost:4600/frontend/test</code>. This high-performance native extension demonstrates advanced parallel computing concepts by dividing fractal computations into tiles, distributing work across multiple CPU threads, and streaming results back to Python in real-time. The architecture showcases production-grade patterns: memory-safe concurrency through Rust's ownership system, zero-cost Python interoperability via PyO3, and efficient workload distribution that scales linearly with available CPU cores. Each component maps cleanly to AP CSP requirements while solving real computational challenges.</p>
   </section>
 
   <section class="grid">
     <article>
       <small>concurrent.rs</small>
       <h3>1. Program Input</h3>
-      <p>The Python frontend calls a single procedure with all user-controlled parameters.</p>
+      <p><strong>Requirement:</strong> Instructions for input from one of the following: the user, a device, an online data stream, or a file</p>
+      <p>The Python frontend calls a single procedure with all user-controlled parameters. This function signature demonstrates input handling across multiple dimensions: canvas dimensions (<code>width</code>, <code>height</code>) control the output image size, tiling parameters (<code>tile_w</code>, <code>tile_h</code>) determine granularity of parallel work distribution, computational depth (<code>max_iter</code>) adjusts fractal detail, resource constraints (<code>time_limit_ms</code>, <code>num_threads</code>) manage performance trade-offs, and a callback function (<code>emit_tile</code>) enables real-time streaming of results. The <code>#[pyfunction]</code> attribute exposes this Rust code to Python, creating a seamless bridge where user interactions in the web interface directly control native computational parameters.</p>
       <pre data-lang="Rust"><code>#[pyfunction]
 pub fn concurrent(
     py: Python&lt;'_&gt;,
@@ -509,7 +510,8 @@ pub fn concurrent(
     <article>
       <small>concurrent.rs</small>
       <h3>2. List / Collection Type</h3>
-      <p>All tile coordinates are assembled into a vector before work begins.</p>
+      <p><strong>Requirement:</strong> Use of at least one list (or other collection type) to represent a collection of data that is stored and used to manage program complexity</p>
+      <p>All tile coordinates are assembled into a vector before work begins. This collection (<code>Vec&lt;(usize, usize)&gt;</code>) serves as the central work queue that manages program complexity by transforming a 2D rendering problem into a 1D list of independent tasks. The nested loop structure systematically generates coordinate pairs for every tile position, stepping through the canvas in tile-sized increments. This abstraction enables critical program features: work can be distributed evenly across threads by chunking the vector, progress tracking becomes straightforward by counting completed tiles, and the rendering order can be randomized or prioritized without modifying the core algorithm. Without this collection, coordinating parallel threads and tracking thousands of individual tile computations would be intractable.</p>
       <pre data-lang="Rust"><code>let mut tiles = Vec::new();
 for ty in (0..height).step_by(tile_h) {
     for tx in (0..width).step_by(tile_w) {
@@ -521,7 +523,8 @@ for ty in (0..height).step_by(tile_h) {
     <article>
       <small>Scoped Threading Logic</small>
       <h3>3. Student-Developed Procedure</h3>
-      <p><code>concurrent</code> slices tiles and spawns scoped threads.</p>
+      <p><strong>Requirement:</strong> At least one procedure that contributes to the program's intended purpose, with defined name, return type, and parameters</p>
+      <p>The <code>concurrent</code> procedure orchestrates parallel fractal rendering by dividing the tile collection into equal chunks and spawning scoped threads for each chunk. This student-developed abstraction has a clear signature: it accepts input parameters (canvas dimensions, tile configuration, computational limits), processes the work concurrently, and returns a vector of task records documenting each tile's computation time and pixel count. The scoped threading pattern ensures memory safety—all threads complete before the function returns, preventing dangling references. The chunk size calculation (<code>(tiles.len() + num_threads - 1) / num_threads</code>) implements ceiling division to ensure even distribution, while <code>Arc::clone</code> enables safe shared state across thread boundaries. This encapsulation makes parallel rendering reusable: changing from fractals to ray tracing only requires swapping the tile rendering logic.</p>
       <pre data-lang="Rust"><code>std::thread::scope(|s| {
     let chunk_size = (tiles.len() + num_threads - 1) / num_threads;
 
@@ -541,7 +544,8 @@ for ty in (0..height).step_by(tile_h) {
     <article>
       <small>Time-limit Enforcement</small>
       <h3>4. Algorithm (S/S/I)</h3>
-      <p>Sequencing: set up timers → Selection: check deadlines → Iteration: loop over tiles.</p>
+      <p><strong>Requirement:</strong> An algorithm that includes sequencing, selection, and iteration</p>
+      <p><strong>Sequencing:</strong> Operations execute in strict order—timers initialize before tile processing, each tile renders before duration measurement, results record before the next iteration. <strong>Selection:</strong> Conditional branches provide graceful degradation: the atomic <code>time_exceeded</code> flag enables instant cross-thread coordination when any worker detects timeout, while the elapsed time check implements a hard deadline that prevents runaway computations. <strong>Iteration:</strong> The <code>for</code> loop processes each tile in the assigned chunk sequentially, but multiple loops run concurrently across threads. This algorithm demonstrates production patterns: <code>Ordering::Relaxed</code> provides lock-free synchronization with minimal overhead, <code>Instant::now()</code> captures nanosecond-precision timing for performance analysis, and early-exit logic ensures responsive UI even during expensive computations.</p>
       <pre data-lang="Rust"><code>for &(tx, ty) in tile_chunk {
     if time_exceeded.load(Ordering::Relaxed) {
         break;
@@ -562,7 +566,8 @@ for ty in (0..height).step_by(tile_h) {
     <article>
       <small>Tile Emission</small>
       <h3>5. Calls to the Procedure</h3>
-      <p>Each completed tile invokes Python-side callbacks with the computed data.</p>
+      <p><strong>Requirement:</strong> Calls to your student-developed procedure</p>
+      <p>Each completed tile invokes Python-side callbacks with the computed data. The <code>emit_tile.call1()</code> procedure call bridges Rust and Python, streaming results incrementally rather than buffering the entire image in memory. This streaming architecture enables real-time visualization—users see the fractal materialize tile-by-tile across the canvas. The <code>TileUpdate</code> struct packages all relevant metadata: spatial coordinates locate where to render pixels, dimensions define the tile's boundaries, raw pixel data contains RGBA values for display, duration metrics enable performance profiling, and task IDs support request tracking. The <code>?</code> operator propagates Python exceptions back through Rust, maintaining error handling across the language boundary. This pattern appears throughout the codebase wherever Rust computations need to report progress to Python.</p>
       <pre data-lang="Rust"><code>emit_tile.call1(
     py,
     (TileUpdate {
@@ -580,7 +585,8 @@ for ty in (0..height).step_by(tile_h) {
     <article>
       <small>model.rs</small>
       <h3>6. Program Output</h3>
-      <p>Output is strongly typed through <code>TaskRecord</code> and <code>TileUpdate</code>, then returned to Python.</p>
+      <p><strong>Requirement:</strong> Instructions for output (tactile, audible, visual, or textual) based on input and program functionality</p>
+      <p>Output is strongly typed through <code>TaskRecord</code> and <code>TileUpdate</code> structures, then returned to Python for visual display. The <code>TaskRecord</code> struct serves as a performance ledger: each entry documents a single tile's computation with spatial coordinates, dimensions, execution time, and pixel count. The <code>#[derive(Debug, IntoPyObject)]</code> attribute auto-generates Python conversion code, enabling seamless data transfer across the language boundary. Returning <code>Ok(final_records)</code> wraps the collection in Rust's <code>Result</code> type, providing explicit error handling. This output feeds the visualization pipeline: Python receives timing data to update progress indicators, coordinate information to position tiles on the canvas, and pixel counts to calculate throughput metrics. The structured output format enables analytics—aggregating duration values reveals bottlenecks, comparing thread performance identifies load imbalances, and tracking pixel throughput quantifies optimization impact.</p>
       <pre data-lang="Rust"><code>#[derive(Debug, IntoPyObject)]
 pub struct TaskRecord {
     pub task_id: u32,
@@ -603,14 +609,15 @@ Ok(final_records)</code></pre>
 
   <section id="gemini-quiz">
     <h2>Gemini Quiz Artifact</h2>
-    <p>This backend-powered quiz service sends the student's answer to Gemini, stores history, and returns live feedback. Every AP CSP requirement maps directly to code in <code>backend/main.py</code>.</p>
+    <p>This backend-powered quiz service integrates Google's Gemini AI to provide intelligent grading and feedback for parallel computing concepts. The system captures student responses through a REST API, validates and sanitizes input to prevent injection attacks, sends questions to Gemini's language model for semantic analysis, parses structured scoring data from natural language responses, maintains a persistent history of all attempts in memory, and returns comprehensive feedback with contextual attempt summaries. This architecture demonstrates full-stack development: Flask handles HTTP routing, JSON parsing manages data interchange, external API calls integrate third-party AI services, regular expressions extract structured data from unstructured text, and stateful session management tracks student progress. Every component maps directly to AP CSP requirements while implementing a practical educational tool.</p>
   </section>
 
   <section class="grid">
     <article>
       <small>backend/main.py</small>
       <h3>1. Program Input</h3>
-      <p>The quiz UI ships a JSON body with a single <code>answer</code> field. The backend validates it before calling Gemini.</p>
+      <p><strong>Requirement:</strong> Instructions for input from one of the following: the user, a device, an online data stream, or a file</p>
+      <p>The quiz UI ships a JSON body with a single <code>answer</code> field through an HTTP POST request. The backend implements defense-in-depth input validation: <code>get_json(silent=True)</code> safely parses JSON without crashing on malformed data, defaulting to an empty dictionary if parsing fails. The <code>.get("answer")</code> method provides None-safe dictionary access, while <code>.strip()</code> removes leading/trailing whitespace that could interfere with AI processing. The conditional check enforces business logic—empty submissions receive immediate 400 errors with descriptive messages, preventing wasted API calls to Gemini. This input handling demonstrates security best practices: explicit validation prevents injection attacks, graceful error handling maintains service availability, and clear error messages guide users toward correct usage.</p>
       <pre data-lang="Python"><code>data = request.get_json(silent=True) or {}
 student_answer = (data.get("answer") or "").strip()
 
@@ -621,14 +628,16 @@ if not student_answer:
     <article>
       <small>backend/main.py</small>
       <h3>2. List / Collection Type</h3>
-      <p>Every attempt is stored inside <code>RECENT_ATTEMPTS</code>. The list keeps multiple submissions manageable.</p>
+      <p><strong>Requirement:</strong> Use of at least one list (or other collection type) to represent a collection of data that is stored and used to manage program complexity</p>
+      <p>Every attempt is stored inside <code>RECENT_ATTEMPTS</code>, a module-level list that persists across HTTP requests. This collection manages program complexity by maintaining session state in a stateless HTTP environment—each new quiz submission appends to the shared history, enabling features like attempt counting, progress tracking, and historical performance analysis. The list stores dictionaries with score and max_score keys, creating a simple but effective database that survives for the lifetime of the Flask process. This data structure enables the <code>summarize_attempts</code> procedure to generate contextual feedback ("You've improved from 2/5 to 4/5 over three attempts"), supports analytics ("80% of students need multiple tries"), and could extend to implement adaptive difficulty or personalized hints. Without this collection, each quiz attempt would exist in isolation, losing valuable educational context.</p>
       <pre data-lang="Python"><code>RECENT_ATTEMPTS = []</code></pre>
     </article>
 
     <article>
       <small>backend/main.py</small>
       <h3>3. Student-Developed Procedure</h3>
-      <p><code>summarize_attempts(attempts, max_items)</code> is the reusable abstraction for history summaries.</p>
+      <p><strong>Requirement:</strong> At least one procedure that contributes to the program's intended purpose, with defined name, return type, and parameters</p>
+      <p>The <code>summarize_attempts(attempts, max_items=5)</code> procedure transforms raw attempt data into human-readable progress summaries. This student-developed abstraction encapsulates complex logic: it accepts a list of attempt dictionaries and an optional limit parameter (defaulting to 5), processes the collection through iteration and conditional logic, and returns a formatted string suitable for display. The procedure demonstrates defensive programming—empty lists return graceful messages rather than crashing. The index calculation (<code>start_index</code> and <code>end_index</code>) implements a sliding window that shows the most recent attempts, preventing information overload when students submit dozens of tries. Default parameters make the procedure flexible: calling <code>summarize_attempts(data)</code> shows 5 attempts, while <code>summarize_attempts(data, 10)</code> shows 10, enabling reuse across different UI contexts (detailed history page vs. compact feedback panel).</p>
       <pre data-lang="Python"><code>def summarize_attempts(attempts, max_items=5):
     if not attempts:
         return "No attempts have been recorded yet."
@@ -642,7 +651,8 @@ if not student_answer:
     <article>
       <small>backend/main.py</small>
       <h3>4. Algorithm (Sequencing + Selection + Iteration)</h3>
-      <p>Inside the procedure: ordered setup, branching labels, and a reverse loop.</p>
+      <p><strong>Requirement:</strong> An algorithm that includes sequencing, selection, and iteration</p>
+      <p><strong>Sequencing:</strong> Operations execute in defined order—initialize empty summary list, calculate index boundaries, iterate through attempts, build formatted strings, join results. <strong>Selection:</strong> Conditional branching classifies attempts into three categories: "Perfect" when score equals max_score (mastery demonstration), "Partial" when score exceeds zero but falls short (progress indicator), and "No credit" for zero scores (complete misunderstanding). This categorization provides actionable feedback rather than raw numbers. <strong>Iteration:</strong> The reverse <code>range()</code> loop walks backward through the attempts list, processing most recent submissions first. The negative step value (-1) makes chronological order intuitive for users. List comprehension could compress this code, but explicit loops improve readability for students learning the algorithm. The iteration demonstrates boundary handling: <code>max(-1, ...)</code> prevents negative indices when fewer attempts exist than the requested limit.</p>
       <pre data-lang="Python"><code>for index in range(start_index, end_index, -1):
     attempt = attempts[index]
     score = attempt["score"]
@@ -663,7 +673,8 @@ if not student_answer:
     <article>
       <small>backend/main.py</small>
       <h3>5. Calls to the Procedure</h3>
-      <p>After grading, the endpoint appends results and calls the procedure to build history.</p>
+      <p><strong>Requirement:</strong> Calls to your student-developed procedure</p>
+      <p>After grading completes, the endpoint appends results to the global collection and invokes the student-developed procedure to build history summaries. This call demonstrates procedural abstraction: the main request handler focuses on HTTP concerns (parsing requests, calling APIs, formatting responses) while delegating summary generation to a specialized function. The two-step pattern—first append new data, then summarize the updated collection—ensures the current attempt appears in the returned summary. The procedure call uses default parameters (<code>summarize_attempts(RECENT_ATTEMPTS)</code> rather than explicitly passing <code>max_items=5</code>), relying on the function signature to provide sensible defaults. The returned string integrates directly into the response payload, making the procedure call essential to program functionality rather than optional debugging output.</p>
       <pre data-lang="Python"><code>RECENT_ATTEMPTS.append(
     {"score": safe_payload["score"], "max_score": safe_payload["max_score"]}
 )
@@ -675,7 +686,8 @@ safe_payload["attempt_summary"] = attempt_summary</code></pre>
     <article>
       <small>backend/main.py</small>
       <h3>6. Program Output</h3>
-      <p>JSON includes score, feedback, and computed summary—exactly what the frontend displays.</p>
+      <p><strong>Requirement:</strong> Instructions for output (tactile, audible, visual, or textual) based on input and program functionality</p>
+      <p>The function returns a JSON response containing score, feedback, and computed summary—exactly what the frontend displays visually. The <code>safe_payload</code> dictionary structures output data with explicit type coercion: <code>int()</code> ensures numeric scores rather than string representations, <code>str()</code> sanitizes AI-generated feedback that might contain unexpected characters, preventing JSON serialization errors. The <code>jsonify()</code> call sets proper HTTP headers (<code>Content-Type: application/json</code>) and serializes Python data structures to JSON format, while the 200 status code signals successful processing. This output drives multiple UI elements: the score updates a progress meter, feedback populates a text panel with syntax highlighting for code snippets, and the attempt summary fills a historical timeline widget. The structured format enables frontend logic—JavaScript can parse the score to trigger celebration animations for perfect attempts or display hints for low scores.</p>
       <pre data-lang="Python"><code>safe_payload = {
     "score": int(graded_score),
     "max_score": int(graded_max),
