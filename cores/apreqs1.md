@@ -1,9 +1,9 @@
 ---
 toc: false
 layout: post
-title: "AP Requirements for Everyone"
-description: "Talks about everyone meeting AP Reqs"
-permalink: /cores/apreqs
+title: "AP Requirements for Everyone (Part 1)"
+description: "Dual-DB bridge and Hardware Havoc evidence"
+permalink: /cores/apreqs1
 breadcrumbs: false
 ---
 
@@ -203,8 +203,8 @@ article {
   border-radius: var(--radius);
   padding: 2rem;
   transition: all 0.2s ease;
-  min-width: 0; /* Prevents overflow */
-  overflow: hidden; /* Contains content */
+  min-width: 0;
+  overflow: hidden;
 }
 
 article:hover {
@@ -377,7 +377,7 @@ a:focus, button:focus {
 
 <main>
   <header>
-    <h1>AP Requirements Evidence</h1>
+    <h1>AP Requirements Evidence — Part 1</h1>
     <p>A single page mapping each AP CSP requirement (input, lists, procedure, algorithm, procedure calls, output) to real code from our project artifacts.</p>
     <ul class="tags">
       <li>AP CSP</li>
@@ -391,9 +391,6 @@ a:focus, button:focus {
       <li>Quick Links:</li>
       <li><a href="#dual-db">Dual DB</a></li>
       <li><a href="#hardware-havoc">Hardware Havoc</a></li>
-      <li><a href="#rust-renderer">Rust Renderer</a></li>
-      <li><a href="#gemini-quiz">Gemini Quiz</a></li>
-      <li><a href="#gpu-sim">GPU Simulator</a></li>
     </ul>
   </nav>
 
@@ -608,283 +605,4 @@ document.getElementById('throughput').textContent = throughput;</code></pre>
   <blockquote>
     <strong>Complete flow:</strong> user input → lists (orders, workstations, achievements) → <code>assignTask</code> logic → multi-modal output (visual stats, queue animations, sound, and completion modal).
   </blockquote>
-
-  <section id="rust-renderer">
-    <h2>Rust Concurrent Renderer — AP Breakdown</h2>
-    <p>Our Rust/PyO3 module drives the fractal renderer behind <code>http://localhost:4600/frontend/test</code>. It tiles the image, parallelizes work, and streams tiles back to Python—clean evidence for each AP requirement.</p>
-  </section>
-
-  <section class="grid">
-    <article>
-      <small>concurrent.rs</small>
-      <h3>1. Program Input</h3>
-      <p>The Python frontend calls a single procedure with all user-controlled parameters.</p>
-      <pre data-lang="Rust"><code>#[pyfunction]
-pub fn concurrent(
-    py: Python<'_>,
-    width: usize,
-    height: usize,
-    tile_w: usize,
-    tile_h: usize,
-    max_iter: u16,
-    emit_tile: PyObject,
-    time_limit_ms: u64,
-    num_threads: usize,
-) -> PyResult<Vec<TaskRecord>> { ... }</code></pre>
-    </article>
-
-    <article>
-      <small>concurrent.rs</small>
-      <h3>2. List / Collection Type</h3>
-      <p>All tile coordinates are assembled into a vector before work begins.</p>
-      <pre data-lang="Rust"><code>let mut tiles = Vec::new();
-for ty in (0..height).step_by(tile_h) {
-    for tx in (0..width).step_by(tile_w) {
-        tiles.push((tx, ty));
-    }
-}</code></pre>
-    </article>
-
-    <article>
-      <small>Scoped Threading Logic</small>
-      <h3>3. Student-Developed Procedure</h3>
-      <p><code>concurrent</code> slices tiles and spawns scoped threads.</p>
-      <pre data-lang="Rust"><code>std::thread::scope(|s| {
-    let chunk_size = (tiles.len() + num_threads - 1) / num_threads;
-
-    for (worker_id, tile_chunk) in tiles.chunks(chunk_size).enumerate() {
-        let time_exceeded = Arc::clone(&time_exceeded);
-        let records = Arc::clone(&records);
-
-        s.spawn(move || {
-            for &(tx, ty) in tile_chunk {
-                // per-tile work...
-            }
-        });
-    }
-});</code></pre>
-    </article>
-
-    <article>
-      <small>Time-limit Enforcement</small>
-      <h3>4. Algorithm (S/S/I)</h3>
-      <p>Sequencing: set up timers → Selection: check deadlines → Iteration: loop over tiles.</p>
-      <pre data-lang="Rust"><code>for &(tx, ty) in tile_chunk {
-    if time_exceeded.load(Ordering::Relaxed) {
-        break;
-    }
-
-    if overall_start.elapsed() > time_limit {
-        time_exceeded.store(true, Ordering::Relaxed);
-        break;
-    }
-
-    let start = Instant::now();
-    let data = render_tile(width, height, tx, ty, tile_w, tile_h, max_iter);
-    let duration_ms = start.elapsed().as_millis();
-    // record result...
-}</code></pre>
-    </article>
-
-    <article>
-      <small>Tile Emission</small>
-      <h3>5. Calls to the Procedure</h3>
-      <p>Each completed tile invokes Python-side callbacks with the computed data.</p>
-      <pre data-lang="Rust"><code>emit_tile.call1(
-    py,
-    (TileUpdate {
-        task_id: record.task_id,
-        tile_x: tx as u32,
-        tile_y: ty as u32,
-        tile_w: tile_w as u32,
-        tile_h: tile_h as u32,
-        data,
-        duration_ms,
-    },),
-)?;</code></pre>
-    </article>
-
-    <article>
-      <small>model.rs</small>
-      <h3>6. Program Output</h3>
-      <p>Output is strongly typed through <code>TaskRecord</code> and <code>TileUpdate</code>, then returned to Python.</p>
-      <pre data-lang="Rust"><code>#[derive(Debug, IntoPyObject)]
-pub struct TaskRecord {
-    pub task_id: u32,
-    pub tile_x: u32,
-    pub tile_y: u32,
-    pub tile_w: u32,
-    pub tile_h: u32,
-    pub duration_ms: u128,
-    pub pixels_computed: u32,
-}
-
-Ok(final_records)</code></pre>
-    </article>
-  </section>
-
-  <blockquote>
-    <strong>Next ideas:</strong> stream static Rust files from the backend and add a Monte Carlo π demo for heavier compute.
-    <p>Bonus read: <a href="https://mataiodoxion.github.io/mataiodoxion_2026/cracking-morts-server/" target="_blank" rel="noopener">"Cracking Mr. Mort's Flask Server For Fun and No Profit"</a></p>
-  </blockquote>
-
-  <section id="gemini-quiz">
-    <h2>Gemini Quiz Artifact</h2>
-    <p>This backend-powered quiz service sends the student's answer to Gemini, stores history, and returns live feedback. Every AP CSP requirement maps directly to code in <code>backend/main.py</code>.</p>
-  </section>
-
-  <section class="grid">
-    <article>
-      <small>backend/main.py</small>
-      <h3>1. Program Input</h3>
-      <p>The quiz UI ships a JSON body with a single <code>answer</code> field. The backend validates it before calling Gemini.</p>
-      <pre data-lang="Python"><code>data = request.get_json(silent=True) or {}
-student_answer = (data.get("answer") or "").strip()
-
-if not student_answer:
-    return jsonify({"error": "Field 'answer' is required."}), 400</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>2. List / Collection Type</h3>
-      <p>Every attempt is stored inside <code>RECENT_ATTEMPTS</code>. The list keeps multiple submissions manageable.</p>
-      <pre data-lang="Python"><code>RECENT_ATTEMPTS = []</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>3. Student-Developed Procedure</h3>
-      <p><code>summarize_attempts(attempts, max_items)</code> is the reusable abstraction for history summaries.</p>
-      <pre data-lang="Python"><code>def summarize_attempts(attempts, max_items=5):
-    if not attempts:
-        return "No attempts have been recorded yet."
-
-    summary_lines = []
-    start_index = len(attempts) - 1
-    end_index = max(-1, len(attempts) - 1 - max_items)
-    ...</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>4. Algorithm (Sequencing + Selection + Iteration)</h3>
-      <p>Inside the procedure: ordered setup, branching labels, and a reverse loop.</p>
-      <pre data-lang="Python"><code>for index in range(start_index, end_index, -1):
-    attempt = attempts[index]
-    score = attempt["score"]
-    max_score = attempt["max_score"]
-
-    if score == max_score:
-        label = "Perfect"
-    elif score > 0:
-        label = "Partial"
-    else:
-        label = "No credit"
-
-    summary_lines.append(
-        f"Attempt {index + 1}: {label} ({score}/{max_score})"
-    )</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>5. Calls to the Procedure</h3>
-      <p>After grading, the endpoint appends results and calls the procedure to build history.</p>
-      <pre data-lang="Python"><code>RECENT_ATTEMPTS.append(
-    {"score": safe_payload["score"], "max_score": safe_payload["max_score"]}
-)
-
-attempt_summary = summarize_attempts(RECENT_ATTEMPTS)
-safe_payload["attempt_summary"] = attempt_summary</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>6. Program Output</h3>
-      <p>JSON includes score, feedback, and computed summary—exactly what the frontend displays.</p>
-      <pre data-lang="Python"><code>safe_payload = {
-    "score": int(graded_score),
-    "max_score": int(graded_max),
-    "feedback": str(graded_feedback),
-    "attempt_summary": attempt_summary,
-}
-return jsonify(safe_payload), 200</code></pre>
-    </article>
-  </section>
-
-  <blockquote>
-    <strong>Hands-on test:</strong> boot the Flask server, open <code>http://localhost:4600/frontend/test</code>, submit a response, and watch the attempt history update in real time.
-  </blockquote>
-    <article>
-      <small>backend/main.py</small>
-      <h3>1. Program Input</h3>
-      <p>The quiz UI ships a JSON body with a single <code>answer</code> field. The backend validates it before calling Gemini.</p>
-      <pre data-lang="Python"><code>data = request.get_json(silent=True) or {}
-student_answer = (data.get("answer") or "").strip()
-
-if not student_answer:
-    return jsonify({"error": "Field 'answer' is required."}), 400</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>2. List / Collection Type</h3>
-      <p>Every attempt is stored inside <code>RECENT_ATTEMPTS</code>. The list keeps multiple submissions manageable.</p>
-      <pre data-lang="Python"><code>RECENT_ATTEMPTS = []</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>3. Student-Developed Procedure</h3>
-      <p><code>summarize_attempts(attempts, max_items)</code> is the reusable abstraction for history summaries.</p>
-      <pre data-lang="Python"><code>def summarize_attempts(attempts, max_items=5):
-    if not attempts:
-        return "No attempts have been recorded yet."
-
-    summary_lines = []
-    start_index = len(attempts) - 1
-    end_index = max(-1, len(attempts) - 1 - max_items)
-    ...</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>4. Algorithm (Sequencing + Selection + Iteration)</h3>
-      <p>Inside the procedure: ordered setup, branching labels, and a reverse loop.</p>
-      <pre data-lang="Python"><code>for index in range(start_index, end_index, -1):
-    attempt = attempts[index]
-    score = attempt["score"]
-    max_score = attempt["max_score"]
-
-    if score == max_score:
-        label = "Perfect"
-    elif score > 0:
-        label = "Partial"
-    else:
-        label = "No credit"
-
-    summary_lines.append(
-        f"Attempt {index + 1}: {label} ({score}/{max_score})"
-    )</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>5. Calls to the Procedure</h3>
-      <p>After grading, the endpoint appends results and calls the procedure to build history.</p>
-      <pre data-lang="Python"><code>RECENT_ATTEMPTS.append(
-    {"score": safe_payload["score"], "max_score": safe_payload["max_score"]}
-)
-
-attempt_summary = summarize_attempts(RECENT_ATTEMPTS)
-safe_payload["attempt_summary"] = attempt_summary</code></pre>
-    </article>
-
-    <article>
-      <small>backend/main.py</small>
-      <h3>6. Program Output</h3>
-      <p>JSON includes score, feedback, and computed summary—exactly what the frontend displays.</p>
-      <pre data-lang="Python"><code>safe_payload = {
-    "score": int(graded_score),
-    "max
+</main>
