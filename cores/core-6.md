@@ -7,6 +7,22 @@ permalink: /cores/core-6
 breadcrumbs: false
 ---
 
+<style>
+  h2, h3 {
+    color: #00ffaa;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0,255,170,0.5);
+  }
+
+  iframe {
+    border: 3px solid #00ffaa !important;
+    border-radius: 2px !important;
+    box-shadow: 0 0 30px rgba(0,255,170,0.3) !important;
+  }
+</style>
+
 ## Module 6 — Case Studies & Projects
 
 ### Computing Infrastructure Builder Game

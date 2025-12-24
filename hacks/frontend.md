@@ -8,41 +8,48 @@ breadcrumbs: true
 
 <style>
   :root{
-    --bg: #0b1220;
-    --paper: #0f1a2e;
-    --surface: #111c33;
-    --surface-2: #0f1a2e;
-    --ink: #e6e9ef;
-    --muted: #b7c0d1;
-    --muted-2: #93a0b8;
-    --border: rgba(230,233,239,0.14);
-    --border-strong: rgba(230,233,239,0.22);
-    --accent: #c9a34a;     /* classic gold */
-    --accent-2: #6ea6d9;   /* subdued blue */
-    --success: #2f8f5b;
-    --warning: #b9832a;
-    --danger: #c44a4a;
+    --bg: #0a0e14;
+    --paper: #12171e;
+    --surface: #1a2028;
+    --surface-2: #141a22;
+    --ink: #e0e6ed;
+    --muted: #8b95a5;
+    --muted-2: #6b7684;
+    --border: rgba(0,255,170,0.15);
+    --border-strong: rgba(0,255,170,0.28);
+    --accent: #00ffaa;     /* electric green */
+    --accent-2: #00d4ff;   /* cyan blue */
+    --accent-3: #ff00aa;   /* magenta */
+    --success: #00ff88;
+    --warning: #ffaa00;
+    --danger: #ff3366;
 
-    --radius: 12px;
-    --radius-sm: 10px;
-    --shadow: 0 10px 30px rgba(0,0,0,0.35);
-    --shadow-sm: 0 6px 18px rgba(0,0,0,0.25);
+    --radius: 2px;
+    --radius-sm: 1px;
+    --shadow: 0 4px 20px rgba(0,255,170,0.15), 0 0 40px rgba(0,255,170,0.08);
+    --shadow-sm: 0 2px 10px rgba(0,255,170,0.12);
+    --glow: 0 0 10px rgba(0,255,170,0.6), 0 0 20px rgba(0,255,170,0.4);
 
-    --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+    --font: 'Courier New', 'Consolas', monospace;
+    --serif: 'Courier New', 'Consolas', monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body{
     font-family: var(--font);
-    background: radial-gradient(1200px 700px at 20% 0%, rgba(110,166,217,0.16), transparent 55%),
-                radial-gradient(900px 600px at 100% 20%, rgba(201,163,74,0.12), transparent 55%),
-                var(--bg);
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+      radial-gradient(circle at 20% 20%, rgba(0,255,170,0.08), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0,212,255,0.06), transparent 50%),
+      var(--bg);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
     color: var(--ink);
     min-height: 100vh;
     padding: 22px;
-    line-height: 1.45;
+    line-height: 1.5;
+    letter-spacing: 0.3px;
   }
 
   .container{
@@ -58,24 +65,286 @@ breadcrumbs: true
     gap: 18px;
     margin-bottom: 26px;
     padding: 22px 24px;
-    background: linear-gradient(180deg, rgba(17,28,51,0.92), rgba(15,26,46,0.92));
-    border: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(26,32,40,0.95), rgba(18,23,30,0.95));
+    border: 2px solid var(--border-strong);
+    border-left: 4px solid var(--accent);
     border-radius: var(--radius);
     box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+
+  .header::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+    opacity: 0.6;
+  }
+
+  .menu-container{
+    position: relative;
+  }
+
+  .menu-btn{
+    padding: 7px 12px;
+    background: rgba(0,255,170,0.08);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .menu-btn:hover{
+    background: rgba(0,255,170,0.15);
+    box-shadow: var(--glow);
+    text-shadow: 0 0 8px var(--accent);
+  }
+
+  .dropdown-menu{
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(18,23,30,0.98);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow), var(--glow);
+    min-width: 160px;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.show{
+    display: block;
+    animation: slideUp 0.2s ease-out;
+  }
+
+  .dropdown-menu.closing{
+    animation: slideDown 0.15s ease-out;
+  }
+
+  .dropdown-item{
+    padding: 12px 16px;
+    color: var(--accent);
+    background: transparent;
+    border: none;
+    border-left: 2px solid transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .dropdown-item:hover{
+    background: rgba(0,255,170,0.10);
+    border-left-color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+  }
+
+  .dropdown-divider{
+    height: 1px;
+    background: var(--accent);
+    margin: 4px 0;
+    opacity: 0.3;
+  }
+
+  /* Tabs */
+  .tabs-container{
+    display: flex;
+    gap: 4px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,255,170,0.2);
+  }
+
+  .tab-btn{
+    padding: 12px 20px;
+    background: rgba(0,255,170,0.03);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    margin-bottom: -2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+  }
+
+  .tab-btn:hover{
+    color: var(--accent);
+    background: rgba(0,255,170,0.08);
+    border-color: var(--accent);
+  }
+
+  .tab-btn.active{
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(0,255,170,0.12);
+    text-shadow: 0 0 8px var(--accent);
+    box-shadow: 0 0 15px rgba(0,255,170,0.3);
+  }
+
+  .tab-btn.active::after{
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .tab-content{
+    display: none;
+  }
+
+  .tab-content.active{
+    display: block;
+  }
+
+  .compact-section{
+    background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    border: 2px solid var(--border-strong);
+    border-left: 4px solid var(--accent);
+    box-shadow: var(--shadow-sm);
+    position: relative;
+  }
+
+  .compact-section::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
+  }
+
+  .section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .section-title{
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0,255,170,0.5);
+  }
+
+  /* Two-column layout for progress tab */
+  .progress-layout{
+    display: flex;
+    gap: 0;
+    position: relative;
+  }
+
+  .progress-main{
+    flex: 1;
+    min-width: 300px;
+    padding-right: 9px;
+  }
+
+  .resize-handle{
+    width: 8px;
+    cursor: col-resize;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--accent) 40%,
+      var(--accent) 60%,
+      transparent 100%);
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    opacity: 0.3;
+  }
+
+  .resize-handle:hover{
+    opacity: 1;
+    box-shadow: 0 0 20px var(--accent);
+  }
+
+  .resize-handle:active{
+    background: var(--accent);
+    opacity: 1;
+    box-shadow: 0 0 30px var(--accent);
+  }
+
+  .progress-sidebar{
+    width: 220px;
+    min-width: 180px;
+    max-width: 500px;
+    padding-left: 9px;
+  }
+
+  @media (max-width: 1024px) {
+    .progress-layout{
+      flex-direction: column;
+    }
+
+    .progress-main{
+      padding-right: 0;
+    }
+
+    .resize-handle{
+      display: none;
+    }
+
+    .progress-sidebar{
+      order: -1;
+      width: 100%;
+      max-width: none;
+      padding-left: 0;
+    }
   }
 
   .header h2{
     font-family: var(--serif);
-    letter-spacing: 0.2px;
-    color: var(--ink);
-    font-size: 2.0rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    font-size: 1.8rem;
     margin-bottom: 6px;
-    font-weight: 650;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(0,255,170,0.6);
   }
 
   .header p{
     color: var(--muted);
-    font-size: 0.98rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   /* Sections */
@@ -129,18 +398,26 @@ breadcrumbs: true
   input, textarea{
     width:100%;
     padding: 11px 12px;
-    background: rgba(11,18,32,0.65);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    color: var(--ink);
-    font-size: 0.98rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    background: rgba(10,14,20,0.80);
+    border: 2px solid var(--border-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-family: var(--font);
+    transition: all 0.2s ease;
   }
 
   input:focus, textarea:focus{
     outline: none;
-    border-color: rgba(201,163,74,0.55);
-    box-shadow: 0 0 0 3px rgba(201,163,74,0.14);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(0,255,170,0.3), inset 0 0 10px rgba(0,255,170,0.05);
+    background: rgba(10,14,20,0.95);
+  }
+
+  input::placeholder, textarea::placeholder{
+    color: var(--muted-2);
+    opacity: 0.6;
   }
 
   textarea{ resize: vertical; }
@@ -157,44 +434,69 @@ breadcrumbs: true
   /* Buttons */
   .btn{
     padding: 10px 16px;
-    background: rgba(201,163,74,0.95);
-    color: #121826;
-    border: 1px solid rgba(201,163,74,0.8);
-    border-radius: 10px;
-    font-size: 0.95rem;
+    background: rgba(0,255,170,0.15);
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.06s ease, box-shadow 0.15s ease, background 0.15s ease;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0,255,170,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .btn:hover{ box-shadow: 0 10px 22px rgba(0,0,0,0.32); }
-  .btn:active{ transform: translateY(1px); }
+  .btn:hover{
+    background: rgba(0,255,170,0.25);
+    box-shadow: var(--glow);
+    text-shadow: 0 0 8px var(--accent);
+  }
+  .btn:active{
+    transform: scale(0.98);
+    box-shadow: 0 0 5px rgba(0,255,170,0.5);
+  }
 
   .btn-secondary{
-    background: rgba(230,233,239,0.10);
-    color: var(--ink);
-    border: 1px solid var(--border-strong);
-    box-shadow: none;
+    background: rgba(0,212,255,0.10);
+    color: var(--accent-2);
+    border: 2px solid var(--accent-2);
+    box-shadow: 0 0 10px rgba(0,212,255,0.2);
   }
 
   .btn-secondary:hover{
-    background: rgba(230,233,239,0.14);
+    background: rgba(0,212,255,0.20);
+    box-shadow: 0 0 10px rgba(0,212,255,0.6), 0 0 20px rgba(0,212,255,0.4);
+    text-shadow: 0 0 8px var(--accent-2);
   }
 
   .btn-warning{
-    background: rgba(185,131,42,0.95);
-    border-color: rgba(185,131,42,0.75);
-    color: #121826;
+    background: rgba(255,170,0,0.15);
+    border-color: var(--warning);
+    color: var(--warning);
+    box-shadow: 0 0 10px rgba(255,170,0,0.3);
+  }
+
+  .btn-warning:hover{
+    background: rgba(255,170,0,0.25);
+    box-shadow: 0 0 10px var(--warning), 0 0 20px rgba(255,170,0,0.4);
+    text-shadow: 0 0 8px var(--warning);
   }
 
   .btn-danger{
-    background: rgba(196,74,74,0.95);
-    border-color: rgba(196,74,74,0.75);
-    color: #121826;
+    background: rgba(255,51,102,0.15);
+    border-color: var(--danger);
+    color: var(--danger);
+    box-shadow: 0 0 10px rgba(255,51,102,0.3);
   }
 
-  .btn-small{ padding: 8px 12px; font-size: 0.9rem; }
+  .btn-danger:hover{
+    background: rgba(255,51,102,0.25);
+    box-shadow: 0 0 10px var(--danger), 0 0 20px rgba(255,51,102,0.4);
+    text-shadow: 0 0 8px var(--danger);
+  }
+
+  .btn-small{ padding: 8px 12px; font-size: 0.8rem; }
 
   /* Utility */
   .hidden{ display:none; }
@@ -230,10 +532,10 @@ breadcrumbs: true
     max-width: 640px;
     margin: 22px auto 0;
     padding: 28px;
-    background: rgba(11,18,32,0.60);
-    border-radius: 16px;
-    border: 1px solid var(--border-strong);
-    box-shadow: var(--shadow);
+    background: linear-gradient(135deg, rgba(18,23,30,0.95), rgba(10,14,20,0.95));
+    border-radius: var(--radius);
+    border: 3px solid var(--accent);
+    box-shadow: var(--shadow), inset 0 0 30px rgba(0,255,170,0.1);
   }
 
   .cpu-label{
@@ -241,10 +543,11 @@ breadcrumbs: true
     top: 12px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 2px;
-    color: var(--muted-2);
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent);
   }
 
   .cpu-visualization{
@@ -263,45 +566,83 @@ breadcrumbs: true
 
   .pin{
     width: 4px; height: 14px;
-    background: rgba(230,233,239,0.18);
-    border-radius: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    box-shadow: 0 0 5px var(--accent);
+    opacity: 0.4;
   }
   .cpu-pins.left .pin, .cpu-pins.right .pin{ width: 14px; height: 4px; }
 
   /* Node tiles */
   .node{
-    background: rgba(17,28,51,0.78);
+    background: rgba(18,23,30,0.85);
     padding: 16px 14px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius);
     text-align:center;
-    border: 1px solid var(--border);
-    transition: border-color 0.15s ease, background 0.15s ease;
+    border: 2px solid var(--border);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .node::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,255,170,0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .node:hover::before{
+    left: 100%;
   }
 
   .node-icon{
     font-size: 1.8rem;
     margin-bottom: 8px;
     color: var(--muted-2);
+    transition: all 0.3s ease;
   }
 
   .node-label{
     font-weight: 800;
-    letter-spacing: 1px;
-    font-size: 0.82rem;
+    letter-spacing: 2px;
+    font-size: 0.7rem;
     color: var(--muted);
+    transition: all 0.3s ease;
   }
 
   .node.active{
-    border-color: rgba(201,163,74,0.55);
-    background: rgba(201,163,74,0.08);
+    border-color: var(--accent);
+    background: rgba(0,255,170,0.12);
+    box-shadow: 0 0 20px rgba(0,255,170,0.4), inset 0 0 20px rgba(0,255,170,0.1);
   }
-  .node.active .node-icon{ color: rgba(201,163,74,0.95); }
-  .node.active .node-label{ color: var(--ink); }
+  .node.active .node-icon{
+    color: var(--accent);
+    text-shadow: 0 0 15px var(--accent);
+  }
+  .node.active .node-label{
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent);
+  }
 
-  /* Fully lit state (subtle) */
+  /* Fully lit state */
   .cpu-container.all-active{
-    border-color: rgba(201,163,74,0.55);
-    box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(0,255,170,0.6), 0 0 80px rgba(0,255,170,0.3);
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 40px rgba(0,255,170,0.6), 0 0 80px rgba(0,255,170,0.3);
+    }
+    50% {
+      box-shadow: 0 0 60px rgba(0,255,170,0.8), 0 0 100px rgba(0,255,170,0.4);
+    }
   }
 
   /* Module buttons */
@@ -314,30 +655,62 @@ breadcrumbs: true
 
   .module-btn{
     padding: 14px 14px;
-    background: rgba(11,18,32,0.55);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
+    background: rgba(18,23,30,0.70);
+    border: 2px solid var(--border-strong);
+    border-left: 3px solid var(--accent-2);
+    border-radius: var(--radius);
     color: var(--ink);
     cursor:pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    transition: all 0.25s ease;
     text-align:left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-btn::after{
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted-2);
+    box-shadow: 0 0 5px var(--muted-2);
+    transition: all 0.3s ease;
   }
 
   .module-btn:hover{
-    background: rgba(230,233,239,0.06);
-    border-color: rgba(201,163,74,0.45);
+    background: rgba(0,212,255,0.08);
+    border-color: var(--accent-2);
+    box-shadow: 0 0 15px rgba(0,212,255,0.3);
+    transform: translateX(3px);
   }
 
   .module-btn .module-icon{
-    font-size: 1.1rem;
-    color: var(--muted-2);
+    font-size: 0.9rem;
+    color: var(--accent-2);
     margin-bottom: 6px;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .module-btn.completed{
-    background: rgba(47,143,91,0.10);
-    border-color: rgba(47,143,91,0.38);
+    background: rgba(0,255,136,0.12);
+    border-color: var(--success);
+    border-left-color: var(--success);
+    box-shadow: 0 0 10px rgba(0,255,136,0.3);
+  }
+
+  .module-btn.completed::after{
+    background: var(--success);
+    box-shadow: 0 0 10px var(--success);
+  }
+
+  .module-btn.completed:hover{
+    box-shadow: 0 0 20px rgba(0,255,136,0.5);
   }
 
   /* Members list */
@@ -391,6 +764,11 @@ breadcrumbs: true
     background: rgba(0,0,0,0.72);
     z-index: 45000;
     overflow-y:auto;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .module-panel.closing{
+    animation: fadeOut 0.2s ease-out;
   }
 
   .module-dialog{
@@ -404,6 +782,11 @@ breadcrumbs: true
     position:relative;
     /* keep dialog constrained to viewport and allow internal scrolling */
     max-height: calc(100vh - 80px);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .module-panel.closing .module-dialog{
+    animation: slideDown 0.2s ease-out;
   }
 
   /* force internal content width */
@@ -429,6 +812,69 @@ breadcrumbs: true
     transform: scale(0.8) translateX(250px);
   }
 
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleOut {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+  }
+
   /* Confirmation modal */
   .confirm-modal{
     display:none;
@@ -442,6 +888,11 @@ breadcrumbs: true
     justify-content:center;
     align-items:center;
     padding: 18px;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .confirm-modal.closing{
+    animation: fadeOut 0.2s ease-out;
   }
 
   .confirm-dialog{
@@ -452,6 +903,11 @@ breadcrumbs: true
     max-width: 520px;
     width: 100%;
     box-shadow: var(--shadow);
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .confirm-modal.closing .confirm-dialog{
+    animation: scaleOut 0.2s ease-out;
   }
 
   .confirm-icon{
@@ -573,7 +1029,14 @@ breadcrumbs: true
     padding: 22px;
   }
 
-  .admin-rooms-modal.show{ display:block; }
+  .admin-rooms-modal.show{
+    display:block;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .admin-rooms-modal.closing{
+    animation: fadeOut 0.2s ease-out;
+  }
 
   .admin-rooms-dialog{
     max-width: 1100px;
@@ -583,6 +1046,11 @@ breadcrumbs: true
     border: 1px solid var(--border-strong);
     padding: 22px;
     box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .admin-rooms-modal.closing .admin-rooms-dialog{
+    animation: slideDown 0.2s ease-out;
   }
 
   .admin-rooms-header{
@@ -673,16 +1141,21 @@ breadcrumbs: true
     position:fixed;
     top: 18px;
     right: 18px;
-    background: rgba(15,26,46,0.98);
-    color: var(--ink);
+    background: rgba(18,23,30,0.98);
+    color: var(--accent);
     padding: 14px 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-strong);
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius);
+    border: 2px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    box-shadow: var(--shadow), var(--glow);
     z-index: 999999;
     pointer-events:none;
     animation: toastIn 0.18s ease-out, toastOut 0.22s ease-out 2.6s forwards;
     max-width: min(420px, calc(100vw - 40px));
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
   }
 
   @keyframes toastIn{
@@ -715,165 +1188,209 @@ breadcrumbs: true
       <p style="margin: 0; color: var(--muted); font-weight: 700;">
         User: <span id="displayUsername"></span>
       </p>
-      <div style="display: flex; gap: 8px; margin-top: 8px;">
-        <button class="btn btn-secondary" onclick="showTutorial()" style="padding: 7px 12px; font-size: 0.9rem;">Tutorial</button>
-        <button class="btn btn-secondary" onclick="logout()" style="padding: 7px 12px; font-size: 0.9rem;">Logout</button>
+      <div class="menu-container" style="margin-top: 8px;">
+        <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+        <div id="dropdownMenu" class="dropdown-menu">
+          <button class="dropdown-item" onclick="showConfigModal(); closeMenu();">
+            <span>🔧</span>
+            <span>Configuration</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" onclick="showTutorial(); closeMenu();">
+            <span>📖</span>
+            <span>Tutorial</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" onclick="logout(); closeMenu();">
+            <span>🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Configuration Section -->
-  <div class="section config-section">
-    <h2>Configuration</h2>
-    <div class="form-group">
-      <label for="apiUrl">Backend API URL</label>
-      <input type="text" id="apiUrl" value="http://localhost:8587" placeholder="http://localhost:8587">
+  <!-- Main Content Area -->
+  <div id="mainContent" style="display: none;">
+    <!-- Tabs Navigation -->
+    <div class="tabs-container">
+      <button class="tab-btn active" onclick="switchTab('room')">Room</button>
+      <button class="tab-btn" onclick="switchTab('progress')">Progress & Modules</button>
+      <button class="tab-btn" onclick="switchTab('glossary')">Glossary</button>
     </div>
-  </div>
 
-  <!-- Room Management Section -->
-  <div class="section" id="roomSection" style="display: none;">
-    <h2>Step 1: Room Management</h2>
-
-    <!-- Admin: Create Room -->
-    <div id="createRoomSection" class="hidden">
-      <h3>Create New Room (Admin Only)</h3>
-      <div class="inline-inputs">
-        <div class="form-group">
-          <label for="roomName">Room Name</label>
-          <input type="text" id="roomName" placeholder="e.g., Computer Science 101">
+    <!-- Tab Content: Room -->
+    <div id="tabRoom" class="tab-content active">
+      <!-- Admin: Create Room -->
+      <div id="createRoomSection" class="compact-section hidden">
+        <div class="section-header">
+          <h3 class="section-title">Create Room (Admin)</h3>
         </div>
-        <button class="btn" onclick="createRoom()">Create Room</button>
-      </div>
-
-      <!-- Admin: Manage Active Rooms -->
-      <div style="margin-top: 18px;">
-        <h3>Manage Active Rooms</h3>
-        <button class="btn" onclick="showActiveRoomsModal()">View and Delete Rooms</button>
-      </div>
-    </div>
-
-    <!-- Join Room -->
-    <div id="joinRoomSection">
-      <h3>Join Room</h3>
-
-      <div class="inline-inputs">
-        <div class="form-group">
-          <label for="roomCode">Room Code</label>
-          <input type="text" id="roomCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="roomName">Room Name</label>
+            <input type="text" id="roomName" placeholder="e.g., Computer Science 101">
+          </div>
+          <button class="btn" onclick="createRoom()">Create Room</button>
         </div>
-        <button class="btn" onclick="joinRoom()">Join Room</button>
+        <div style="margin-top: 14px;">
+          <button class="btn btn-secondary" onclick="showActiveRoomsModal()">Manage All Rooms</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Current Room Info -->
-    <div id="currentRoomInfo" class="hidden">
-      <div class="room-info">
-        <h3>Current Room</h3>
+      <!-- Join Room -->
+      <div id="joinRoomSection" class="compact-section">
+        <div class="section-header">
+          <h3 class="section-title">Join Room</h3>
+        </div>
+        <div class="inline-inputs">
+          <div class="form-group">
+            <label for="roomCode">Room Code</label>
+            <input type="text" id="roomCode" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;">
+          </div>
+          <button class="btn" onclick="joinRoom()">Join Room</button>
+        </div>
+      </div>
+
+      <!-- Current Room Info -->
+      <div id="currentRoomInfo" class="compact-section hidden">
+        <div class="section-header">
+          <h3 class="section-title">Current Room</h3>
+          <button class="btn btn-danger btn-small" onclick="leaveRoom()">Leave Room</button>
+        </div>
         <div class="room-code" id="displayRoomCode">------</div>
-        <p><strong>Room Name:</strong> <span id="displayRoomName"></span></p>
-        <p><strong>Members:</strong> <span id="displayMemberCount"></span></p>
-        <button class="btn btn-danger" onclick="leaveRoom()">Leave Room</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CPU Visualization -->
-  <div class="section" id="cpuSection" style="display: none;">
-    <h2>Step 2: CPU Core Status</h2>
-    <p style="color: var(--muted); margin-bottom: 12px; text-align: center;">
-      Each core activates when all members complete the corresponding module.
-    </p>
-
-    <div class="cpu-container" id="cpuContainer">
-      <div class="cpu-label">PARALLEL PROCESSOR</div>
-
-      <!-- CPU Pins -->
-      <div class="cpu-pins left">
-        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
-      </div>
-      <div class="cpu-pins right">
-        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
-      </div>
-      <div class="cpu-pins top">
-        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
-      </div>
-      <div class="cpu-pins bottom">
-        <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
-      </div>
-
-      <div class="cpu-visualization">
-        <div class="node" id="node1">
-          <div class="node-icon">I</div>
-          <div class="node-label">CORE 1</div>
-        </div>
-        <div class="node" id="node2">
-          <div class="node-icon">II</div>
-          <div class="node-label">CORE 2</div>
-        </div>
-        <div class="node" id="node3">
-          <div class="node-icon">III</div>
-          <div class="node-label">CORE 3</div>
-        </div>
-        <div class="node" id="node4">
-          <div class="node-icon">IV</div>
-          <div class="node-label">CORE 4</div>
-        </div>
-        <div class="node" id="node5">
-          <div class="node-icon">V</div>
-          <div class="node-label">CORE 5</div>
-        </div>
-        <div class="node" id="node6">
-          <div class="node-icon">VI</div>
-          <div class="node-label">CORE 6</div>
-        </div>
+        <p style="margin: 8px 0; color: var(--muted);"><strong>Room Name:</strong> <span id="displayRoomName"></span></p>
+        <p style="margin: 8px 0; color: var(--muted);"><strong>Members:</strong> <span id="displayMemberCount"></span></p>
       </div>
     </div>
 
-    <!-- Reset Button (only shows when CPU is fully lit) -->
-    <div id="resetSection" class="hidden" style="text-align: center; margin-top: 18px;">
-      <button class="btn btn-danger" onclick="resetProgress()">Reset All Progress</button>
-      <p style="color: var(--muted); margin-top: 8px; font-size: 0.92rem;">
-        This clears completed modules for everyone in the room.
-      </p>
+    <!-- Tab Content: Progress & Modules -->
+    <div id="tabProgress" class="tab-content">
+      <div class="progress-layout">
+        <!-- Left Side: Progress Content -->
+        <div class="progress-main">
+          <!-- CPU Visualization -->
+          <div class="compact-section">
+            <div class="section-header">
+              <h3 class="section-title">CPU Core Status</h3>
+              <button id="resetProgressBtn" class="btn btn-danger btn-small hidden" onclick="resetProgressMidGame()">Reset Progress</button>
+            </div>
+            <p style="color: var(--muted); margin-bottom: 12px; text-align: center; font-size: 0.9rem;">
+              Each core activates when all members complete the corresponding module.
+            </p>
+            <div class="cpu-container" id="cpuContainer">
+              <div class="cpu-label">PARALLEL PROCESSOR</div>
+              <div class="cpu-pins left">
+                <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
+              </div>
+              <div class="cpu-pins right">
+                <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
+              </div>
+              <div class="cpu-pins top">
+                <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
+              </div>
+              <div class="cpu-pins bottom">
+                <div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div><div class="pin"></div>
+              </div>
+              <div class="cpu-visualization">
+                <div class="node" id="node1"><div class="node-icon">I</div><div class="node-label">CORE 1</div></div>
+                <div class="node" id="node2"><div class="node-icon">II</div><div class="node-label">CORE 2</div></div>
+                <div class="node" id="node3"><div class="node-icon">III</div><div class="node-label">CORE 3</div></div>
+                <div class="node" id="node4"><div class="node-icon">IV</div><div class="node-label">CORE 4</div></div>
+                <div class="node" id="node5"><div class="node-icon">V</div><div class="node-label">CORE 5</div></div>
+                <div class="node" id="node6"><div class="node-icon">VI</div><div class="node-label">CORE 6</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="compact-section">
+            <div class="section-header">
+              <h3 class="section-title">Room Members Progress</h3>
+              <div id="lastRefresh" style="color: var(--muted); font-size: 0.85rem;">Auto-refreshing...</div>
+            </div>
+            <ul class="members-list" id="membersList"></ul>
+          </div>
+        </div>
+
+        <!-- Right Side: Modules Column -->
+        <div class="progress-sidebar">
+          <div class="compact-section">
+            <div class="section-header">
+              <h3 class="section-title">Modules</h3>
+            </div>
+            <p style="color: var(--muted); margin-bottom: 12px; font-size: 0.85rem;">
+              Click to complete modules.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button class="module-btn" data-permalink="/cores/core-1" data-module="1" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 1
+              </button>
+              <button class="module-btn" data-permalink="/cores/core-2" data-module="2" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 2
+              </button>
+              <button class="module-btn" data-permalink="/cores/core-3" data-module="3" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 3
+              </button>
+              <button class="module-btn" data-permalink="/cores/core-4" data-module="4" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 4
+              </button>
+              <button class="module-btn" data-permalink="/cores/core-5" data-module="5" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 5
+              </button>
+              <button class="module-btn" data-permalink="/cores/core-6" data-module="6" onclick="openModule(this)" style="margin: 0;">
+                <div class="module-icon">Module</div>
+                Module 6
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Module Completion Section -->
-  <div class="section" id="moduleSection" style="display: none;">
-    <h2>Step 3: Complete Modules</h2>
-    <p style="color: var(--muted); margin-bottom: 12px;">
-      Complete modules to light cores once all room members finish.
-    </p>
-
-    <div class="module-controls">
-      <button class="module-btn" data-permalink="/cores/core-1" data-module="1" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 1
-      </button>
-      <button class="module-btn" data-permalink="/cores/core-2" data-module="2" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 2
-      </button>
-      <button class="module-btn" data-permalink="/cores/core-3" data-module="3" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 3
-      </button>
-      <button class="module-btn" data-permalink="/cores/core-4" data-module="4" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 4
-      </button>
-      <button class="module-btn" data-permalink="/cores/core-5" data-module="5" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 5
-      </button>
-      <button class="module-btn" data-permalink="/cores/core-6" data-module="6" onclick="openModule(this)">
-        <div class="module-icon">Module</div>
-        Module 6
-      </button>
+    <!-- Tab Content: Glossary -->
+    <div id="tabGlossary" class="tab-content">
+      <div class="compact-section">
+        <div class="section-header">
+          <h3 class="section-title">Room Glossary</h3>
+        </div>
+        <div class="glossary-stats" style="background: rgba(11,18,32,0.55); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 14px; display:flex; justify-content:space-around; gap: 10px; border: 1px solid var(--border);">
+          <div style="text-align:center;">
+            <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryTotalEntries">0</div>
+            <div style="color: var(--muted); font-size: 0.92rem;">Total Entries</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryContributors">0</div>
+            <div style="color: var(--muted); font-size: 0.92rem;">Contributors</div>
+          </div>
+        </div>
+        <div class="glossary-form" style="background: rgba(11,18,32,0.55); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 14px; border: 1px solid var(--border);">
+          <h4 style="margin-top: 0; font-size: 1rem; color: var(--ink);">Add New Entry</h4>
+          <form id="addGlossaryForm" onsubmit="addGlossaryEntry(event)">
+            <div class="form-group">
+              <label for="glossaryTerm">Term</label>
+              <input type="text" id="glossaryTerm" placeholder="e.g., Race Condition" required>
+            </div>
+            <div class="form-group">
+              <label for="glossaryDefinition">Definition</label>
+              <textarea id="glossaryDefinition" placeholder="Enter a clear definition..." required style="min-height: 80px; font-family: inherit;"></textarea>
+            </div>
+            <button type="submit" class="btn">Add to Glossary</button>
+          </form>
+        </div>
+        <div class="form-group">
+          <label for="glossarySearch">Search Glossary</label>
+          <input type="text" id="glossarySearch" placeholder="Search terms and definitions..." oninput="searchGlossary()">
+        </div>
+        <div id="glossaryList" style="margin-top: 14px;"></div>
+      </div>
     </div>
 
-    <!-- Full-page Module Overlay -->
+    <!-- Module Panel Overlay -->
     <div id="modulePanel" class="module-panel" style="display:none;">
       <div class="module-dialog">
         <div style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); background: rgba(11,18,32,0.55);">
@@ -888,61 +1405,6 @@ breadcrumbs: true
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Members Progress Section -->
-  <div class="section" id="membersSection" style="display: none;">
-    <h2>Room Members Progress</h2>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap;">
-      <button id="refreshProgressBtn" class="btn btn-danger" onclick="resetProgressMidGame()">Reset Room Progress</button>
-      <div id="lastRefresh" style="color: var(--muted); font-size: 0.92rem;">Click to reset all progress</div>
-    </div>
-    <ul class="members-list" id="membersList"></ul>
-  </div>
-
-  <!-- Glossary Section -->
-  <div class="section" id="glossarySection" style="display: none;">
-    <h2>Step 4: Room Glossary</h2>
-    <p style="color: var(--muted); margin-bottom: 12px;">
-      Build a shared knowledge base. Add terms and definitions as you learn.
-    </p>
-
-    <!-- Glossary Stats -->
-    <div class="glossary-stats" style="background: rgba(11,18,32,0.55); padding: 14px; border-radius: var(--radius-sm); margin-bottom: 14px; display:flex; justify-content:space-around; gap: 10px; border: 1px solid var(--border);">
-      <div style="text-align:center;">
-        <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryTotalEntries">0</div>
-        <div style="color: var(--muted); font-size: 0.92rem;">Total Entries</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size: 1.8rem; color: var(--ink); font-weight: 800; font-family: var(--serif);" id="glossaryContributors">0</div>
-        <div style="color: var(--muted); font-size: 0.92rem;">Contributors</div>
-      </div>
-    </div>
-
-    <!-- Add Entry Form -->
-    <div class="glossary-form" style="background: rgba(11,18,32,0.55); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 14px; border: 1px solid var(--border);">
-      <h3 style="margin-top: 0;">Add New Entry</h3>
-      <form id="addGlossaryForm" onsubmit="addGlossaryEntry(event)">
-        <div class="form-group">
-          <label for="glossaryTerm">Term</label>
-          <input type="text" id="glossaryTerm" placeholder="e.g., Race Condition" required>
-        </div>
-        <div class="form-group">
-          <label for="glossaryDefinition">Definition</label>
-          <textarea id="glossaryDefinition" placeholder="Enter a clear definition..." required style="min-height: 100px; font-family: inherit;"></textarea>
-        </div>
-        <button type="submit" class="btn">Add to Glossary</button>
-      </form>
-    </div>
-
-    <!-- Search Box -->
-    <div class="form-group">
-      <label for="glossarySearch">Search Glossary</label>
-      <input type="text" id="glossarySearch" placeholder="Search terms and definitions..." oninput="searchGlossary()">
-    </div>
-
-    <!-- Glossary Entries List -->
-    <div id="glossaryList" style="margin-top: 14px;"></div>
   </div>
 </div>
 
@@ -972,6 +1434,23 @@ breadcrumbs: true
       </div>
       <div class="confirm-buttons">
         <button class="confirm-btn confirm" onclick="closeTutorial()">Got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Configuration Modal -->
+<div id="configModal" class="confirm-modal" style="display: none;">
+  <div class="confirm-dialog">
+    <div style="padding: 20px;">
+      <div class="confirm-title" style="margin-bottom: 16px;">Configuration</div>
+      <div class="form-group">
+        <label for="apiUrl">Flask Server Port</label>
+        <input type="text" id="apiUrl" value="http://localhost:8587" placeholder="http://localhost:8587">
+      </div>
+      <div class="confirm-buttons" style="margin-top: 16px;">
+        <button class="confirm-btn confirm" onclick="saveConfig()">Save</button>
+        <button class="confirm-btn cancel" onclick="closeConfigModal()">Cancel</button>
       </div>
     </div>
   </div>
@@ -1097,7 +1576,110 @@ breadcrumbs: true
   }
 
   function getApiUrl() {
-    return document.getElementById('apiUrl').value.trim();
+    return localStorage.getItem('apiUrl') || document.getElementById('apiUrl').value.trim();
+  }
+
+  function loadApiUrl() {
+    const savedUrl = localStorage.getItem('apiUrl');
+    if (savedUrl) {
+      document.getElementById('apiUrl').value = savedUrl;
+    }
+  }
+
+  function showConfigModal() {
+    const modal = document.getElementById('configModal');
+    loadApiUrl();
+    modal.style.display = 'flex';
+    modal.classList.add('show');
+  }
+
+  function closeConfigModal() {
+    const modal = document.getElementById('configModal');
+    modal.classList.add('closing');
+    setTimeout(() => {
+      modal.classList.remove('show', 'closing');
+      modal.style.display = 'none';
+    }, 200);
+  }
+
+  function saveConfig() {
+    const apiUrl = document.getElementById('apiUrl').value.trim();
+    if (apiUrl) {
+      localStorage.setItem('apiUrl', apiUrl);
+      showToast('Configuration saved successfully.');
+      closeConfigModal();
+    } else {
+      showToast('Please enter a valid Flask server URL.');
+    }
+  }
+
+  function toggleMenu() {
+    const menu = document.getElementById('dropdownMenu');
+    menu.classList.toggle('show');
+  }
+
+  function closeMenu() {
+    const menu = document.getElementById('dropdownMenu');
+    if (menu && menu.classList.contains('show')) {
+      menu.classList.add('closing');
+      setTimeout(() => {
+        menu.classList.remove('show', 'closing');
+      }, 150);
+    }
+  }
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (event) => {
+    const menuContainer = document.querySelector('.menu-container');
+    const menu = document.getElementById('dropdownMenu');
+    if (menu && menuContainer && !menuContainer.contains(event.target)) {
+      menu.classList.remove('show');
+    }
+  });
+
+  function switchTab(tabName) {
+    // Remove active class from all tabs and contents
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+    // Add active class to selected tab and content
+    event.target.classList.add('active');
+    document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.add('active');
+  }
+
+  function initResizeHandle() {
+    const handle = document.querySelector('.resize-handle');
+    const sidebar = document.querySelector('.progress-sidebar');
+
+    if (!handle || !sidebar) return;
+
+    let isResizing = false;
+
+    handle.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+
+      const containerRect = handle.parentElement.getBoundingClientRect();
+      const newWidth = containerRect.right - e.clientX;
+
+      // Apply constraints: min 180px, max 500px
+      if (newWidth >= 180 && newWidth <= 500) {
+        sidebar.style.width = newWidth + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
   }
 
   function showStatus(elementId, message, type) {
@@ -1164,7 +1746,10 @@ breadcrumbs: true
 
   function closeConfirm() {
     const modal = document.getElementById('confirmModal');
-    modal.classList.remove('show');
+    modal.classList.add('closing');
+    setTimeout(() => {
+      modal.classList.remove('show', 'closing');
+    }, 200);
   }
 
   // Tutorial Modal Functions
@@ -1180,14 +1765,23 @@ breadcrumbs: true
   function closeTutorial() {
     const modal = document.getElementById('tutorialModal');
     if (modal) {
-      modal.classList.remove('show');
-      modal.style.display = 'none';
-      localStorage.setItem('tutorialDismissed', 'true');
+      modal.classList.add('closing');
+      setTimeout(() => {
+        modal.classList.remove('show', 'closing');
+        modal.style.display = 'none';
+        localStorage.setItem('tutorialDismissed', 'true');
+      }, 200);
     }
   }
 
   // Close modal on background click
   document.addEventListener('DOMContentLoaded', async () => {
+    // Load saved API URL from localStorage
+    loadApiUrl();
+
+    // Initialize resize handle for Progress & Modules layout
+    initResizeHandle();
+
     const modal = document.getElementById('confirmModal');
     if (modal) {
       modal.addEventListener('click', (e) => {
@@ -1200,6 +1794,14 @@ breadcrumbs: true
     if (tutorialModal) {
       tutorialModal.addEventListener('click', (e) => {
         if (e.target === tutorialModal) closeTutorial();
+      });
+    }
+
+    // Config modal background click handler
+    const configModal = document.getElementById('configModal');
+    if (configModal) {
+      configModal.addEventListener('click', (e) => {
+        if (e.target === configModal) closeConfigModal();
       });
     }
 
@@ -1277,11 +1879,7 @@ breadcrumbs: true
     localStorage.removeItem('user');
 
     document.getElementById('userInfo').style.display = 'none';
-    document.getElementById('roomSection').style.display = 'none';
-    document.getElementById('cpuSection').style.display = 'none';
-    document.getElementById('moduleSection').style.display = 'none';
-    document.getElementById('membersSection').style.display = 'none';
-    document.getElementById('glossarySection').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
 
     const baseurl = '{{site.baseurl}}';
     window.location.href = baseurl + '/login';
@@ -1321,7 +1919,7 @@ breadcrumbs: true
   function updateUIAfterLogin() {
     document.getElementById('userInfo').style.display = 'block';
     document.getElementById('displayUsername').textContent = currentUser.username;
-    document.getElementById('roomSection').style.display = 'block';
+    document.getElementById('mainContent').style.display = 'block';
 
     if (currentUser && currentUser.role === 'admin') {
       document.getElementById('createRoomSection').classList.remove('hidden');
@@ -1374,11 +1972,7 @@ breadcrumbs: true
       document.getElementById('displayRoomCode').textContent = currentRoomData.room_code;
       document.getElementById('displayRoomName').textContent = currentRoomData.name;
       document.getElementById('displayMemberCount').textContent = currentRoomData.stats.total_members;
-
-      document.getElementById('cpuSection').style.display = 'block';
-      document.getElementById('moduleSection').style.display = 'block';
-      document.getElementById('membersSection').style.display = 'block';
-      document.getElementById('glossarySection').style.display = 'block';
+      document.getElementById('resetProgressBtn').classList.remove('hidden');
 
       await loadRoomProgress();
       await loadGlossary();
@@ -1409,11 +2003,7 @@ breadcrumbs: true
 
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
-        document.getElementById('cpuSection').style.display = 'none';
-        document.getElementById('moduleSection').style.display = 'none';
-        document.getElementById('membersSection').style.display = 'none';
-        document.getElementById('glossarySection').style.display = 'none';
-        document.getElementById('resetSection').classList.add('hidden');
+        document.getElementById('resetProgressBtn').classList.add('hidden');
 
         const cpuContainer = document.getElementById('cpuContainer');
         cpuContainer.classList.remove('all-active');
@@ -1426,42 +2016,6 @@ breadcrumbs: true
     );
   }
 
-  async function resetProgress() {
-    showConfirm(
-      'Reset All Progress',
-      'This will delete all completed modules for everyone in the room. This cannot be undone.',
-      async () => {
-        try {
-          await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
-
-          cpuFullyLit = false;
-
-          const cpuContainer = document.getElementById('cpuContainer');
-          cpuContainer.classList.remove('all-active');
-
-          for (let i = 1; i <= 6; i++) {
-            document.getElementById(`node${i}`).classList.remove('active');
-          }
-
-          document.getElementById('resetSection').classList.add('hidden');
-
-          const buttons = document.querySelectorAll('.module-btn');
-          buttons.forEach(btn => btn.classList.remove('completed'));
-
-          const membersList = document.getElementById('membersList');
-          membersList.innerHTML = '';
-
-          showToast('Progress reset for all members.');
-
-          await new Promise(resolve => setTimeout(resolve, 500));
-          await loadRoomProgress();
-        } catch (error) {
-          showToast(`Failed to reset progress: ${error.message}`);
-          console.error('Reset error:', error);
-        }
-      }
-    );
-  }
 
   async function resetProgressMidGame() {
     showConfirm(
@@ -1487,8 +2041,6 @@ breadcrumbs: true
             document.getElementById(`node${i}`).classList.remove('active');
           }
 
-          const resetSection = document.getElementById('resetSection');
-          if (resetSection) resetSection.classList.add('hidden');
 
           const buttons = document.querySelectorAll('.module-btn');
           buttons.forEach(btn => btn.classList.remove('completed'));
@@ -1578,11 +2130,7 @@ breadcrumbs: true
 
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
-        document.getElementById('cpuSection').style.display = 'none';
-        document.getElementById('moduleSection').style.display = 'none';
-        document.getElementById('membersSection').style.display = 'none';
-        document.getElementById('glossarySection').style.display = 'none';
-        document.getElementById('resetSection').classList.add('hidden');
+        document.getElementById('resetProgressBtn').classList.add('hidden');
 
         return;
       }
@@ -1601,7 +2149,6 @@ breadcrumbs: true
         if (data.completed_modules.length === 6) {
           cpuFullyLit = true;
           document.getElementById('cpuContainer').classList.add('all-active');
-          document.getElementById('resetSection').classList.remove('hidden');
         }
       }
 
@@ -1656,11 +2203,7 @@ breadcrumbs: true
 
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
-        document.getElementById('cpuSection').style.display = 'none';
-        document.getElementById('moduleSection').style.display = 'none';
-        document.getElementById('membersSection').style.display = 'none';
-        document.getElementById('glossarySection').style.display = 'none';
-        document.getElementById('resetSection').classList.add('hidden');
+        document.getElementById('resetProgressBtn').classList.add('hidden');
         return;
       }
 
@@ -1782,10 +2325,14 @@ breadcrumbs: true
   function closeModule() {
     const panel = document.getElementById('modulePanel');
     if (!panel) return;
-    panel.style.display = 'none';
-    document.body.classList.remove('module-panel-open');
-    panel.scrollTop = 0;
-    panel.dataset.activeModule = '';
+    panel.classList.add('closing');
+    setTimeout(() => {
+      panel.style.display = 'none';
+      panel.classList.remove('closing');
+      document.body.classList.remove('module-panel-open');
+      panel.scrollTop = 0;
+      panel.dataset.activeModule = '';
+    }, 200);
   }
 
   window.addEventListener('moduleQuizScored', event => {
@@ -1977,7 +2524,10 @@ breadcrumbs: true
 
   function closeAdminRoomsModal() {
     const modal = document.getElementById('adminRoomsModal');
-    modal.classList.remove('show');
+    modal.classList.add('closing');
+    setTimeout(() => {
+      modal.classList.remove('show', 'closing');
+    }, 200);
   }
 
   async function loadActiveRooms() {

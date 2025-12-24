@@ -28,48 +28,116 @@ While often used interchangeably, concurrency and parallelism have a key distinc
   .mandelbrot-container {
     margin: 20px 0;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 3px solid rgba(0,255,170,0.28);
+    border-left: 6px solid #00ffaa;
+    border-radius: 2px;
+    background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+    box-shadow: 0 0 20px rgba(0,255,170,0.15);
+    position: relative;
   }
-  
+
+  .mandelbrot-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffaa, transparent);
+    opacity: 0.5;
+  }
+
   .mandelbrot-container h2 {
     margin-top: 0;
+    color: #00ffaa;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0,255,170,0.5);
+    font-size: 1.2rem;
   }
-  
+
   .mandelbrot-controls {
     margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
   }
-  
+
   .mandelbrot-controls button {
     padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
+    font-size: 0.85rem;
+    background: rgba(0,255,170,0.15);
+    color: #00ffaa;
+    border: 2px solid #00ffaa;
+    border-radius: 2px;
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 0;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px rgba(0,255,170,0.3);
   }
-  
+
   .mandelbrot-controls button:hover {
-    background-color: #45a049;
+    background: rgba(0,255,170,0.25);
+    box-shadow: 0 0 10px rgba(0,255,170,0.6), 0 0 20px rgba(0,255,170,0.4);
+    text-shadow: 0 0 8px #00ffaa;
   }
-  
+
   .mandelbrot-controls button:disabled {
-    background-color: #cccccc;
+    background: rgba(107,118,132,0.15);
+    color: #6b7684;
+    border-color: #6b7684;
     cursor: not-allowed;
+    box-shadow: none;
+    text-shadow: none;
   }
-  
+
+  .mandelbrot-controls input {
+    padding: 8px 12px;
+    background: rgba(10,14,20,0.80);
+    border: 2px solid rgba(0,255,170,0.28);
+    border-left: 3px solid #00ffaa;
+    border-radius: 2px;
+    color: #00ffaa;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.9rem;
+  }
+
+  .mandelbrot-controls input:focus {
+    outline: none;
+    border-color: #00ffaa;
+    box-shadow: 0 0 15px rgba(0,255,170,0.3);
+  }
+
+  .mandelbrot-controls label {
+    color: #8b95a5;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
   canvas {
-    border: 1px solid #333;
+    border: 2px solid #00ffaa;
     display: block;
+    box-shadow: 0 0 20px rgba(0,255,170,0.2);
   }
-  
+
   .info-display {
     margin-top: 10px;
-    font-family: monospace;
+    font-family: 'Courier New', 'Consolas', monospace;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 2px;
+    background: rgba(10,14,20,0.60);
+    border-left: 3px solid #00ffaa;
+    color: #00ffaa;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
   }
 </style>
 

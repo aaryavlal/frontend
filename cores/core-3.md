@@ -7,6 +7,95 @@ permalink: /cores/core-3
 breadcrumbs: false
 ---
 
+<style>
+  details {
+    background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+    border: 2px solid rgba(0,255,170,0.28);
+    border-left: 4px solid #00ffaa;
+    border-radius: 2px;
+    padding: 16px;
+    margin: 12px 0;
+    box-shadow: 0 0 15px rgba(0,255,170,0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  details:hover {
+    border-color: #00ffaa;
+    box-shadow: 0 0 20px rgba(0,255,170,0.3);
+  }
+
+  details[open] {
+    border-color: #00ffaa;
+    box-shadow: 0 0 25px rgba(0,255,170,0.4);
+  }
+
+  summary {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-weight: 700;
+    color: #00ffaa;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  details p {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(10,14,20,0.60);
+    border-left: 3px solid #00ffaa;
+    border-radius: 2px;
+    color: #e0e6ed;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  h2, h3, h4 {
+    color: #00ffaa;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0,255,170,0.5);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+    border: 2px solid rgba(0,255,170,0.28);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  th {
+    background: rgba(0,255,170,0.15);
+    color: #00ffaa;
+    padding: 12px;
+    text-align: left;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #00ffaa;
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(0,255,170,0.15);
+    color: #e0e6ed;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.85rem;
+  }
+
+  tr:hover {
+    background: rgba(0,255,170,0.05);
+  }
+</style>
+
 ## Module 3 — Computing Models Quiz
 
 Test your understanding of sequential, parallel, and distributed computing! Review Core 1 & Core 2 before taking this quiz.

@@ -8,34 +8,44 @@
         body {
             margin: 0;
             padding: 10px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
+            font-family: 'Courier New', 'Consolas', monospace;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+                        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+                        #0a0e14;
+            color: #e0e6ed;
             font-size: 13px;
+            letter-spacing: 0.3px;
         }
 
         .game-container {
             max-width: 100%;
             margin: 0 auto;
-            background: #1e293b;
+            background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
             padding: 10px;
-            border-radius: 8px;
-            border: 2px solid #38bdf8;
+            border-radius: 2px;
+            border: 3px solid #00ffaa;
+            border-left: 6px solid #00ffaa;
+            box-shadow: 0 0 30px rgba(0,255,170,0.3);
         }
 
         .game-container h1 {
-            font-size: 20px;
+            font-size: 18px;
             margin: 0 0 10px 0;
-            color: #38bdf8;
+            color: #00ffaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(0,255,170,0.6);
         }
 
         .scenario-display {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+            color: #e0e6ed;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 2px;
             margin: 10px 0;
-            border: 2px solid #38bdf8;
+            border: 2px solid rgba(0,255,170,0.28);
+            border-left: 4px solid #00ffaa;
+            box-shadow: 0 0 20px rgba(0,255,170,0.15);
         }
 
         .scenario-header {
@@ -46,9 +56,12 @@
         }
 
         .scenario-display h2 {
-            font-size: 16px;
+            font-size: 14px;
             margin: 0;
-            color: #38bdf8;
+            color: #00ffaa;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 10px rgba(0,255,170,0.5);
         }
 
         .scenario-text {
@@ -74,17 +87,21 @@
         }
 
         .components-palette {
-            background: #0f172a;
+            background: rgba(10,14,20,0.80);
             padding: 10px;
-            border-radius: 8px;
-            border: 2px solid #334155;
+            border-radius: 2px;
+            border: 2px solid rgba(0,255,170,0.28);
+            border-left: 4px solid #00ffaa;
         }
 
         .components-palette h3 {
             margin-top: 0;
             margin-bottom: 8px;
-            color: #38bdf8;
-            font-size: 13px;
+            color: #00ffaa;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 8px rgba(0,255,170,0.5);
         }
 
         .component-list {
@@ -94,9 +111,9 @@
         }
 
         .component-item {
-            background: #1e293b;
-            border: 2px solid #334155;
-            border-radius: 6px;
+            background: rgba(18,23,30,0.85);
+            border: 2px solid rgba(0,255,170,0.28);
+            border-radius: 2px;
             padding: 6px;
             cursor: grab;
             transition: all 0.2s;
@@ -105,8 +122,8 @@
 
         .component-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(56, 189, 248, 0.3);
-            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(0,255,170,0.4);
+            border-color: #00ffaa;
         }
 
         .component-item:active {
@@ -164,17 +181,21 @@
         }
 
         .build-area {
-            background: #0f172a;
+            background: rgba(10,14,20,0.80);
             padding: 10px;
-            border-radius: 8px;
-            border: 2px solid #334155;
+            border-radius: 2px;
+            border: 2px solid rgba(0,255,170,0.28);
+            border-left: 4px solid #00ffaa;
         }
 
         .build-area h3 {
             margin-top: 0;
             margin-bottom: 8px;
-            color: #38bdf8;
-            font-size: 13px;
+            color: #00ffaa;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 8px rgba(0,255,170,0.5);
         }
 
         .workspace {

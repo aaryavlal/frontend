@@ -14,12 +14,15 @@ show_reading_time: false
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-  background: #0f0f23;
-  color: #e0e0e0;
+  font-family: 'Courier New', 'Consolas', monospace;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+              repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,170,0.03) 2px, rgba(0,255,170,0.03) 4px),
+              #0a0e14;
+  color: #e0e6ed;
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
+  letter-spacing: 0.3px;
 }
 
 #gpu-simulator-app * {
@@ -51,41 +54,44 @@ show_reading_time: false
 }
 
 #gpu-simulator-app .edu-panel {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border: 2px solid #00d4ff;
-  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(26,32,40,0.92), rgba(18,23,30,0.92));
+  border: 2px solid rgba(0,255,170,0.28);
+  border-left: 4px solid #00ffaa;
+  border-radius: 2px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0,255,170,0.15);
 }
 
 #gpu-simulator-app .edu-panel-header {
-  background: linear-gradient(90deg, #0f1419 0%, #1a2332 100%);
+  background: linear-gradient(90deg, rgba(18,23,30,0.95), rgba(26,32,40,0.95));
   padding: 15px 20px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #00d4ff;
+  border-bottom: 2px solid #00ffaa;
   transition: background 0.2s ease;
 }
 
 #gpu-simulator-app .edu-panel-header:hover {
-  background: rgba(0, 212, 255, 0.1);
+  background: rgba(0,255,170,0.10);
 }
 
 #gpu-simulator-app .edu-panel-header h3 {
-  color: #00d4ff;
-  font-size: 0.9rem;
+  color: #00ffaa;
+  font-size: 0.85rem;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   font-weight: 700;
+  text-shadow: 0 0 10px rgba(0,255,170,0.5);
 }
 
 #gpu-simulator-app .edu-panel-arrow {
-  color: #00d4ff;
+  color: #00ffaa;
   font-size: 1.2rem;
   transition: transform 0.3s ease;
+  text-shadow: 0 0 10px rgba(0,255,170,0.6);
 }
 
 #gpu-simulator-app .edu-panel.expanded .edu-panel-arrow {
@@ -106,18 +112,19 @@ show_reading_time: false
 }
 
 #gpu-simulator-app .edu-panel-content h4 {
-  color: #00ff88;
-  font-size: 0.85rem;
+  color: #00ffaa;
+  font-size: 0.8rem;
   margin: 15px 0 8px 0;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   font-weight: 700;
+  text-shadow: 0 0 8px rgba(0,255,170,0.5);
 }
 
 #gpu-simulator-app .edu-panel-content p {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1.6;
-  color: #b8c5d6;
+  color: #8b95a5;
   margin: 8px 0;
 }
 
@@ -134,15 +141,15 @@ show_reading_time: false
 }
 
 #gpu-simulator-app .edu-panel-content strong {
-  color: #00d4ff;
+  color: #00ffaa;
 }
 
 #gpu-simulator-app .edu-highlight-box {
-  background: rgba(76, 175, 239, 0.1);
-  border-left: 3px solid #4CAFEF;
+  background: rgba(0,255,170,0.08);
+  border-left: 3px solid #00ffaa;
   padding: 12px;
   margin: 10px 0;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 #gpu-simulator-app .edu-comparison-table {
