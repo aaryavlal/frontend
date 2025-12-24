@@ -39,12 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
                        <hr style="margin: 4px 0;">`
                     : '';
 
+                // Build admin links conditionally
+                const adminLinks = data.role === 'admin' || data.role === 'teacher'
+                    ? `<a href="${baseurl}/admin/debug">API Debug Console</a>`
+                    : '';
+
                 loginArea.innerHTML = `
                     <div class="dropdown">
                         <button class="dropbtn">${displayName}</button>
                         <div class="dropdown-content hidden">
                             ${infoHtml}
                             <a href="${baseurl}/prototyperoomcode">Hardware Havoc</a>
+                            ${adminLinks}
                             <a href="javascript:void(0)" onclick="logout()">Logout</a>
                         </div>
                     </div>
