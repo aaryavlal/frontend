@@ -10,6 +10,7 @@ breadcrumbs: false
 [⬅ Back to Core 4 Overview](/cores/core-4)
 
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Oxanium:wght@400;600;700&display=swap");
   .m4-module-dropdown {
     margin: clamp(12px, 4vw, 24px) auto;
     display: block;
@@ -110,6 +111,143 @@ breadcrumbs: false
     margin-bottom: 10px;
   }
 
+  .m4-game-intro {
+    font-family: "Oxanium", "Chakra Petch", "Trebuchet MS", sans-serif;
+    color: #cbd5f5;
+    font-size: 1.02em;
+    letter-spacing: 0.02em;
+  }
+  .m4-hud {
+    margin-top: 20px;
+    border: 1px solid rgba(56,189,248,0.35);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(2,6,23,0.95), rgba(15,23,42,0.85));
+    padding: 18px 20px;
+    display: grid;
+    gap: 14px;
+  }
+  .m4-hud-title {
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75em;
+    color: #7dd3fc;
+  }
+  .m4-hud-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .m4-hud-stat {
+    background: rgba(2,6,23,0.6);
+    border: 1px solid rgba(148,163,184,0.25);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+  }
+  .m4-hud-stat span {
+    display: block;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+  }
+  .m4-hud-stat strong {
+    font-size: 1.1em;
+    color: #e2e8f0;
+  }
+  .m4-xp-bar {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(148,163,184,0.2);
+    overflow: hidden;
+  }
+  .m4-xp-bar span {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #22d3ee, #34d399);
+    transition: width 0.4s ease;
+  }
+  .m4-xp-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78em;
+    color: #cbd5f5;
+  }
+  .m4-quest-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .m4-quest-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(2,6,23,0.55);
+    border: 1px dashed rgba(148,163,184,0.35);
+    font-size: 0.82em;
+    color: #e5e7eb;
+  }
+  .m4-quest-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #fbbf24;
+    box-shadow: 0 0 8px rgba(251,191,36,0.6);
+  }
+  .m4-quest-item.is-complete {
+    border-color: rgba(34,197,94,0.5);
+    background: rgba(34,197,94,0.12);
+  }
+  .m4-quest-item.is-complete .m4-quest-dot {
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34,197,94,0.6);
+  }
+  .m4-terminal {
+    display: grid;
+    gap: 14px;
+  }
+  .m4-terminal-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m4-chip {
+    border-radius: 999px;
+    padding: 6px 14px;
+    border: 1px solid rgba(94,234,212,0.5);
+    background: rgba(15,23,42,0.8);
+    color: #5eead4;
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .m4-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(94,234,212,0.4);
+  }
+  .m4-terminal-readout {
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: rgba(2,6,23,0.8);
+    border: 1px solid rgba(56,189,248,0.35);
+    font-size: 0.95em;
+    color: #e2e8f0;
+    min-height: 90px;
+  }
+  .m4-formula-row {
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+    font-size: 1.05em;
+    color: #f8fafc;
+    letter-spacing: 0.04em;
+  }
+
   /* Tooltip styling for formula terms */
   .tooltip-term {
     position: relative;
@@ -208,6 +346,107 @@ breadcrumbs: false
     border: 1px solid rgba(148,163,184,0.35);
     padding: 10px 12px;
   }
+  .m4-gauge {
+    display: grid;
+    gap: 6px;
+  }
+  .m4-gauge-bar {
+    position: relative;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(148,163,184,0.2);
+    overflow: hidden;
+  }
+  .m4-gauge-bar span {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #f59e0b, #f97316);
+    transition: width 0.4s ease;
+  }
+  .m4-quest-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .m4-quest-card {
+    border-radius: 16px;
+    border: 1px solid rgba(59,130,246,0.35);
+    background: rgba(2,6,23,0.75);
+    padding: 16px;
+    display: grid;
+    gap: 10px;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .m4-quest-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(59,130,246,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .m4-quest-card:hover::after {
+    opacity: 1;
+  }
+  .m4-quest-card h4 {
+    margin: 0;
+    font-size: 1.05em;
+    color: #7dd3fc;
+  }
+  .m4-quest-card p {
+    margin: 0;
+    color: #cbd5f5;
+    font-size: 0.9em;
+    line-height: 1.6;
+  }
+  .m4-quest-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m4-quest-actions button {
+    border-radius: 999px;
+    border: 1px solid rgba(147,197,253,0.45);
+    background: rgba(15,23,42,0.7);
+    color: #e0f2fe;
+    padding: 6px 12px;
+    font-size: 0.8em;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .m4-quest-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(59,130,246,0.3);
+  }
+  .m4-mission-log {
+    border-radius: 12px;
+    border: 1px solid rgba(148,163,184,0.3);
+    background: rgba(2,6,23,0.7);
+    padding: 12px 14px;
+    font-size: 0.85em;
+    color: #e2e8f0;
+    min-height: 72px;
+  }
+  .m4-boosters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m4-boosters button {
+    border-radius: 999px;
+    border: 1px solid rgba(52,211,153,0.5);
+    background: rgba(15,23,42,0.7);
+    color: #6ee7b7;
+    padding: 6px 14px;
+    font-size: 0.82em;
+    cursor: pointer;
+  }
+  .m4-boosters button:hover {
+    box-shadow: 0 0 12px rgba(52,211,153,0.4);
+  }
 </style>
 
 <details class="m4-module-dropdown" open>
@@ -218,147 +457,219 @@ breadcrumbs: false
 
   <div class="m4-shell">
     <div class="m4-shell-inner">
-      <p style="font-size:1.05em; color:#cbd5f5; line-height:1.8;">
-        This module combines everything from Modules 1–3:
-        you already know what <strong>sequential vs parallel</strong> work looks like (Module 1),
-        why we chase parallelism at all (Module 2),
-        and how <strong>sequential bottlenecks</strong> and <strong>overhead</strong> limit us (Module 3).
-        Here you will turn those ideas into actual numbers by playing with a simple execution-time model.
+      <p class="m4-game-intro">
+        Boot sequence online. This module is now a mission simulator: you will decode the time model,
+        tune a parallel rig, and hunt bottlenecks to earn XP. Every idea from Modules 1–3 is packed
+        into interactive stations below.
       </p>
 
-    <div class="m4-section">
-      <h3 style="color:#0ea5e9; font-size:1.3em;">
-        🧾 From story to formula
-      </h3>
-      <p style="font-size:0.98em; color:#e5e7eb; line-height:1.8;">
-        Imagine an algorithm with:
-        <strong>setup / combining work</strong> that cannot be split (sequential),
-        plus a chunk of <strong>independent tasks</strong> that can run on multiple processors in parallel.
-        The total time on one core is just the sum of everything; on multiple cores,
-        only the parallel part shrinks.
-      </p>
-
-      <p style="font-size:1.0em; color:#e2e8f0; line-height:2;">
-        <strong style="color:#0ea5e9;">Sequential time (Module 1):</strong>
-        &nbsp; <em>T</em><sub>seq-total</sub> = <em>T</em><sub>seq-part</sub> + <em>T</em><sub>parallel-part</sub>
-      </p>
-
-      <p style="font-size:1.0em; color:#e2e8f0; line-height:2; margin-bottom:6px;">
-        <strong style="color:#0ea5e9;">Parallel time model (using ideas from Module 3):</strong>
-      </p>
-
-      <p style="font-size:1.05em; color:#e5e7eb; line-height:2;">
-        <span class="tooltip-term">
-          <span class="term-label"><em>T</em><sub>parallel</sub></span>
-          <span class="tooltip-box">
-            <strong>Total time</strong> for the whole algorithm when you use multiple processors.
-            This is what you care about in the real world: how long users wait.
-          </span>
-        </span>
-        =
-        <span class="tooltip-term">
-          <span class="term-label"><em>T</em><sub>seq-part</sub></span>
-          <span class="tooltip-box">
-            The <strong>sequential portion</strong> that cannot be split up.
-            Every processor must wait for this (setup, critical sections, combining results).
-            This is the bottleneck from Module 3.
-          </span>
-        </span>
-        +
-        <span class="tooltip-term">
-          <span class="term-label"><em>T</em><sub>parallel-part</sub> ÷ <em>P</em></span>
-          <span class="tooltip-box">
-            The <strong>independent work</strong> from Module 3 shared across
-            <strong>P processors</strong>. We assume each processor gets about the same amount of work,
-            so the time is roughly total parallel work divided by P, plus hidden overhead.
-          </span>
-        </span>
-      </p>
-
-      <p style="font-size:0.9em; color:#a5b4fc; margin-top:8px;">
-        Hover over each pill to connect the symbols back to the story from earlier modules.
-      </p>
-    </div>
-
-    <div class="m4-section">
-      <h3 style="color:#0ea5e9; font-size:1.3em;">
-        🎚 Interactive model: change the work, watch the time
-      </h3>
-      <p style="font-size:0.98em; color:#e5e7eb; line-height:1.7;">
-        Use the sliders to describe an algorithm:
-        how much is <strong>sequential</strong>, how much is <strong>parallelizable</strong>,
-        and how many <strong>processors</strong> you have.
-        The dashboard shows the sequential baseline, the modeled parallel time, and the resulting speedup
-        (which Module 5 will formalize).
-      </p>
-
-      <div class="m4-sliders">
-        <div>
-          <div class="m4-slider-group">
-            <label for="m4-seq-slider">
-              🔒 Sequential work time
-              <span style="color:#38bdf8;">(T<sub>seq-part</sub>)</span>:
-              <strong><span id="m4-seq-value">40</span> s</strong>
-            </label>
-            <input id="m4-seq-slider" type="range" min="0" max="120" value="40" step="5">
+      <div class="m4-hud">
+        <div class="m4-hud-title">Mission HUD</div>
+        <div class="m4-hud-grid">
+          <div class="m4-hud-stat">
+            <span>Rank</span>
+            <strong id="m4-rank">Cadet</strong>
           </div>
-
-          <div class="m4-slider-group">
-            <label for="m4-par-slider">
-              ⚙️ Total parallelizable work
-              <span style="color:#38bdf8;">(T<sub>parallel-part</sub>)</span>:
-              <strong><span id="m4-par-value">130</span> s</strong>
-            </label>
-            <input id="m4-par-slider" type="range" min="20" max="300" value="130" step="10">
+          <div class="m4-hud-stat">
+            <span>XP</span>
+            <strong><span id="m4-xp-value">0</span> pts</strong>
           </div>
-
-          <div class="m4-slider-group">
-            <label for="m4-proc-slider">
-              🧠 Number of processors
-              <span style="color:#38bdf8;">(P)</span>:
-              <strong><span id="m4-proc-value">2</span></strong>
-            </label>
-            <input id="m4-proc-slider" type="range" min="1" max="16" value="2" step="1">
+          <div class="m4-hud-stat">
+            <span>Quests</span>
+            <strong><span id="m4-quest-count">0</span>/4</strong>
+          </div>
+          <div class="m4-hud-stat">
+            <span>Active Speedup</span>
+            <strong>×<span id="m4-speedup-live">1.00</span></strong>
           </div>
         </div>
+        <div class="m4-xp-bar">
+          <span id="m4-xp-fill"></span>
+        </div>
+        <div class="m4-xp-meta">
+          <span>Next rank in <span id="m4-xp-next">20</span> XP</span>
+          <span id="m4-xp-rank-label">Cadet tier</span>
+        </div>
+        <div class="m4-quest-list">
+          <div class="m4-quest-item" id="m4-quest-terminal"><span class="m4-quest-dot"></span>Decode the formula console</div>
+          <div class="m4-quest-item" id="m4-quest-calibrate"><span class="m4-quest-dot"></span>Calibrate the rig</div>
+          <div class="m4-quest-item" id="m4-quest-bottleneck"><span class="m4-quest-dot"></span>Win the bottleneck hunt</div>
+          <div class="m4-quest-item" id="m4-quest-speedup"><span class="m4-quest-dot"></span>Break speedup threshold</div>
+        </div>
+      </div>
 
-        <div class="m4-metric-grid">
-          <div class="m4-metric-box">
-            <div style="color:#94a3b8;">Sequential total (Module 1)</div>
-            <div style="color:#e5e7eb; font-weight:bold; font-size:1.05em;">
-              <span id="m4-seq-total">170</span> s
-            </div>
-            <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
-              Time if everything ran on one core with no parallelism.
-            </p>
+      <div class="m4-section">
+        <h3 style="color:#0ea5e9; font-size:1.3em;">
+          🧩 Formula Console: tap to decode the model
+        </h3>
+        <div class="m4-terminal">
+          <div class="m4-terminal-buttons">
+            <button class="m4-chip" type="button" data-m4-term="seq-part">T_seq-part</button>
+            <button class="m4-chip" type="button" data-m4-term="par-part">T_parallel-part</button>
+            <button class="m4-chip" type="button" data-m4-term="proc">P (processors)</button>
+            <button class="m4-chip" type="button" data-m4-term="overhead">Overhead</button>
+            <button class="m4-chip" type="button" data-m4-term="model">Full model</button>
           </div>
-          <div class="m4-metric-box">
-            <div style="color:#94a3b8;">Parallel time (Modules 2–3)</div>
-            <div style="color:#e5e7eb; font-weight:bold; font-size:1.05em;">
-              <span id="m4-par-time">90</span> s
-            </div>
-            <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
-              Sequential setup + parallel work split across P processors.
-            </p>
+          <div class="m4-terminal-readout" id="m4-term-readout">
+            Tap a chip to unlock the story behind each term. Each unlock earns XP.
           </div>
-          <div class="m4-metric-box">
-            <div style="color:#94a3b8;">Speedup (Module 5 preview)</div>
-            <div style="color:#4ade80; font-weight:bold; font-size:1.05em;">
-              ×<span id="m4-speedup-value">1.89</span>
-            </div>
-            <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
-              How many times faster the parallel version is than the sequential baseline.
-            </p>
+          <div class="m4-formula-row">
+            T_parallel = T_seq-part + (T_parallel-part / P) + overhead
           </div>
         </div>
       </div>
 
-      <p style="font-size:0.9em; color:#a5b4fc; margin-top:14px; line-height:1.6;">
-        Try increasing the number of processors while keeping a large sequential part.
-        You should see the speedup flatten out — that is the <strong>sequential bottleneck</strong>
-        and <strong>diminishing returns</strong> from Module 3 showing up in the math.
-      </p>
-    </div>
+      <div class="m4-section">
+        <h3 style="color:#0ea5e9; font-size:1.3em;">
+          🎛 Quest 1: Calibrate the execution rig
+        </h3>
+        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
+          Dial the rig sliders to describe a workload. The HUD updates instantly with modeled runtime,
+          speedup, and a boss shield that represents the sequential bottleneck.
+        </p>
+
+        <div class="m4-sliders">
+          <div>
+            <div class="m4-slider-group">
+              <label for="m4-seq-slider">
+                🔒 Sequential work time
+                <span style="color:#38bdf8;">(T<sub>seq-part</sub>)</span>:
+                <strong><span id="m4-seq-value">40</span> s</strong>
+              </label>
+              <input id="m4-seq-slider" type="range" min="0" max="120" value="40" step="5">
+            </div>
+
+            <div class="m4-slider-group">
+              <label for="m4-par-slider">
+                ⚙️ Total parallelizable work
+                <span style="color:#38bdf8;">(T<sub>parallel-part</sub>)</span>:
+                <strong><span id="m4-par-value">130</span> s</strong>
+              </label>
+              <input id="m4-par-slider" type="range" min="20" max="300" value="130" step="10">
+            </div>
+
+            <div class="m4-slider-group">
+              <label for="m4-proc-slider">
+                🧠 Number of processors
+                <span style="color:#38bdf8;">(P)</span>:
+                <strong><span id="m4-proc-value">2</span></strong>
+              </label>
+              <input id="m4-proc-slider" type="range" min="1" max="16" value="2" step="1">
+            </div>
+
+            <div class="m4-slider-group">
+              <label for="m4-overhead-slider">
+                📡 Coordination overhead per extra processor
+                <span style="color:#38bdf8;">(overhead)</span>:
+                <strong><span id="m4-overhead-value">2</span> s</strong>
+              </label>
+              <input id="m4-overhead-slider" type="range" min="0" max="20" value="2" step="1">
+            </div>
+          </div>
+
+          <div class="m4-metric-grid">
+            <div class="m4-metric-box">
+              <div style="color:#94a3b8;">Sequential total (Module 1)</div>
+              <div style="color:#e5e7eb; font-weight:bold; font-size:1.05em;">
+                <span id="m4-seq-total">170</span> s
+              </div>
+              <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
+                Time if everything ran on one core with no parallelism.
+              </p>
+            </div>
+            <div class="m4-metric-box">
+              <div style="color:#94a3b8;">Modeled parallel time</div>
+              <div style="color:#e5e7eb; font-weight:bold; font-size:1.05em;">
+                <span id="m4-par-time">90</span> s
+              </div>
+              <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
+                Sequential setup + parallel work split + coordination cost.
+              </p>
+            </div>
+            <div class="m4-metric-box">
+              <div style="color:#94a3b8;">Speedup (Module 5 preview)</div>
+              <div style="color:#4ade80; font-weight:bold; font-size:1.05em;">
+                ×<span id="m4-speedup-value">1.89</span>
+              </div>
+              <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
+                How many times faster the parallel version is.
+              </p>
+            </div>
+            <div class="m4-metric-box">
+              <div style="color:#94a3b8;">Boss shield (sequential share)</div>
+              <div class="m4-gauge">
+                <div class="m4-gauge-bar"><span id="m4-shield-bar"></span></div>
+                <div style="color:#e5e7eb; font-weight:bold; font-size:0.95em;">
+                  <span id="m4-shield-value">0</span>%
+                </div>
+              </div>
+              <p style="margin:6px 0 0 0; font-size:0.82em; color:#9ca3af;">
+                High shield means the sequential chunk is dominating the runtime.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m4-section">
+        <h3 style="color:#0ea5e9; font-size:1.3em;">
+          🛰 Quest 2: Bottleneck hunt
+        </h3>
+        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
+          Pick a mission. The rig auto-loads the workload, and you choose which part is slowing the crew.
+          Correct calls earn XP and teach how sequential work or overhead limits speedup.
+        </p>
+
+        <div class="m4-quest-grid">
+          <article class="m4-quest-card" data-seq="20" data-par="240" data-proc="8" data-overhead="1">
+            <h4>Mission: Drone Sweep</h4>
+            <p>Lots of independent scans, tiny setup. Eight drones in the air.</p>
+            <div class="m4-quest-actions">
+              <button type="button" data-m4-action="load">Load Scenario</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="parallel">Parallel bottleneck</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="sequential">Sequential bottleneck</button>
+            </div>
+          </article>
+          <article class="m4-quest-card" data-seq="90" data-par="90" data-proc="12" data-overhead="2">
+            <h4>Mission: Gatekeeper Core</h4>
+            <p>Heavy startup routines before any parallel work can begin.</p>
+            <div class="m4-quest-actions">
+              <button type="button" data-m4-action="load">Load Scenario</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="parallel">Parallel bottleneck</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="sequential">Sequential bottleneck</button>
+            </div>
+          </article>
+          <article class="m4-quest-card" data-seq="30" data-par="160" data-proc="14" data-overhead="5">
+            <h4>Mission: Swarm Coordination</h4>
+            <p>Plenty of tasks, but the team keeps colliding in coordination overhead.</p>
+            <div class="m4-quest-actions">
+              <button type="button" data-m4-action="load">Load Scenario</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="parallel">Parallel bottleneck</button>
+              <button type="button" data-m4-action="choose" data-m4-choice="sequential">Sequential bottleneck</button>
+            </div>
+          </article>
+        </div>
+
+        <div class="m4-mission-log" id="m4-mission-log">
+          Mission log online. Load a scenario to begin the hunt.
+        </div>
+      </div>
+
+      <div class="m4-section">
+        <h3 style="color:#0ea5e9; font-size:1.3em;">
+          🚀 Quest 3: Speedup sprint
+        </h3>
+        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
+          Punch in booster commands to add processors quickly. Watch the speedup meter and boss shield to
+          feel the diminishing returns from the sequential slice.
+        </p>
+        <div class="m4-boosters">
+          <button type="button" data-m4-boost="2">Boost to 2</button>
+          <button type="button" data-m4-boost="4">Boost to 4</button>
+          <button type="button" data-m4-boost="8">Boost to 8</button>
+          <button type="button" data-m4-boost="16">Boost to 16</button>
+        </div>
+      </div>
     </div>
   </div>
 </details>
@@ -389,10 +700,10 @@ breadcrumbs: false
   <div class="relative z-10 mx-auto flex max-w-4xl flex-col gap-12">
     <header class="space-y-3">
       <p class="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-200/90">
-        Gemini QPI Quiz
+        Final Checkpoint Quiz
       </p>
       <h2 class="text-4xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
-        Module 4: Execution-Time Reasoning Check
+        Mission Debrief: Execution-Time Reasoning
       </h2>
       <p class="text-base text-slate-200 sm:text-lg">
         Use the story-to-formula model you explored above to answer a scenario question. Gemini grades
@@ -518,49 +829,269 @@ breadcrumbs: false
   const m4SeqSlider = document.getElementById('m4-seq-slider');
   const m4ParSlider = document.getElementById('m4-par-slider');
   const m4ProcSlider = document.getElementById('m4-proc-slider');
+  const m4OverheadSlider = document.getElementById('m4-overhead-slider');
 
   const m4SeqValue = document.getElementById('m4-seq-value');
   const m4ParValue = document.getElementById('m4-par-value');
   const m4ProcValue = document.getElementById('m4-proc-value');
+  const m4OverheadValue = document.getElementById('m4-overhead-value');
 
   const m4SeqTotalEl = document.getElementById('m4-seq-total');
   const m4ParTimeEl = document.getElementById('m4-par-time');
   const m4SpeedupEl = document.getElementById('m4-speedup-value');
+  const m4ShieldBar = document.getElementById('m4-shield-bar');
+  const m4ShieldValue = document.getElementById('m4-shield-value');
+  const m4SpeedupLive = document.getElementById('m4-speedup-live');
+
+  const m4RankEl = document.getElementById('m4-rank');
+  const m4XpValueEl = document.getElementById('m4-xp-value');
+  const m4XpFillEl = document.getElementById('m4-xp-fill');
+  const m4XpNextEl = document.getElementById('m4-xp-next');
+  const m4QuestCountEl = document.getElementById('m4-quest-count');
+  const m4RankLabelEl = document.getElementById('m4-xp-rank-label');
+
+  const m4QuestTerminalEl = document.getElementById('m4-quest-terminal');
+  const m4QuestCalibrateEl = document.getElementById('m4-quest-calibrate');
+  const m4QuestBottleneckEl = document.getElementById('m4-quest-bottleneck');
+  const m4QuestSpeedupEl = document.getElementById('m4-quest-speedup');
+  const m4MissionLog = document.getElementById('m4-mission-log');
+  const m4TermReadout = document.getElementById('m4-term-readout');
+
+  const m4State = {
+    xp: 0,
+    quests: {
+      terminal: false,
+      calibrate: false,
+      bottleneck: false,
+      speedup: false
+    },
+    unlockedTerms: new Set(),
+    bottleneckWins: new Set()
+  };
+
+  const m4Ranks = [
+    { name: "Cadet", min: 0, next: 20, label: "Cadet tier" },
+    { name: "Operator", min: 20, next: 40, label: "Operator tier" },
+    { name: "Strategist", min: 40, next: 60, label: "Strategist tier" },
+    { name: "Architect", min: 60, next: null, label: "Architect tier" }
+  ];
+
+  const termMessages = {
+    "seq-part": "Sequential work is the non-splittable setup or combine step. Every processor must wait here.",
+    "par-part": "Parallel work is the pile of independent tasks. This is the part you divide by P.",
+    "proc": "P is the number of processors. More P shrinks the parallel part, but only to a point.",
+    "overhead": "Overhead is coordination cost that grows as you add processors (sync, messaging, balance).",
+    "model": "Total time = sequential + parallel/P + overhead. Bottlenecks show up when one term dominates."
+  };
+
+  const logM4 = (message) => {
+    if (m4MissionLog) {
+      m4MissionLog.textContent = message;
+    }
+  };
+
+  const addXP = (amount, reason) => {
+    if (!amount) return;
+    m4State.xp += amount;
+    if (reason) {
+      logM4(`+${amount} XP: ${reason}`);
+    }
+    updateM4HUD();
+  };
+
+  const setQuestComplete = (key, el) => {
+    if (m4State.quests[key]) return;
+    m4State.quests[key] = true;
+    if (el) {
+      el.classList.add("is-complete");
+    }
+    updateM4HUD();
+  };
+
+  const updateM4HUD = () => {
+    if (m4XpValueEl) {
+      m4XpValueEl.textContent = m4State.xp.toString();
+    }
+
+    const currentRank = m4Ranks.reduce((acc, rank) => (m4State.xp >= rank.min ? rank : acc), m4Ranks[0]);
+    if (m4RankEl) {
+      m4RankEl.textContent = currentRank.name;
+    }
+    if (m4RankLabelEl) {
+      m4RankLabelEl.textContent = currentRank.label;
+    }
+
+    if (m4XpNextEl) {
+      const nextTarget = currentRank.next;
+      m4XpNextEl.textContent = nextTarget ? Math.max(nextTarget - m4State.xp, 0).toString() : "0";
+    }
+
+    if (m4XpFillEl) {
+      const nextTarget = currentRank.next;
+      const fill = nextTarget ? ((m4State.xp - currentRank.min) / (nextTarget - currentRank.min)) * 100 : 100;
+      m4XpFillEl.style.width = `${Math.min(Math.max(fill, 0), 100).toFixed(0)}%`;
+    }
+
+    if (m4QuestCountEl) {
+      const done = Object.values(m4State.quests).filter(Boolean).length;
+      m4QuestCountEl.textContent = done.toString();
+    }
+  };
 
   function updateM4Model() {
+    if (!m4SeqSlider || !m4ParSlider || !m4ProcSlider || !m4OverheadSlider) {
+      return;
+    }
     const seq = parseFloat(m4SeqSlider.value);   // T_seq-part
     const par = parseFloat(m4ParSlider.value);   // T_parallel-part
     const P   = parseInt(m4ProcSlider.value, 10);
+    const overhead = parseFloat(m4OverheadSlider.value);
 
     // Sequential baseline
     const seqTotal = seq + par;
 
-    // Simple parallel model: seq part + parallel part split over P
-    const parallelTime = seq + par / Math.max(P, 1);
+    // Parallel model: seq part + parallel split + coordination cost
+    const overheadCost = overhead * Math.max(P - 1, 0);
+    const parallelTime = seq + par / Math.max(P, 1) + overheadCost;
 
     const speedup = seqTotal / parallelTime;
+    const shieldRatio = parallelTime > 0 ? Math.min(seq / parallelTime, 1) : 0;
 
     m4SeqValue.textContent = seq.toFixed(0);
     m4ParValue.textContent = par.toFixed(0);
     m4ProcValue.textContent = P.toString();
+    if (m4OverheadValue) {
+      m4OverheadValue.textContent = overhead.toFixed(0);
+    }
 
     m4SeqTotalEl.textContent = seqTotal.toFixed(0);
     m4ParTimeEl.textContent = parallelTime.toFixed(0);
     m4SpeedupEl.textContent = speedup.toFixed(2);
+    if (m4SpeedupLive) {
+      m4SpeedupLive.textContent = speedup.toFixed(2);
+    }
+    if (m4ShieldBar && m4ShieldValue) {
+      const shieldPercent = shieldRatio * 100;
+      m4ShieldBar.style.width = `${shieldPercent.toFixed(0)}%`;
+      m4ShieldValue.textContent = shieldPercent.toFixed(0);
+    }
+
+    if (speedup >= 2 && !m4State.quests.speedup) {
+      setQuestComplete("speedup", m4QuestSpeedupEl);
+      addXP(12, "Speedup threshold cleared");
+    }
   }
 
-  if (m4SeqSlider && m4ParSlider && m4ProcSlider) {
-    m4SeqSlider.addEventListener('input', updateM4Model);
-    m4ParSlider.addEventListener('input', updateM4Model);
-    m4ProcSlider.addEventListener('input', updateM4Model);
+  const markCalibrated = () => {
+    if (!m4State.quests.calibrate) {
+      setQuestComplete("calibrate", m4QuestCalibrateEl);
+      addXP(10, "Rig calibrated");
+    }
+  };
+
+  const loadScenario = (seq, par, proc, overhead) => {
+    if (m4SeqSlider) m4SeqSlider.value = seq;
+    if (m4ParSlider) m4ParSlider.value = par;
+    if (m4ProcSlider) m4ProcSlider.value = proc;
+    if (m4OverheadSlider) m4OverheadSlider.value = overhead;
     updateM4Model();
+    logM4(`Scenario loaded: seq ${seq}s, parallel ${par}s, P=${proc}, overhead ${overhead}s.`);
+  };
+
+  const evaluateBottleneck = (seq, par, proc, overhead) => {
+    const overheadCost = overhead * Math.max(proc - 1, 0);
+    const parallelChunk = par / Math.max(proc, 1) + overheadCost;
+    return seq >= parallelChunk ? "sequential" : "parallel";
+  };
+
+  const termButtons = document.querySelectorAll(".m4-chip");
+  termButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-m4-term");
+      if (!key || !termMessages[key]) return;
+      if (m4TermReadout) {
+        m4TermReadout.textContent = termMessages[key];
+      }
+      if (!m4State.unlockedTerms.has(key)) {
+        m4State.unlockedTerms.add(key);
+        addXP(4, `Decoded ${key.replace("-", " ")}`);
+      }
+      if (m4State.unlockedTerms.size === Object.keys(termMessages).length) {
+        setQuestComplete("terminal", m4QuestTerminalEl);
+        addXP(8, "Formula console fully decoded");
+      }
+    });
+  });
+
+  const sliderInputs = [m4SeqSlider, m4ParSlider, m4ProcSlider, m4OverheadSlider].filter(Boolean);
+  sliderInputs.forEach((slider) => {
+    slider.addEventListener("input", () => {
+      updateM4Model();
+      markCalibrated();
+    });
+  });
+
+  const questCards = document.querySelectorAll(".m4-quest-card");
+  questCards.forEach((card, index) => {
+    const seq = parseFloat(card.dataset.seq);
+    const par = parseFloat(card.dataset.par);
+    const proc = parseFloat(card.dataset.proc);
+    const overhead = parseFloat(card.dataset.overhead);
+    const cardId = `card-${index}`;
+
+    card.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.getAttribute("data-m4-action");
+        if (action === "load") {
+          loadScenario(seq, par, proc, overhead);
+          return;
+        }
+        if (action === "choose") {
+          const choice = btn.getAttribute("data-m4-choice");
+          loadScenario(seq, par, proc, overhead);
+          const result = evaluateBottleneck(seq, par, proc, overhead);
+          if (choice === result) {
+            if (!m4State.bottleneckWins.has(cardId)) {
+              m4State.bottleneckWins.add(cardId);
+              addXP(12, "Correct bottleneck call");
+            } else {
+              logM4("Correct again. Try another mission for more XP.");
+            }
+          } else {
+            logM4("Not quite. Look at the shield and parallel time, then call again.");
+          }
+
+          if (m4State.bottleneckWins.size >= 2) {
+            setQuestComplete("bottleneck", m4QuestBottleneckEl);
+          }
+        }
+      });
+    });
+  });
+
+  const boosters = document.querySelectorAll("[data-m4-boost]");
+  boosters.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = parseInt(btn.getAttribute("data-m4-boost"), 10);
+      if (m4ProcSlider && Number.isFinite(target)) {
+        m4ProcSlider.value = target;
+        updateM4Model();
+        markCalibrated();
+        logM4(`Booster engaged: processors set to ${target}.`);
+      }
+    });
+  });
+
+  if (m4SeqSlider && m4ParSlider && m4ProcSlider && m4OverheadSlider) {
+    updateM4Model();
+    updateM4HUD();
   }
 </script>
 
 <script>
   const MODULE4_PASS_RATIO = 1 / 3;
   const MODULE4_NUMBER = 4;
-  const API_URL = "http://localhost:8587/api/quiz/grade";
+  const API_URL = "http://localhost:8405/api/quiz/grade";
   const submitBtn = document.getElementById("m4-quiz-submit");
   const answerEl = document.getElementById("m4-quiz-answer");
   const resultEl = document.getElementById("m4-quiz-result");
