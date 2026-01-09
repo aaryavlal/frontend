@@ -16,34 +16,34 @@ body {
 .digit-recognizer-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 15px 10px;
 }
 
 /* Header */
 .header {
     text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .header p {
     color: #7f8c8d;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .main-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-bottom: 40px;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
 @media (max-width: 968px) {
@@ -58,8 +58,8 @@ body {
 /* Canvas Section */
 .canvas-section {
     background: #fff;
-    padding: 25px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 6px;
     border: 1px solid #ddd;
 }
 
@@ -67,22 +67,22 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 8px;
 }
 
 .canvas-header h3 {
     color: #2c3e50;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .canvas-controls {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 15px;
+    gap: 6px;
+    padding: 4px 10px;
     background: #f8f9fa;
     border-radius: 4px;
     border: 1px solid #ddd;
@@ -118,8 +118,8 @@ body {
 .canvas-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .canvas-buttons #learn-cnn-btn {
@@ -127,10 +127,10 @@ body {
 }
 
 .btn {
-    padding: 12px 24px;
+    padding: 8px 16px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
@@ -173,8 +173,8 @@ body {
 /* Results Section */
 .results-section {
     background: #fff;
-    padding: 25px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 6px;
     border: 1px solid #ddd;
 }
 
@@ -182,12 +182,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .result-header h3 {
     color: #2c3e50;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -208,22 +208,22 @@ body {
 
 .main-result {
     text-align: center;
-    padding: 40px;
+    padding: 20px;
     background: #f8f9fa;
     border-radius: 4px;
     border: 1px solid #ddd;
-    margin-bottom: 25px;
+    margin-bottom: 12px;
 }
 
 .result-number {
-    font-size: 5rem;
+    font-size: 3.5rem;
     font-weight: 700;
     color: #2c3e50;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .result-confidence {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #7f8c8d;
 }
 
@@ -254,10 +254,10 @@ body {
 .digit-card {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 8px;
     background: #fff;
     border-radius: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     border: 1px solid #e0e0e0;
     transition: all 0.2s;
 }
@@ -272,12 +272,12 @@ body {
 }
 
 .digit-card img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     image-rendering: pixelated;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-right: 15px;
+    margin-right: 10px;
     background: #fff;
 }
 
@@ -310,37 +310,38 @@ body {
 /* Info Section */
 .info-section {
     background: #fff;
-    padding: 30px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 6px;
     border: 1px solid #ddd;
 }
 
 .info-section h3 {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     color: #2c3e50;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .info-section p {
     color: #555;
-    line-height: 1.8;
-    margin-bottom: 20px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
 }
 
 .stats {
     display: flex;
     justify-content: space-around;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .stat {
-    padding: 20px;
+    padding: 10px;
     background: #f8f9fa;
     border-radius: 4px;
     flex: 1;
-    min-width: 150px;
+    min-width: 120px;
     border: 1px solid #e0e0e0;
     text-align: center;
 }
@@ -348,14 +349,14 @@ body {
 .stat strong {
     display: block;
     color: #2c3e50;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
 .stat div {
     color: #555;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
 }
 
 /* Loading spinner */
@@ -395,10 +396,10 @@ body {
 
 .cnn-modal-content {
     background: #fff;
-    border-radius: 8px;
-    padding: 40px;
+    border-radius: 6px;
+    padding: 15px;
     max-width: 1200px;
-    width: 90%;
+    width: 95%;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -408,13 +409,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .cnn-modal-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     color: #2c3e50;
     font-weight: 600;
     margin: 0;
@@ -424,9 +425,9 @@ body {
     background: transparent;
     border: 2px solid #e74c3c;
     color: #e74c3c;
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
@@ -488,18 +489,18 @@ body {
 
 /* Visual Explainer */
 .visual-explainer {
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .explainer-card {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
+    gap: 10px;
+    padding: 10px;
     background: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .explainer-icon {
@@ -778,22 +779,22 @@ body {
 
 .slide-number {
     color: #7f8c8d;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
     font-weight: 500;
 }
 
 .slide h3 {
     color: #2c3e50;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .slide p {
     color: #555;
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.5;
     max-width: 600px;
     margin: 0 auto;
 }
@@ -952,17 +953,17 @@ body {
 /* Interactive Challenge Styles */
 .concept-intro {
     background: #f8f9fa;
-    border-left: 4px solid #3498db;
-    padding: 12px 16px;
-    margin-bottom: 20px;
+    border-left: 3px solid #3498db;
+    padding: 8px 12px;
+    margin-bottom: 12px;
     border-radius: 4px;
     text-align: center;
 }
 
 .concept-intro p {
-    margin: 8px 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    margin: 4px 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
 .concept-intro strong {
@@ -971,23 +972,24 @@ body {
 }
 
 .concept-connection {
-    margin-top: 20px;
-    padding: 12px 16px;
+    margin-top: 12px;
+    padding: 8px 12px;
     background: #e8f5e9;
-    border-left: 4px solid #27ae60;
+    border-left: 3px solid #27ae60;
     border-radius: 4px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: #2c3e50;
 }
 
 .challenge-status {
-    margin-top: 15px;
-    padding: 10px;
+    margin-top: 10px;
+    padding: 8px;
     background: #e3f2fd;
     border-radius: 4px;
     text-align: center;
     font-weight: 500;
+    font-size: 0.9rem;
     color: #2c3e50;
 }
 
@@ -1338,24 +1340,24 @@ body {
 .slide-navigation {
     display: flex;
     justify-content: space-between;
-    gap: 15px;
-    margin-top: 25px;
-    padding-top: 20px;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 12px;
     border-top: 1px solid #ddd;
 }
 
 .nav-btn {
-    padding: 12px 24px;
+    padding: 8px 16px;
     background: #3498db;
     color: white;
     border: none;
-    border-radius: 6px;
-    font-size: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
     flex: 1;
-    max-width: 200px;
+    max-width: 180px;
 }
 
 .nav-btn:hover:not(:disabled) {
