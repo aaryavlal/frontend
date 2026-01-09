@@ -192,7 +192,7 @@ show_reading_time: false
       console.error('API URL:', API_BASE);
       console.error('pythonURI:', pythonURI);
       console.error('FetchOptions:', fetchOptions);
-      document.getElementById('jokeContainer').innerHTML = `<div class="error">⚠️ Failed to load jokes from ${API_BASE}. Make sure the backend (main.py) is running on port 8587. Error: ${error.message}</div>`;
+      document.getElementById('jokeContainer').innerHTML = `<div class="error">⚠️ Failed to load jokes from ${API_BASE}. Make sure the backend (main.py) is running on port 8405. Error: ${error.message}</div>`;
     }
   }
 

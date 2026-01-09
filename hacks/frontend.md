@@ -1446,7 +1446,7 @@ breadcrumbs: true
       <div class="confirm-title" style="margin-bottom: 16px;">Configuration</div>
       <div class="form-group">
         <label for="apiUrl">Flask Server Port</label>
-        <input type="text" id="apiUrl" value="http://localhost:8587" placeholder="http://localhost:8587">
+        <input type="text" id="apiUrl" value="http://localhost:8405" placeholder="http://localhost:8405">
       </div>
       <div class="confirm-buttons" style="margin-top: 16px;">
         <button class="confirm-btn confirm" onclick="saveConfig()">Save</button>
