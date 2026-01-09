@@ -1,6 +1,13 @@
 class DigitRecognizer {
     constructor() {
         this.canvas = document.getElementById('drawing-canvas');
+
+        if (!this.canvas) {
+            console.error('❌ CRITICAL: Canvas element #drawing-canvas not found!');
+            console.log('Available elements:', document.querySelectorAll('canvas'));
+            return;
+        }
+
         this.ctx = this.canvas.getContext('2d');
         this.isDrawing = false;
         this.lastX = 0;
@@ -16,6 +23,7 @@ class DigitRecognizer {
         this.isPlaying = false;
         this.playInterval = null;
 
+        console.log('✅ DigitRecognizer constructor completed successfully');
         this.init();
     }
     
@@ -1183,8 +1191,14 @@ function showSlide(slideNumber) {
     }
 }
 
-// Add click handlers to progress dots and keyboard navigation
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize the main recognizer
+    const recognizer = new DigitRecognizer();
+    window.recognizer = recognizer; // Make it globally accessible
+    recognizer.initInteractiveChallenges();
+
+    // Add click handlers to progress dots
     document.querySelectorAll('.progress-dot').forEach(dot => {
         dot.addEventListener('click', () => {
             const slideNum = parseInt(dot.getAttribute('data-slide'));
@@ -1203,11 +1217,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-});
-
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    const recognizer = new DigitRecognizer();
-    window.recognizer = recognizer; // Make it globally accessible
-    recognizer.initInteractiveChallenges();
 });
