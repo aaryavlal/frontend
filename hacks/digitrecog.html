@@ -1,0 +1,253 @@
+---
+layout: default
+title: AI Digit Recognizer
+permalink: /digitrecog
+---
+
+<div class="digit-recognizer-container">
+    <div class="header">
+        <h1>Digit Recognition Tool</h1>
+        <p>Deep Learning-Powered Handwritten Digit Recognition</p>
+    </div>
+
+    <div class="main-content">
+        <!-- Left: Drawing Canvas -->
+        <div class="canvas-section">
+            <div class="canvas-header">
+                <h3>Drawing Canvas</h3>
+                <div class="canvas-controls">
+                    <label for="brush-size">Brush Size:</label>
+                    <input type="range" id="brush-size" min="5" max="30" value="15">
+                    <span id="brush-value">15</span>
+                </div>
+            </div>
+
+            <canvas id="drawing-canvas" width="500" height="500"></canvas>
+
+            <div class="canvas-buttons">
+                <button id="clear-btn" class="btn btn-secondary">Clear</button>
+                <button id="recognize-btn" class="btn btn-primary">Recognize</button>
+                <button id="learn-cnn-btn" class="btn btn-learn">View Processing Pipeline</button>
+            </div>
+        </div>
+
+        <!-- Right: Results -->
+        <div class="results-section">
+            <div class="result-header">
+                <h3>Recognition Results</h3>
+                <div id="status-indicator" class="status"></div>
+            </div>
+
+            <div id="main-result" class="main-result">
+                <div class="result-number">?</div>
+                <div class="result-confidence">Draw a digit to begin</div>
+            </div>
+
+            <div id="individual-digits" class="individual-digits">
+                <!-- Digits will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h3>System Information</h3>
+        <p>Sequential processing pipeline trained on 60,000+ samples (MNIST dataset). Uses convolution, pooling, and matrix operations to classify digits through ~200K sequential computations.</p>
+
+        <div class="stats">
+            <div class="stat">
+                <strong>Architecture</strong>
+                <div>Conv → Pool → Dense</div>
+            </div>
+            <div class="stat">
+                <strong>Operations</strong>
+                <div>~200,000 per digit</div>
+            </div>
+            <div class="stat">
+                <strong>Accuracy</strong>
+                <div>98.5%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CNN Visualization Modal -->
+    <div id="cnn-visualization-modal" class="cnn-modal">
+        <div class="cnn-modal-content">
+            <div class="cnn-modal-header">
+                <h2>Processing Pipeline Visualization</h2>
+                <button id="close-viz-btn" class="close-btn">✕</button>
+            </div>
+            <div class="layer-progress">
+                <div id="layer-progress-bar" class="layer-progress-bar"></div>
+                <div id="layer-counter" class="layer-counter">Layer 0 / 0</div>
+            </div>
+
+            <div class="layer-info">
+                <h3 id="layer-title">INPUT</h3>
+                <p id="layer-description">Your drawn digit</p>
+            </div>
+
+            <div id="visual-explainer" class="visual-explainer">
+                <!-- Dynamically filled with visual explanations -->
+            </div>
+
+            <div class="sequential-explanation-full">
+                    <h4>Sequential Computing Pipeline</h4>
+
+                    <div class="lesson-content">
+                        <!-- Progress dots -->
+                        <div class="slide-progress">
+                            <span class="progress-dot active" data-slide="1" onclick="showSlide(1)"></span>
+                            <span class="progress-dot" data-slide="2" onclick="showSlide(2)"></span>
+                            <span class="progress-dot" data-slide="3" onclick="showSlide(3)"></span>
+                            <span class="progress-dot" data-slide="4" onclick="showSlide(4)"></span>
+                            <span class="progress-dot" data-slide="5" onclick="showSlide(5)"></span>
+                        </div>
+
+                        <!-- Slideshow container -->
+                        <div class="slideshow-container">
+                            <!-- Slide 1: Pixel Grid Challenge -->
+                            <div class="slide active" id="slide-1">
+                                <div class="slide-number">1/5</div>
+                                <h3>Step 1: From Image to Data</h3>
+                                <div class="concept-intro">
+                                    <p><strong>The Input:</strong> Your drawing becomes a 28×28 grid = 784 numbers</p>
+                                    <p><strong>Data representation:</strong> Each pixel is 0-255 (brightness value)</p>
+                                    <p>Computers don't "see" - they process numerical data through sequential operations</p>
+                                </div>
+                                <div class="pixel-challenge">
+                                    <div class="pixel-visualization">
+                                        <div class="digit-preview-container">
+                                            <canvas id="digit-28x28" width="200" height="200"></canvas>
+                                            <div class="preview-label">Your 28×28 digit</div>
+                                        </div>
+                                        <div class="mini-pixel-grid" id="mini-pixel-grid">
+                                            <!-- 5x5 grid generated by JS -->
+                                        </div>
+                                    </div>
+                                    <div class="challenge-status" id="challenge-1-status">Click pixels to reveal their values. Find one > 150!</div>
+                                </div>
+                                <div class="concept-connection">
+                                    ➜ Next: Apply mathematical transformations to extract features from the data
+                                </div>
+                            </div>
+
+                            <!-- Slide 2: Filter Matcher -->
+                            <div class="slide" id="slide-2">
+                                <div class="slide-number">2/5</div>
+                                <h3>Step 2: Pattern Detection via Convolution</h3>
+                                <div class="concept-intro">
+                                    <p><strong>Operation:</strong> Sliding window multiplies small matrices across the image</p>
+                                    <p><strong>Output:</strong> Feature maps highlighting edges (vertical │, horizontal ━, diagonal ╲)</p>
+                                    <p>This is pure matrix multiplication - each filter produces one output map</p>
+                                </div>
+                                <div class="filter-challenge">
+                                    <div id="filter-preview" class="filter-preview-grid">
+                                        <!-- Will be filled with actual feature maps -->
+                                    </div>
+                                    <div class="filter-options">
+                                        <button class="filter-option" onclick="checkFilter('horizontal', this)">
+                                            <div class="mini-filter">━━━</div>
+                                            <span>Horizontal</span>
+                                        </button>
+                                        <button class="filter-option" onclick="checkFilter('vertical', this)">
+                                            <div class="mini-filter">┃┃┃</div>
+                                            <span>Vertical</span>
+                                        </button>
+                                        <button class="filter-option" onclick="checkFilter('diagonal', this)">
+                                            <div class="mini-filter">╲╲╲</div>
+                                            <span>Diagonal</span>
+                                        </button>
+                                    </div>
+                                    <div class="challenge-status" id="challenge-2-status">Which pattern type dominates your digit?</div>
+                                </div>
+                                <div class="concept-connection">
+                                    ➜ Next: Reduce data dimensionality through downsampling
+                                </div>
+                            </div>
+
+                            <!-- Slide 3: Pooling Game -->
+                            <div class="slide" id="slide-3">
+                                <div class="slide-number">3/5</div>
+                                <h3>Step 3: Data Reduction (Max Pooling)</h3>
+                                <div class="concept-intro">
+                                    <p><strong>Purpose:</strong> Reduce computational load - fewer numbers to process</p>
+                                    <p><strong>Algorithm:</strong> Take max value from each 2×2 region (downsample by 2x)</p>
+                                    <p>28×28 → 14×14 → 7×7. Simple, fast, preserves important features</p>
+                                </div>
+                                <div class="pooling-challenge">
+                                    <div class="pool-before">
+                                        <div class="pool-grid" id="pool-grid">
+                                            <!-- Generated by JS -->
+                                        </div>
+                                        <div class="pool-label">Input 2×2</div>
+                                    </div>
+                                    <div class="pool-arrow">→</div>
+                                    <div class="pool-after">
+                                        <input type="number" id="pool-answer" class="pool-input" placeholder="?" min="0" max="9">
+                                        <button class="check-btn" onclick="checkPooling()">Check</button>
+                                    </div>
+                                </div>
+                                <div class="challenge-status" id="challenge-3-status">What's the maximum value?</div>
+                                <div class="concept-connection">
+                                    ➜ Next: Flatten and classify using weighted connections
+                                </div>
+                            </div>
+
+                            <!-- Slide 4: Neuron Connection -->
+                            <div class="slide" id="slide-4">
+                                <div class="slide-number">4/5</div>
+                                <h3>Step 4: Classification Layer (Fully Connected)</h3>
+                                <div class="concept-intro">
+                                    <p><strong>Input:</strong> Flattened feature vector (all previous layer outputs)</p>
+                                    <p><strong>Process:</strong> Weighted sum: output[i] = Σ(input[j] × weight[i][j])</p>
+                                    <p>Each output is computed independently - fully parallelizable matrix operation</p>
+                                </div>
+                                <div class="neuron-challenge">
+                                    <div class="neuron-visual" id="neuron-visual">
+                                        <!-- Generated by JS -->
+                                    </div>
+                                    <div class="answer-options" id="neuron-answers">
+                                        <!-- Generated by JS -->
+                                    </div>
+                                    <div class="challenge-status" id="challenge-4-status">How many connections between layers?</div>
+                                </div>
+                                <div class="concept-connection">
+                                    ➜ Next: See the final prediction with confidence scores
+                                </div>
+                            </div>
+
+                            <!-- Slide 5: Speed Round -->
+                            <div class="slide" id="slide-5">
+                                <div class="slide-number">5/5</div>
+                                <h3>Step 5: Output & Softmax</h3>
+                                <div class="concept-intro">
+                                    <p><strong>Processing Pipeline:</strong> 784 pixels → Conv (matrix ops) → Pool (downsample) → Dense (weighted sum) → 10 outputs</p>
+                                    <p><strong>Final step:</strong> Softmax converts raw scores to probabilities that sum to 1.0</p>
+                                    <p>Total inference: ~200K multiply-add operations in sequence</p>
+                                </div>
+                                <div class="speed-challenge">
+                                    <canvas id="speed-canvas" width="140" height="140"></canvas>
+                                    <div class="speed-options" id="speed-options">
+                                        <!-- Generated by JS -->
+                                    </div>
+                                    <div class="challenge-status" id="challenge-5-status">What digit did you draw?</div>
+                                </div>
+                                <div class="concept-connection">
+                                    🎉 This is a Convolutional Neural Network - a clever application of sequential mathematical operations. Draw a new digit to explore again!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="slide-navigation">
+                            <button class="nav-btn prev-btn" onclick="prevSlide()">← Previous</button>
+                            <button class="nav-btn next-btn" onclick="nextSlide()">Next →</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{{ '/assets/css/digrecog.css' | relative_url }}">
+<script src="{{ '/assets/js/digit-recognizer.js' | relative_url }}"></script>
