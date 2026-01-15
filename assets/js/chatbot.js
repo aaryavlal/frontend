@@ -214,10 +214,13 @@ function formatMessageDate(datestr) {
 async function fetchData(url, method = "GET", data = null) {
   const options = {
     method, // HTTP method (GET, POST, DELETE, etc.)
-    headers: { "Content-Type": "application/json" }, // Headers for the request
     mode: "cors", // Cross-origin resource sharing
     cache: "no-cache", // No caching
-    credentials: "same-origin", // Same-origin credentials
+    credentials: "include", // Include credentials (cookies, etc.)
+    headers: {
+      "Content-Type": "application/json",
+      "X-Origin": "client" // Custom header to identify source
+    },
     redirect: "follow", // Follow redirects
     referrerPolicy: "no-referrer", // No referrer policy
   };

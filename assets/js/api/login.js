@@ -104,12 +104,12 @@ function getCredentials(baseurl) {
     // Call the integrated backend's /api/auth/me endpoint
     const URL = pythonURI + '/api/auth/me';
     return fetch(URL, {
+        ...fetchOptions,
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            ...fetchOptions.headers,
             'Authorization': `Bearer ${authToken}`
-        },
-        credentials: 'include'
+        }
     })
     .then(response => {
         if (!response.ok) {

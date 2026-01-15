@@ -176,7 +176,16 @@ class DigitRecognizer {
         const statusIndicator = document.getElementById('status-indicator');
 
         try {
-            const response = await fetch(`${this.API_URL}/health`);
+            const response = await fetch(`${this.API_URL}/health`, {
+                method: 'GET',
+                mode: 'cors',
+                cache: 'default',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Origin': 'client'
+                }
+            });
             const data = await response.json();
 
             if (data.status === 'ok') {
@@ -205,8 +214,12 @@ class DigitRecognizer {
             // Call API
             const response = await fetch(`${this.API_URL}/predict`, {
                 method: 'POST',
+                mode: 'cors',
+                cache: 'default',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-Origin': 'client'
                 },
                 body: JSON.stringify({ image: imageData })
             });
@@ -299,7 +312,13 @@ class DigitRecognizer {
         try {
             const response = await fetch(`${this.API_URL}/visualize`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                mode: 'cors',
+                cache: 'default',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Origin': 'client'
+                },
                 body: JSON.stringify({ image: imageData })
             });
 
