@@ -1583,6 +1583,12 @@ breadcrumbs: true
     const savedUrl = localStorage.getItem('apiUrl');
     if (savedUrl) {
       document.getElementById('apiUrl').value = savedUrl;
+    } else {
+      // Set default based on hostname
+      const defaultUrl = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+        ? "http://localhost:8405"
+        : "https://hardwarehavoc.opencodingsociety.com";
+      document.getElementById('apiUrl').value = defaultUrl;
     }
   }
 
