@@ -1,8 +1,8 @@
 ---
 toc: false
 layout: post
-title: "Core 5 — Module 5: Performance & Scaling"
-description: "Module 5: Measuring performance through speedup"
+title: "Core 5 — Hardware Havoc"
+description: "Module 5: Understanding hardware performance and parallel computing"
 permalink: /cores/core-5
 breadcrumbs: false
 ---
@@ -11,7 +11,7 @@ breadcrumbs: false
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Speedup Formula - Interactive Learning</title>
+<title>Hardware Havoc - Interactive Performance Learning</title>
 <style>
 * {
     box-sizing: border-box;
@@ -32,10 +32,164 @@ body {
     letter-spacing: 0.3px;
 }
 
+/* Welcome Overlay */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 14, 20, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.welcome-overlay.hidden {
+    display: none;
+}
+
+.welcome-box {
+    background: linear-gradient(135deg, #1a2028 0%, #0f1419 100%);
+    border: 3px solid #00ffaa;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 700px;
+    box-shadow: 0 20px 60px rgba(0,255,170,0.3), 0 0 100px rgba(0,255,170,0.1);
+    animation: slideUp 0.6s ease-out;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.welcome-box h1 {
+    color: #00ffaa;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(0,255,170,0.6);
+}
+
+.welcome-box p {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.welcome-box .highlight {
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.welcome-box ul {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.welcome-box li {
+    color: #94a3b8;
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.start-btn {
+    background: linear-gradient(135deg, #00ffaa 0%, #00d4ff 100%);
+    color: #0a0e14;
+    border: none;
+    padding: 16px 48px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,255,170,0.4);
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,255,170,0.6);
+}
+
 .page-wrapper {
     display: flex;
     min-height: 100vh;
     max-width: 100vw;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1200px) {
+    .page-wrapper {
+        flex-direction: column;
+    }
+    .info-sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 2px solid #1e293b;
+    }
+    .main-content {
+        max-width: 100vw !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-box {
+        padding: 24px;
+        margin: 20px;
+    }
+    .welcome-box h1 {
+        font-size: 1.8rem;
+    }
+    .welcome-box p {
+        font-size: 0.95rem;
+    }
+    .content-header h1 {
+        font-size: 1.8rem;
+    }
+    .sidebar-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-box {
+        padding: 20px;
+        margin: 10px;
+    }
+    .welcome-box h1 {
+        font-size: 1.5rem;
+    }
+    .start-btn {
+        padding: 12px 32px;
+        font-size: 1rem;
+    }
 }
 
 /* LEFT SIDEBAR - Information Panels */
