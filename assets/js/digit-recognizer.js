@@ -1,3 +1,5 @@
+import { pythonURI, fetchOptions } from './api/config.js';
+
 class DigitRecognizer {
     constructor() {
         this.canvas = document.getElementById('drawing-canvas');
@@ -14,8 +16,8 @@ class DigitRecognizer {
         this.lastY = 0;
         this.brushSize = 15;
 
-        // API endpoint - uses current host for EC2 compatibility (backend runs on port 8405)
-        this.API_URL = `${window.location.protocol}//${window.location.hostname}:8405/api/digit`;
+        // API endpoint - uses pythonURI from config.js (same as other APIs)
+        this.API_URL = `${pythonURI}/api/digit`;
 
         // CNN visualization state
         this.currentLayerIndex = 0;
@@ -176,16 +178,7 @@ class DigitRecognizer {
         const statusIndicator = document.getElementById('status-indicator');
 
         try {
-            const response = await fetch(`${this.API_URL}/health`, {
-                method: 'GET',
-                mode: 'cors',
-                cache: 'default',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Origin': 'client'
-                }
-            });
+            const response = await fetch(`${this.API_URL}/health`, fetchOptions);
             const data = await response.json();
 
             if (data.status === 'ok') {
@@ -213,14 +206,8 @@ class DigitRecognizer {
             
             // Call API
             const response = await fetch(`${this.API_URL}/predict`, {
+                ...fetchOptions,
                 method: 'POST',
-                mode: 'cors',
-                cache: 'default',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Origin': 'client'
-                },
                 body: JSON.stringify({ image: imageData })
             });
             
@@ -311,14 +298,8 @@ class DigitRecognizer {
 
         try {
             const response = await fetch(`${this.API_URL}/visualize`, {
+                ...fetchOptions,
                 method: 'POST',
-                mode: 'cors',
-                cache: 'default',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Origin': 'client'
-                },
                 body: JSON.stringify({ image: imageData })
             });
 
