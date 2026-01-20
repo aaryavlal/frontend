@@ -191,7 +191,10 @@ class DigitRecognizer {
         } catch (error) {
             console.error('API health check failed:', error);
             statusIndicator.classList.remove('ready');
-            alert('⚠️ Cannot connect to API. Make sure Flask server is running on port 8405 with digit_api blueprint registered.');
+            // Only show alert on localhost - production API may not be deployed
+            if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                alert('⚠️ Cannot connect to API. Make sure Flask server is running on port 8405 with digit_api blueprint registered.');
+            }
         }
     }
     
