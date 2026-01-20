@@ -1397,9 +1397,334 @@ body {
     margin-top: 0;
 }
 
+/* CPU Collection Animation */
+.cpu-collection {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a2028 0%, #0f1419 100%);
+    border: 3px solid #00ffaa;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,255,170,0.4);
+    display: none;
+    animation: popIn 0.5s ease-out;
+}
+
+.cpu-collection.show {
+    display: block;
+}
+
+/* Progress Tracker */
+.progress-tracker {
+    background: rgba(26, 32, 40, 0.6);
+    border: 2px solid #38bdf8;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.progress-tracker h4 {
+    color: #38bdf8;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress-bar-container {
+    background: #1e293b;
+    border-radius: 8px;
+    height: 24px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, #00ffaa 0%, #00d4ff 100%);
+    height: 100%;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #0a0e14;
+}
+
+.progress-text {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+@keyframes popIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.cpu-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: spin 2s ease-in-out;
+}
+
+@keyframes spin {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(-15deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.cpu-collection h2 {
+    color: #00ffaa;
+    font-size: 2rem;
+    margin-bottom: 16px;
+    text-shadow: 0 0 15px rgba(0,255,170,0.6);
+}
+
+.cpu-collection p {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+
+.cpu-count {
+    color: #38bdf8;
+    font-size: 3rem;
+    font-weight: 800;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
+    margin: 20px 0;
+}
+
+.collect-btn {
+    background: linear-gradient(135deg, #00ffaa 0%, #00d4ff 100%);
+    color: #0a0e14;
+    border: none;
+    padding: 16px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,255,170,0.4);
+}
+
+.collect-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,255,170,0.6);
+}
+
+/* Fractal Hint Section */
+.fractal-hint {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 2px solid #a855f7;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 40px 0;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+}
+
+.fractal-hint h2 {
+    color: #c4b5fd;
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.fractal-hint p {
+    color: #cbd5e1;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.fractal-hint .highlight {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.fractal-hint ul {
+    margin: 16px 0 16px 24px;
+}
+
+.fractal-hint li {
+    color: #94a3b8;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.fractal-link {
+    display: inline-block;
+    background: rgba(168, 85, 247, 0.2);
+    color: #c4b5fd;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 16px;
+    transition: all 0.3s ease;
+    border: 2px solid #a855f7;
+}
+
+.fractal-link:hover {
+    background: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+}
+
+/* Help Tooltip System */
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 2px solid #38bdf8;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: help;
+    margin-left: 8px;
+    position: relative;
+}
+
+.help-icon:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #1e293b;
+    color: #cbd5e1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    border: 1px solid #38bdf8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    max-width: 300px;
+    white-space: normal;
+}
+
+/* Additional responsive improvements */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .controls input,
+    .controls button {
+        width: 100%;
+    }
+    
+    .drag-area {
+        min-height: 100px;
+        padding: 12px;
+    }
+    
+    .block {
+        padding: 10px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .live-panel {
+        padding: 16px;
+    }
+    
+    .speed-big {
+        font-size: 2.5rem;
+    }
+    
+    .modal-body .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .fractal-hint {
+        padding: 20px;
+    }
+    
+    .fractal-hint h2 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .activity-card {
+        padding: 16px;
+    }
+    
+    .game-section-title {
+        font-size: 1rem;
+    }
+    
+    .results,
+    .saved-runs {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+}
+
 </style>
 </head>
 <body>
+
+<!-- Welcome Overlay -->
+<div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-box">
+        <h1>🎮 Hardware Havoc</h1>
+        <p>Welcome to <span class="highlight">Module 5: Hardware Performance</span>!</p>
+        <p>In this module, you'll explore how different computing hardware configurations affect performance. Understanding hardware performance is crucial for solving complex computational problems efficiently.</p>
+        
+        <ul>
+            <li>🎯 <strong>Learn:</strong> How parallel computing improves performance through speedup</li>
+            <li>🧪 <strong>Experiment:</strong> Drag and drop tasks to see real-time performance changes</li>
+            <li>⚡ <strong>Discover:</strong> When parallel processing makes a difference</li>
+            <li>🏆 <strong>Apply:</strong> Connect hardware knowledge to real-world problems</li>
+        </ul>
+        
+        <button class="start-btn" onclick="closeWelcome()">Start Learning →</button>
+    </div>
+</div>
+
+<!-- CPU Collection Popup -->
+<div class="cpu-collection" id="cpuCollection">
+    <div class="cpu-icon">🔥</div>
+    <h2>OCS Delivery Service</h2>
+    <p>Congratulations! You've mastered hardware performance concepts!</p>
+    <p>You've earned:</p>
+    <div class="cpu-count">+1 CPU Core</div>
+    <p>These CPU cores will help you run the Fractal Machine faster!</p>
+    <button class="collect-btn" onclick="collectCPU()">Collect CPU →</button>
+</div>
 
 <div class="page-wrapper">
     <!-- LEFT SIDEBAR with Information Panels -->
@@ -1591,10 +1916,37 @@ body {
 
         <!-- Main Activity Card -->
         <div class="activity-card">
-            <h2 class="activity-title">🎮 Drag & Drop Activity</h2>
+            <h2 class="activity-title">
+                🎮 Drag & Drop Activity
+                <span class="help-icon">?
+                    <span class="tooltip">Drag tasks between areas to experiment with parallel vs. serial execution!</span>
+                </span>
+            </h2>
             
             <div class="activity-intro">
-                <p><strong>How to use:</strong> Create tasks by entering a time value and clicking "Add Task". Then drag tasks from the Task Pool into either the Series Row (sequential) or Parallel Row (simultaneous). Click "Compute Speedup" to see the performance improvement!</p>
+                <p><strong>Step-by-step Guide:</strong></p>
+                <ol style="margin-left: 20px; color: #cbd5e1; line-height: 1.8;">
+                    <li><strong>Create Tasks:</strong> Enter a time value (e.g., 10) and click "Add Task"</li>
+                    <li><strong>Organize Tasks:</strong> Drag tasks from the Task Pool to either:
+                        <ul style="margin-left: 20px; margin-top: 8px;">
+                            <li><em>Series Row</em> - Tasks run one after another (slower but sometimes necessary)</li>
+                            <li><em>Parallel Row</em> - Tasks run simultaneously (faster when possible)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Calculate:</strong> Click "Compute Speedup" to see performance improvements</li>
+                    <li><strong>Experiment:</strong> Try different configurations to maximize speedup!</li>
+                </ol>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="progress-tracker">
+                <h4>🎯 Progress to CPU Reward</h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;">
+                        <span id="progressBarText">0/3</span>
+                    </div>
+                </div>
+                <p class="progress-text">Complete 3 runs with speedup > 1.5× to earn a CPU core!</p>
             </div>
 
             <!-- Live Speedup Display -->
@@ -1619,19 +1971,32 @@ body {
                     <button class="show-btn" onclick="showSavedRuns()">📊 Show Saved</button>
                 </div>
 
-                <h3 class="game-section-title">📦 Task Pool</h3>
+                <h3 class="game-section-title">
+                    📦 Task Pool
+                    <span class="help-icon">?
+                        <span class="tooltip">Tasks waiting to be organized. Drag them to series or parallel rows below.</span>
+                    </span>
+                </h3>
                 <div class="drag-area" id="taskPool" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <span class="area-label">Available Tasks</span>
                     <span class="area-hint">Drag tasks from here to series or parallel rows below</span>
                 </div>
 
-                <h3 class="game-section-title">🔄 Series Row (Sequential)</h3>
+                <h3 class="game-section-title">🔄 Series Row (Sequential)
+                    <span class="help-icon">?
+                        <span class="tooltip">Tasks here run one after another. Total time = sum of all task times.</span>
+                    </span>
+                </h3>
                 <div class="drag-area" id="seriesRow" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <span class="area-label">Series Tasks (Run One After Another)</span>
                     <span class="area-hint">These tasks execute sequentially - total time = sum of all</span>
                 </div>
 
-                <h3 class="game-section-title">⚡ Parallel Row (Simultaneous)</h3>
+                <h3 class="game-section-title">⚡ Parallel Row (Simultaneous)
+                    <span class="help-icon">?
+                        <span class="tooltip">Tasks here run at the same time! Total time = longest task time.</span>
+                    </span>
+                </h3>
                 <div class="drag-area" id="parallelRow" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <span class="area-label">Parallel Tasks (Run At Same Time)</span>
                     <span class="area-hint">These tasks execute simultaneously - time = longest task</span>
@@ -1640,6 +2005,26 @@ body {
                 <div id="results" class="results"></div>
                 <div id="savedRuns" class="saved-runs"></div>
             </div>
+        </div>
+
+        <!-- Fractal Problem Hint Section -->
+        <div class="fractal-hint">
+            <h2>🧩 Connection to the Fractal Problem</h2>
+            <p>Now that you understand <span class="highlight">hardware performance and parallel computing</span>, think about how this applies to our ultimate challenge:</p>
+            
+            <p><strong>The Fractal Problem</strong> requires massive computational power. Each pixel in a fractal needs to be calculated, and with millions of pixels, this takes a lot of time!</p>
+            
+            <p>Consider these questions:</p>
+            <ul>
+                <li>💭 <strong>How could parallel processing help render fractals faster?</strong></li>
+                <li>💭 <strong>If each pixel calculation is independent, can they run in parallel?</strong></li>
+                <li>💭 <strong>What speedup could you achieve with multiple CPU cores or a GPU?</strong></li>
+                <li>💭 <strong>Are there parts of fractal generation that MUST run sequentially?</strong></li>
+            </ul>
+            
+            <p><em>Hint: With the right hardware configuration, you could turn hours of computation into minutes!</em></p>
+            
+            <a href="/cores/core-6" class="fractal-link">Continue to Fractal Challenge →</a>
         </div>
     </div>
 </div>
@@ -1668,6 +2053,74 @@ body {
 <script>
 // Initialize global variables
 window.currentScore = null;
+let cpuCoresCollected = 0;
+
+// Welcome overlay functions
+function closeWelcome() {
+    document.getElementById('welcomeOverlay').classList.add('hidden');
+    localStorage.setItem('core5_welcomeSeen', 'true');
+}
+
+// Check if welcome was already seen
+window.addEventListener('load', function() {
+    const welcomeSeen = localStorage.getItem('core5_welcomeSeen');
+    if (welcomeSeen === 'true') {
+        document.getElementById('welcomeOverlay').classList.add('hidden');
+    }
+});
+
+// CPU Collection functions
+function showCPUCollection() {
+    const cpuPopup = document.getElementById('cpuCollection');
+    cpuPopup.classList.add('show');
+    
+    // Store CPU collection in localStorage
+    const currentCPUs = parseInt(localStorage.getItem('totalCPUs') || '0');
+    localStorage.setItem('totalCPUs', currentCPUs + 1);
+    
+    // Mark this module as completed
+    localStorage.setItem('core5_completed', 'true');
+}
+
+function collectCPU() {
+    const cpuPopup = document.getElementById('cpuCollection');
+    cpuPopup.classList.remove('show');
+    
+    // Optional: redirect to next module or show success message
+    alert('🎉 CPU Core collected! Check your inventory before tackling the Fractal Machine!');
+}
+
+// Trigger CPU collection when user achieves significant progress
+function checkForCPUReward() {
+    const completedRuns = savedRuns.filter(run => run.speedup > 1.5).length;
+    const moduleCompleted = localStorage.getItem('core5_completed');
+    
+    // Update progress bar
+    updateProgressBar(completedRuns);
+    
+    // Award CPU if user has 3+ good speedup runs and hasn't collected yet
+    if (completedRuns >= 3 && moduleCompleted !== 'true') {
+        setTimeout(() => {
+            showCPUCollection();
+        }, 1000);
+    }
+}
+
+// Update progress bar visual
+function updateProgressBar(completedRuns) {
+    const progressBarFill = document.getElementById('progressBarFill');
+    const progressBarText = document.getElementById('progressBarText');
+    
+    const progress = Math.min(completedRuns, 3);
+    const percentage = (progress / 3) * 100;
+    
+    progressBarFill.style.width = percentage + '%';
+    progressBarText.textContent = progress + '/3';
+    
+    if (progress >= 3) {
+        progressBarText.textContent = '✓ Complete!';
+    }
+}
 
 // Initialize default tasks
 function initializeDefaultTasks() {
@@ -2215,6 +2668,9 @@ function saveRun() {
 
     savedRuns.push({name, ...window.currentScore, timestamp: new Date().toLocaleString()});
     alert(`✅ Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
+    
+    // Check if user should receive CPU reward
+    checkForCPUReward();
 }
 
 function showSavedRuns() {
