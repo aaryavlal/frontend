@@ -12,3 +12,4 @@ newspaper3k
 wikipedia
 emoji
 lxml_html_clean
+keras
