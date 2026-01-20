@@ -874,7 +874,6 @@ function checkEfficiency() {
     let message = "";
     let details = "";
     let rating = "poor";
-    let magnitudeAnalysis = "";
 
     // Evaluate based on scenario type
     if (currentScenario.type === "sequential") {
@@ -884,18 +883,15 @@ function checkEfficiency() {
             details = "Sequential tasks run best on a single computer. Excellent choice!";
             rating = "excellent";
 
-            // Magnitude analysis for sequential
+            // Apply scaling penalty for sequential tasks
             if (componentCounts.computer > 1) {
-                efficiency = Math.max(70, efficiency - (componentCounts.computer - 1) * 10);
                 if (componentCounts.computer <= 2) {
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> You used ${componentCounts.computer} computers. Multiple computers CAN work in parallel, but with significant overhead for coordination. Cost-effectiveness drops as sequential tasks don't benefit from horizontal scaling. Consider: 1 computer costs $${COMPONENT_SPECS.computer.cost}, but ${componentCounts.computer} cost $${metrics.cost} with minimal speedup.`;
+                    efficiency = Math.max(70, efficiency - (componentCounts.computer - 1) * 10);
                     rating = "good";
                 } else if (componentCounts.computer <= 5) {
-                    magnitudeAnalysis = `<br><br><strong>⚠️ OVERKILL:</strong> ${componentCounts.computer} computers for a sequential task is excessive! Sequential workloads can only use ONE processor at a time, so ${componentCounts.computer - 1} computers sit mostly idle. You're spending $${metrics.cost} when $${COMPONENT_SPECS.computer.cost} would work just as well. Network coordination overhead makes this ${componentCounts.computer}x more expensive with <1.2x speedup.`;
-                    efficiency = Math.max(50, efficiency - (componentCounts.computer - 2) * 15);
+                    efficiency = Math.max(50, efficiency - (componentCounts.computer - 1) * 10 - (componentCounts.computer - 2) * 15);
                     rating = "poor";
                 } else {
-                    magnitudeAnalysis = `<br><br><strong>🚨 MASSIVE OVERKILL:</strong> ${componentCounts.computer} computers?! This is absurdly wasteful for sequential processing! Sequential tasks are fundamentally single-threaded - only ONE computer can do the work at any moment. You've spent $${metrics.cost} (${componentCounts.computer}x the cost) for essentially zero speedup gain. This demonstrates a fundamental misunderstanding of sequential vs parallel workloads.`;
                     efficiency = 30;
                     rating = "poor";
                 }
@@ -907,15 +903,11 @@ function checkEfficiency() {
             rating = "good";
 
             if (componentCounts.server > 1) {
-                efficiency = Math.max(40, efficiency - (componentCounts.server - 1) * 8);
-                const serverCost = componentCounts.server * COMPONENT_SPECS.server.cost;
                 if (componentCounts.server <= 2) {
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> Using ${componentCounts.server} servers is extremely wasteful for sequential tasks. Each server costs $${COMPONENT_SPECS.server.cost}, totaling $${serverCost} just for servers. Sequential workloads can only use one processor at a time, so extra servers sit completely idle.`;
+                    efficiency = Math.max(40, efficiency - (componentCounts.server - 1) * 8);
                 } else if (componentCounts.server <= 5) {
-                    magnitudeAnalysis = `<br><br><strong>⚠️ SEVERE OVERKILL:</strong> ${componentCounts.server} servers ($${serverCost}) for sequential processing is ludicrous! A server already has ${COMPONENT_SPECS.server.parallelism} processors - but sequential tasks can only use ONE at a time. You're wasting ${componentCounts.server - 1} entire servers. A single $${COMPONENT_SPECS.computer.cost} computer would be ${Math.round(serverCost / COMPONENT_SPECS.computer.cost)}x more cost-effective!`;
-                    efficiency = Math.max(25, efficiency - 20);
+                    efficiency = Math.max(25, efficiency - (componentCounts.server - 1) * 8 - 20);
                 } else {
-                    magnitudeAnalysis = `<br><br><strong>🚨 CATASTROPHIC WASTE:</strong> ${componentCounts.server} servers?! $${serverCost} for a sequential task that needs $${COMPONENT_SPECS.computer.cost}?! This is a ${Math.round(serverCost / COMPONENT_SPECS.computer.cost)}x cost overrun! Each server has ${COMPONENT_SPECS.server.parallelism} processors, but sequential processing uses ONE processor TOTAL across your entire infrastructure. ${componentCounts.server * COMPONENT_SPECS.server.parallelism - 1} processors sit permanently idle. This would get you fired in industry!`;
                     efficiency = 15;
                 }
             }
@@ -926,12 +918,7 @@ function checkEfficiency() {
             rating = "poor";
 
             if (componentCounts.cloud > 1) {
-                const cloudCost = componentCounts.cloud * COMPONENT_SPECS.cloud.cost;
-                const wasteMultiplier = Math.round(cloudCost / COMPONENT_SPECS.computer.cost);
                 efficiency = 10;
-                magnitudeAnalysis = `<br><br><strong>🚨 NUCLEAR-LEVEL OVERKILL:</strong> ${componentCounts.cloud} cloud instances ($${cloudCost.toLocaleString()}) for a sequential task?! This is financial insanity! Cloud infrastructure is designed for millions of global users - you're using it to run a single sequential program. You've wasted ${wasteMultiplier}x the necessary budget. Each cloud has ${COMPONENT_SPECS.cloud.parallelism} processors across ${componentCounts.cloud} instances = ${componentCounts.cloud * COMPONENT_SPECS.cloud.parallelism} total processors, but sequential tasks use ONLY ONE. This is a career-ending mistake in real-world engineering!`;
-            } else {
-                magnitudeAnalysis = `<br><br><strong>⚠️ EXTREME OVERKILL:</strong> A cloud instance ($${COMPONENT_SPECS.cloud.cost}) for sequential processing? That's ${Math.round(COMPONENT_SPECS.cloud.cost / COMPONENT_SPECS.computer.cost)}x more expensive than needed! Cloud infrastructure is built for massive global distribution, not single sequential tasks. You're using enterprise-scale resources for a simple job.`;
             }
         } else {
             efficiency = 50;
@@ -946,26 +933,16 @@ function checkEfficiency() {
             details = "Servers with multiple processors are perfect for parallel processing tasks!";
             rating = "excellent";
 
-            // Magnitude analysis for parallel
+            // Apply scaling adjustments for parallel tasks
             if (componentCounts.server > 1) {
-                const costPerServer = COMPONENT_SPECS.server.cost;
-                const totalServerCost = componentCounts.server * costPerServer;
-                const parallelSpeedup = calculateAmdahlSpeedup(currentScenario.parallelFraction, metrics.parallelism);
-
                 if (componentCounts.server <= 3) {
                     efficiency = Math.min(98, efficiency + 3);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.server} servers provide good horizontal scaling for parallel tasks. Total cost: $${totalServerCost}. With ${(currentScenario.parallelFraction * 100).toFixed(0)}% parallelizable work, you achieve ${parallelSpeedup.toFixed(2)}x speedup. This is cost-effective!`;
                     rating = "excellent";
                 } else if (componentCounts.server <= 7) {
                     efficiency = Math.max(70, efficiency - (componentCounts.server - 3) * 5);
-                    const maxSpeedup = (1 / (1 - currentScenario.parallelFraction)).toFixed(2);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.server} servers may be excessive. Due to Amdahl's Law, the ${(currentScenario.parallelFraction * 100).toFixed(0)}% parallel portion limits speedup to ${maxSpeedup}x maximum. Beyond 3 servers, you hit diminishing returns. Total cost: $${totalServerCost}. You're approaching the point where additional servers provide minimal benefit.`;
                     rating = "good";
                 } else {
                     efficiency = Math.max(55, efficiency - (componentCounts.server - 3) * 8);
-                    const maxSpeedup = (1 / (1 - currentScenario.parallelFraction)).toFixed(2);
-                    const actualSpeedup = parallelSpeedup.toFixed(2);
-                    magnitudeAnalysis = `<br><br><strong>⚠️ OVERKILL:</strong> ${componentCounts.server} servers ($${totalServerCost}) is over-provisioned! Amdahl's Law dictates maximum ${maxSpeedup}x speedup with ${(currentScenario.parallelFraction * 100).toFixed(0)}% parallel work. You're achieving ${actualSpeedup}x speedup - already near the theoretical limit! Additional servers cost $${COMPONENT_SPECS.server.cost} each but add <0.1x speedup. This is inefficient spending - you've hit the parallelization wall!`;
                     rating = "good";
                 }
             }
@@ -976,18 +953,12 @@ function checkEfficiency() {
             rating = "good";
 
             if (componentCounts.cloud > 1) {
-                const cloudCost = componentCounts.cloud * COMPONENT_SPECS.cloud.cost;
-                const serverAlt = COMPONENT_SPECS.server.cost * 3;
                 if (componentCounts.cloud <= 3) {
                     efficiency = Math.max(55, efficiency - (componentCounts.cloud - 1) * 8);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.cloud} cloud instances cost $${cloudCost.toLocaleString()}. While clouds scale infinitely, this parallel task doesn't need global distribution. A single server ($${COMPONENT_SPECS.server.cost}) or 2-3 servers ($${serverAlt}) would be ${Math.round(cloudCost / serverAlt)}x more cost-effective for this workload.`;
                 } else {
                     efficiency = Math.max(40, efficiency - (componentCounts.cloud - 1) * 10);
-                    magnitudeAnalysis = `<br><br><strong>⚠️ MAJOR OVERKILL:</strong> ${componentCounts.cloud} clouds ($${cloudCost.toLocaleString()}) for parallel processing is wasteful! Cloud infrastructure excels at DISTRIBUTED tasks (global users), not parallel computing in one location. You're paying for geographic distribution, auto-scaling, and CDN features you don't need. This costs ${Math.round(cloudCost / serverAlt)}x more than 2-3 servers that would perform identically for this workload!`;
                     rating = "poor";
                 }
-            } else {
-                magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> 1 cloud instance ($${COMPONENT_SPECS.cloud.cost}) works but is expensive for parallel tasks. Clouds excel at distributed workloads (global scale), not localized parallel processing. Consider: 3 servers ($${COMPONENT_SPECS.server.cost * 3}) would provide similar parallel performance at ${Math.round(COMPONENT_SPECS.cloud.cost / (COMPONENT_SPECS.server.cost * 3))}x lower cost.`;
             }
         } else if (hasComputer) {
             efficiency = 40;
@@ -996,9 +967,7 @@ function checkEfficiency() {
             rating = "poor";
 
             if (componentCounts.computer > 1) {
-                const speedup = calculateAmdahlSpeedup(currentScenario.parallelFraction, componentCounts.computer);
                 efficiency = Math.min(65, 40 + componentCounts.computer * 5);
-                magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> Using ${componentCounts.computer} computers provides some parallelism (${speedup.toFixed(2)}x speedup). This CAN work, but coordination overhead is high. Total cost: $${componentCounts.computer * COMPONENT_SPECS.computer.cost}. A single server ($${COMPONENT_SPECS.server.cost}) with ${COMPONENT_SPECS.server.parallelism} processors would give ${calculateAmdahlSpeedup(currentScenario.parallelFraction, COMPONENT_SPECS.server.parallelism).toFixed(2)}x speedup more efficiently.`;
                 rating = componentCounts.computer >= 4 ? "good" : "poor";
             }
         } else {
@@ -1014,20 +983,16 @@ function checkEfficiency() {
             details = "Cloud infrastructure is ideal for distributed processing across multiple locations!";
             rating = "excellent";
 
-            // Magnitude analysis for distributed
+            // Apply scaling adjustments for distributed tasks
             if (componentCounts.cloud > 1) {
-                const cloudCost = componentCounts.cloud * COMPONENT_SPECS.cloud.cost;
                 if (componentCounts.cloud <= 5) {
                     efficiency = Math.min(100, efficiency + 2);
-                    magnitudeAnalysis = `<br><br><strong>✅ Excellent Scaling:</strong> ${componentCounts.cloud} cloud instances provide excellent redundancy and geographic distribution! Total cost: $${cloudCost.toLocaleString()}. For distributed tasks serving global users, multiple clouds in different regions reduce latency and improve fault tolerance. Great architecture for global scale!`;
                     rating = "excellent";
                 } else if (componentCounts.cloud <= 10) {
                     efficiency = Math.min(98, efficiency);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.cloud} cloud instances ($${cloudCost.toLocaleString()}) provide robust global distribution. This is appropriate for extremely high-traffic distributed systems (Netflix/YouTube scale). However, verify you actually need this many regions - you're paying for ${componentCounts.cloud} geographic locations. Most apps serve well with 3-5 regions.`;
                     rating = "excellent";
                 } else {
                     efficiency = Math.min(90, efficiency - 5);
-                    magnitudeAnalysis = `<br><br><strong>⚠️ POSSIBLE OVERKILL:</strong> ${componentCounts.cloud} cloud instances ($${cloudCost.toLocaleString()}) is extremely high! Unless you're running planet-scale infrastructure (Google/Facebook level), this may be excessive. Each cloud costs $${COMPONENT_SPECS.cloud.cost} - you're operating ${componentCounts.cloud} data centers. Most global distributed systems work well with 5-7 strategic regions. Verify this cost is justified by your actual user distribution!`;
                     rating = "excellent";
                 }
             }
@@ -1038,18 +1003,14 @@ function checkEfficiency() {
             rating = "good";
 
             if (componentCounts.server > 1) {
-                const serverCost = componentCounts.server * COMPONENT_SPECS.server.cost;
                 if (componentCounts.server <= 5) {
                     efficiency = Math.min(70, 55 + componentCounts.server * 3);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.server} servers provide some distributed capability, but they're likely in one location. Total cost: $${serverCost.toLocaleString()}. For truly distributed tasks (global users, multiple regions), cloud infrastructure ($${COMPONENT_SPECS.cloud.cost}/cloud) offers geographic distribution, auto-scaling, and better fault tolerance.`;
                     rating = "good";
                 } else if (componentCounts.server <= 10) {
                     efficiency = Math.min(68, 55 + componentCounts.server * 2);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.server} servers ($${serverCost.toLocaleString()}) can handle distributed load, but lacks geographic diversity. You're building a single-datacenter distributed system - this works for regional apps but fails for global distribution. For $${COMPONENT_SPECS.cloud.cost}/cloud, you'd get worldwide presence, auto-scaling, and edge caching that ${componentCounts.server} co-located servers can't provide.`;
                     rating = "good";
                 } else {
                     efficiency = Math.min(65, 55 + componentCounts.server * 1.5);
-                    magnitudeAnalysis = `<br><br><strong>⚠️ INFRASTRUCTURE MISMATCH:</strong> ${componentCounts.server} servers ($${serverCost.toLocaleString()}) is a lot of hardware for one location! At this scale, cloud is more appropriate. You're building enterprise infrastructure without cloud benefits: no geographic distribution, manual scaling, single point of failure. This is the wrong tool for distributed systems - you're paying server costs (now $${serverCost.toLocaleString()}) approaching cloud pricing but missing global reach!`;
                     rating = "good";
                 }
             }
@@ -1060,28 +1021,24 @@ function checkEfficiency() {
             rating = "poor";
 
             if (componentCounts.computer > 3) {
-                const computerCost = componentCounts.computer * COMPONENT_SPECS.computer.cost;
                 if (componentCounts.computer <= 10) {
                     efficiency = Math.min(45, 25 + componentCounts.computer * 3);
-                    magnitudeAnalysis = `<br><br><strong>Magnitude Note:</strong> ${componentCounts.computer} computers show you understand the need for scale ($${computerCost} total). However, computers lack the geographic distribution and management tools for true distributed systems. Consider: 1 cloud ($${COMPONENT_SPECS.cloud.cost}) can auto-scale and serve global users from multiple regions.`;
                     rating = "poor";
                 } else if (componentCounts.computer <= 50) {
                     efficiency = Math.min(40, 25 + componentCounts.computer * 2);
-                    magnitudeAnalysis = `<br><br><strong>⚠️ WRONG ARCHITECTURE:</strong> ${componentCounts.computer} computers ($${computerCost}) demonstrates scale awareness, but this is the wrong approach for distributed systems! You're building what would require: network infrastructure, load balancers, data replication, manual failover - all things cloud provides automatically. At ${componentCounts.computer} computers, operational complexity becomes unmanageable. Use cloud instead!`;
                     rating = "poor";
                 } else {
                     efficiency = Math.min(35, 25 + componentCounts.computer * 1);
-                    magnitudeAnalysis = `<br><br><strong>🚨 ARCHITECTURAL DISASTER:</strong> ${componentCounts.computer} computers ($${computerCost.toLocaleString()}) for distributed systems?! This is completely impractical! You'd need: ${componentCounts.computer} network connections, ${componentCounts.computer} power supplies, ${componentCounts.computer} operating systems to patch, complex load balancing, manual geographic distribution. At this scale, you're essentially reinventing cloud infrastructure badly. Google/Amazon use clouds for a reason - this approach is obsolete!`;
                     rating = "poor";
                 }
             }
         }
     }
 
-    showResult(efficiency, message, details, rating, magnitudeAnalysis);
+    showResult(efficiency, message, details, rating);
 }
 
-function showResult(score, message, details, rating, magnitudeAnalysis = "") {
+function showResult(score, message, details, rating) {
     const resultDiv = document.getElementById('result-display');
     resultDiv.className = 'result-display show ' + rating;
 
@@ -1091,7 +1048,7 @@ function showResult(score, message, details, rating, magnitudeAnalysis = "") {
     resultDiv.innerHTML = `
         <div class="efficiency-score">${score}%</div>
         <div class="result-message"><strong>${message}</strong></div>
-        <div class="result-details">${details}${magnitudeAnalysis}</div>
+        <div class="result-details">${details}</div>
         ${challengeBonus}
         <div class="result-details" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid currentColor;">
             <strong>Expected Solution:</strong><br>

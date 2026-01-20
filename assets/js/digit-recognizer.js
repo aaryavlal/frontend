@@ -14,8 +14,8 @@ class DigitRecognizer {
         this.lastY = 0;
         this.brushSize = 15;
 
-        // API endpoint - matches Flask Blueprint structure (backend runs on port 8405)
-        this.API_URL = 'http://127.0.0.1:8405/api/digit';
+        // API endpoint - uses current host for EC2 compatibility (backend runs on port 8405)
+        this.API_URL = `${window.location.protocol}//${window.location.hostname}:8405/api/digit`;
 
         // CNN visualization state
         this.currentLayerIndex = 0;
