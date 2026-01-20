@@ -658,6 +658,9 @@ function showSlide(slideNumber) {
     }
 
     currentSlide = slideNumber;
+
+    // Initialize challenges when entering their slide
+    initChallengeForSlide(slideNumber);
 }
 
 function nextSlide() {
@@ -1150,37 +1153,8 @@ function checkSpeed(guess) {
     }
 }
 
-// Modified showSlide to initialize challenges
-const originalShowSlide = showSlide;
-function showSlide(slideNumber) {
-    // Call original
-    for (let i = 1; i <= totalSlides; i++) {
-        const slide = document.getElementById(`slide-${i}`);
-        const dot = document.querySelector(`[data-slide="${i}"]`);
-        if (slide) slide.classList.remove('active');
-        if (dot) dot.classList.remove('active');
-    }
-
-    const currentSlideEl = document.getElementById(`slide-${slideNumber}`);
-    const currentDot = document.querySelector(`[data-slide="${slideNumber}"]`);
-    if (currentSlideEl) currentSlideEl.classList.add('active');
-    if (currentDot) currentDot.classList.add('active');
-
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-
-    if (prevBtn) prevBtn.disabled = slideNumber === 1;
-    if (nextBtn) {
-        if (slideNumber === totalSlides) {
-            nextBtn.textContent = 'Restart';
-        } else {
-            nextBtn.textContent = 'Next →';
-        }
-    }
-
-    currentSlide = slideNumber;
-
-    // Initialize challenges when entering their slide
+// Initialize challenge when slide changes - called from within showSlide
+function initChallengeForSlide(slideNumber) {
     if (slideNumber === 1) {
         setTimeout(initPixelChallenge, 100);
     } else if (slideNumber === 2) {
