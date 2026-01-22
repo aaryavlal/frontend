@@ -7,7 +7,6 @@ permalink: /cores/core-2
 breadcrumbs: false
 ---
 
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="{{site.baseurl}}/assets/js/mandelbrot.js"></script>
 
 # Module 2 — Why Parallel / Distributed?
@@ -125,7 +124,7 @@ While often used interchangeably, concurrency and parallelism have a key distinc
   canvas {
     border: 2px solid #00ffaa;
     display: block;
-    width: 100%;
+    max-width: 100%;
     height: auto;
   }
 
@@ -371,8 +370,8 @@ As we've demonstrated here, parallelization can definitely speed up processes by
 Nonetheless, it is an incredibly important concept for any computer system you'll be building.
 
 <script>
-let sequentialSocket = null;
-let concurrentSocket = null;
+let sequentialAPI = null;
+let concurrentAPI = null;
 
 // Thread visualization state
 let tileData = [];
@@ -538,10 +537,10 @@ function initMandelbrotSim() {
   });
 
   // Sequential simulation
-  runSequentialBtn.addEventListener("click", () => {
-    // Disconnect existing socket if any
-    if (sequentialSocket) {
-      sequentialSocket.disconnect();
+  runSequentialBtn.addEventListener("click", async () => {
+    // Stop existing API if any
+    if (sequentialAPI) {
+      sequentialAPI.stop();
     }
 
     // Reset sequential progress state
@@ -567,34 +566,31 @@ function initMandelbrotSim() {
     runSequentialBtn.disabled = true;
     stopSequentialBtn.disabled = false;
 
-    // Initialize Mandelbrot
-    sequentialSocket = initMandelbrot({
+    // Initialize Mandelbrot API
+    sequentialAPI = new MandelbrotAPI({
       canvasId: "sequential-mandelbrot",
-      serverUrl: "http://localhost:8500",
+      apiBaseUrl: "http://localhost:8405/api/compute",
       width: 800,
       height: 600,
-      tile_w: 64,
-      tile_h: 64,
+      tile_w: 50,
+      tile_h: 50,
       max_iter: 1000,
       time_limit_ms: 500,
       mode: "sequential",
     });
 
-    // Listen for tile updates
-    sequentialSocket.on('compute_task_update', (data) => {
-      const tile = data.task;
-      const progress = data.progress;
-      
-      sequentialProgress.completed = progress.current;
-      sequentialProgress.total = progress.total;
+    // Listen for progress updates
+    sequentialAPI.on('progress', (data) => {
+      sequentialProgress.completed = data.current;
+      sequentialProgress.total = data.total;
       
       updateSequentialProgressBar();
       
-      infoDiv.textContent = `Processing: ${progress.current}/${progress.total} tiles`;
+      infoDiv.textContent = `Processing: ${data.current}/${data.total} tiles`;
     });
 
-    // Re-enable button on completion or error
-    sequentialSocket.on("compute_sequential_complete", (data) => {
+    // Listen for completion
+    sequentialAPI.on('complete', (data) => {
       runSequentialBtn.disabled = false;
       stopSequentialBtn.disabled = true;
       
@@ -602,16 +598,31 @@ function initMandelbrotSim() {
       infoDiv.style.color = "green";
     });
 
-    sequentialSocket.on("compute_sequential_error", () => {
+    // Listen for errors
+    sequentialAPI.on('error', (data) => {
       runSequentialBtn.disabled = false;
       stopSequentialBtn.disabled = true;
+      
+      infoDiv.textContent = `Error: ${data.message}`;
+      infoDiv.style.color = "red";
     });
+
+    // Start the computation
+    try {
+      await sequentialAPI.start();
+    } catch (error) {
+      console.error('Failed to start sequential simulation:', error);
+      runSequentialBtn.disabled = false;
+      stopSequentialBtn.disabled = true;
+      infoDiv.textContent = `Error: ${error.message}`;
+      infoDiv.style.color = "red";
+    }
   });
 
   stopSequentialBtn.addEventListener("click", () => {
-    if (sequentialSocket) {
-      sequentialSocket.disconnect();
-      sequentialSocket = null;
+    if (sequentialAPI) {
+      sequentialAPI.stop();
+      sequentialAPI = null;
     }
     const infoDiv = document.getElementById("sequential-mandelbrot-info");
     infoDiv.textContent = "Simulation stopped";
@@ -624,10 +635,10 @@ function initMandelbrotSim() {
   });
 
   // Concurrent simulation
-  runConcurrentBtn.addEventListener("click", () => {
-    // Disconnect existing socket if any
-    if (concurrentSocket) {
-      concurrentSocket.disconnect();
+  runConcurrentBtn.addEventListener("click", async () => {
+    // Stop existing API if any
+    if (concurrentAPI) {
+      concurrentAPI.stop();
     }
 
     // Get number of threads
@@ -668,35 +679,33 @@ function initMandelbrotSim() {
     runConcurrentBtn.disabled = true;
     stopConcurrentBtn.disabled = false;
 
-    // Initialize Mandelbrot
-    concurrentSocket = initMandelbrot({
+    // Initialize Mandelbrot API
+    concurrentAPI = new MandelbrotAPI({
       canvasId: "concurrent-mandelbrot",
-      serverUrl: "http://localhost:8500",
+      apiBaseUrl: "http://localhost:8405/api/compute",
       width: 800,
       height: 600,
-      tile_w: 64,
-      tile_h: 64,
+      tile_w: 50,
+      tile_h: 50,
       max_iter: 1000,
       time_limit_ms: 500,
       mode: "concurrent",
       num_threads: numThreads,
     });
 
-    // Listen for tile updates to track per thread progress
-    concurrentSocket.on('compute_task_update', (data) => {
+    // Listen for progress updates to track per thread progress
+    concurrentAPI.on('progress', (data) => {
       if (isReplaying) return; // Don't update during replay
       
-      const tile = data.task;
-      const progress = data.progress;
-      
-      const threadId = tile.thread_id;
+      const task = data.task;
+      const threadId = task.thread_id;
       
       // Store tile data for replay
       tileData.push({
-        tile: tile,
+        tile: task,
         threadId: threadId,
-        startTime: tile.start_time_ms,
-        duration: tile.duration_ms
+        startTime: task.start_time_ms,
+        duration: task.duration_ms
       });
       
       // Update thread stats (thread already exists from preload)
@@ -704,11 +713,11 @@ function initMandelbrotSim() {
       updateThreadProgressBar(threadId);
       
       // Update info
-      infoDiv.textContent = `Processing: ${progress.current}/${progress.total} tiles (Thread ${threadId} active)`;
+      infoDiv.textContent = `Processing: ${data.current}/${data.total} tiles (Thread ${threadId} active)`;
     });
 
-    // Re-enable button on completion or error
-    concurrentSocket.on("compute_concurrent_complete", (data) => {
+    // Listen for completion
+    concurrentAPI.on('complete', (data) => {
       runConcurrentBtn.disabled = false;
       stopConcurrentBtn.disabled = true;
       
@@ -722,23 +731,36 @@ function initMandelbrotSim() {
       document.getElementById('replay-controls').style.display = 'block';
       
       // Update info
-      infoDiv.textContent = `Completed: ${data.completed_tasks}/${data.total_tasks} tiles using ${data.num_threads} threads${data.was_time_limited ? ' (time limit reached)' : ''}. Click Replay to visualize thread progress`;
+      const timeLimit = data.was_time_limited ? ' (time limit reached)' : '';
+      infoDiv.textContent = `Completed: ${data.completed_tasks}/${data.total_tasks} tiles using ${data.num_threads} threads${timeLimit}. Click Replay to visualize thread progress`;
       infoDiv.style.color = "green";
     });
 
-    concurrentSocket.on("compute_concurrent_error", (data) => {
+    // Listen for errors
+    concurrentAPI.on('error', (data) => {
       runConcurrentBtn.disabled = false;
       stopConcurrentBtn.disabled = true;
       
       infoDiv.textContent = `Error: ${data.message}`;
       infoDiv.style.color = "red";
     });
+
+    // Start the computation
+    try {
+      await concurrentAPI.start();
+    } catch (error) {
+      console.error('Failed to start concurrent simulation:', error);
+      runConcurrentBtn.disabled = false;
+      stopConcurrentBtn.disabled = true;
+      infoDiv.textContent = `Error: ${error.message}`;
+      infoDiv.style.color = "red";
+    }
   });
 
   stopConcurrentBtn.addEventListener("click", () => {
-    if (concurrentSocket) {
-      concurrentSocket.disconnect();
-      concurrentSocket = null;
+    if (concurrentAPI) {
+      concurrentAPI.stop();
+      concurrentAPI = null;
     }
     const infoDiv = document.getElementById("concurrent-mandelbrot-info");
     infoDiv.textContent = "Simulation stopped";
