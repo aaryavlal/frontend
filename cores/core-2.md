@@ -7,7 +7,7 @@ permalink: /cores/core-2
 breadcrumbs: false
 ---
 
-<script src="{{site.baseurl}}/assets/js/mandelbrot.js"></script>
+<script type="module" src="{{site.baseurl}}/assets/js/mandelbrot.js"></script>
 
 # Module 2 — Why Parallel / Distributed?
 
@@ -569,7 +569,6 @@ function initMandelbrotSim() {
     // Initialize Mandelbrot API
     sequentialAPI = new MandelbrotAPI({
       canvasId: "sequential-mandelbrot",
-      apiBaseUrl: "http://localhost:8405/api/compute",
       width: 800,
       height: 600,
       tile_w: 50,
@@ -682,7 +681,6 @@ function initMandelbrotSim() {
     // Initialize Mandelbrot API
     concurrentAPI = new MandelbrotAPI({
       canvasId: "concurrent-mandelbrot",
-      apiBaseUrl: "http://localhost:8405/api/compute",
       width: 800,
       height: 600,
       tile_w: 50,

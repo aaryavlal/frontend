@@ -3,11 +3,13 @@
  * Connects to Flask REST API endpoints instead of Socket.IO
  */
 
+import { pythonURI, fetchOptions } from "./api/config.js";
+
 class MandelbrotAPI {
   constructor(config) {
     this.config = {
       canvasId: config.canvasId,
-      apiBaseUrl: config.apiBaseUrl || 'http://localhost:8405/api/compute',
+      apiBaseUrl: config.apiBaseUrl || '${pythonURI}/api/compute',
       width: config.width || 800,
       height: config.height || 600,
       tile_w: config.tile_w || 64,
@@ -115,6 +117,7 @@ class MandelbrotAPI {
     try {
       // Make API request
       const response = await fetch(url, {
+        ...fetchOptions,
         method: 'GET',
         signal: this.abortController.signal,
       });
@@ -239,7 +242,10 @@ class MandelbrotAPI {
    */
   async checkHealth() {
     try {
-      const response = await fetch(`${this.config.apiBaseUrl}/health`);
+      const response = await fetch(`${this.config.apiBaseUrl}/health`, {
+        ...fetchOptions,
+        method: 'GET',
+      });
       return await response.json();
     } catch (error) {
       return { rustism_available: false, status: 'error', message: error.message };
