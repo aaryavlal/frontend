@@ -9,7 +9,7 @@ class MandelbrotAPI {
   constructor(config) {
     this.config = {
       canvasId: config.canvasId,
-      apiBaseUrl: config.apiBaseUrl || '${pythonURI}/api/compute',
+      apiBaseUrl: config.apiBaseUrl || `${pythonURI}/api/compute`,
       width: config.width || 800,
       height: config.height || 600,
       tile_w: config.tile_w || 64,
