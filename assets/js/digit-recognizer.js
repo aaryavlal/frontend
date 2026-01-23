@@ -678,6 +678,10 @@ function prevSlide() {
     }
 }
 
+// Expose to global scope for HTML onclick handlers
+window.nextSlide = nextSlide;
+window.prevSlide = prevSlide;
+
 // Interactive Challenge Functions
 let pixelData = [];
 let foundHighPixel = false;
