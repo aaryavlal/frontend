@@ -381,6 +381,17 @@ backend/main.py
   - Line ~196: summarize_attempts() - List + procedure example
 ```
 
+### TensorFlow / CNN (Core 3)
+```
+backend/api/digit_api.py            # Digit recognition API
+  - TensorFlow + Keras CNN model
+  - Line ~26: model loading (best_model.keras)
+  - Line ~48: find_connected_components() - digit segmentation
+  - Endpoint: /api/digit - POST with base64 image
+  - Input: 28x28 pixel array
+  - Output: predicted digit + confidence scores
+```
+
 ### Database
 ```
 backend/Quest/database.db           # SQLite database
