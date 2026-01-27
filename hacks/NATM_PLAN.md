@@ -6,7 +6,7 @@ layout: post
 
 # Hardware Havoc - N@tM Preparation Plan
 
-**Name/Team:** [Your Name] / Hardware Havoc Team
+**Name/Team:** Rudra J, Aaryav L, Lucas M, Tanay P, Dhyan S/Hardware Havoc Team
 **Skills:** A, B, C
 **Purpose:** Checkpoint → Summative
 **Timeline:** 10 School Days Before N@tM
