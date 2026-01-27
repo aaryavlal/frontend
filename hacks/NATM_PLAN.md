@@ -53,6 +53,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ## 10-Day Calendar Plan
 
 ### Day 1 - Foundation & Task Selection
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Identify YOUR individual task from the features below | Skill A | ☐ |
@@ -64,6 +65,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 2 - Code Deep Dive
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Document your task's INPUT (form, button, Postman) | Skill B | ☐ |
@@ -75,6 +77,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 3 - Create PT Written Response Draft
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Write PPR 3a: Describe your procedure | Skill B | ☐ |
@@ -86,6 +89,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 4 - Video Recording Prep
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Finalize 1-minute video script | Skill A | ☐ |
