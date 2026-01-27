@@ -257,7 +257,7 @@ breadcrumbs: false
     border-radius: 2px;
     background: rgba(0,255,170,0.15);
     border: 1px solid #00ffaa;
-    color: #00ffaa;
+    color: #02f1a2;
     cursor: help;
     font-weight: 600;
     font-size: 0.95em;
