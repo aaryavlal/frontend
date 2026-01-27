@@ -211,55 +211,96 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 
 ---
 
-## Skill A/B - Individual Task Options (Pick ONE)
+## Skill A/B - Individual Task Options (Pick ONE Core)
 
-Based on Hardware Havoc's actual codebase:
+Each team member should pick a different core for their Create PT:
 
-### Option 1: Module Completion + CPU Core Lighting
-**Best for showing input/output/procedure with visual feedback**
-- **Frontend:** `frontend/hacks/frontend.md` - `completeModule()` function (line ~2081)
-- **Backend:** `backend/Quest/routes/progress.py` - `complete_module()` endpoint
-- **Input:** User clicks module button after learning
-- **Output:** CPU core lights up, room progress updates
-- **List Used:** `completed_modules` array tracking which modules done
-- **Procedure:** `User.mark_module_complete()` + `Room.check_and_update_room_progress()`
+---
 
-### Option 2: Room Join/Create System (THE SUPERPOWER)
-**Best for showing CRUD operations + the core multiplayer feature**
-- **Frontend:** `frontend/hacks/frontend.md` - `joinRoom()`, `createRoom()` functions
-- **Backend:** `backend/Quest/routes/rooms.py` - `/join`, `/` POST endpoints
-- **Input:** User enters 6-character room code (e.g., `ABC123`)
-- **Output:** User added to room, room info displayed, synced with other members
-- **List Used:** `room_members` table, rooms list
-- **Procedure:** `Room.add_member()`, `Room.find_by_code()`
-- **Why this option:** This IS the superpower - the multiplayer room system that makes learning collaborative
+### CORE 1: Computing Models — GPU Assembly Simulator
+**Topic:** Sequential vs Parallel vs Distributed computing models
+- **Frontend:** `frontend/cores/core-1.md` + `frontend/gpu-assembly-simulator`
+- **Feature:** GPU Assembly Simulator that visualizes 3 computing models
+- **Input:** User selects computing model (sequential/parallel/distributed)
+- **Output:** Visual simulation showing execution differences
+- **List Used:** Array of assembly instructions being processed
+- **Procedure:** Simulation loop with timing calculations per model
+- **Demo:** Show same task running 3 different ways, compare speeds
 
-### Option 3: AI Quiz Grading (Gemini)
-**Best for showing external API integration**
-- **Frontend:** Quiz submission form
-- **Backend:** `backend/main.py` - `grade_quiz()` endpoint (line ~244)
-- **Input:** Student's free-response answer about parallel computing
-- **Output:** AI-graded score (0-3) + feedback
-- **List Used:** `RECENT_ATTEMPTS` list storing attempt history
-- **Procedure:** `summarize_attempts()` - shows sequencing, selection, iteration
+---
 
-### Option 4: Glossary System
-**Best for showing collaborative data**
-- **Frontend:** `frontend/hacks/frontend.md` - `addGlossaryEntry()`, `loadGlossary()`
-- **Backend:** `backend/Quest/routes/glossary.py`
-- **Input:** User adds term + definition
-- **Output:** Term appears in shared room glossary
-- **List Used:** Glossary entries list per room
-- **Procedure:** Create, read, update, delete glossary terms
+### CORE 2: Why Parallel/Distributed? — Mandelbrot Fractal
+**Topic:** Concurrency vs Parallelism visualization
+- **Frontend:** `frontend/cores/core-2.md` + `assets/js/mandelbrot.js`
+- **Feature:** Mandelbrot fractal generator comparing sequential vs parallel rendering
+- **Input:** User sets resolution, zoom level, number of workers
+- **Output:** Fractal image with timing comparison
+- **List Used:** Pixel data array divided among workers
+- **Procedure:** Worker thread distribution, chunk processing, image assembly
+- **Demo:** Render fractal with 1 worker vs 4 workers, show speedup
 
-### Option 5: Room Progress Tracking
-**Best for showing aggregation logic**
-- **Frontend:** `frontend/hacks/frontend.md` - `loadRoomProgress()` function
-- **Backend:** `backend/Quest/routes/rooms.py` - `/<room_id>/progress` endpoint
-- **Input:** Room ID (automatic from current room)
-- **Output:** All members' progress, which CPU cores are lit
-- **List Used:** `member_progress` list with each user's completed modules
-- **Procedure:** `Room.get_room_stats()`, progress percentage calculation
+---
+
+### CORE 3: AI Digit Recognizer — Deep Learning
+**Topic:** Neural network inference with parallel processing
+- **Frontend:** `frontend/cores/core-3.md` + `assets/digitrecog-standalone.html`
+- **Backend:** `backend/api/digit_api.py`
+- **Feature:** Draw a digit, AI recognizes it using trained neural network
+- **Input:** User draws digit on canvas (0-9)
+- **Output:** Predicted digit with confidence scores
+- **List Used:** Pixel array (28x28), layer weights, confidence scores array
+- **Procedure:** Canvas capture → preprocessing → model inference → prediction
+- **Demo:** Draw digits, show prediction confidence, explain how parallelism speeds up inference
+
+---
+
+### CORE 4: Execution Time Calculations — Speedup Calculator
+**Topic:** Amdahl's Law and parallel speedup math
+- **Frontend:** `frontend/cores/core-4.md`
+- **Backend:** `backend/Quest/routes/speedup.py`
+- **Feature:** Interactive calculator for sequential vs parallel execution time
+- **Input:** Sequential time, parallel fraction, number of processors
+- **Output:** Calculated speedup, efficiency, visual graph
+- **List Used:** Array of calculation results for different processor counts
+- **Procedure:** Amdahl's Law formula: `Speedup = 1 / (S + P/N)`
+- **Demo:** Show diminishing returns as you add more processors
+
+---
+
+### CORE 5: Hardware Performance — Interactive Learning Game
+**Topic:** Understanding hardware bottlenecks and optimization
+- **Frontend:** `frontend/cores/core-5.md`
+- **Feature:** Interactive scenarios teaching hardware performance concepts
+- **Input:** User makes choices about hardware configurations
+- **Output:** Performance metrics, feedback on choices
+- **List Used:** Scenario options list, performance metrics history
+- **Procedure:** Decision tree evaluation, score calculation
+- **Demo:** Walk through a scenario, show how choices affect performance
+
+---
+
+### CORE 6: Case Studies — Infrastructure Builder Game
+**Topic:** Applying parallel concepts to real-world systems
+- **Frontend:** `frontend/cores/core-6.md`
+- **Feature:** Build computing infrastructure for different scenarios
+- **Input:** User selects components (CPUs, memory, network)
+- **Output:** System performance score, cost analysis
+- **List Used:** Component inventory, build configuration list
+- **Procedure:** Cost/performance optimization algorithm
+- **Demo:** Build infrastructure for a web server vs ML training workload
+
+---
+
+### BONUS: Room System (THE SUPERPOWER)
+**Topic:** Multiplayer collaborative learning
+- **Frontend:** `frontend/hacks/frontend.md` - `joinRoom()`, `createRoom()`
+- **Backend:** `backend/Quest/routes/rooms.py`, `progress.py`
+- **Feature:** 6-character room codes for collaborative learning
+- **Input:** Room code (e.g., `ABC123`)
+- **Output:** Synced progress across all room members, CPU cores light up together
+- **List Used:** `room_members` table, `completed_modules` per user
+- **Procedure:** `Room.add_member()`, `Room.check_and_update_room_progress()`
+- **Demo:** Two users join same room, both complete module, core lights up for both
 
 ---
 
