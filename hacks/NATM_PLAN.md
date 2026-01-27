@@ -101,6 +101,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 5 - Video Recording & Iteration
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Record first draft of 1-minute video | Skill A | ☐ |
@@ -112,6 +113,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 6 - Team Presentation Planning
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Team: Draft 1-minute primary overview script | Skill C | ☐ |
@@ -123,6 +125,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 7 - Individual N@tM Presentation Prep
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Prepare YOUR individual presentation (choose focus below) | Skill C | ☐ |
@@ -134,6 +137,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 8 - Transactional & Bulk Data Demos
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Prepare CRUD demo: Create room, Join room, Complete module, Leave room | Skill C | ☐ |
@@ -145,6 +149,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 9 - Final Polish & Integration
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Finalize Create PT video (final edit) | Skill A | ☐ |
@@ -156,6 +161,7 @@ This mirrors real parallel computing: just like CPU cores must synchronize, stud
 ---
 
 ### Day 10 - Pre-N@tM Final Prep
+
 | # | Item | Type | Status |
 |---|------|------|--------|
 | 1 | Submit Create PT (Video + Code + PPR) | Skill A/B | ☐ |
