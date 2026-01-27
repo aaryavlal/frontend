@@ -419,7 +419,7 @@ body {
 .panel-arrow {
     color: #38bdf8;
     font-size: 1.3rem;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+    transition: color 0.3s ease;
     filter: drop-shadow(0 0 4px rgba(56,189,248,0.3));
 }
 
@@ -428,39 +428,8 @@ body {
     filter: drop-shadow(0 0 8px rgba(56,189,248,0.5));
 }
 
-.info-panel.expanded .panel-arrow {
-    transform: rotate(180deg);
-    color: #00ffaa;
-}
-
 .panel-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(180deg, rgba(10,14,26,0.8) 0%, rgba(15,23,42,0.6) 100%);
-}
-
-.info-panel.expanded .panel-content {
-    max-height: 800px;
-    overflow-y: auto;
-    border-top: 1px solid rgba(56,189,248,0.2);
-}
-
-.panel-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.panel-content::-webkit-scrollbar-track {
-    background: rgba(10,14,26,0.5);
-}
-
-.panel-content::-webkit-scrollbar-thumb {
-    background: #38bdf8;
-    border-radius: 3px;
-}
-
-.panel-content::-webkit-scrollbar-thumb:hover {
-    background: #7dd3fc;
+    display: none; /* Hidden - content shows in modal instead */
 }
 
 .panel-body {
@@ -1540,6 +1509,143 @@ body {
     margin-top: 0;
 }
 
+/* Enhanced Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 14, 20, 0.92);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a2028 0%, #0f1419 100%);
+    border: 3px solid #00ffaa;
+    border-radius: 16px;
+    padding: 0;
+    max-width: 800px;
+    max-height: 85vh;
+    width: 90%;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,255,170,0.3), 0 0 100px rgba(0,255,170,0.1);
+    animation: slideUp 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, rgba(0,255,170,0.15) 0%, rgba(0,212,255,0.1) 100%);
+    padding: 24px 30px;
+    border-bottom: 2px solid #00ffaa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.modal-header h2 {
+    color: #00ffaa;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0,255,170,0.6);
+}
+
+.modal-close {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 2px solid #ef4444;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 700;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.3);
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.modal-body {
+    padding: 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #0a0e14;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #38bdf8;
+    border-radius: 5px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #00ffaa;
+}
+
+.modal-body p {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.modal-body h3 {
+    color: #38bdf8;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+}
+
+.modal-body h4 {
+    color: #10b981;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.modal-body ul {
+    margin-left: 24px;
+    margin-top: 8px;
+}
+
+.modal-body li {
+    margin-bottom: 8px;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.modal-body strong {
+    color: #e2e8f0;
+    font-weight: 700;
+}
+
 /* CPU Collection Animation */
 .cpu-collection {
     position: fixed;
@@ -1878,12 +1984,12 @@ body {
         </div>
 
         <!-- Panel 1: What is Speedup? -->
-        <div class="info-panel expanded">
-            <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">⚡ What is Speedup?</h3>
+        <div class="info-panel">
+            <div class="panel-header" onclick="openModal('speedup')">
+                <h3>⚡ What is Speedup?</h3>
                 <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('speedup'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                    <button class="view-more-btn" onclick="openModal('speedup'); event.stopPropagation();">View Details</button>
+                    <span class="panel-arrow">→</span>
                 </div>
             </div>
             <div class="panel-content">
@@ -1908,11 +2014,11 @@ body {
 
         <!-- Panel 2: How It Works -->
         <div class="info-panel">
-            <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">🔧 How It Works</h3>
+            <div class="panel-header" onclick="openModal('howitworks')">
+                <h3>🔧 How It Works</h3>
                 <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('howitworks'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
+                    <button class="view-more-btn" onclick="openModal('howitworks'); event.stopPropagation();">View Details</button>
+                    <span class="panel-arrow">→</span>
                 </div>
             </div>
             <div class="panel-content">
@@ -2185,14 +2291,6 @@ body {
     </div>
 </div>
 
-<!-- Modal for expanded panel content -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <div id="modalBody"></div>
-    </div>
-</div>
-
 <script>
 // Initialize global variables
 window.currentScore = null;
@@ -2265,6 +2363,167 @@ function updateProgressBar(completedRuns) {
     }
 }
 
+// Modal management - simplified for popup-only approach
+function openModal(topic) {
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    
+    // Set content based on topic
+    const content = getModalContent(topic);
+    modalTitle.textContent = content.title;
+    modalBody.innerHTML = content.body;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    
+    const modal = document.getElementById('modalOverlay');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// ESC key to close modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
+
+function getModalContent(topic) {
+    const contents = {
+        'speedup': {
+            title: '⚡ What is Speedup?',
+            body: `
+                <p><strong>Speedup</strong> measures how much faster a parallel implementation runs compared to a sequential (serial) one.</p>
+                
+                <div class="formula-display">
+                    <div class="formula-text" style="font-size: 1.6rem;">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
+                </div>
+                
+                <h3>Understanding the Formula</h3>
+                <ul>
+                    <li><strong>T<sub>serial</sub></strong>: Total time if all tasks run sequentially (one after another)</li>
+                    <li><strong>T<sub>parallel</sub></strong>: Time with parallelization (some tasks run simultaneously)</li>
+                </ul>
+                
+                <h3>Interpreting Speedup Values</h3>
+                <ul>
+                    <li><strong>Speedup > 1</strong>: Parallel is faster! You're winning! 🎉</li>
+                    <li><strong>Speedup = 1</strong>: No improvement - parallel and serial take the same time</li>
+                    <li><strong>Speedup < 1</strong>: Parallel is actually slower (overhead costs outweigh benefits)</li>
+                </ul>
+                
+                <h3>Example</h3>
+                <p>If a serial program takes 100 seconds and the parallel version takes 25 seconds:</p>
+                <p style="text-align: center; color: #00ffaa; font-size: 1.3rem; font-weight: bold;">Speedup = 100 / 25 = 4×</p>
+                <p>This means the parallel version is <strong>4 times faster</strong>!</p>
+            `
+        },
+        'howitworks': {
+            title: '🔧 How Parallelization Works',
+            body: `
+                <h3>Serial vs Parallel Execution</h3>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card serial">
+                        <h4>🔄 Serial Execution</h4>
+                        <p>Tasks run one after another, like a single-file line.</p>
+                        <p><strong>Time = Sum of all tasks</strong></p>
+                        <p>Example: 3 tasks of 10s each = 30s total</p>
+                    </div>
+                    
+                    <div class="comparison-card parallel">
+                        <h4>⚡ Parallel Execution</h4>
+                        <p>Tasks run simultaneously, like multiple checkout lanes.</p>
+                        <p><strong>Time = Longest single task</strong></p>
+                        <p>Example: 3 tasks of 10s each = 10s total (if 3 processors available)</p>
+                    </div>
+                </div>
+                
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Independent Tasks:</strong> Can run in parallel without waiting for each other</li>
+                    <li><strong>Dependent Tasks:</strong> Must run in series because one needs the output of another</li>
+                    <li><strong>Processors/Cores:</strong> Physical hardware units that can execute tasks simultaneously</li>
+                    <li><strong>Overhead:</strong> Extra time needed to coordinate parallel tasks</li>
+                </ul>
+                
+                <h3>The Challenge</h3>
+                <p>Not all programs can be fully parallelized. Some parts <em>must</em> run sequentially, which limits the maximum speedup you can achieve.</p>
+            `
+        },
+        'amdahl': {
+            title: "📊 Amdahl's Law",
+            body: `
+                <p><strong>Amdahl's Law</strong> predicts the maximum speedup possible when parallelizing a program, based on the fraction that <em>cannot</em> be parallelized.</p>
+                
+                <div class="formula-display">
+                    <div class="formula-text" style="font-size: 1.3rem;">Speedup = 1 / [(1 - P) + (P / N)]</div>
+                </div>
+                
+                <h3>Formula Variables</h3>
+                <ul>
+                    <li><strong>P</strong>: Fraction of program that can be parallelized (0 to 1)</li>
+                    <li><strong>N</strong>: Number of processors/cores available</li>
+                    <li><strong>1 - P</strong>: Serial portion (the bottleneck)</li>
+                </ul>
+                
+                <h3>What It Tells Us</h3>
+                <p>Even with infinite processors, the <strong>serial portion limits maximum speedup</strong>.</p>
+                
+                <h4>Examples:</h4>
+                <ul>
+                    <li>If 50% of your program is serial (P = 0.5), max speedup = 2× (no matter how many processors!)</li>
+                    <li>If 10% is serial (P = 0.9), max speedup = 10×</li>
+                    <li>If 5% is serial (P = 0.95), max speedup = 20×</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <p><strong>Key Insight:</strong> To achieve massive speedups, you need programs where almost everything can run in parallel. Even small serial portions become significant bottlenecks!</p>
+                </div>
+            `
+        },
+        'realworld': {
+            title: '🌍 Real-World Applications',
+            body: `
+                <h3>Where Parallel Computing Shines</h3>
+                
+                <h4>🎬 Video Rendering</h4>
+                <p>Each frame can be processed independently. A 10-minute video with 18,000 frames can be split across multiple cores.</p>
+                
+                <h4>🧬 Scientific Simulations</h4>
+                <p>Weather prediction, protein folding, and physics simulations divide the problem space and compute each section in parallel.</p>
+                
+                <h4>🌐 Web Servers</h4>
+                <p>Handle thousands of user requests simultaneously. Each request runs on a separate thread or process.</p>
+                
+                <h4>🤖 Machine Learning</h4>
+                <p>Training neural networks involves millions of calculations that can be parallelized across GPU cores.</p>
+                
+                <h4>🎮 Graphics (GPUs)</h4>
+                <p>Modern GPUs have thousands of cores rendering pixels simultaneously. That's why gaming performance scales with GPU power!</p>
+                
+                <h3>When Serial is Better</h3>
+                <ul>
+                    <li><strong>Small tasks:</strong> Parallel overhead exceeds benefit</li>
+                    <li><strong>Sequential dependencies:</strong> Step 2 needs step 1's result</li>
+                    <li><strong>Simple programs:</strong> On single-core systems, parallelization adds complexity without benefit</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <p><strong>Hardware Note:</strong> Modern CPUs have 4-16 cores. High-end GPUs have thousands! Choosing the right hardware for your workload is crucial.</p>
+                </div>
+            `
+        }
+    };
+    
+    return contents[topic] || {title: 'Information', body: '<p>Content not found.</p>'};
+}
+
 // Initialize default tasks
 function initializeDefaultTasks() {
     const taskPool = document.getElementById("taskPool");
@@ -2287,34 +2546,45 @@ function toggleSidebar() {
     sidebar.classList.toggle('collapsed');
 }
 
-// Panel toggle function for sidebar
-function togglePanel(header) {
-    const panel = header.parentElement;
-    panel.classList.toggle('expanded');
-}
-
-// Modal functions
+// Modal functions - sidebar panels now open in modals instead of expanding inline
 function openModal(panelId) {
     const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
     
     const content = getModalContent(panelId);
-    modalBody.innerHTML = content;
+    modalTitle.textContent = content.title;
+    modalBody.innerHTML = content.body;
+    
     modalOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
-function closeModal() {
+function closeModal(event) {
+    if (event && event.target !== event.currentTarget && !event.target.classList.contains('modal-close')) {
+        return;
+    }
+    
     const modalOverlay = document.getElementById('modalOverlay');
     modalOverlay.classList.remove('active');
     document.body.style.overflow = 'auto';
 }
 
+// ESC key to close modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modalOverlay = document.getElementById('modalOverlay');
+        if (modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    }
+});
+
 function getModalContent(panelId) {
     const contents = {
-        'speedup': `
-            <h2 class="modal-title">⚡ What is Speedup?</h2>
-            <div class="modal-body">
+        'speedup': {
+            title: '⚡ What is Speedup?',
+            body: `
                 <p><strong>Speedup</strong> is a fundamental metric in parallel computing that quantifies performance improvement. It measures how much faster a parallel implementation executes compared to a sequential version of the same program.</p>
                 
                 <div class="modal-highlight">
@@ -2349,11 +2619,11 @@ function getModalContent(panelId) {
                 
                 <h4>Why It Matters</h4>
                 <p>Speedup helps you evaluate whether parallelization is worth the effort. High speedup justifies the complexity of parallel programming, while low speedup suggests you might need a different approach or that your problem isn't well-suited for parallelization.</p>
-            </div>
-        `,
-        'howitworks': `
-            <h2 class="modal-title">🔧 How It Works</h2>
-            <div class="modal-body">
+            `
+        },
+        'howitworks': {
+            title: '🔧 How It Works',
+            body: `
                 <p>Understanding how to calculate speedup is essential for evaluating parallel performance. Let's break down the calculation process step by step.</p>
                 
                 <h4>Step 1: Calculate Serial Time</h4>
@@ -2381,6 +2651,104 @@ function getModalContent(panelId) {
                     <li>Parallel tasks: 8, 12 (run simultaneously) = max(8, 12) = 12 units</li>
                     <li><code>T<sub>parallel</sub> = 15 + 12 = 27 units</code></li>
                 </ul>
+                
+                <h4>Step 3: Calculate Speedup</h4>
+                <div class="modal-highlight">
+                    <code style="font-size: 1.2rem;">Speedup = 35 / 27 ≈ 1.30×</code>
+                    <p style="margin-top: 12px;">The parallel version is 30% faster!</p>
+                </div>
+                
+                <h4>Key Insights</h4>
+                <ul>
+                    <li>More parallel tasks = higher potential speedup</li>
+                    <li>Serial portions limit maximum speedup (Amdahl's Law)</li>
+                    <li>Communication overhead can reduce actual speedup</li>
+                    <li>Optimal speedup = number of processors (ideal case)</li>
+                </ul>
+            `
+        },
+        'amdahl': {
+            title: "📊 Amdahl's Law",
+            body: `
+                <p><strong>Amdahl's Law</strong> is a formula that predicts the maximum possible speedup of a program when parallelizing it, based on the portion that can be parallelized.</p>
+                
+                <div class="modal-highlight">
+                    <h4>The Formula</h4>
+                    <div class="formula-display">
+                        <div class="formula-text" style="font-size: 1.3rem;">Speedup = 1 / [(1 - P) + (P / N)]</div>
+                    </div>
+                    <p style="margin-top: 12px;">Where:</p>
+                    <ul>
+                        <li><strong>P</strong> = Fraction of program that can be parallelized (0 to 1)</li>
+                        <li><strong>N</strong> = Number of processors</li>
+                        <li><strong>1 - P</strong> = Serial fraction (the bottleneck)</li>
+                    </ul>
+                </div>
+                
+                <h4>The Key Insight</h4>
+                <p>Even with <strong>infinite processors</strong>, your speedup is limited by the serial portion:</p>
+                <div class="modal-highlight">
+                    <code style="font-size: 1.1rem;">Maximum Speedup = 1 / (1 - P)</code>
+                </div>
+                
+                <h4>Real Examples</h4>
+                <ul>
+                    <li><strong>90% parallel (P=0.9):</strong> Max speedup = 10× (even with 1000 processors!)</li>
+                    <li><strong>95% parallel (P=0.95):</strong> Max speedup = 20×</li>
+                    <li><strong>50% parallel (P=0.5):</strong> Max speedup = 2× only</li>
+                </ul>
+                
+                <h4>Why This Matters</h4>
+                <p>To achieve massive speedups (100×, 1000×), you need programs where almost everything (99%+) can run in parallel. Even small serial portions become major bottlenecks!</p>
+                
+                <p><strong>Lesson:</strong> Focus on minimizing the serial portion of your program, not just adding more processors.</p>
+            `
+        },
+        'realworld': {
+            title: '🌍 Real-World Applications',
+            body: `
+                <h4>Where Parallel Computing Shines</h4>
+                
+                <p><strong>🎬 Video Rendering</strong><br>
+                Each frame can be processed independently. A 10-minute video with 18,000 frames can be split across multiple cores, reducing rendering time from hours to minutes.</p>
+                
+                <p><strong>🧬 Scientific Simulations</strong><br>
+                Weather prediction, protein folding, and physics simulations divide the problem space and compute each section in parallel. Modern weather models use supercomputers with thousands of cores.</p>
+                
+                <p><strong>🌐 Web Servers</strong><br>
+                Handle thousands of user requests simultaneously. Each request runs on a separate thread or process, allowing one server to serve many users at once.</p>
+                
+                <p><strong>🤖 Machine Learning</strong><br>
+                Training neural networks involves millions of calculations that can be parallelized across GPU cores. A GPU with 5000 cores can train models 100× faster than a CPU.</p>
+                
+                <p><strong>🎮 Graphics (GPUs)</strong><br>
+                Modern GPUs have thousands of cores rendering pixels simultaneously. That's why gaming performance scales dramatically with GPU power - each pixel is calculated independently!</p>
+                
+                <h4>When Serial is Better</h4>
+                <ul>
+                    <li><strong>Small tasks:</strong> Parallel overhead (thread creation, synchronization) exceeds the benefit</li>
+                    <li><strong>Sequential dependencies:</strong> When step 2 needs step 1's result, you can't parallelize</li>
+                    <li><strong>Simple programs:</strong> On single-core systems or with trivial workloads, parallelization adds complexity without benefit</li>
+                </ul>
+                
+                <div class="modal-highlight">
+                    <h4>🔥 Hardware Reality</h4>
+                    <ul>
+                        <li><strong>CPUs:</strong> 4-16 cores (consumer), up to 128 cores (server)</li>
+                        <li><strong>GPUs:</strong> 2,000-10,000+ cores (specialized for parallel work)</li>
+                        <li><strong>Supercomputers:</strong> Millions of cores working together</li>
+                    </ul>
+                    <p><strong>Choosing the right hardware for your workload is just as important as writing parallel code!</strong></p>
+                </div>
+            `
+        }
+    };
+    
+    return contents[panelId] || {title: 'Information', body: '<p>Content not found.</p>'};
+}
+
+// Panel toggle function for sidebar - REMOVED (now opens modals instead)
+function togglePanel(header) {
                 
                 <h4>Step 3: Calculate Speedup</h4>
                 <div class="modal-highlight">
