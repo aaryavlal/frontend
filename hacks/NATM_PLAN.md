@@ -242,15 +242,15 @@ Each team member should pick a different core for their Create PT:
 ---
 
 ### CORE 3: AI Digit Recognizer — Deep Learning
-**Topic:** Neural network inference with parallel processing
+**Topic:** Sequential CNN inference pipeline
 - **Frontend:** `frontend/cores/core-3.md` + `assets/digitrecog-standalone.html`
 - **Backend:** `backend/api/digit_api.py`
-- **Feature:** Draw a digit, AI recognizes it using trained neural network
+- **Feature:** Draw a digit, AI recognizes it using trained CNN (sequential layers)
 - **Input:** User draws digit on canvas (0-9)
 - **Output:** Predicted digit with confidence scores
 - **List Used:** Pixel array (28x28), layer weights, confidence scores array
-- **Procedure:** Canvas capture → preprocessing → model inference → prediction
-- **Demo:** Draw digits, show prediction confidence, explain how parallelism speeds up inference
+- **Procedure:** Canvas capture → preprocessing → sequential layer-by-layer inference → prediction
+- **Demo:** Draw digits, show prediction confidence, trace data through CNN layers
 
 ---
 
