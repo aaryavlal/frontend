@@ -4,6 +4,45 @@ permalink: /NATM_PLAN
 layout: post
 ---
 
+<style>
+  .task-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #00ffaa;
+  }
+  .task-checkbox:checked + .task-label {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  td:has(.task-checkbox) {
+    text-align: center;
+  }
+  .progress-bar {
+    background: rgba(0,255,170,0.2);
+    border: 1px solid #00ffaa;
+    border-radius: 4px;
+    height: 24px;
+    margin: 10px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, #00ffaa, #00d4ff);
+    height: 100%;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0e14;
+    font-weight: bold;
+    font-size: 0.85rem;
+  }
+</style>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+</div>
+
 # Hardware Havoc - N@tM Preparation Plan
 
 **Name/Team:** Rudra J, Aaryav L, Lucas M, Tanay P, Dhyan S/Hardware Havoc Team
@@ -226,35 +265,29 @@ Based on Hardware Havoc's actual codebase:
 
 ## Skill B - Code Documentation Template
 
-```markdown
-### My Task: [TASK NAME]
+Use this format for your Create PT write-up:
 
-#### Input
-- **File:** [frontend file]
-- **Code:**
-```javascript
-// Show the fetch call or form submission
-```
+**My Task:** [TASK NAME]
 
-#### Output
-- **File:** [API response handling]
-- **Code:**
-```javascript
-// Show what happens with the response
-```
+**Input**
+- File: [frontend file]
+- Code: Show the fetch call or form submission
 
-#### Procedure (Backend)
-- **File:** `backend/Quest/routes/[file].py`
-- **Function:** [function_name]
-- **Contains:**
+**Output**
+- File: [API response handling]
+- Code: Show what happens with the response
+
+**Procedure (Backend)**
+- File: `backend/Quest/routes/[file].py`
+- Function: [function_name]
+- Contains:
   - Sequencing: [describe order of operations]
   - Selection: [describe if/else logic]
   - Iteration: [describe any loops]
 
-#### List/Collection
-- **Data Structure:** [SQLite table or Python list]
-- **How it's used:** [describe read/write operations]
-```
+**List/Collection**
+- Data Structure: [SQLite table or Python list]
+- How it's used: [describe read/write operations]
 
 ---
 
@@ -354,3 +387,64 @@ curl -X POST http://localhost:8405/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"test"}'
 ```
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const STORAGE_KEY = 'natm_plan_checkboxes';
+
+  // Load saved state
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  // Save state
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  // Update progress bar
+  function updateProgress() {
+    const checkboxes = document.querySelectorAll('.task-checkbox');
+    const total = checkboxes.length;
+    const checked = document.querySelectorAll('.task-checkbox:checked').length;
+    const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    const fill = document.getElementById('progressFill');
+    if (fill) {
+      fill.style.width = percent + '%';
+      fill.textContent = checked + '/' + total + ' (' + percent + '%)';
+    }
+  }
+
+  // Find all table cells with ☐ and replace with checkboxes
+  const state = loadState();
+  let checkboxId = 0;
+
+  document.querySelectorAll('td').forEach(function(td) {
+    if (td.textContent.trim() === '☐') {
+      const id = 'task-' + checkboxId++;
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'task-checkbox';
+      checkbox.id = id;
+      checkbox.checked = state[id] || false;
+
+      checkbox.addEventListener('change', function() {
+        const currentState = loadState();
+        currentState[this.id] = this.checked;
+        saveState(currentState);
+        updateProgress();
+      });
+
+      td.textContent = '';
+      td.appendChild(checkbox);
+    }
+  });
+
+  updateProgress();
+});
+</script>
