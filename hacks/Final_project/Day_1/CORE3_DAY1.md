@@ -159,11 +159,11 @@ layout: post
 
 | Team Member | Core | Presentation Focus |
 |-------------|------|-------------------|
-| Rudra | Core 3 | AI Digit Recognizer - CNN Pipeline |
-| [Teammate 2] | Core ? | [TBD] |
-| [Teammate 3] | Core ? | [TBD] |
-| [Teammate 4] | Core ? | [TBD] |
-| [Teammate 5] | Core ? | [TBD] |
+| Dhyan | Core 1 | Computing Models — GPU Assembly Simulator |
+| Lucas | Core 2 | Why Parallel/Distributed? — Mandelbrot Fractal |
+| Rudra | Core 3 | AI Digit Recognizer — Sequential CNN Pipeline |
+| Aaryav | Core 4 | Execution Time Calculations — Speedup Calculator |
+| Tanay | Core 5 | Hardware Performance — Interactive Learning Game |
 
 ### My N@tM Presentation Focus:
 1. **Live Demo:** Draw digits, show recognition
