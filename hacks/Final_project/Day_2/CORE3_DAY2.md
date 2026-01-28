@@ -68,14 +68,72 @@ async recognizeDigits() {
 }
 ```
 
-### Postman Test
+### Postman Test (Complete Working Example)
 
+**Method:** `POST`
+
+**URL:**
 ```
-POST http://localhost:8405/api/digit/predict
-Content-Type: application/json
+http://localhost:8405/api/digit/predict
+```
 
+**Headers:**
+
+| Key | Value |
+|-----|-------|
+| Content-Type | application/json |
+
+**Body (raw JSON):**
+```json
 {
-    "image": "data:image/png;base64,[base64_encoded_image_data]"
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAAAAABVicqIAAAAxUlEQVR4nO3YQQ5AQBBEUSPuf2V2ViJd1SF/qFlazM/ThMzYl+fX+kIjkUQSSSSR70e2q4ujs+PFV/A7tyuRn0ZG9+fufKduNupKKo0pZlKCzCCpQSaQFCF8SRWCl5QhdEkdApcIELZEgaAlEoQs0SBgiQjhSlQIViJDqBIdApUYEKbEgSAlFoQo8SBAiQnhSVwITmJDaBIfApM0ICxJB4KStCAkSQ9SjOy9M1fhyHa4EGUmPkcavFsBPV2JJJJIIokkcr8OlX4mwEghVJUAAAAASUVORK5CYII="
+}
+```
+
+**Expected Response (200 OK):**
+```json
+{
+    "success": true,
+    "count": 1,
+    "number": "7",
+    "digits": [
+        {
+            "digit": 7,
+            "confidence": 0.85,
+            "top3": [
+                {"digit": 7, "confidence": 0.85},
+                {"digit": 1, "confidence": 0.08},
+                {"digit": 9, "confidence": 0.03}
+            ],
+            "bbox": {"x": 20, "y": 20, "width": 60, "height": 60},
+            "processed_image": "data:image/png;base64,..."
+        }
+    ]
+}
+```
+
+**Test Image:** The base64 above is a 100x100 PNG with a hand-drawn "7"
+
+**Common Errors:**
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `{"error": "No image provided"}` | Missing `image` key in JSON | Add `"image":` to body |
+| `{"error": "Model not loaded"}` | `best_model.keras` missing | Check backend/api/ folder |
+| `Connection refused` | Flask not running | Run `python main.py` |
+| `404 Not Found` | Wrong endpoint URL | Use `/api/digit/predict` |
+
+**Health Check Endpoint:**
+```
+GET http://localhost:8405/api/digit/health
+```
+Response:
+```json
+{
+    "status": "ok",
+    "model_loaded": true,
+    "ensemble_models": 0,
+    "tta_enabled": true
 }
 ```
 
