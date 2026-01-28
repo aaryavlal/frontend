@@ -159,6 +159,7 @@ layout: post
 
 | Team Member | Core | Presentation Focus |
 |-------------|------|-------------------|
+| **ALL** | **SUPERPOWER** | **Room Code Multiplayer System — Join rooms, learn together, light up CPU together** |
 | Dhyan | Core 1 | Computing Models — GPU Assembly Simulator |
 | Lucas | Core 2 | Why Parallel/Distributed? — Mandelbrot Fractal |
 | Rudra | Core 3 | AI Digit Recognizer — Sequential CNN Pipeline |
