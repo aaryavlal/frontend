@@ -1,6 +1,6 @@
 ---
 title: "Core 3 - Day 2 Code Deep Dive"
-permalink: /core3-day2
+permalink: /core3/day2
 layout: post
 ---
 

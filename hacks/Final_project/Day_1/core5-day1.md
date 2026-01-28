@@ -1,6 +1,6 @@
 ---
 title: "Core 5 - Day 1"
-permalink: /core5-day1
+permalink: /core5/day1
 layout: post
 ---
 
