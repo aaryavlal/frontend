@@ -1,606 +1,133 @@
 ---
-title: "Core 5 - Day 2 Code Deep Dive"
+title: "Core 5 - Day 2"
 permalink: /core5/day2
 layout: post
 ---
 
-# Core 5: Speedup Calculator — Day 2 Complete
-
-**Task:** Document INPUT, OUTPUT, PROCEDURE, and Data Flow for Create PT
+# Core 5: Speedup Calculator — Day 2
 
 ---
 
-## Task 1: INPUT Documentation ✓
+## Task 1: INPUT ✓
 
-### Frontend Input Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2730-2740
+**File:** `frontend/cores/core-5.md`
 
 ```javascript
+// addTask() - Line 2730
 window.addTask = function() {
-  /**
-   * INPUT: User enters task time value and clicks "Add Task"
-   * Creates a draggable block with the specified time
-   */
-  
   const val = parseInt(document.getElementById('newTaskTime').value);
-  
-  // INPUT VALIDATION: Check for valid positive number
-  if(isNaN(val) || val < 1) {
-      alert("Please enter a valid task time (positive number)");
-      return;
-  }
-
-  // INPUT ACCEPTED: Create draggable task block
+  if(isNaN(val) || val < 1) return alert("Invalid input");
   const block = document.createElement("div");
   block.className = "block";
-  block.id = "task" + Date.now();    // Unique ID using timestamp
-  block.draggable = true;            // Enable drag functionality
-  block.ondragstart = drag;          // Attach drag handler
-  block.textContent = val;           // Display time value
-  
-  // Add to Task Pool (visual LIST on page)
+  block.draggable = true;
+  block.textContent = val;
   document.getElementById("taskPool").appendChild(block);
-  
-  // Clear input field for next task
-  document.getElementById('newTaskTime').value = "";
-}
-```
-
-### Drag & Drop Input Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2678-2715
-
-```javascript
-// Drag and Drop INPUT functions
-
-function drag(ev) {
-  /**
-   * INPUT: User starts dragging a task block
-   * Captures the block ID and provides visual feedback
-   */
-  
-  ev.dataTransfer.setData("text", ev.target.id);  // Store block ID
-  ev.target.classList.add('dragging');            // Visual feedback
-  currentlyDragging = ev.target;
-  
-  // Highlight valid drop zones (Series Row, Parallel Row, Task Pool)
-  document.getElementById('seriesRow').classList.add('highlight-target');
-  document.getElementById('parallelRow').classList.add('highlight-target');
-  document.getElementById('taskPool').classList.add('highlight-target');
 }
 
-function allowDrop(ev) {
-  /**
-   * INPUT: User hovers dragged block over a drop zone
-   * Prevents default behavior to enable dropping
-   */
-  
-  ev.preventDefault();  // Required to allow drop
-  
-  // Find the closest drag-area container and add visual feedback
-  let targetArea = ev.target.closest('.drag-area');
-  if (targetArea) {
-      targetArea.classList.add('drag-over');
-  }
-}
-
+// Drag & Drop - Lines 2681-2715
+function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
 function drop(ev) {
-  /**
-   * INPUT: User releases dragged block in a drop zone
-   * Moves the block to the target area (Series or Parallel row)
-   */
-  
   ev.preventDefault();
-  
-  let data = ev.dataTransfer.getData("text");  // Get block ID
-  let elem = document.getElementById(data);    // Find the block element
-  
-  // Find the closest drag-area container (Series Row or Parallel Row)
-  let targetArea = ev.target.closest('.drag-area');
-  
-  // If we found a valid drag area, move the block there
-  if (targetArea && elem) {
-      targetArea.appendChild(elem);         // MOVE block to new location
-      elem.classList.remove('dragging');    // Remove drag styling
-  }
-  
-  removeHighlights();  // Clean up visual feedback
-}
-
-function removeHighlights() {
-  // Remove all drag-over and highlight classes
-  document.querySelectorAll('.drag-area').forEach(area => {
-      area.classList.remove('drag-over', 'highlight-target');
-  });
+  let elem = document.getElementById(ev.dataTransfer.getData("text"));
+  ev.target.closest('.drag-area').appendChild(elem);
 }
 ```
 
-### Button Input Code
+**Inputs:** Task creation, drag-and-drop organization, button clicks (Compute, Save, Show)
 
-**File:** `frontend/cores/core-5.md` — Lines 2103-2111 (HTML), Lines 3180-3240 (Event Listeners)
+---
+
+## Task 2: OUTPUT ✓
 
 ```javascript
-// Event listener setup for button clicks
-window.addEventListener('load', function() {
-    console.log('Page loaded, initializing...');
-    
-    // INPUT: Add Task button
-    const addTaskBtn = document.getElementById('addTaskBtn');
-    if (addTaskBtn) {
-        addTaskBtn.addEventListener('click', function() {
-            console.log('Add task clicked');
-            window.addTask();
-        });
-    }
-    
-    // INPUT: Compute Speedup button
-    const computeBtn = document.getElementById('computeBtn');
-    if (computeBtn) {
-        computeBtn.addEventListener('click', function() {
-            console.log('Compute clicked');
-            window.computeSpeedup();
-        });
-    }
-    
-    // INPUT: Save Run button
-    const saveBtn = document.getElementById('saveBtn');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', function() {
-            console.log('Save clicked');
-            window.saveRun();
-        });
-    }
-    
-    // INPUT: Show Saved Runs button
-    const showBtn = document.getElementById('showBtn');
-    if (showBtn) {
-        showBtn.addEventListener('click', function() {
-            console.log('Show saved clicked');
-            window.showSavedRuns();
-        });
-    }
-    
-    // INPUT: Sidebar toggle button
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
-            window.toggleSidebar();
-        });
-    }
-    
-    // INPUT: Modal "View More" buttons
-    document.querySelectorAll('[data-modal]').forEach(function(element) {
-        element.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const modalId = this.getAttribute('data-modal');
-            console.log('Opening modal:', modalId);
-            window.openModal(modalId);
-        });
-    });
-    
-    // INPUT: Modal close (click overlay)
-    const modalOverlay = document.getElementById('modalOverlay');
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) {
-                window.closeModal();
-            }
-        });
-    }
-    
-    // INPUT: Modal close button (×)
-    const modalClose = document.querySelector('.modal-close');
-    if (modalClose) {
-        modalClose.addEventListener('click', function() {
-            window.closeModal();
-        });
-    }
+// computeSpeedup() - Lines 2760-2782
+const speedup = serialTime / parallelTime;
+resultsElem.textContent = `Series: [${seriesBlocks}]\nParallel: [${parallelBlocks}]\nSpeedup: ${speedup.toFixed(3)}×`;
+speedBig.textContent = `${speedup.toFixed(2)}×`;
+speedBarInner.style.width = `${speedup * 50}%`;
+
+// saveRun() - Line 2805
+alert(`✅ Run "${name}" saved!`);
+
+// showSavedRuns() - Lines 2836-2841
+savedRuns.forEach((run, i) => {
+    text += `${i+1}. ${run.name} - Speedup: ${run.speedup.toFixed(3)}×\n`;
 });
 ```
 
-### Input Breakdown
-
-| Component | Description | Code Location | User Action |
-|-----------|-------------|---------------|-------------|
-| **Task Creation** | Enter time value, click "Add Task" | `addTask()` - Line 2730 | Type number → Click button |
-| **Drag Start** | User grabs a task block | `drag()` - Line 2681 | Mouse down + move on block |
-| **Drag Over** | User hovers over drop zone | `allowDrop()` - Line 2670 | Dragging over Series/Parallel row |
-| **Drop** | User releases block in zone | `drop()` - Line 2693 | Release mouse in drop area |
-| **Compute Button** | Calculate speedup | `computeSpeedup()` - Line 2747 | Click "⚡ Compute Speedup" |
-| **Save Button** | Save current configuration | `saveRun()` - Line 2787 | Click "💾 Save Run" |
-| **Show Button** | Display saved runs | `showSavedRuns()` - Line 2823 | Click "📊 Show Saved" |
-| **Sidebar Toggle** | Open/close learning guide | `toggleSidebar()` - Line 2288 | Click hamburger icon |
-| **Modal Open** | View detailed explanations | `openModal()` - Line 2289 | Click "View More" buttons |
-
-### Input Data Structures
-
-```javascript
-// Global state variables (Lines 2666-2668)
-let savedRuns = [];              // LIST: Stores all saved speedup calculations
-let currentlyDragging = null;    // Reference: Currently dragged block element
-
-// Task block structure (created dynamically)
-let taskBlock = {
-    id: "task1738195234567",    // Unique ID (timestamp)
-    className: "block",          // CSS styling
-    draggable: true,             // Enable drag
-    textContent: "10",           // Time value (integer)
-    ondragstart: drag            // Event handler
-};
-
-// Drop zone elements (existing in DOM)
-let dropZones = {
-    taskPool: document.getElementById("taskPool"),      // Task storage
-    seriesRow: document.getElementById("seriesRow"),    // Sequential tasks
-    parallelRow: document.getElementById("parallelRow") // Simultaneous tasks
-};
-```
-
-### User Interaction Flow
-
-1. **Create Task:**
-   - User types "10" in input field
-   - Clicks "➕ Add Task"
-   - Calls `addTask()` → Creates draggable block in Task Pool
-
-2. **Organize Tasks:**
-   - User drags block from Task Pool
-   - Calls `drag()` → Stores block ID, adds visual feedback
-   - User hovers over Series Row
-   - Calls `allowDrop()` → Highlights drop zone
-   - User releases mouse
-   - Calls `drop()` → Moves block to Series Row
-
-3. **Calculate Speedup:**
-   - User clicks "⚡ Compute Speedup"
-   - Calls `computeSpeedup()` → Processes task lists, calculates times
-
-4. **Save Configuration:**
-   - User clicks "💾 Save Run"
-   - Calls `saveRun()` → Prompts for name, saves to `savedRuns` LIST
-
-5. **View History:**
-   - User clicks "📊 Show Saved"
-   - Calls `showSavedRuns()` → Displays all saved configurations
-
-### Input Validation Rules
-
-| Input | Validation Rule | Error Message | Code Location |
-|-------|----------------|---------------|---------------|
-| Task Time | Must be positive integer | "Please enter a valid task time (positive number)" | Line 2734 |
-| Task Time | Cannot be NaN | Same as above | Line 2734 |
-| Compute Speedup | At least 1 task in Series or Parallel | "Please add some tasks to the Series or Parallel rows first" | Line 2756 |
-| Save Run | Must compute speedup first | "Please compute speedup first before saving!" | Line 2794 |
-| Save Run | Must enter a name | (Silent return if cancelled) | Line 2802 |
+**Outputs:** Results text, visual speedup panel (bar + number), save alerts, saved runs list
 
 ---
 
-## Task 2: OUTPUT Documentation ✓
+## Task 3: PROCEDURE ✓
 
-### Visual Output Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2760-2785
+**Main Procedure:** `computeSpeedup()` (Lines 2747-2785)
 
 ```javascript
 window.computeSpeedup = function() {
-    // ... input collection code ...
-    
-    // Calculate speedup values
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
-    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
-
-    // OUTPUT 1: Text results display
-    const resultsElem = document.getElementById("results");
-    resultsElem.className = "results has-results";
-    resultsElem.textContent = 
-        `RESULTS\n` +
-        `${'='.repeat(50)}\n\n` +
-        `Series Tasks: [${seriesBlocks.join(', ') || 'none'}]\n` +
-        `Parallel Tasks: [${parallelBlocks.join(', ') || 'none'}]\n\n` +
-        `Serial Time (all sequential): ${serialTime} units\n` +
-        `Parallel Time (with parallelism): ${parallelTime} units\n\n` +
-        `Speedup: ${speedup.toFixed(3)}×\n\n` +
-        `${speedup > 1 ? 
-          'Success! You achieved speedup through parallelization.' : 
-          'No speedup gained - try moving more tasks to parallel row.'}`;
-
-    // OUTPUT 2: Visual speedup panel
-    const speedBig = document.getElementById('speedBig');
-    const speedBarInner = document.getElementById('speedBarInner');
-    const speedLabel = document.getElementById('speedLabel');
-    
-    // Calculate progress bar percentage (50% per 1× speedup)
-    const pct = Math.min(200, Math.max(0, Math.round(speedup * 50)));
-    
-    // Update visual elements
-    speedBig.textContent = speedup > 0 ? `${speedup.toFixed(2)}×` : '—';
-    speedBarInner.style.width = pct + '%';
-    speedLabel.textContent = speedup > 1 
-        ? 'Nice — parallelism helped!' 
-        : 'No speedup yet — try moving tasks to parallel.';
-
-    // OUTPUT 3: Store result in global variable for saving
-    window.currentScore = {
-        seriesBlocks,      // LIST
-        parallelBlocks,    // LIST
-        serialTime,
-        parallelTime,
-        speedup
-    };
-    
-    console.log('✅ currentScore set:', window.currentScore);
-}
-```
-
-### Save Run Output Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2787-2821
-
-```javascript
-window.saveRun = function() {
-    console.log('=== SAVE RUN DEBUG ===');
-    console.log('window.currentScore:', window.currentScore);
-    
-    // INPUT VALIDATION
-    if (!window.currentScore) {
-        console.log('❌ FAILED: currentScore is null/undefined');
-        alert("Please compute speedup first before saving!");
-        return;
-    }
-    
-    if (typeof window.currentScore.speedup !== 'number') {
-        console.log('❌ FAILED: speedup is not a number');
-        alert("Please compute speedup first before saving!");
-        return;
-    }
-    
-    console.log('✅ PASSED validation, showing prompt');
-    
-    // Get run name from user
-    const name = prompt("Enter a name for this run:");
-    if(!name) return;
-
-    // OUTPUT: Add to savedRuns LIST
-    savedRuns.push({
-        name: name,
-        seriesBlocks: window.currentScore.seriesBlocks,      // LIST
-        parallelBlocks: window.currentScore.parallelBlocks,  // LIST
-        serialTime: window.currentScore.serialTime,
-        parallelTime: window.currentScore.parallelTime,
-        speedup: window.currentScore.speedup,
-        timestamp: new Date().toLocaleString()               // Date/time string
-    });
-    
-    // OUTPUT: Success notification
-    alert(`✅ Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
-    
-    console.log('📊 Current savedRuns LIST:', savedRuns);
-    console.log('📊 Total saved runs:', savedRuns.length);
-}
-```
-
-### Show Saved Runs Output Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2823-2845
-
-```javascript
-window.showSavedRuns = function() {
-    const savedRunsElem = document.getElementById("savedRuns");
-    
-    // OUTPUT: Handle empty state
-    if(savedRuns.length === 0) {
-        savedRunsElem.textContent = "No runs saved yet. Compute a speedup and save it.";
-        savedRunsElem.style.display = "block";
-        return;
-    }
-
-    // OUTPUT: Format saved runs display
-    let text = `SAVED RUNS (${savedRuns.length} total)\n${'='.repeat(60)}\n\n`;
-    
-    // ITERATION: Loop through savedRuns LIST
-    savedRuns.forEach((run, i) => {
-        text += `${i+1}. ${run.name} - ${run.timestamp}\n`;
-        text += `   Speedup: ${run.speedup.toFixed(3)}× (Serial: ${run.serialTime}, Parallel: ${run.parallelTime})\n`;
-        text += `   Series: [${run.seriesBlocks.join(', ') || 'none'}]\n`;
-        text += `   Parallel: [${run.parallelBlocks.join(', ') || 'none'}]\n\n`;
-    });
-    
-    // OUTPUT: Display formatted text
-    savedRunsElem.textContent = text;
-    savedRunsElem.style.display = "block";
-}
-```
-
-### Modal Output Code
-
-**File:** `frontend/cores/core-5.md` — Lines 2289-2308
-
-```javascript
-// Modal functions - sidebar panels now open in modals instead of expanding inline
-window.openModal = function(panelId) {
-    console.log('openModal called with:', panelId);
-    
-    // Get modal elements
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    
-    // Get content for this topic (from getModalContent function)
-    const content = getModalContent(panelId);
-    
-    // OUTPUT: Update modal content
-    modalTitle.textContent = content.title;
-    modalBody.innerHTML = content.body;
-    
-    // OUTPUT: Show modal
-    modalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';  // Prevent background scrolling
-    
-    console.log('Modal opened for:', panelId);
-};
-
-window.closeModal = function(event) {
-    // OUTPUT: Hide modal
-    const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.classList.remove('active');
-    document.body.style.overflow = 'auto';  // Restore scrolling
-    
-    console.log('Modal closed');
-};
-```
-
-### Output Breakdown
-
-| Output Element | Update Trigger | Display Format | Code Location |
-|----------------|----------------|----------------|---------------|
-| **Results Panel** | Compute button click | Multi-line text with calculations | Lines 2764-2775 |
-| **Speedup Display** | Compute button click | Large "1.30×" text | Line 2780 |
-| **Progress Bar** | Compute button click | Width = speedup × 50% | Line 2781 |
-| **Status Label** | Compute button click | Success/failure message | Line 2782 |
-| **Save Confirmation** | Save button click | Alert popup | Line 2805 |
-| **Saved Runs List** | Show button click | Formatted text list | Lines 2836-2841 |
-| **Console Logs** | Various actions | Debug information | Multiple locations |
-| **Modal Popup** | "View More" click | Educational content | Lines 2295-2301 |
-
-### Output Data Structures
-
-```javascript
-// currentScore object (stored after computation)
-window.currentScore = {
-    seriesBlocks: [5, 10],           // LIST: Tasks in Series Row
-    parallelBlocks: [8, 12],         // LIST: Tasks in Parallel Row
-    serialTime: 35,                  // Sum of all tasks
-    parallelTime: 27,                // Series sum + max(Parallel)
-    speedup: 1.296                   // serialTime / parallelTime
-};
-
-// savedRuns LIST structure
-let savedRuns = [
-    {
-        name: "Test Run 1",
-        seriesBlocks: [5, 10],       // LIST
-        parallelBlocks: [8, 12],     // LIST
-        serialTime: 35,
-        parallelTime: 27,
-        speedup: 1.296,
-        timestamp: "1/29/2026, 3:45:23 PM"
-    },
-    {
-        name: "Optimized Run",
-        seriesBlocks: [5],
-        parallelBlocks: [10, 8, 12],
-        serialTime: 35,
-        parallelTime: 17,
-        speedup: 2.059,
-        timestamp: "1/29/2026, 3:47:10 PM"
-    }
-    // ... more saved runs
-];
-
-// Modal content object (returned by getModalContent)
-let modalContent = {
-    title: "⚡ What is Speedup?",
-    body: "<p>Speedup measures how much faster...</p>"
-};
-```
-
-### Visual Output Examples
-
-**Example 1: Compute Speedup Output**
-```
-RESULTS
-==================================================
-
-Series Tasks: [5, 10]
-Parallel Tasks: [8, 12]
-
-Serial Time (all sequential): 35 units
-Parallel Time (with parallelism): 27 units
-
-Speedup: 1.296×
-
-Success! You achieved speedup through parallelization.
-```
-
-**Example 2: Saved Runs Output**
-```
-SAVED RUNS (2 total)
-============================================================
-
-1. Test Run 1 - 1/29/2026, 3:45:23 PM
-   Speedup: 1.296× (Serial: 35, Parallel: 27)
-   Series: [5, 10]
-   Parallel: [8, 12]
-
-2. Optimized Run - 1/29/2026, 3:47:10 PM
-   Speedup: 2.059× (Serial: 35, Parallel: 17)
-   Series: [5]
-   Parallel: [10, 8, 12]
-```
-
-### Console Output (Debugging)
-
-```javascript
-// Console logs throughout the code for debugging
-console.log('Page loaded, initializing...');
-console.log('Add task clicked');
-console.log('Compute clicked');
-console.log('✅ currentScore set:', window.currentScore);
-console.log('=== SAVE RUN DEBUG ===');
-console.log('window.currentScore:', window.currentScore);
-console.log('✅ PASSED validation, showing prompt');
-console.log('📊 Current savedRuns LIST:', savedRuns);
-console.log('📊 Total saved runs:', savedRuns.length);
-console.log('Opening modal:', panelId);
-console.log('Modal opened for:', panelId);
-```
-
----
-
-## Task 3: PROCEDURE Identification ✓
-
-### Main Procedure: `computeSpeedup()`
-
-**File:** `frontend/cores/core-5.md` — Lines 2747-2785
-
-```javascript
-window.computeSpeedup = function() {
-  /**
-   * PROCEDURE: Calculate speedup from task organization
-   *
-   * Contains ALL required elements:
-   * - SEQUENCING: Steps execute in order (collect → validate → calculate → display)
-   * - SELECTION: if statements for validation and success/failure messages
-   * - ITERATION: Array methods (.filter, .map, .reduce) loop through task LISTS
-   * - LIST: seriesBlocks array, parallelBlocks array
-   *
-   * Parameters: None (reads from DOM)
-   * Return: None (updates DOM and global state)
-   */
-
-  // SEQUENCING STEP 1: Collect tasks from Series Row
-  // ITERATION: Array.from creates array, filter selects blocks, map extracts values
+  // STEP 1-2: ITERATION - Collect tasks from DOM into LISTS
   const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-                          .filter(c => c.classList.contains("block"))  // SELECTION
-                          .map(b => parseInt(b.textContent));          // LIST
+    .filter(c => c.classList.contains("block"))  // SELECTION
+    .map(b => parseInt(b.textContent));          // LIST
 
-  // SEQUENCING STEP 2: Collect tasks from Parallel Row
   const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-                          .filter(c => c.classList.contains("block"))
-                          .map(b => parseInt(b.textContent));          // LIST
+    .filter(c => c.classList.contains("block"))
+    .map(b => parseInt(b.textContent));
 
-  // SEQUENCING STEP 3: INPUT VALIDATION - Check if tasks exist
-  // SELECTION: Conditional check
+  // STEP 3: SELECTION - Validate
   if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-      alert("Please add some tasks to the Series or Parallel rows first");
-      return;  // Early exit if no tasks
+      alert("Add tasks first");
+      return;
   }
 
-  // SEQUENCING STEP 4: Calculate Serial Time
-  // ITERATION: reduce() loops through combined array, summing all values
+  // STEP 4-5: Calculate times
+  const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b) => a+b, 0);
+  const parallelTime = seriesBlocks.reduce((a,b) => a+b, 0) + 
+                       (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+
+  // STEP 6: Calculate speedup
+  const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+  // STEP 7-8: OUTPUT - Display results
+  resultsElem.textContent = `Speedup: ${speedup.toFixed(3)}×`;
+  speedBig.textContent = `${speedup.toFixed(2)}×`;
+  speedBarInner.style.width = `${Math.round(speedup * 50)}%`;
+
+  // STEP 9: Store result
+  window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
+}
+```
+
+---
+
+## Task 4: Data Flow Example ✓
+
+**Scenario:** Tasks [5, 10, 8, 12] → Series [5, 10], Parallel [8, 12]
+
+1. **Collect:** `.filter().map()` → seriesBlocks = [5,10], parallelBlocks = [8,12]
+2. **Serial Time:** 5 + 10 + 8 + 12 = 35 units
+3. **Parallel Time:** (5 + 10) + max(8, 12) = 15 + 12 = 27 units
+4. **Speedup:** 35 / 27 = 1.296× (29.6% faster)
+5. **Display:** "Speedup: 1.296×" + progress bar at 65%
+6. **Store:** `currentScore = { seriesBlocks, parallelBlocks, 35, 27, 1.296 }`
+
+---
+
+## Task 5: Create PT Elements ✓
+
+| Element | Location | Example |
+|---------|----------|---------|
+| **INPUT** | Lines 2730, 2681-2715 | Task creation, drag & drop |
+| **OUTPUT** | Lines 2764-2782, 2805 | Results display, alerts |
+| **PROCEDURE** | Lines 2747-2785 | `computeSpeedup()` |
+| **SEQUENCING** | 2747-2785 | 9 steps execute in order |
+| **SELECTION** | 2755, 2763, 2770 | `if` statements, ternary operators |
+| **ITERATION** | 2749-2753, 2760 | `.filter()`, `.map()`, `.reduce()` |
+| **LIST** | 2749, 2666 | `seriesBlocks[]`, `parallelBlocks[]`, `savedRuns[]` |
+
+**Algorithm:** Serial time = sum all. Parallel time = series sum + max(parallel). Speedup = serial/parallel.
+
+**Status:** Ready for PPR responses!
   const serialTime = [...seriesBlocks, ...parallelBlocks]
                       .reduce((a, b) => a + b, 0);
 
@@ -792,239 +319,58 @@ window.showSavedRuns = function() {
 | `addTask()` | 2730 | Create draggable task block | INPUT + SELECTION |
 | `drag()` | 2681 | Handle drag start | INPUT |
 | `allowDrop()` | 2670 | Allow drop in zone | INPUT |
-| `drop()` | 2693 | Move block to zone | INPUT + SELECTION |
-| `computeSpeedup()` | 2747 | Calculate speedup (MAIN) | All elements |
-| `saveRun()` | 2787 | Save to savedRuns LIST | SEQUENCING + SELECTION + LIST |
-| `showSavedRuns()` | 2823 | Display saved runs | ITERATION + LIST + OUTPUT |
-| `openModal()` | 2289 | Show educational content | OUTPUT |
-| `closeModal()` | 2302 | Hide modal | OUTPUT |
-| `toggleSidebar()` | 2288 | Show/hide learning guide | OUTPUT |
+### Main Procedure: `computeSpeedup()` (Lines 2747-2785)
 
----
+```javascript
+window.computeSpeedup = function() {
+  // STEP 1 & 2: ITERATION - Collect tasks from DOM into LISTS
+  const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+                          .filter(c => c.classList.contains("block"))  // SELECTION
+                          .map(b => parseInt(b.textContent));          // LIST
 
-## Task 4: Data Flow Trace ✓
+  const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+                          .filter(c => c.classList.contains("block"))
+                          .map(b => parseInt(b.textContent));          // LIST
 
-### Complete Data Flow Diagram
+  // STEP 3: SELECTION - Validate input
+  if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+      alert("Please add some tasks first");
+      return;
+  }
 
+  // STEP 4: ITERATION - Calculate serial time (sum all tasks)
+  const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
+
+  // STEP 5: Calculate parallel time (series sum + max parallel)
+  const parallelTime = seriesBlocks.reduce((a, b) => a + b, 0) + 
+                       (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+
+  // STEP 6: SELECTION - Calculate speedup (avoid division by zero)
+  const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+  // STEP 7: OUTPUT - Display text results
+  resultsElem.textContent = 
+      `Series Tasks: [${seriesBlocks.join(', ')}]\n` +
+      `Speedup: ${speedup.toFixed(3)}×`;
+
+  // STEP 8: OUTPUT - Update visual panel
+  speedBig.textContent = `${speedup.toFixed(2)}×`;
+  speedBarInner.style.width = `${Math.round(speedup * 50)}%`;
+  speedLabel.textContent = speedup > 1 ? 'Nice!' : 'No speedup yet';
+
+  // STEP 9: Store result for saving
+  window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
+}
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              USER ACTION: CREATE TASK                        │
-│                                                                              │
-│  User types "10" in input field                                             │
-│  User clicks "➕ Add Task" button                                           │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         STEP 1: INPUT PROCESSING                             │
-│  Function: addTask() (Line 2730)                                            │
-│                                                                              │
-│  1. Read value from input field:                                            │
-│     val = parseInt(document.getElementById('newTaskTime').value)            │
-│     val = 10                                                                 │
-│                                                                              │
-│  2. SELECTION: Validate input                                               │
-│     if (isNaN(val) || val < 1)                                              │
-│       → alert error, return                                                 │
-│     ✓ Passed validation                                                     │
-│                                                                              │
-│  3. SEQUENCING: Create task block                                           │
-│     block = document.createElement("div")                                   │
-│     block.className = "block"                                               │
-│     block.id = "task1738195234567"  ← Unique timestamp ID                  │
-│     block.draggable = true                                                  │
-│     block.ondragstart = drag                                                │
-│     block.textContent = "10"                                                │
-│                                                                              │
-│  4. OUTPUT: Add to Task Pool                                                │
-│     document.getElementById("taskPool").appendChild(block)                  │
-│                                                                              │
-│  5. Clear input field                                                       │
-│     document.getElementById('newTaskTime').value = ""                       │
-│                                                                              │
-│  State: Task Pool now contains: [block with "10"]                          │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      │ (User creates more tasks: 5, 8, 12)
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 2: USER ORGANIZES TASKS (DRAG & DROP)               │
-│                                                                              │
-│  Task Pool: [5, 10, 8, 12]                                                  │
-│  Series Row: []                                                              │
-│  Parallel Row: []                                                            │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         DRAG ACTION: Move "5" to Series Row                  │
-│  Functions: drag() → allowDrop() → drop()                                   │
-│                                                                              │
-│  6. User clicks and holds "5" block                                         │
-│     → drag(event) called (Line 2681)                                        │
-│                                                                              │
-│  7. Store block ID in dataTransfer:                                         │
-│     ev.dataTransfer.setData("text", "task1738195234567")                    │
-│                                                                              │
-│  8. Add visual feedback:                                                    │
-│     ev.target.classList.add('dragging')                                     │
-│     currentlyDragging = ev.target                                           │
-│                                                                              │
-│  9. Highlight valid drop zones:                                             │
-│     seriesRow.classList.add('highlight-target')                             │
-│     parallelRow.classList.add('highlight-target')                           │
-│     taskPool.classList.add('highlight-target')                              │
-│                                                                              │
-│ 10. User drags over Series Row                                              │
-│     → allowDrop(event) called (Line 2670)                                   │
-│                                                                              │
-│ 11. Allow drop:                                                             │
-│     ev.preventDefault()  ← Required for drop to work                        │
-│                                                                              │
-│ 12. Add hover feedback:                                                     │
-│     targetArea = ev.target.closest('.drag-area')                            │
-│     targetArea.classList.add('drag-over')                                   │
-│                                                                              │
-│ 13. User releases mouse                                                     │
-│     → drop(event) called (Line 2693)                                        │
-│                                                                              │
-│ 14. Get block from dataTransfer:                                            │
-│     data = ev.dataTransfer.getData("text")                                  │
-│     elem = document.getElementById(data)  ← Get "5" block                  │
-│                                                                              │
-│ 15. Move block to Series Row:                                               │
-│     targetArea = ev.target.closest('.drag-area')  ← Series Row             │
-│     targetArea.appendChild(elem)                  ← MOVE block              │
-│                                                                              │
-│ 16. Clean up visual feedback:                                               │
-│     elem.classList.remove('dragging')                                       │
-│     removeHighlights()  ← Remove all highlight classes                      │
-│                                                                              │
-│  State: Task Pool: [10, 8, 12]                                              │
-│         Series Row: [5]                                                      │
-│         Parallel Row: []                                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      │ (User continues dragging)
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 3: FINAL TASK ORGANIZATION                           │
-│                                                                              │
-│  After user organizes all tasks:                                            │
-│  Task Pool: []                                                               │
-│  Series Row: [5, 10]         ← Tasks run one after another                 │
-│  Parallel Row: [8, 12]       ← Tasks run simultaneously                    │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 4: USER REQUESTS CALCULATION                         │
-│  User clicks "⚡ Compute Speedup" button                                    │
-│  Function: computeSpeedup() (Line 2747)                                    │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 5: COLLECT TASKS FROM DOM                            │
-│  Lines 2749-2753                                                             │
-│                                                                              │
-│ 17. ITERATION: Get all children of Series Row                               │
-│     Array.from(document.getElementById("seriesRow").children)               │
-│     → [<div class="block">5</div>, <div class="block">10</div>]            │
-│                                                                              │
-│ 18. SELECTION: Filter to only block elements                                │
-│     .filter(c => c.classList.contains("block"))                             │
-│     → [<div class="block">5</div>, <div class="block">10</div>]            │
-│                                                                              │
-│ 19. ITERATION: Extract text content as integers                             │
-│     .map(b => parseInt(b.textContent))                                      │
-│     → [5, 10]                                                               │
-│                                                                              │
-│ 20. Store in seriesBlocks LIST                                              │
-│     const seriesBlocks = [5, 10]                                            │
-│                                                                              │
-│ 21. Repeat for Parallel Row (same process)                                  │
-│     const parallelBlocks = [8, 12]                                          │
-│                                                                              │
-│  State: seriesBlocks = [5, 10]                                              │
-│         parallelBlocks = [8, 12]                                            │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 6: VALIDATE INPUT                                    │
-│  Line 2755                                                                   │
-│                                                                              │
-│ 22. SELECTION: Check if tasks exist                                         │
-│     if (seriesBlocks.length === 0 && parallelBlocks.length === 0)          │
-│       → alert("Please add tasks...")                                        │
-│       → return                                                               │
-│                                                                              │
-│     seriesBlocks.length = 2  ✓                                              │
-│     parallelBlocks.length = 2  ✓                                            │
-│     Validation passed!                                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 7: CALCULATE SERIAL TIME                             │
-│  Line 2760                                                                   │
-│                                                                              │
-│ 23. Combine both LISTS with spread operator:                                │
-│     [...seriesBlocks, ...parallelBlocks]                                    │
-│     → [5, 10, 8, 12]                                                        │
-│                                                                              │
-│ 24. ITERATION: Sum all values with reduce()                                 │
-│     .reduce((a, b) => a + b, 0)                                             │
-│     → 0 + 5 = 5                                                             │
-│     → 5 + 10 = 15                                                           │
-│     → 15 + 8 = 23                                                           │
-│     → 23 + 12 = 35                                                          │
-│                                                                              │
-│ 25. Store result:                                                           │
-│     const serialTime = 35                                                   │
-│                                                                              │
-│  Meaning: If all tasks run sequentially, total time = 35 units             │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 8: CALCULATE PARALLEL TIME                           │
-│  Lines 2761-2763                                                             │
-│                                                                              │
-│ 26. ITERATION: Sum series tasks                                             │
-│     seriesBlocks.reduce((a, b) => a + b, 0)                                 │
-│     → 0 + 5 = 5                                                             │
-│     → 5 + 10 = 15                                                           │
-│     const seriesTotal = 15                                                  │
-│                                                                              │
-│     (Series tasks MUST run sequentially - no speedup possible)              │
-│                                                                              │
-│ 27. SELECTION: Check if parallel tasks exist                                │
-│     parallelBlocks.length > 0  ✓ (length = 2)                              │
-│                                                                              │
-│ 28. Find longest parallel task with Math.max():                             │
-│     Math.max(...parallelBlocks)                                             │
-│     Math.max(8, 12)                                                         │
-│     → 12                                                                    │
-│                                                                              │
-│     (Parallel tasks run SIMULTANEOUSLY - use max time, not sum)             │
-│                                                                              │
-│     const parallelMax = 12                                                  │
-│                                                                              │
-│ 29. Calculate total parallel time:                                          │
-│     parallelTime = seriesTotal + parallelMax                                │
-│     parallelTime = 15 + 12                                                  │
-│     parallelTime = 27                                                       │
-│                                                                              │
-│  State: serialTime = 35                                                     │
-│         parallelTime = 27                                                    │
-│                                                                              │
-│  Breakdown:                                                                  │
-│  ┌─────────────────────┐                                                    │
-│  │ Serial Execution:   │  5 + 10 + 8 + 12 = 35 units                        │
-│  └─────────────────────┘                                                    │
-│                                                                              │
+
+### Procedure Elements
+
+| Element | Lines | Description |
+|---------|-------|-------------|
+| **SEQUENCING** | 2747-2785 | 9 steps: collect → validate → calculate → display → store |
+| **SELECTION** | 2755, 2763, 2770, 2776 | `if (empty)`, `if (parallelBlocks.length)`, `speedup > 1 ?` |
+| **ITERATION** | 2749-2753, 2760 | `.filter()`, `.map()`, `.reduce()` on task LISTS |
+| **LIST** | 2749-2753 | `seriesBlocks[]`, `parallelBlocks[]` arrays |               │
 │  ┌─────────────────────┐                                                    │
 │  │ Parallel Execution: │  (5 + 10) + max(8, 12) = 15 + 12 = 27 units       │
 │  └─────────────────────┘  Series    Parallel (simultaneous)                │
