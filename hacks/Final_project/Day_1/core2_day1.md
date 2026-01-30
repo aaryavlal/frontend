@@ -1,7 +1,7 @@
 ---
 title: "Core 2 Day 1"
 description: "API spec for the Rustism concurrency endpoint"
-permalink: /core-2/day1
+permalink: /core2/day1
 ---
 
 General endpoint spec (taken from doc comment):
