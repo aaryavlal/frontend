@@ -7,7 +7,7 @@ permalink: /core2/day1
 General endpoint spec (taken from doc comment):
 ```py
 """
-uery Parameters:
+Query Parameters:
     width (int): Image width in pixels (default: 800)
     height (int): Image height in pixels (default: 600)
     tile_w (int): Tile width (default: 64)
