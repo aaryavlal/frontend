@@ -4,100 +4,154 @@ permalink: /core5/day1
 layout: post
 ---
 
-# Core 5: Speedup Calculator — Day 1 Complete
-
-**Team Member:** Tanay
-**Core Assignment:** Core 5 - Interactive Speedup Calculator with Drag & Drop
+# Core 5: Speedup Calculator — Day 1
 
 ---
 
-## Task 1: Individual Task Identified ✓
+## Task 1: Task Overview ✓
 
-**My Task:** Drag & Drop Speedup Calculator for Parallel Computing
+**My Task:** Drag & Drop Speedup Calculator
 
-**What it does:** User drags task blocks into "Series Row" (sequential) or "Parallel Row" (simultaneous execution), then clicks "Compute Speedup" to calculate how much faster parallel execution is compared to serial execution. Demonstrates Amdahl's Law and performance optimization.
+User drags task blocks into Series (sequential) or Parallel (simultaneous) rows, then computes speedup to demonstrate Amdahl's Law.
 
-**Why it fits Create PT:**
-- Clear INPUT → PROCEDURE → OUTPUT flow
-- Uses LISTS (task arrays, saved runs history)
-- Has defined PROCEDURES with sequencing (drag → organize → compute), selection (if tasks exist, compute speedup), and iteration (loop through task blocks to calculate times)
-- Persistent storage (localStorage for saved runs)
+**Create PT fit:** Clear INPUT → PROCEDURE → OUTPUT flow, uses LISTS (task arrays), includes sequencing/selection/iteration.
 
 ---
 
-## Task 2: API Routes Reviewed ✓
+## Task 2: API Routes ✓
 
-### Backend API: `backend/Quest/routes/speedup.py`
+**Backend:** `/api/speedup/quiz` (POST) - Optional knowledge quiz
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/speedup/quiz` | POST | Speedup knowledge quiz with scoring |
-| `/api/speedup/calculate` | POST | Backend calculation validation (optional - frontend also calculates) |
-
-### Key Frontend Functions (Core 5 is primarily client-side):
+**Key Frontend Functions:**
 
 | Function | Line | Purpose |
 |----------|------|---------|
-| `addTask()` | ~2726 | Creates draggable task block with user-input time value |
-| `drag(event)` | ~2691 | Handles drag start event, stores task ID |
-| `allowDrop(event)` | ~2695 | Allows drop zone to accept dragged elements |
-| `drop(event)` | ~2699 | Handles drop event, moves task to target area |
-| `computeSpeedup()` | ~2747 | Calculates serial time, parallel time, and speedup ratio |
-| `saveRun()` | ~2787 | Saves current configuration to localStorage array |
-| `showSavedRuns()` | ~2823 | Displays list of saved speedup calculations |
-| `openModal(panelId)` | ~2289 | Opens educational modal with detailed explanations |
-| `getModalContent(panelId)` | ~2309 | Returns content for modals (Amdahl's Law, parallel vs serial, etc.) |
+| `addTask()` | 2726 | Creates draggable task block |
+| `drag()/drop()` | 2691-2712 | Drag-and-drop handlers |
+| `computeSpeedup()` | 2747 | Main calculation procedure |
+| `saveRun()` | 2787 | Saves to localStorage |
+| `showSavedRuns()` | 2823 | Displays saved configurations |
 
 ---
 
-## Task 3: Frontend + Backend Code Mapped ✓
-
-### Data Flow Diagram
+## Task 3: Data Flow ✓
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           FRONTEND INPUT                                 │
-│  frontend/cores/core-5.md                                               │
-│                                                                          │
-│  User Actions:                                                           │
-│  1. Enter task time value (e.g., "10") in input field                   │
-│  2. Click "➕ Add Task" button                                           │
-│  3. Drag task blocks to Series or Parallel rows                         │
-│  4. Click "⚡ Compute Speedup" button                                    │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      INPUT COLLECTION                                    │
-│  Line 2726: addTask() function                                          │
-│                                                                          │
-│  const val = parseInt(document.getElementById('newTaskTime').value);    │
-│  if (val > 0) {                                                          │
-│    const block = document.createElement("div");                          │
-│    block.className = "block";                                            │
-│    block.draggable = true;                                               │
-│    block.textContent = val;           ← Store time value in block       │
-│    taskPool.appendChild(block);       ← Add to Task Pool (LIST)         │
-│  }                                                                       │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      DRAG & DROP INTERACTION                             │
-│  Lines 2691-2712: Drag and Drop Functions                               │
-│                                                                          │
-│  1. drag(event) - User starts dragging a task block                     │
-│     → Sets event.dataTransfer with block ID                             │
-│                                                                          │
-│  2. allowDrop(event) - User hovers over drop zone                       │
-│     → event.preventDefault() to allow drop                              │
-│     → Adds 'drag-over' CSS class for visual feedback                    │
-│                                                                          │
-│  3. drop(event) - User releases block in Series or Parallel row         │
-│     → Retrieves block ID from dataTransfer                              │
-│     → targetArea.appendChild(draggedBlock)                              │
-│     → Removes 'drag-over' class                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+INPUT (User creates tasks)
+  ↓
+addTask() → Creates block, adds to Task Pool (LIST)
+  ↓
+drag()/drop() → User organizes tasks into Series/Parallel rows
+  ↓
+PROCEDURE: computeSpeedup()
+  1. Collect: .filter().map() → seriesBlocks[], parallelBlocks[] (LISTS)
+  2. Validate: if (empty) → alert (SELECTION)
+  3. Calculate serial: .reduce() sums all tasks (ITERATION)
+  4. Calculate parallel: series sum + max(parallel) (ITERATION)
+  5. Speedup: serial / parallel
+  6. Store: window.currentScore = { seriesBlocks, parallelBlocks, times, speedup }
+  ↓
+OUTPUT
+  • Display: serialTime, parallelTime, speedup×
+  • Visual: Progress bar, status message
+  • Save: savedRuns.push() → localStorage (LIST)
+```
+
+**Example:**
+- Tasks [5, 10, 8, 12] → Series [5, 10], Parallel [8, 12]
+- Serial: 35 units | Parallel: 27 units | Speedup: 1.30×
+
+---
+
+## Task 4: Video Script ✓
+
+**[0:00-0:15]** Show interface, create tasks (type values, click "Add Task")
+
+**[0:15-0:40]** Drag tasks to Series/Parallel rows, explain sequential vs simultaneous execution
+
+**[0:40-0:55]** Click "Compute Speedup", show results (1.30× speedup), explain calculation
+
+**[0:55-1:00]** Click "Save Run" to demonstrate LIST storage
+
+---
+
+## Task 5: Code Segments Preview ✓
+
+### INPUT
+```javascript
+// Line 2726: addTask()
+window.addTask = function() {
+    const val = parseInt(document.getElementById('newTaskTime').value);
+    if (isNaN(val) || val <= 0) return alert("Invalid");
+    const block = document.createElement("div");
+    block.className = "block";
+    block.draggable = true;
+    block.textContent = val;
+    document.getElementById("taskPool").appendChild(block);
+}
+```
+
+### PROCEDURE
+```javascript
+// Line 2747: computeSpeedup()
+window.computeSpeedup = function() {
+    // Collect into LISTS
+    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+        .filter(c => c.classList.contains("block"))  // SELECTION
+        .map(b => parseInt(b.textContent));          // LIST
+
+    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+        .filter(c => c.classList.contains("block"))
+        .map(b => parseInt(b.textContent));
+
+    // SELECTION: Validate
+    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+        alert("Add tasks first");
+        return;
+    }
+
+    // ITERATION: Calculate
+    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b) => a+b, 0);
+    const parallelTime = seriesBlocks.reduce((a,b) => a+b, 0) + 
+                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+    const speedup = serialTime / parallelTime;
+
+    // Store result
+    window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
+    displayResults(serialTime, parallelTime, speedup);
+}
+```
+
+### OUTPUT
+```javascript
+// Display results
+speedBig.textContent = `${speedup.toFixed(2)}×`;
+speedBarInner.style.width = `${(speedup - 1) * 50}%`;
+speedLabel.textContent = speedup > 1 ? 'Nice!' : 'No speedup yet';
+
+// Save to LIST
+window.saveRun = function() {
+    savedRuns.push({
+        seriesBlocks: window.currentScore.seriesBlocks,
+        parallelBlocks: window.currentScore.parallelBlocks,
+        speedup: window.currentScore.speedup,
+        timestamp: new Date().toLocaleString()
+    });
+    localStorage.setItem('speedupRuns', JSON.stringify(savedRuns));
+}
+```
+
+---
+
+## Checklist
+
+- [x] Task identified (Speedup Calculator)
+- [x] API routes reviewed
+- [x] Code mapped with data flow
+- [x] Video script drafted
+- [ ] Team sync for other cores
+
+**Next:** Day 2 - Document INPUT/OUTPUT/PROCEDURE with screenshots
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
