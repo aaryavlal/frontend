@@ -13,13 +13,17 @@ layout: post
 ## College Board Create PT Requirements
 
 The written response section requires you to answer questions about:
-- **3a:** Procedure description
-- **3b:** Algorithm with sequencing, selection, and iteration
-- **3c:** List usage and purpose
+- **3a:** Procedure description — *What does your procedure do and why?*
+- **3b:** Algorithm with sequencing, selection, and iteration — *How does it work step-by-step?*
+- **3c:** List usage and purpose — *How does your list manage program complexity?*
 
 ---
 
 ## Task 1: PPR 3a — Procedure Description ✓
+
+### PURPOSE
+
+> The `predict()` procedure enables real-time handwritten digit classification by receiving canvas drawings, processing them through a Convolutional Neural Network, and returning prediction results with confidence scores. It serves as the API endpoint that bridges user input with machine learning inference.
 
 ### Written Response 3a
 
@@ -27,17 +31,18 @@ The written response section requires you to answer questions about:
 
 **Response:**
 
-The overall purpose of my program is to recognize handwritten digits (0-9) drawn by users on a canvas and return the predicted digit with confidence scores. This AI-powered digit recognition system uses a Convolutional Neural Network (CNN) trained on the MNIST dataset to classify user drawings.
+The purpose of this program is to provide an intelligent digit recognition system that enables users to draw handwritten numerical characters (0-9) on an interactive canvas interface and receive real-time classification predictions powered by a trained Convolutional Neural Network (CNN). This application demonstrates the practical implementation of machine learning inference within a web-based client-server architecture, utilizing the industry-standard MNIST dataset methodology for handwritten digit classification.
 
-The `predict()` procedure contributes essential functionality by serving as the main API endpoint that processes user input and returns recognition results. This procedure:
+The student-developed procedure `predict()` serves as the critical computational bridge between the user interface and the machine learning model. This procedure fulfills the following essential functions within the program architecture:
 
-1. Receives a base64-encoded image from the frontend canvas
-2. Decodes and preprocesses the image for CNN input
-3. Segments multiple digits if present in the drawing
-4. Runs each digit through the trained neural network
-5. Returns predictions with confidence scores in JSON format
+1. **Input Acquisition:** Receives and validates base64-encoded image data transmitted from the client-side canvas element via HTTP POST request
+2. **Data Transformation:** Decodes the binary image data and converts it to a numerical array suitable for neural network processing
+3. **Feature Extraction:** Invokes the `find_connected_components()` subroutine to perform image segmentation, isolating individual digit regions within the input
+4. **Preprocessing Pipeline:** Applies normalization transformations through `advanced_preprocess_digit()` to standardize input dimensions to the 28×28 pixel format required by the CNN architecture
+5. **Model Inference:** Executes forward propagation through the trained neural network via `predict_with_tta()`, generating probability distributions across all ten digit classes
+6. **Response Construction:** Aggregates prediction results, confidence metrics, and spatial metadata into a structured JSON response for client consumption
 
-Without this procedure, the program would have no way to connect user drawings to the machine learning model, making digit recognition impossible.
+The `predict()` procedure is indispensable to the program's functionality; without this computational pathway, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output. This procedure effectively implements the complete inference pipeline that transforms raw pixel data into actionable digit recognition results.
 
 ---
 
@@ -97,6 +102,10 @@ def predict():
 ---
 
 ## Task 2: PPR 3b — Algorithm Description ✓
+
+### PURPOSE
+
+> The algorithm transforms raw image data into digit predictions through a sequential pipeline: decode base64 → segment digits → preprocess to 28×28 → run CNN inference → aggregate results. Selection handles error cases and validation, while iteration enables multi-digit recognition from a single drawing.
 
 ### Written Response 3b
 
@@ -209,6 +218,10 @@ return jsonify({
 ---
 
 ## Task 3: PPR 3c — List Usage ✓
+
+### PURPOSE
+
+> The `results` list stores prediction data for each detected digit, enabling the program to handle variable-length input (single digit or multi-digit numbers). It maintains left-to-right spatial ordering and serializes directly to JSON for API response construction.
 
 ### Written Response 3c
 
