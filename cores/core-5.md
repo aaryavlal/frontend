@@ -194,7 +194,7 @@ body {
 
 /* LEFT SIDEBAR - Information Panels */
 .info-sidebar {
-    width: 280px;
+    width: 200px;
     background: linear-gradient(180deg, #0f1419 0%, #0a0e14 100%);
     border-right: 3px solid #00ffaa;
     overflow-y: auto;
@@ -281,7 +281,7 @@ body {
 }
 
 .sidebar-header {
-    padding: 28px 24px;
+    padding: 20px 16px;
     background: linear-gradient(135deg, rgba(0,255,170,0.1) 0%, rgba(0,212,255,0.05) 100%);
     border-bottom: 3px solid #00ffaa;
     box-shadow: 0 4px 20px rgba(0,255,170,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
@@ -293,238 +293,66 @@ body {
 
 .sidebar-header h2 {
     color: #00ffaa;
-    font-size: 1.4rem;
-    margin-bottom: 8px;
+    font-size: 1.2rem;
+    margin-bottom: 6px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     text-shadow: 0 0 15px rgba(0,255,170,0.6), 0 0 30px rgba(0,255,170,0.3);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .sidebar-header p {
     color: #cbd5e1;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .info-panel {
-    border-bottom: 2px solid rgba(30,41,59,0.5);
-    overflow: hidden;
     margin: 8px 12px;
     border-radius: 8px;
     background: rgba(15,23,42,0.4);
     transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid rgba(56,189,248,0.2);
 }
 
 .info-panel:hover {
-    background: rgba(15,23,42,0.6);
-    border-bottom-color: rgba(56,189,248,0.3);
+    background: rgba(15,23,42,0.8);
+    border-color: #38bdf8;
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(56,189,248,0.3);
 }
 
 .panel-header {
-    padding: 18px 20px;
-    background: linear-gradient(90deg, rgba(15,23,42,0.8) 0%, rgba(26,35,50,0.8) 100%);
+    padding: 14px 16px;
+    background: transparent;
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 4px solid transparent;
-    gap: 8px;
-    position: relative;
-}
-
-.panel-header::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, rgba(56,189,248,0.2), transparent);
-    transition: width 0.3s ease;
-}
-
-.panel-header:hover::before {
-    width: 100%;
-}
-
-.panel-header:hover {
-    background: linear-gradient(90deg, rgba(26,35,50,0.9) 0%, rgba(30,41,59,0.9) 100%);
-    border-left-color: #38bdf8;
-    padding-left: 24px;
+    gap: 12px;
+    transition: all 0.3s ease;
 }
 
 .panel-header h3 {
     color: #e2e8f0;
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin: 0;
-    font-weight: 700;
+    font-weight: 600;
     flex: 1;
-    cursor: pointer;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     transition: all 0.3s ease;
 }
 
-.panel-header:hover h3 {
+.info-panel:hover .panel-header h3 {
     color: #fff;
     text-shadow: 0 0 8px rgba(56,189,248,0.4);
 }
 
-.panel-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-    font-weight: 600;
-    flex: 1;
-}
-
-.panel-actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.view-more-btn {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.1));
-    color: #7dd3fc;
-    border: 2px solid #38bdf8;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 8px rgba(56,189,248,0.2);
-}
-
-.view-more-btn:hover {
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(56, 189, 248, 0.25));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(56,189,248,0.4);
-    color: #fff;
-}
-
-.view-more-btn:active {
-    transform: translateY(0);
-}
-
-.panel-arrow {
-    color: #38bdf8;
-    font-size: 1.3rem;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-    filter: drop-shadow(0 0 4px rgba(56,189,248,0.3));
-}
-
-.panel-header:hover .panel-arrow {
-    color: #7dd3fc;
-    filter: drop-shadow(0 0 8px rgba(56,189,248,0.5));
-}
-
-.info-panel.expanded .panel-arrow {
-    transform: rotate(180deg);
-    color: #00ffaa;
-}
-
-.panel-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(180deg, rgba(10,14,26,0.8) 0%, rgba(15,23,42,0.6) 100%);
-}
-
-.info-panel.expanded .panel-content {
-    max-height: 800px;
-    overflow-y: auto;
-    border-top: 1px solid rgba(56,189,248,0.2);
-}
-
-.panel-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.panel-content::-webkit-scrollbar-track {
-    background: rgba(10,14,26,0.5);
-}
-
-.panel-content::-webkit-scrollbar-thumb {
-    background: #38bdf8;
-    border-radius: 3px;
-}
-
-.panel-content::-webkit-scrollbar-thumb:hover {
-    background: #7dd3fc;
-}
-
-.panel-body {
-    padding: 20px 24px;
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.panel-body h4 {
-    color: #38bdf8;
-    font-size: 0.95rem;
-    margin: 16px 0 10px 0;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.panel-body h4::before {
-    content: '▸';
-    color: #00ffaa;
-    font-size: 1.1rem;
-}
-
-.panel-body p {
-    color: #cbd5e1;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    margin-bottom: 12px;
-}
-
-.panel-body ul {
-    margin: 12px 0 16px 24px;
-}
-
-.panel-body li {
-    color: #94a3b8;
-    font-size: 0.88rem;
-    line-height: 1.6;
-    margin-bottom: 8px;
-    position: relative;
-    padding-left: 8px;
-}
-
-.panel-body li::marker {
-    color: #38bdf8;
-}
-
-.panel-body strong {
-    color: #e2e8f0;
-    font-weight: 700;
-}
+/* Panel content removed - all info appears in modals */
 
 .highlight-box {
     background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0.05) 100%);
@@ -1878,164 +1706,37 @@ body {
         </div>
 
         <!-- Panel 1: What is Speedup? -->
-        <div class="info-panel expanded">
+        <div class="info-panel" onclick="openModal('speedup')">
             <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">⚡ What is Speedup?</h3>
-                <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('speedup'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="panel-body">
-                    <p><strong>Speedup</strong> measures how much faster a parallel implementation runs compared to a sequential one.</p>
-                    
-                    <div class="formula-display">
-                        <div class="formula-text">Speedup = T<sub>serial</sub> / T<sub>parallel</sub></div>
-                    </div>
-                    
-                    <h4>Key Terms</h4>
-                    <ul>
-                        <li><strong>T<sub>serial</sub></strong>: Total time if all tasks run sequentially (one after another)</li>
-                        <li><strong>T<sub>parallel</sub></strong>: Time with parallelization (some tasks run simultaneously)</li>
-                        <li><strong>Speedup > 1</strong>: Parallel is faster!</li>
-                        <li><strong>Speedup = 1</strong>: No improvement</li>
-                        <li><strong>Speedup < 1</strong>: Parallel is slower (overhead costs)</li>
-                    </ul>
-                </div>
+                <h3>⚡ What is Speedup?</h3>
             </div>
         </div>
 
         <!-- Panel 2: How It Works -->
-        <div class="info-panel">
+        <div class="info-panel" onclick="openModal('howitworks')">
             <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">🔧 How It Works</h3>
-                <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('howitworks'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="panel-body">
-                    <h4>Serial Execution</h4>
-                    <p>All tasks execute one after another on a single processor. Total time = sum of all task times.</p>
-                    
-                    <div class="highlight-box">
-                        <p><strong>Example:</strong> Tasks [10, 5, 8, 3]<br>
-                        Serial Time = 10 + 5 + 8 + 3 = 26 units</p>
-                    </div>
-                    
-                    <h4>Parallel Execution</h4>
-                    <p>Some tasks can run simultaneously on multiple processors. Series tasks still run sequentially, but parallel tasks overlap.</p>
-                    
-                    <div class="highlight-box">
-                        <p><strong>Example:</strong> Series [10] + Parallel [5, 8, 3]<br>
-                        Parallel Time = 10 + max(5, 8, 3) = 10 + 8 = 18 units<br>
-                        <strong>Speedup = 26 / 18 = 1.44×</strong></p>
-                    </div>
-                </div>
+                <h3>🔧 How It Works</h3>
             </div>
         </div>
 
         <!-- Panel 3: Parallel vs Serial -->
-        <div class="info-panel">
+        <div class="info-panel" onclick="openModal('comparison')">
             <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">⚙️ Parallel vs Serial</h3>
-                <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('comparison'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="panel-body">
-                    <h4>Parallel Computing</h4>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Faster execution for large tasks</li>
-                        <li>Utilizes multiple CPU cores</li>
-                        <li>Ideal for independent operations</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Communication overhead</li>
-                        <li>Synchronization costs</li>
-                        <li>Not all tasks can parallelize</li>
-                    </ul>
-
-                    <h4>Serial Computing</h4>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Simple to implement</li>
-                        <li>No coordination overhead</li>
-                        <li>Faster for small tasks</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Uses only one processor</li>
-                        <li>Slow for large workloads</li>
-                        <li>Wastes available cores</li>
-                    </ul>
-                </div>
+                <h3>⚙️ Parallel vs Serial</h3>
             </div>
         </div>
 
         <!-- Panel 4: Amdahl's Law -->
-        <div class="info-panel">
+        <div class="info-panel" onclick="openModal('amdahl')">
             <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">📊 Amdahl's Law</h3>
-                <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('amdahl'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="panel-body">
-                    <p><strong>Amdahl's Law</strong> shows the theoretical speedup limit based on the portion of code that can be parallelized.</p>
-                    
-                    <div class="formula-display">
-                        <div class="formula-text" style="font-size: 0.9rem;">Speedup = 1 / [(1 - P) + (P / N)]</div>
-                    </div>
-                    
-                    <p><strong>Where:</strong></p>
-                    <ul>
-                        <li><strong>P</strong> = Fraction that can be parallelized (0 to 1)</li>
-                        <li><strong>N</strong> = Number of processors</li>
-                    </ul>
-                    
-                    <div class="highlight-box">
-                        <p><strong>Key Insight:</strong> If only 50% of your program can be parallelized, even with infinite processors, max speedup is only 2×!</p>
-                    </div>
-                </div>
+                <h3>📊 Amdahl's Law</h3>
             </div>
         </div>
 
         <!-- Panel 5: Real-World Examples -->
-        <div class="info-panel">
+        <div class="info-panel" onclick="openModal('realworld')">
             <div class="panel-header">
-                <h3 onclick="togglePanel(this.parentElement)">🌍 Real-World Use</h3>
-                <div class="panel-actions">
-                    <button class="view-more-btn" onclick="openModal('realworld'); event.stopPropagation();">View More</button>
-                    <span class="panel-arrow" onclick="togglePanel(this.parentElement)">▼</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="panel-body">
-                    <h4>Where Parallel Computing Shines</h4>
-                    <ul>
-                        <li><strong>Video Rendering:</strong> Process each frame independently</li>
-                        <li><strong>Scientific Simulations:</strong> Run calculations simultaneously</li>
-                        <li><strong>Web Servers:</strong> Handle multiple requests at once</li>
-                        <li><strong>Machine Learning:</strong> Train models with parallel processing</li>
-                        <li><strong>Graphics (GPUs):</strong> Thousands of cores rendering pixels</li>
-                    </ul>
-                    
-                    <h4>When Serial is Better</h4>
-                    <ul>
-                        <li>Small, quick tasks (overhead > benefit)</li>
-                        <li>Sequential dependencies (step 2 needs step 1 result)</li>
-                        <li>Simple programs on single-core systems</li>
-                    </ul>
-                </div>
+                <h3>🌍 Real-World Use</h3>
             </div>
         </div>
     </div>
@@ -2288,11 +1989,6 @@ function toggleSidebar() {
 }
 
 // Panel toggle function for sidebar
-function togglePanel(header) {
-    const panel = header.parentElement;
-    panel.classList.toggle('expanded');
-}
-
 // Modal functions
 function openModal(panelId) {
     const modalOverlay = document.getElementById('modalOverlay');
