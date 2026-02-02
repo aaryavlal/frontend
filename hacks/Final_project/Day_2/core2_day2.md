@@ -6,14 +6,14 @@ layout: post
 
 ## Input
 
-Some API query is made like so:
+To initiate the concurrent computation process, an API request is sent to the server with specific parameters. Here's an example of how that request looks:
 ```bash
 curl -X GET https://hardwarehavoc.opencodingsociety.com/api/compute/concurrent\?width\=96\&height\=96\&tile_w\=32\&tile_h\=32\&max_iter\=128\&time_limit_ms\=500\&num_threads\=2
 ```
 
 ## Output
 
-A concurrency simulation runs on the actual server and the performance records are returned as a JSON object:
+Once the server receives the request, it executes a multi-threaded concurrency simulation that divides the computational work across multiple threads. After all tiles are processed, the server returns a detailed JSON object containing performance metrics for each tile, including which thread handled it, how long it took, and its position in the grid:
 
 ```json
 {
@@ -133,12 +133,12 @@ A concurrency simulation runs on the actual server and the performance records a
 }
 ```
 
-These are then received by the frontend website and played back.
+The frontend website receives this performance data and uses it to create an animated visualization of how the work was distributed and executed across the different threads, allowing you to see the concurrent execution in action.
 
 
 ## Procedure
 
-The main procedure for actual handling of concurrency is located in a Rust cross compiled module.
+The core algorithm that manages multi-threaded concurrency is implemented in Rust and compiled to work with Python. This approach combines Rust's performance and thread-safety with Python's ease of use. Here's how the concurrent computation process works:
 
 ```rs
 use crate::model::{TaskRecord, TileUpdate, render_tile};
@@ -194,12 +194,12 @@ pub fn concurrent(
             // Spawn a thread for this chunk of tiles
             s.spawn(move || {
                 for &(task_id, tx, ty) in tile_chunk {
-                    // Check if TLE
+                    // Check if time limit exceeded (TLE) and stop processing if so
                     if time_exceeded.load(Ordering::Relaxed) {
                         break;
                     }
 
-                    // Check TL
+                    // Check if overall computation time has exceeded the specified time limit
                     if overall_start.elapsed() > time_limit {
                         time_exceeded.store(true, Ordering::Relaxed);
                         break;
@@ -245,9 +245,8 @@ pub fn concurrent(
         .into_inner()
         .unwrap();
 
-    // For parallel visualization, sort by start_time_ms or don't sort at all
-
-    // Sort by start_time to show completion order (shows true parallelism)
+    // Sort results by their start time to visualize the actual execution order
+    // This reveals the true parallelism—showing which tasks ran simultaneously on different threads
     results.sort_by_key(|(record, _, start_time_ms, _, _, _, _)| *start_time_ms);
 
     let mut final_records = Vec::new();
@@ -273,4 +272,4 @@ pub fn concurrent(
 }
 ```
 
-(Code commented with applications to CPT)
+This Rust implementation demonstrates key Computer Science Principles (CSP) concepts: thread management, synchronization with mutexes and atomic operations, time limit enforcement, and task scheduling across multiple processing threads.
