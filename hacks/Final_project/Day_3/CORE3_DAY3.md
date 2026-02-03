@@ -33,16 +33,18 @@ The written response section requires you to answer questions about:
 
 The purpose of this program is to provide an intelligent digit recognition system that enables users to draw handwritten numerical characters (0-9) on an interactive canvas interface and receive real-time classification predictions powered by a trained Convolutional Neural Network (CNN). This application demonstrates the practical implementation of machine learning inference within a web-based client-server architecture, utilizing the industry-standard MNIST dataset methodology for handwritten digit classification.
 
-The student-developed procedure `predict()` serves as the critical computational bridge between the user interface and the machine learning model. This procedure fulfills the following essential functions within the program architecture:
+The student-developed procedure `predict()` accepts **parameters** through the HTTP POST request body, specifically receiving base64-encoded image data as input. This procedure implements **sequencing** by executing operations in a precise order: first validating input, then decoding the image, followed by digit segmentation, preprocessing, model inference, and finally response construction. The procedure uses **selection** through conditional statements (`if model is None`, `if not data`, `if not components`) to validate preconditions and handle edge cases appropriately. **Iteration** is implemented via `for` loops that process each detected digit component, enabling multi-digit recognition from a single canvas drawing.
 
-1. **Input Acquisition:** Receives and validates base64-encoded image data transmitted from the client-side canvas element via HTTP POST request
+The `predict()` procedure fulfills these essential functions within the program architecture:
+
+1. **Input Acquisition:** Receives and validates the image **parameter** transmitted from the client-side canvas element
 2. **Data Transformation:** Decodes the binary image data and converts it to a numerical array suitable for neural network processing
-3. **Feature Extraction:** Invokes the `find_connected_components()` subroutine to perform image segmentation, isolating individual digit regions within the input
-4. **Preprocessing Pipeline:** Applies normalization transformations through `advanced_preprocess_digit()` to standardize input dimensions to the 28×28 pixel format required by the CNN architecture
+3. **Feature Extraction:** Invokes the `find_connected_components()` subroutine to perform image segmentation, isolating individual digit regions
+4. **Preprocessing Pipeline:** Applies normalization transformations through `advanced_preprocess_digit()` to standardize input dimensions to the 28×28 pixel format required by the CNN
 5. **Model Inference:** Executes forward propagation through the trained neural network via `predict_with_tta()`, generating probability distributions across all ten digit classes
-6. **Response Construction:** Aggregates prediction results, confidence metrics, and spatial metadata into a structured JSON response for client consumption
+6. **Response Construction:** Aggregates prediction results into a structured JSON response for client consumption
 
-The `predict()` procedure is indispensable to the program's functionality; without this computational pathway, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output. This procedure effectively implements the complete inference pipeline that transforms raw pixel data into actionable digit recognition results.
+The `predict()` procedure is indispensable to the program's functionality; without this computational pathway combining **sequencing**, **selection**, and **iteration**, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output.
 
 ---
 
