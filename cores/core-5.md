@@ -281,10 +281,9 @@ body {
 }
 
 .sidebar-header {
-    padding: 20px 16px;
+    padding: 8px 10px;
     background: linear-gradient(135deg, rgba(0,255,170,0.1) 0%, rgba(0,212,255,0.05) 100%);
-    border-bottom: 3px solid #00ffaa;
-    box-shadow: 0 4px 20px rgba(0,255,170,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+    border-bottom: 2px solid #00ffaa;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -293,31 +292,25 @@ body {
 
 .sidebar-header h2 {
     color: #00ffaa;
-    font-size: 1.2rem;
-    margin-bottom: 6px;
-    font-weight: 800;
+    font-size: 0.85rem;
+    margin: 0;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 0 15px rgba(0,255,170,0.6), 0 0 30px rgba(0,255,170,0.3);
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(0,255,170,0.5);
 }
 
 .sidebar-header p {
-    color: #cbd5e1;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
+    display: none;
 }
 
 .info-panel {
-    margin: 8px 12px;
-    border-radius: 8px;
+    margin: 3px 6px;
+    border-radius: 4px;
     background: rgba(15,23,42,0.4);
     transition: all 0.3s ease;
     cursor: pointer;
-    border: 2px solid rgba(56,189,248,0.2);
+    border: 1px solid rgba(56,189,248,0.2);
 }
 
 .info-panel:hover {
@@ -328,23 +321,24 @@ body {
 }
 
 .panel-header {
-    padding: 14px 16px;
+    padding: 6px 8px;
     background: transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
     transition: all 0.3s ease;
 }
 
 .panel-header h3 {
     color: #e2e8f0;
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     margin: 0;
     font-weight: 600;
     flex: 1;
-    letter-spacing: 0.3px;
+    letter-spacing: 0;
     transition: all 0.3s ease;
+    line-height: 1.1;
 }
 
 .info-panel:hover .panel-header h3 {
