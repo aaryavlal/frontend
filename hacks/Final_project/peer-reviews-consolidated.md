@@ -8,7 +8,13 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 # Tri2Quest - Peer Reviews & Feedback
 
 **Team Name:** Tri2Quest
-**Reviewer:** Dhyan Soni (@dhyantsoni)
+**Team Members:**
+- Dhyan Soni (@dhyantsoni)
+- Lucas Masterson (@lucasmasterson)
+- Rudra Joshi (@rudrajoshi)
+- Aaryav Lal (@aaryavlal)
+- Tanay Paranjpe (@tp254)
+
 **Review Period:** January 2025
 
 ---
@@ -25,7 +31,7 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ## Reviews Written by Team Members
 
-### By: Matai Odoxion (@mataiodoxion)
+### By: Lucas Masterson (@lucasmasterson)
 
 **Context:** Collected feedback from other teams during crossover rotation
 
@@ -147,7 +153,7 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ## Reviews Received by Our Team
 
-### Codemaxxers Review (From Matai)
+### Codemaxxers Review (From Lucas)
 
 **Grows:**
 - Limit scrolling
@@ -234,4 +240,4 @@ We're actively addressing these items and grateful for the detailed feedback fro
 ---
 
 **Last Updated:** February 4, 2025
-**Contributors:** @dhyantsoni, @aaryavlal, @mataiodoxion, @tp254, @ethanwong2008, @ruchikak19
+**Contributors:** @dhyantsoni, @lucasmasterson, @rudrajoshi, @aaryavlal, @tp254
