@@ -167,6 +167,7 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 ## Key Themes from All Reviews
 
 ### Common Strengths Identified
+
 | Theme | Frequency | Key Comments |
 |-------|-----------|--------------|
 | Interactive Learning | High | "Step-by-step process", "Real-time feedback" |
@@ -175,6 +176,7 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 | Value Proposition | High | "Very applicable", "Interesting presentation" |
 
 ### Common Areas for Improvement
+
 | Theme | Frequency | Action Items |
 |-------|-----------|--------------|
 | Educational Clarity | High | Make teaching purpose more explicit |
