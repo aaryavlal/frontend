@@ -1010,6 +1010,119 @@ show_reading_time: false
 }
 
 /* Responsive Design */
+/* Welcome Banner for First-Time Users */
+#gpu-simulator-app .welcome-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  position: relative;
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+#gpu-simulator-app .welcome-banner h2 {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  margin-bottom: 15px;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+#gpu-simulator-app .welcome-banner p {
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+#gpu-simulator-app .welcome-steps {
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+#gpu-simulator-app .welcome-steps ol {
+  margin: 10px 0;
+  padding-left: 20px;
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+}
+
+#gpu-simulator-app .welcome-steps li {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+
+#gpu-simulator-app .welcome-banner-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+#gpu-simulator-app .welcome-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#gpu-simulator-app .welcome-btn-primary {
+  background: white;
+  color: #667eea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#gpu-simulator-app .welcome-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+#gpu-simulator-app .welcome-btn-secondary {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+#gpu-simulator-app .welcome-btn-secondary:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+#gpu-simulator-app .dismiss-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#gpu-simulator-app .dismiss-btn:hover {
+  background: rgba(255,255,255,0.4);
+  transform: rotate(90deg);
+}
+
+/* Responsive Design Improvements */
 @media (max-width: 1600px) {
   #gpu-simulator-app .page-container {
     flex-direction: column;
@@ -1033,34 +1146,231 @@ show_reading_time: false
   }
 }
 
+@media (max-width: 1024px) {
+  #gpu-simulator-app .page-container {
+    padding: clamp(10px, 2vw, 20px);
+    gap: 10px;
+  }
+
+  #gpu-simulator-app .game-frame {
+    height: auto;
+    min-height: 600px;
+    max-height: none;
+  }
+
+  #gpu-simulator-app .header-stats {
+    gap: 10px;
+  }
+
+  #gpu-simulator-app .header-stat-value {
+    font-size: 1.2rem;
+  }
+
+  #gpu-simulator-app .header-stat-label {
+    font-size: 0.6rem;
+  }
+}
+
 @media (max-width: 768px) {
   #gpu-simulator-app {
+    padding: 5px;
+  }
+
+  #gpu-simulator-app .page-container {
     padding: 10px;
   }
 
   #gpu-simulator-app .game-frame {
-    height: 80vh;
+    height: auto;
+    min-height: 500px;
+    border-radius: 8px;
+  }
+
+  #gpu-simulator-app .game-header {
+    padding: 12px 15px;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  #gpu-simulator-app .title-section h1 {
+    font-size: 1.2rem;
+  }
+
+  #gpu-simulator-app .title-section p {
+    font-size: 0.6rem;
+  }
+
+  #gpu-simulator-app .header-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #gpu-simulator-app .game-content {
+    flex-direction: column;
   }
 
   #gpu-simulator-app .left-sidebar {
-    width: 160px;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #1e2936;
+    max-height: 400px;
   }
 
   #gpu-simulator-app .right-sidebar {
-    width: 180px;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #1e2936;
+  }
+
+  #gpu-simulator-app .stage-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  #gpu-simulator-app .stage-selector h3 {
+    width: 100%;
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+
+  #gpu-simulator-app .stage-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 8px;
+    font-size: 0.75rem;
+  }
+
+  #gpu-simulator-app .stage-icon {
+    font-size: 1.2rem;
   }
 
   #gpu-simulator-app .workstations-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  #gpu-simulator-app .control-panel {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #gpu-simulator-app .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.75rem;
   }
 
   #gpu-simulator-app .educational-sidebar {
     flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  #gpu-simulator-app .edu-panel-header h3 {
+    font-size: 0.75rem;
+  }
+
+  #gpu-simulator-app .edu-panel-content {
+    font-size: 0.7rem;
+  }
+
+  #gpu-simulator-app .welcome-banner {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  #gpu-simulator-app .welcome-banner-actions {
+    flex-direction: column;
+  }
+
+  #gpu-simulator-app .welcome-btn {
+    width: 100%;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #gpu-simulator-app .game-header {
+    padding: 10px;
+  }
+
+  #gpu-simulator-app .title-section h1 {
+    font-size: 1rem;
+  }
+
+  #gpu-simulator-app .header-stat-value {
+    font-size: 1rem;
+  }
+
+  #gpu-simulator-app .assembly-area {
+    padding: 10px;
+  }
+
+  #gpu-simulator-app .workstation {
+    padding: 10px;
+  }
+
+  #gpu-simulator-app .robot {
+    padding: 8px;
+  }
+
+  #gpu-simulator-app .modal-content {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  #gpu-simulator-app .modal-content h2 {
+    font-size: 1.5rem;
+  }
+
+  #gpu-simulator-app .result-row {
+    font-size: 0.85rem;
+  }
+
+  #gpu-simulator-app .help-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  #gpu-simulator-app .help-tooltip {
+    width: calc(100vw - 40px);
+    max-width: none;
+    right: 20px;
+    bottom: 70px;
   }
 }
 </style>
 
 <div id="gpu-simulator-app">
+
+<!-- Welcome Banner for First-Time Users -->
+<div class="welcome-banner" id="welcomeBanner" style="display: none;">
+  <button class="dismiss-btn" onclick="dismissWelcome()" aria-label="Dismiss">×</button>
+  <h2>🎮 Welcome to GPU Assembly Simulator!</h2>
+  <p>Learn computing models by building GPUs in this interactive simulation.</p>
+
+  <div class="welcome-steps">
+    <strong>Here's how to get started:</strong>
+    <ol>
+      <li><strong>Select a Stage</strong> — Choose Sequential, Parallel, or Distributed computing model</li>
+      <li><strong>Click "Start"</strong> — Begin production and orders will appear automatically</li>
+      <li><strong>Assign Tasks</strong> — Click PCB → Cores → Memory → Test buttons to build GPUs</li>
+      <li><strong>Watch Performance</strong> — Compare completion times across different computing models</li>
+      <li><strong>Unlock Achievements</strong> — Complete special challenges to earn badges</li>
+    </ol>
+  </div>
+
+  <div class="welcome-banner-actions">
+    <button class="welcome-btn welcome-btn-primary" onclick="startFirstGame()">Get Started</button>
+    <button class="welcome-btn welcome-btn-secondary" onclick="dismissWelcome()">I'll Explore</button>
+  </div>
+</div>
 
 <div class="page-container">
 
@@ -2098,6 +2408,36 @@ async function logGameData() {
   }
 }
 
+// Welcome banner functionality
+function dismissWelcome() {
+  const banner = document.getElementById('welcomeBanner');
+  if (banner) {
+    banner.style.display = 'none';
+    localStorage.setItem('gpuSimWelcomeDismissed', 'true');
+    showToast('👋 Welcome dismissed. Click ? for help anytime!', 'info');
+  }
+}
+
+function startFirstGame() {
+  dismissWelcome();
+  if (!gameRunning && currentStage === 1) {
+    startGame();
+    showToast('🚀 Let\'s build some GPUs!', 'success');
+  }
+}
+
+function checkWelcomeBanner() {
+  const banner = document.getElementById('welcomeBanner');
+  const dismissed = localStorage.getItem('gpuSimWelcomeDismissed');
+
+  if (!dismissed && banner) {
+    // Show banner after a brief delay for better UX
+    setTimeout(() => {
+      banner.style.display = 'block';
+    }, 500);
+  }
+}
+
 // Expose functions to global scope for onclick handlers
 window.toggleTutorial = toggleTutorial;
 window.toggleEduPanel = toggleEduPanel;
@@ -2109,8 +2449,11 @@ window.assignTask = assignTask;
 window.assignTest = assignTest;
 window.nextStage = nextStage;
 window.toggleAutoFill = toggleAutoFill;
+window.dismissWelcome = dismissWelcome;
+window.startFirstGame = startFirstGame;
 
 initGame();
+checkWelcomeBanner();
 
 // Help tooltip toggle
 let helpTooltipTimeout;
