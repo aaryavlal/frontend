@@ -295,4 +295,4 @@ We're actively addressing these items and grateful for the detailed feedback fro
 ---
 
 **Last Updated:** February 4, 2025
-**Contributors:** @dhyantsoni, @lucasmasterson, @rudrajoshi, @aaryavlal, @tp254
+**Contributors:** @dhyantsoni, @lucasmasterson, @rudrajoshi, @aaryavlal, @tp254, @RudraBJoshi
