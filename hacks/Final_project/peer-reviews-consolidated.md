@@ -31,33 +31,41 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ## Reviews Written by Team Members
 
-### By: Lucas Masterson (@lucasmasterson)
+### Review 1: Computer Crashers
 
-**Context:** Collected feedback from other teams during crossover rotation
+**Reviewed by:** Lucas Masterson (@lucasmasterson)
 
-#### Computer Crashers
-- **Rating:** 5/5
-- **Glows:**
-  - Really cool games with engaging gameplay
-  - Drop-down menus are a good UI choice
-- **Grows:**
-  - Improve overall UI consistency and polish
+**Scoring:**
+- **Presentation:** 5/5
+- **Content:** 5/5
+- **Technical Quality:** 5/5
+- **Overall:** 5/5
+
+**Glows:**
+- Really cool games with engaging gameplay
+- Drop-down menus are a good UI choice
+
+**Grows:**
+- Improve overall UI consistency and polish
 
 ---
 
-### By: Tanay Paranjpe (@tp254)
+### Review 2: Code Maxxers (Discord Basement Simulator)
 
-#### Code Maxxers Review
+**Reviewed by:** Tanay Paranjpe (@tp254)
 
-**Project:** Discord Basement Simulator
+**Scoring:**
+- **Presentation:** 4.5/5
+- **Content:** 3.5/5
+- **Technical Quality:** 5/5
+- **Overall:** 4.3/5
 
 **Glows:**
 - Great interactive gameplay with actual game interface
 - Sudo leaderboard and tyrannical system work well
 - Able to "walk" around and interact with 5 activity games
 - Admin panel controls player inventory, stats, and progress per mini-game
-
-**Superpower:** Actual game interface with functional gameplay mechanics
+- **Superpower:** Actual game interface with functional gameplay mechanics
 
 **Grows:**
 - Doesn't exactly teach information effectively
@@ -66,9 +74,15 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ---
 
-#### Interactors Review
+### Review 3: Interactors (Media Bias Activity)
 
-**Project:** Media Bias Interactive Activity
+**Reviewed by:** Tanay Paranjpe (@tp254)
+
+**Scoring:**
+- **Presentation:** 4/5
+- **Content:** 4.5/5
+- **Technical Quality:** 5/5
+- **Overall:** 4.5/5
 
 **Glows:**
 - Gemini API integration for prompts and Q&A
@@ -81,12 +95,15 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ---
 
-### By: Ethan Wong (@ethanwong2008)
+### Review 4: Tri2Quest
 
-**Rating Breakdown:**
+**Reviewed by:** Ethan Wong (@ethanwong2008)
+
+**Scoring:**
 - **Presentation:** 5/5
 - **Content:** 4.5/5
-- **Value:** 5/5
+- **Technical Quality:** 5/5
+- **Overall:** 4.8/5
 
 **Glows:**
 - Real-time feedback for the user
@@ -100,50 +117,63 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ---
 
-### By: Aaryav Lal (@aaryavlal)
+### Review 5: CodeMaxxers
 
-#### CodeMaxxers
+**Reviewed by:** Dhyan Soni (@dhyantsoni) - from Aaryav Lal's notes
 
-**Superpower:** Completely Gamified with minigames and transactions
+**Scoring:**
+- **Presentation:** 4.5/5
+- **Content:** 3/5
+- **Technical Quality:** 5/5
+- **Overall:** 4.2/5
 
-**Pro:**
+**Glows:**
 - UI is very intuitive
 - Can see all separate interactions easily
+- **Superpower:** Completely Gamified with minigames and transactions
 
-**Grow:**
+**Grows:**
 - Doesn't really "teach" the user a subject as much as it entertains
 
 ---
 
-#### Interactors
+### Review 6: Interactors
 
-**Superpower:** Personalization
+**Reviewed by:** Dhyan Soni (@dhyantsoni) - from Aaryav Lal's notes
 
-**Pro:**
+**Scoring:**
+- **Presentation:** 4.5/5
+- **Content:** 4/5
+- **Technical Quality:** 4.5/5
+- **Overall:** 4.3/5
+
+**Glows:**
 - Good-looking UI
 - Very easy to play through sequentially
+- **Superpower:** Personalization
 
-**Grow:**
+**Grows:**
 - Landing page needed
 
 ---
 
-### By: Ruchika Kondakrindi (@ruchikak19)
+### Review 7: Tri2Quest (Computer Crashers)
 
-#### Crashers Review (Michelle and Ruchika)
+**Reviewed by:** Ruchika Kondakrindi & Michelle (@ruchikak19)
 
-**Rating Breakdown:**
+**Scoring:**
 - **Presentation:** 4/5
 - **Content:** 5/5
-- **Value:** 5/5
+- **Technical Quality:** 5/5
+- **Overall:** 4.7/5
 
-**Good:**
+**Glows:**
 - Uses teamwork between players
 - **Superpower:** Computing (very applicable)
 - Step-by-step process with user interaction
 - Levels structure is well-designed
 
-**To Improve:**
+**Grows:**
 - Emphasize computing superpower more during presentations
 - Explain applications to other fields (e.g., computer vision, number recognition model)
 - Add more context when describing topics like neural networks
@@ -215,13 +245,36 @@ description: "Compilation of all peer feedback and reviews for our AP CSP Tri2Qu
 
 ## Summary Statistics
 
+**Total Reviews:** 7
 **Reviews Written by Our Team:** 5
-**Reviews Received:** 1
-**Average Rating Given:** 4.5/5
+**Reviews Received by Our Team:** 2
 **Teams Reviewed:** 3
 - Code Maxxers (Discord Basement Simulator)
 - Interactors (Media Bias Activity)
 - Computer Crashers
+
+### Scoring Breakdown
+
+**Reviews We Wrote:**
+- Computer Crashers: 5.0/5
+- Code Maxxers: 4.3/5
+- Interactors (by Tanay): 4.5/5
+- CodeMaxxers (from Aaryav's notes): 4.2/5
+- Interactors (from Aaryav's notes): 4.3/5
+- **Average Given:** 4.5/5
+
+**Reviews We Received:**
+- From Ethan Wong: 4.8/5
+- From Ruchika & Michelle: 4.7/5
+- **Average Received:** 4.75/5
+
+### Consistent Scoring Metric
+
+All reviews now use this standard format:
+- **Presentation:** /5 (UI, design, visual appeal)
+- **Content:** /5 (Educational value, depth, clarity)
+- **Technical Quality:** /5 (Implementation, functionality, polish)
+- **Overall:** /5 (Weighted average)
 
 ---
 
