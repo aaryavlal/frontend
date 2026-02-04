@@ -35,10 +35,54 @@ show_reading_time: false
   max-width: 1800px;
   width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: clamp(10px, 2vw, 20px);
   align-items: flex-start;
   overflow-x: hidden;
   flex-direction: row-reverse;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1200px) {
+  #gpu-simulator-app .page-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #gpu-simulator-app .educational-sidebar {
+    flex: 1 1 auto;
+    width: 100%;
+    position: relative;
+    max-height: none;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  #gpu-simulator-app .page-container {
+    padding: 10px;
+  }
+
+  #gpu-simulator-app .edu-panel-content {
+    font-size: 0.85rem;
+  }
+
+  #gpu-simulator-app .stats-panel {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #gpu-simulator-app .page-container {
+    padding: 5px;
+  }
+
+  #gpu-simulator-app .stage-select {
+    flex-direction: column;
+  }
+
+  #gpu-simulator-app .stage-btn {
+    width: 100% !important;
+  }
 }
 
 #gpu-simulator-app .educational-sidebar {
@@ -919,6 +963,148 @@ show_reading_time: false
   background: #5CBFFF;
 }
 
+/* Welcome Banner */
+#gpu-simulator-app .welcome-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(300px, 90vw, 600px);
+  background: linear-gradient(135deg, rgba(26,32,40,0.98), rgba(18,23,30,0.98));
+  border: 3px solid #00ffaa;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 50px rgba(0,255,170,0.4), 0 0 100px rgba(0,255,170,0.2);
+  z-index: 3000;
+  animation: fadeIn 0.5s ease;
+}
+
+#gpu-simulator-app .welcome-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00ffaa, #00d4ff, #00ffaa);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -45%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+#gpu-simulator-app .welcome-banner h2 {
+  color: #00ffaa;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  margin: 0 0 1rem 0;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(0,255,170,0.8);
+}
+
+#gpu-simulator-app .welcome-banner p {
+  color: #b8c5d6;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+#gpu-simulator-app .welcome-steps {
+  background: rgba(0,255,170,0.08);
+  border-left: 3px solid #00ffaa;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+#gpu-simulator-app .welcome-steps strong {
+  color: #00ffaa;
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+#gpu-simulator-app .welcome-steps ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #b8c5d6;
+}
+
+#gpu-simulator-app .welcome-steps li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+#gpu-simulator-app .welcome-banner-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#gpu-simulator-app .welcome-btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+}
+
+#gpu-simulator-app .welcome-btn-primary {
+  background: rgba(0,255,170,0.2);
+  color: #00ffaa;
+  border: 2px solid #00ffaa;
+}
+
+#gpu-simulator-app .welcome-btn-primary:hover {
+  background: rgba(0,255,170,0.3);
+  box-shadow: 0 0 20px rgba(0,255,170,0.5);
+}
+
+#gpu-simulator-app .welcome-btn-secondary {
+  background: transparent;
+  color: #8b95a5;
+  border: 2px solid #4a5568;
+}
+
+#gpu-simulator-app .welcome-btn-secondary:hover {
+  border-color: #6b7280;
+  color: #b8c5d6;
+}
+
+#gpu-simulator-app .dismiss-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #8b95a5;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  transition: all 0.2s ease;
+}
+
+#gpu-simulator-app .dismiss-btn:hover {
+  color: #00ffaa;
+  transform: scale(1.2);
+}
+
 /* Help Button */
 #gpu-simulator-app .help-button {
   position: fixed;
@@ -1794,7 +1980,40 @@ function toggleEduPanel(panelId) {
 function initGame() {
   renderAchievements();
   selectStage(1);
+
+  // Show welcome banner for first-time users
+  const hasVisited = localStorage.getItem('gpuSimVisited');
+  if (!hasVisited) {
+    setTimeout(() => {
+      const welcomeBanner = document.getElementById('welcomeBanner');
+      if (welcomeBanner) {
+        welcomeBanner.style.display = 'block';
+      }
+    }, 500);
+  }
 }
+
+// Welcome banner functions
+function dismissWelcome() {
+  const welcomeBanner = document.getElementById('welcomeBanner');
+  if (welcomeBanner) {
+    welcomeBanner.style.display = 'none';
+    localStorage.setItem('gpuSimVisited', 'true');
+  }
+}
+
+function startFirstGame() {
+  dismissWelcome();
+  selectStage(1);
+  setTimeout(() => {
+    startGame();
+    showToast('🎉 Welcome! Build your first GPU!', 'info');
+  }, 300);
+}
+
+// Expose welcome functions globally
+window.dismissWelcome = dismissWelcome;
+window.startFirstGame = startFirstGame;
 
 function selectStage(stage) {
   const btn = document.getElementById(`stage${stage}Btn`);
