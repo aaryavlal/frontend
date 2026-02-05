@@ -4,23 +4,23 @@ permalink: /core4/day3
 layout: post
 ---
 
-# Core 4: Execution Time Calculations — Day 3 Complete
+# Core 4: Algorithm Performance Analysis — Day 3 Complete
 
 **Team Member:** Aaryav
-**Core Assignment:** Core 4 - Execution Time Calculations (Speedup & Efficiency)
+**Core Assignment:** Core 4 - Computing Performance Optimization (Scalability & Algorithm Efficiency)
 
 ---
 
 ## Task 1: Individual Task Identified ✓
 
-**My Task:** Execution Time Calculator - Interactive Speedup & Efficiency Learning Tool
+**My Task:** Algorithm Performance Analyzer - Interactive Computing Scalability Exploration Tool
 
-**What it does:** Users input sequential execution time and number of processors, then explore how parallel execution time scales across different processor counts. The tool calculates speedup, efficiency, and demonstrates Amdahl's Law limitations. Interactive sliders and visualizations show the relationship between parallelizable fraction, processor count, and achievable speedup.
+**What it does:** Users examine algorithm performance characteristics by inputting base execution time and computational properties, then analyze how execution time scales with varying levels of parallelization. The tool models performance scaling using established algorithms, demonstrates scalability limitations, and provides comparative analysis of sequential versus parallel execution models. Interactive controls and visualizations illustrate the relationship between algorithm parallelizability, processor resources, and achievable computational improvement.
 
-**Why it fits Create PT:**
-- Clear INPUT → PROCEDURE → OUTPUT flow (user enters time values → calculation algorithm → results display)
-- Uses LISTS (processor count array, speedup array, efficiency array, results history)
-- Has defined PROCEDURES with sequencing (read inputs → validate → calculate → display), selection (if parallelizable fraction < 100%, apply Amdahl's Law), and iteration (process calculations for each processor count)
+**Why it fits CREATE Task (AP CSP Objectives):**
+- Demonstrates **Algorithms (Big Idea 3):** Clear algorithmic procedure converting input (time measurements) → processing (performance calculations) → output (scalability metrics)
+- Uses **Data Structures (Big Idea 1):** LISTS for processor configurations, performance measurements, efficiency metrics, and historical analysis data
+- Implements **Procedural Abstraction (Big Idea 2):** Structured functions with sequencing (collect measurements → validate data → execute scalability algorithm → present results), selection (conditional logic for scalability constraints), and iteration (loop through computational configurations)
 
 ---
 
@@ -165,34 +165,34 @@ layout: post
 
 ## Task 4: 1-Minute Video Script Outline ✓
 
-### Video Script: "Execution Time Calculations - Understanding Speedup & Amdahl's Law"
+### Video Script: "Computing Performance Optimization - Understanding Algorithm Scalability & Performance Limitations"
 
 **[0:00-0:10] HOOK + INTRO**
-> "Ever wonder why parallel code isn't always faster? Let me show you using execution time calculations and Amdahl's Law."
+> "Why doesn't adding more processors always proportionally improve program execution time? Let me demonstrate algorithm scalability analysis and inherent computational constraints."
 
-**[0:10-0:25] STAGE 1 - IDEAL SPEEDUP INPUT**
-- Show calculator interface
-- Input sequential time: 100 seconds
-- Input parallelizable fraction: 100%
-- Explain: "With 100% parallelizable code, speedup SHOULD equal the number of processors - linear scaling."
-- Show chart rising linearly: 1 processor (1x), 2 processors (2x), 4 processors (4x), 8 processors (8x)
+**[0:10-0:25] STAGE 1 - THEORETICAL MAXIMUM SCALABILITY**
+- Display performance analysis interface
+- Input base execution time: 100 seconds
+- Input maximally parallelizable algorithm: 100%
+- Explain: "For an algorithm with perfect parallelizability, execution time reduction is theoretically linear with computational resources - doubling processors halves execution time."
+- Visualize scaling trajectory: 1 processor (baseline), 2 processors (2× faster), 4 processors (4× faster), 8 processors (8× faster)
 
-**[0:25-0:40] STAGE 2 - AMDAHL'S LAW LIMITATION PROCEDURE**
-- Keep same 100 seconds
-- Change parallelizable fraction to 80%
-- Explain: "But real code has serial portions that can't be parallelized. Watch what happens..."
-- Show chart hitting a ceiling
-- Point out: "Even with 16 processors, speedup only reaches 4.17x instead of 16x. This is Amdahl's Law - the 20% serial portion is a bottleneck."
-- Highlight: "The PROCEDURE iterates through each processor count, applying Amdahl's Law formula with SELECTION logic for optimization"
+**[0:25-0:40] STAGE 2 - PERFORMANCE CONSTRAINT ANALYSIS WITH PROCEDURE**
+- Maintain 100 second base measurement
+- Adjust algorithm parallelizability to 80%
+- Explain: "Real algorithms contain inherent sequential dependencies preventing complete parallelization. Observe the performance ceiling..."
+- Show scaling curve flattening
+- Demonstrate: "With 16 processors, actual performance improvement only reaches 4.17× rather than theoretical 16×. This reflects the fundamental scalability constraint - the 20% sequential component creates an inherent performance bottleneck."
+- Highlight: "The computational PROCEDURE iterates through configuration iterations, applying performance-scaling algorithms with conditional selection logic for constraint identification"
 
-**[0:40-0:55] STAGE 3 - EFFICIENCY ANALYSIS + LISTS**
-- Show efficiency chart alongside speedup
-- Explain: "Efficiency shows how well we're using each processor. At 8 processors, we get 52% efficiency - wasting half the CPU power!"
-- Point to efficiency values LIST: [100%, 90%, 77%, 52%, 30%, ...]
-- Highlight: "More processors = worse efficiency due to Amdahl's Law overhead"
+**[0:40-0:55] STAGE 3 - COMPUTATIONAL EFFICIENCY METRICS & LISTS**
+- Display efficiency analysis alongside performance curves
+- Explain: "Computational efficiency quantifies resource utilization. At 8 processors, efficiency reduces to 52% - the computational system wastes nearly half available resources due to scalability constraints."
+- Reference efficiency measurements LISTS: [100%, 90%, 77%, 52%, 30%, ...]
+- Highlight: "Increased computational resources demonstrate diminishing returns due to inherent scalability limitations"
 
-**[0:55-1:00] CLOSE + CREATE PT CONNECTION**
-> "This demonstrates INPUT (time and parallelizable fraction), PROCEDURE (Amdahl's Law calculations with iteration through processor counts), and OUTPUT (speedup and efficiency arrays displayed in charts). The calculation history is a LIST that grows with each experiment."
+**[0:55-1:00] CLOSE + CREATE TASK CONNECTION**
+> "This analysis demonstrates all CREATE Task requirements: data INPUT (temporal measurements and algorithm properties), algorithmic PROCEDURE (scalability calculations with iteration through resource configurations and conditional constraint analysis), and information OUTPUT (performance metrics and efficiency arrays displayed as visual representations). The measurement history LISTS demonstrate data aggregation across multiple executions."
 
 ---
 
@@ -217,11 +217,11 @@ layout: post
 5. **API Integration:** Show backend logging when calculation completes
 
 ### Key Talking Points:
-- Ideal speedup: Linear (perfect scaling)
-- Amdahl's Law: Serial bottleneck limits speedup
-- 80% parallelizable code: Maximum speedup ~5-6x (not 100x!)
-- Real-world connection: Why enterprise systems don't use 1000 processors for everything
-- Efficiency tradeoff: More processors = less bang for the buck
+- **Theoretical scalability:** Linear performance improvement with ideal algorithm parallelization
+- **Scalability constraints:** Sequential algorithm components limit maximum performance gains
+- **Performance ceiling:** 80% parallelizable algorithms achieve ~5-6× maximum improvement (not 100×)
+- **Industrial applications:** Enterprise computing systems face practical scalability limitations preventing unbounded resource allocation
+- **Resource efficiency analysis:** Computational efficiency decreases with resource multiplication due to inherent sequential constraints
 
 ---
 
@@ -392,49 +392,53 @@ async function logSessionData() {
 
 ---
 
-## Amdahl's Law Deep Dive
+## Scalability Performance Model Deep Analysis
 
-### Formula Breakdown
+### Computational Performance Algorithm
 
-**Amdahl's Law:**
-$$T_{parallel} = T_{sequential} \times \left[(1-P) + \frac{P}{N}\right]$$
+**Performance Scaling Formula (Computing Scalability Model):**
+$$T_{optimized} = T_{base} \times \left[(1-\alpha) + \frac{\alpha}{N}\right]$$
 
 Where:
-- $T_{parallel}$ = Parallel execution time
-- $T_{sequential}$ = Sequential execution time
-- $P$ = Parallelizable fraction (0 to 1)
-- $N$ = Number of processors
+- $T_{optimized}$ = Optimized algorithm execution time with distributed resources
+- $T_{base}$ = Baseline sequential algorithm execution time
+- $\alpha$ = Algorithm parallelizability coefficient (0 to 1, representing proportion of algorithm amenable to parallelization)
+- $N$ = Computational resource quantity (processor count)
 
-**Speedup Formula:**
-$$S = \frac{T_{sequential}}{T_{parallel}} = \frac{1}{(1-P) + \frac{P}{N}}$$
+**Performance Improvement Metric:**
+$$\text{Speedup} = \frac{T_{base}}{T_{optimized}} = \frac{1}{(1-\alpha) + \frac{\alpha}{N}}$$
 
-**Efficiency Formula:**
-$$E = \frac{S}{N} \times 100\%$$
+**Computational Efficiency Metric:**
+$$\text{Efficiency} = \frac{\text{Speedup}}{N} \times 100\%$$
 
-### Example Calculations
+Represents the percentage of computational resources effectively utilized in performance improvement.
 
-| Sequential | P (%) | 1 Proc | 2 Proc | 4 Proc | 8 Proc | 16 Proc | 32 Proc |
-|-----------|-------|--------|--------|--------|--------|---------|---------|
-| 100s | 100% | 1.0x | 2.0x | 4.0x | 8.0x | 16.0x | 32.0x |
-| 100s | 80% | 1.0x | 1.85x | 3.08x | 4.17x | 4.71x | 4.90x |
-| 100s | 50% | 1.0x | 1.33x | 1.60x | 1.78x | 1.88x | 1.94x |
+### Scalability Analysis Examples
 
-**Key Insight:** As $N \to \infty$, maximum speedup approaches $\frac{1}{1-P}$
+| Base Time | Parallelizability | 1 Resource | 2 Resources | 4 Resources | 8 Resources | 16 Resources | 32 Resources |
+|-----------|------------------|-----------|-----------|-----------|-----------|----------|----------|
+| 100s | 100% | 1.0× | 2.0× | 4.0× | 8.0× | 16.0× | 32.0× |
+| 100s | 80% | 1.0× | 1.85× | 3.08× | 4.17× | 4.71× | 4.90× |
+| 100s | 50% | 1.0× | 1.33× | 1.60× | 1.78× | 1.88× | 1.94× |
 
----
+**Critical Performance Principle:** As $N \to \infty$, maximum achievable performance improvement approaches $\frac{1}{1-\alpha}$
 
-## Execution Time Comparisons
+ThiAlgorithm Performance Scalability Comparison
 
-| Parallelizable % | Max Speedup (infinite procs) | Practical Limit (32 procs) |
-|-----------------|------------------------------|---------------------------|
-| **100%** | Infinite | 32.0x |
-| **90%** | 10.0x | 9.75x |
-| **80%** | 5.0x | 4.90x |
-| **70%** | 3.33x | 3.22x |
-| **50%** | 2.0x | 1.94x |
-| **25%** | 1.33x | 1.30x |
+| Algorithm Parallelizability | Theoretical Maximum Improvement | Practical Limitation (32 Resources) |
+|------|------|-------|
+| **100%** | Unbounded (linear) | 32.0× |
+| **90%** | 10.0× maximum | 9.75× |
+| **80%** | 5.0× maximum | 4.90× |
+| **70%** | 3.33× maximum | 3.22× |
+| **50%** | 2.0× maximum | 1.94× |
+| **25%** | 1.33× maximum | 1.30× |
 
-**Real-World Observations:**
+**Computational Analysis Observations:**
+- **Typical algorithm characteristics:** 70-90% parallelizable; remaining 10-30% demonstrates inherent sequential dependencies (input/output operations, synchronization protocols, initialization procedures)
+- **Enterprise system constraints:** Industrial computing infrastructure rarely justifies resource allocation beyond 16-32 computational units due to scalability ceiling limitations
+- **GPU computing advantages:** Graphics processing algorithms achieve 95%+ parallelizability, enabling efficient scaling with thousands of cores
+- **Distributed computing benefits:** Geographically distributed systems achieve improved performance through reduction of communication bottlenecks and resource fragmentation rather than pure parallelization
 - Most code is 70-90% parallelizable due to I/O, locking, serial initialization
 - Enterprise systems rarely scale beyond 16-32 cores due to Amdahl's Law
 - GPU parallelization works because tasks are 95%+ parallelizable
