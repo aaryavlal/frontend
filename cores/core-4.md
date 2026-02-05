@@ -117,6 +117,70 @@ breadcrumbs: false
     font-size: 1.02em;
     letter-spacing: 0.02em;
   }
+  .m4-briefing-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    margin-bottom: 8px;
+  }
+  .m4-briefing-card {
+    background: rgba(2,6,23,0.7);
+    border: 1px solid rgba(125,211,252,0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: inset 0 0 20px rgba(59,130,246,0.12);
+  }
+  .m4-briefing-title {
+    font-family: "Chakra Petch", "Trebuchet MS", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72em;
+    color: #7dd3fc;
+    margin-bottom: 8px;
+  }
+  .m4-intel {
+    border-radius: 12px;
+    background: rgba(15,23,42,0.55);
+    border: 1px dashed rgba(148,163,184,0.35);
+    padding: 10px 12px;
+  }
+  .m4-intel summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fbbf24;
+    margin-bottom: 6px;
+  }
+  .m4-intel-title {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fbbf24;
+    margin-bottom: 6px;
+  }
+  .m4-intel summary::-webkit-details-marker {
+    display: none;
+  }
+  .m4-intel p {
+    margin: 0;
+    color: #cbd5f5;
+    line-height: 1.65;
+    font-size: 0.95em;
+  }
+  .m4-objective-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #e2e8f0;
+    font-size: 0.95em;
+    line-height: 1.6;
+  }
+  .m4-briefing-note {
+    margin-top: 10px;
+    font-size: 0.82em;
+    color: #94a3b8;
+  }
   .m4-hud {
     margin-top: 20px;
     border: 1px solid rgba(56,189,248,0.35);
@@ -457,11 +521,28 @@ breadcrumbs: false
 
   <div class="m4-shell">
     <div class="m4-shell-inner">
-      <p class="m4-game-intro">
-        Boot sequence online. This module is now a mission simulator: you will decode the time model,
-        tune a parallel rig, and hunt bottlenecks to earn XP. Every idea from Modules 1–3 is packed
-        into interactive stations below.
-      </p>
+      <div class="m4-briefing-grid">
+        <div class="m4-briefing-card">
+          <div class="m4-briefing-title">Mission Briefing</div>
+          <details class="m4-intel">
+            <summary>Open intel log</summary>
+            <p class="m4-game-intro">
+              Boot sequence online. This module is now a mission simulator: you will decode the time model,
+              tune a parallel rig, and hunt bottlenecks to earn XP. Every idea from Modules 1–3 is packed
+              into interactive stations below.
+            </p>
+          </details>
+        </div>
+        <div class="m4-briefing-card">
+          <div class="m4-briefing-title">Objectives</div>
+          <ul class="m4-objective-list">
+            <li>Decode the time model.</li>
+            <li>Tune a parallel rig.</li>
+            <li>Hunt bottlenecks to earn XP.</li>
+          </ul>
+          <div class="m4-briefing-note">Every idea from Modules 1–3 is packed into interactive stations below.</div>
+        </div>
+      </div>
 
       <div class="m4-hud">
         <div class="m4-hud-title">Mission HUD</div>
@@ -523,10 +604,13 @@ breadcrumbs: false
         <h3 style="color:#0ea5e9; font-size:1.3em;">
           🎛 Quest 1: Calibrate the execution rig
         </h3>
-        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
-          Dial the rig sliders to describe a workload. The HUD updates instantly with modeled runtime,
-          speedup, and a boss shield that represents the sequential bottleneck.
-        </p>
+        <div class="m4-intel">
+          <div class="m4-intel-title">Objective intel</div>
+          <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7; margin:0;">
+            Dial the rig sliders to describe a workload. The HUD updates instantly with modeled runtime,
+            speedup, and a boss shield that represents the sequential bottleneck.
+          </p>
+        </div>
 
         <div class="m4-sliders">
           <div>
@@ -615,10 +699,13 @@ breadcrumbs: false
         <h3 style="color:#0ea5e9; font-size:1.3em;">
           🛰 Quest 2: Bottleneck hunt
         </h3>
-        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
-          Pick a mission. The rig auto-loads the workload, and you choose which part is slowing the crew.
-          Correct calls earn XP and teach how sequential work or overhead limits speedup.
-        </p>
+        <div class="m4-intel">
+          <div class="m4-intel-title">Objective intel</div>
+          <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7; margin:0;">
+            Pick a mission. The rig auto-loads the workload, and you choose which part is slowing the crew.
+            Correct calls earn XP and teach how sequential work or overhead limits speedup.
+          </p>
+        </div>
 
         <div class="m4-quest-grid">
           <article class="m4-quest-card" data-seq="20" data-par="240" data-proc="8" data-overhead="1">
@@ -659,10 +746,13 @@ breadcrumbs: false
         <h3 style="color:#0ea5e9; font-size:1.3em;">
           🚀 Quest 3: Speedup sprint
         </h3>
-        <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7;">
-          Punch in booster commands to add processors quickly. Watch the speedup meter and boss shield to
-          feel the diminishing returns from the sequential slice.
-        </p>
+        <div class="m4-intel">
+          <div class="m4-intel-title">Objective intel</div>
+          <p style="font-size:0.95em; color:#e5e7eb; line-height:1.7; margin:0;">
+            Punch in booster commands to add processors quickly. Watch the speedup meter and boss shield to
+            feel the diminishing returns from the sequential slice.
+          </p>
+        </div>
         <div class="m4-boosters">
           <button type="button" data-m4-boost="2">Boost to 2</button>
           <button type="button" data-m4-boost="4">Boost to 4</button>
