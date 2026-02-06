@@ -27,7 +27,7 @@ layout: post
 - Calculates parallel time (series + max parallel)
 - Computes speedup ratio
 - Displays results
-- Without it: Just drag-and-drop, no analysis
+- **Without it:** Just drag-and-drop interface with no computational analysis
 
 ---
 
