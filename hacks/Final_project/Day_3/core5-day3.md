@@ -12,15 +12,22 @@ layout: post
 
 ## Task 1: PPR 3a — Procedure Description ✓
 
-### Written Response 3a
-
 > **Prompt:** Describe the overall purpose of the program and what functionality the selected procedure contributes to.
 
-**Response:**
+**Program Purpose:**
+- Demonstrates parallel computing speedup
+- Users organize tasks: Series (sequential) vs Parallel (simultaneous)
+- Calculates performance improvement
+- Visualizes Amdahl's Law
 
-My program demonstrates parallel computing speedup by allowing users to organize tasks into Series (sequential) and Parallel (simultaneous) rows, then calculates performance improvement. It helps visualize Amdahl's Law and parallel optimization concepts.
-
-The `computeSpeedup()` procedure serves as the main calculation engine. It collects task values from both rows, validates input, calculates serial time (sum all tasks) and parallel time (series sum + max parallel task), computes the speedup ratio, and displays results. Without this procedure, the program would be only a drag-and-drop interface with no computational analysis.
+**Procedure: `computeSpeedup()`**
+- Collects task values from both rows
+- Validates input exists
+- Calculates serial time (sum all)
+- Calculates parallel time (series + max parallel)
+- Computes speedup ratio
+- Displays results
+- Without it: Just drag-and-drop, no analysis
 
 ---
 
@@ -62,19 +69,27 @@ window.computeSpeedup = function() {
 
 ## Task 2: PPR 3b — Algorithm Description ✓
 
-### Written Response 3b
-
 > **Prompt:** Describe how the selected algorithm includes sequencing, selection, and iteration.
 
-**Response:**
+**Sequencing (7 steps in order):**
+1. Collect series tasks
+2. Collect parallel tasks
+3. Validate input
+4. Calculate serial time
+5. Calculate parallel time
+6. Compute speedup
+7. Display results
 
-The `computeSpeedup()` algorithm includes sequencing, selection, and iteration:
+**Selection (conditionals):**
+- `if (seriesBlocks.length === 0 && parallelBlocks.length === 0)` → validates tasks exist
+- `parallelBlocks.length ? Math.max(...) : 0` → checks parallel tasks before max
+- `parallelTime > 0 ? serialTime / parallelTime : 0` → prevents divide by zero
 
-**Sequencing:** Steps execute in required order: (1) collect series tasks, (2) collect parallel tasks, (3) validate input, (4) calculate serial time, (5) calculate parallel time, (6) compute speedup, (7) display results. Each step depends on previous outputs—speedup cannot be calculated before knowing both times.
+**Iteration (loops):**
+- `.filter()` → iterates through DOM children
+- `.map()` → loops to extract values
+- `.reduce()` → sums array values
 
-**Selection:** Uses conditionals for different scenarios: `if (seriesBlocks.length === 0 && parallelBlocks.length === 0)` validates tasks exist; `parallelBlocks.length ? Math.max(...parallelBlocks) : 0` checks if parallel tasks exist before finding max; `parallelTime > 0 ? serialTime / parallelTime : 0` prevents division by zero.
-
-**Iteration:** Array methods loop through tasks: `.filter(c => c.classList.contains("block"))` iterates through DOM children; `.map(b => parseInt(b.textContent))` loops to extract values; `.reduce((a, b) => a + b, 0)` iterates through arrays to sum times. This processes any number of tasks dynamically.
 ---
 
 ### Algorithm Code (for 3b)
@@ -116,27 +131,34 @@ window.computeSpeedup = function() {
 
 ## Task 3: PPR 3c — List Usage ✓
 
-### Written Response 3c
-
 > **Prompt:** Describe how the selected list manages complexity in your program.
 
-**Response:**
+**Lists:** `seriesBlocks[]` and `parallelBlocks[]`
 
-The `seriesBlocks` and `parallelBlocks` lists store task execution times organized by the user. They manage complexity by:
-
-**What they contain:** `seriesBlocks` holds integers for sequential tasks (e.g., `[5, 10]`), while `parallelBlocks` holds simultaneous tasks (e.g., `[8, 12]`).
+**What they store:**
+- `seriesBlocks`: Sequential task times (e.g., `[5, 10]`)
+- `parallelBlocks`: Simultaneous task times (e.g., `[8, 12]`)
 
 **How they manage complexity:**
 
-1. **Variable input:** Lists dynamically accommodate 1-50+ tasks without needing separate variables (`task1`, `task2`, etc.)
+1. **Variable input**
+   - Handle 1-50+ tasks dynamically
+   - No need for `task1`, `task2`, etc.
 
-2. **Batch processing:** `.filter().map()` processes all tasks regardless of count, avoiding separate code for each scenario
+2. **Batch processing**
+   - `.filter().map()` processes all at once
+   - Same code works for any count
 
-3. **Simplified calculations:** `.reduce((a, b) => a + b, 0)` sums values in one line instead of manual addition
+3. **Simple calculations**
+   - `.reduce()` sums in one line
+   - No manual loops needed
 
-4. **Data persistence:** Both lists store in `currentScore` object and save to `savedRuns` array for comparison
+4. **Data persistence**
+   - Stored in `currentScore` object
+   - Saved to `savedRuns[]` array
 
-Without lists, the program would be limited to fixed task counts with extensive conditional logic for each possibility.
+**Without lists:** Limited to fixed task counts, messy conditional logic
+
 ---
 
 ### List Code (for 3c)
