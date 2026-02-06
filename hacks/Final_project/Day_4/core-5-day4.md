@@ -50,11 +50,6 @@ layout: post
 **During:** Move slowly • Show contrast • Don't rush  
 **After:** ≤60s • Has input/output • Clear serial vs parallel
 
-## Export
-
-```
-MP4 (H.264) • 1280x720 • 30fps • <30MB
-File: CreatePT_Core5_HardwareHavoc.mp4
 ```
 
 ## College Board Requirements
@@ -81,11 +76,10 @@ File: CreatePT_Core5_HardwareHavoc.mp4
 - Reorganize: Series [10], Parallel [10,10,10,10]
 - Result: 20 units (2.5× speedup)
 
-## Troubleshooting
+---
 
-| Issue | Fix |
-|-------|-----|
-| Page not loading | Run `bundle exec jekyll serve` |
-| Drag not working | Refresh page |
-| No speedup | Move tasks to Parallel row |
-| File too large | Use 720p |
+## Summary
+
+This video demonstrates **parallel computing** by comparing serial vs parallel task execution. Show INPUT (task times), PROCESSING (drag-and-drop organization), and OUTPUT (speedup calculation). The goal: prove that parallel execution improves performance when tasks can run simultaneously.
+
+**Key Point:** Speedup = T_serial / T_parallel. Your video should clearly show this improvement (aim for >1.5×).
