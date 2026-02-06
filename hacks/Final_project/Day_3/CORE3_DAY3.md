@@ -310,62 +310,62 @@ return jsonify({
 ### Input
 **File:** `digit-recognizer.js` — Canvas capture + fetch POST
 
-![Core3 Input](Snippits/Core3Input.png)
+![Core3 Input]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3Input.png)
 
 ---
 
 ### Algorithm (Procedure)
 **File:** `digit_api.py` — Full `predict()` function
 
-![Core3 Algorithm Part 1](Snippits/Core3imgAlgPart1.png)
+![Core3 Algorithm Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3imgAlgPart1.png)
 
-![Core3 Algorithm Part 2](Snippits/Core3imgAlgPart2.png)
+![Core3 Algorithm Part 2]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3imgAlgPart2.png)
 
 ---
 
 ### List Declaration
 **File:** `digit_api.py` — `results = []`
 
-![Core3 List Declaration](Snippits/Core3imgList.png)
+![Core3 List Declaration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3imgList.png)
 
 ---
 
 ### List Append
 **File:** `digit_api.py` — `results.append({...})`
 
-![Core3 List Append](Snippits/Core3Listappend.png)
+![Core3 List Append]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3Listappend.png)
 
 ---
 
 ### List Usage
 **File:** `digit_api.py` — `'digits': results` in return
 
-![Core3 List Usage](Snippits/Core3ListUsage.png)
+![Core3 List Usage]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3ListUsage.png)
 
 ---
 
 ### Iteration
 **File:** `digit_api.py` — `for idx, (component, processed) in enumerate(...)`
 
-![Core3 Iteration](Snippits/Core3Iteration.png)
+![Core3 Iteration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3Iteration.png)
 
 ---
 
 ### Selection
 **File:** `digit_api.py` — `if model is None`, `if not data`, `if not components`
 
-![Core3 Selection Part 1](Snippits/Core3SelectionPart1.png)
+![Core3 Selection Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3SelectionPart1.png)
 
-![Core3 Selection Part 2](Snippits/Core3SelectionPart2.png)
+![Core3 Selection Part 2]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3SelectionPart2.png)
 
-![Core3 Selection Part 3](Snippits/Core3SelectionPart3.png)
+![Core3 Selection Part 3]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3SelectionPart3.png)
 
 ---
 
 ### Output
 **File:** `digit_api.py` — `return jsonify({...})`
 
-![Core3 Output](Snippits/Core3Output.png)
+![Core3 Output]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3Output.png)
 
 ---
 
