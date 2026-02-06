@@ -307,27 +307,65 @@ return jsonify({
 
 ## Task 4: Code Screenshots ✓
 
-### Screenshot Checklist
+### Input
+**File:** `digit-recognizer.js` — Canvas capture + fetch POST
 
-Take screenshots of these code segments for your Create PT submission:
+![Core3 Input](Snippits/Core3Input.png)
 
-| Screenshot | File | Lines | Shows |
-|------------|------|-------|-------|
-| **Input** | `digit-recognizer.js` | 201-215 | `canvas.toDataURL()` + fetch POST |
-| **Procedure** | `digit_api.py` | 356-454 | Full `predict()` function |
-| **List Declaration** | `digit_api.py` | 400 | `results = []` |
-| **List Append** | `digit_api.py` | 413-430 | `results.append({...})` |
-| **List Usage** | `digit_api.py` | 443-448 | `'digits': results` in return |
-| **Iteration** | `digit_api.py` | 403-430 | `for idx, (component, processed) in enumerate(...)` |
-| **Selection** | `digit_api.py` | 360, 368, 384 | `if model is None`, `if not data`, `if not components` |
-| **Output** | `digit_api.py` | 443-448 | `return jsonify({...})` |
+---
 
-### How to Take Screenshots
+### Algorithm (Procedure)
+**File:** `digit_api.py` — Full `predict()` function
 
-1. Open the file in VS Code
-2. Highlight the relevant lines
-3. Use `Cmd+Shift+4` (Mac) or `Win+Shift+S` (Windows) to capture
-4. Save with descriptive names: `input.png`, `procedure.png`, `list.png`, etc.
+![Core3 Algorithm Part 1](Snippits/Core3imgAlgPart1.png)
+
+![Core3 Algorithm Part 2](Snippits/Core3imgAlgPart2.png)
+
+---
+
+### List Declaration
+**File:** `digit_api.py` — `results = []`
+
+![Core3 List Declaration](Snippits/Core3imgList.png)
+
+---
+
+### List Append
+**File:** `digit_api.py` — `results.append({...})`
+
+![Core3 List Append](Snippits/Core3Listappend.png)
+
+---
+
+### List Usage
+**File:** `digit_api.py` — `'digits': results` in return
+
+![Core3 List Usage](Snippits/Core3ListUsage.png)
+
+---
+
+### Iteration
+**File:** `digit_api.py` — `for idx, (component, processed) in enumerate(...)`
+
+![Core3 Iteration](Snippits/Core3Iteration.png)
+
+---
+
+### Selection
+**File:** `digit_api.py` — `if model is None`, `if not data`, `if not components`
+
+![Core3 Selection Part 1](Snippits/Core3SelectionPart1.png)
+
+![Core3 Selection Part 2](Snippits/Core3SelectionPart2.png)
+
+![Core3 Selection Part 3](Snippits/Core3SelectionPart3.png)
+
+---
+
+### Output
+**File:** `digit_api.py` — `return jsonify({...})`
+
+![Core3 Output](Snippits/Core3Output.png)
 
 ---
 
