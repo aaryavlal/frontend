@@ -4,7 +4,7 @@ permalink: /core4/day3
 layout: post
 ---
 
-# Core 4: Algorithm Performance Analyzer — Day 3 Complete
+# Core 4: Execution Time Calculations — Day 3 Complete
 
 **Task:** Write PPR (Personalized Project Reference) Responses for Create PT
 
@@ -23,7 +23,7 @@ The written response section requires you to answer questions about:
 
 ### PURPOSE
 
-> The `updateSpeedup()` procedure enables real-time algorithm performance analysis by receiving user input parameters (sequential time, parallelizable fraction), calculating speedup values using Amdahl's Law across multiple processor configurations, and returning visualization data with efficiency metrics. It serves as the core calculation engine that transforms user inputs into meaningful performance insights.
+> The `updateM4Model()` procedure enables real-time execution time modeling by receiving slider input parameters (sequential time, parallel time, processors, overhead), calculating parallel execution metrics using the time formula, and updating the HUD with speedup values and bottleneck indicators. It serves as the core calculation engine that transforms user-adjusted parameters into meaningful performance visualizations.
 
 ### Written Response 3a
 
@@ -31,79 +31,72 @@ The written response section requires you to answer questions about:
 
 **Response:**
 
-The purpose of this program is to provide an interactive algorithm performance analyzer that enables users to explore computational scalability concepts by inputting base execution time and parallelizability metrics, then observing how performance scales with varying processor counts. This application demonstrates the practical implementation of Amdahl's Law for understanding parallel computing limitations and resource efficiency.
+The purpose of this program is to provide an interactive execution time calculator that enables users to explore parallel computing concepts by adjusting workload parameters (sequential portion, parallelizable work, processor count, coordination overhead), then observing how these affect total runtime and speedup. The module includes a Gemini AI-graded quiz that evaluates student understanding of sequential bottlenecks and optimization strategies.
 
-The student-developed procedure `updateSpeedup()` accepts **parameters** through user interface inputs, specifically receiving sequential time, parallelizable fraction, and processor count as input values. This procedure implements **sequencing** by executing operations in a precise order: first initializing result arrays, then iterating through processor configurations, followed by applying Amdahl's Law calculations, and finally updating the visualization. The procedure uses **selection** through conditional statements (`if (sequentialTime > 0)`) to validate inputs and handle edge cases appropriately. **Iteration** is implemented via `for` loops that process each processor count configuration, enabling comprehensive scalability analysis from a single calculation request.
+The student-developed procedure `updateM4Model()` accepts **parameters** through slider inputs, specifically receiving sequential time (T_seq-part), parallel time (T_parallel-part), processor count (P), and overhead values. This procedure implements **sequencing** by executing operations in a precise order: first parsing slider values, then calculating sequential total, followed by computing parallel execution time using the formula, and finally updating all HUD display elements. The procedure uses **selection** through conditional statements (`if (speedup >= 2)`) to check quest completion thresholds and trigger XP rewards. **Iteration** is implicitly used through DOM update operations that process multiple display elements.
 
-The `updateSpeedup()` procedure fulfills these essential functions within the program architecture:
+The `updateM4Model()` procedure fulfills these essential functions within the program architecture:
 
-1. **Input Processing:** Receives and validates the numerical **parameters** from user interface elements
-2. **Data Initialization:** Creates empty result LISTS to store speedup, efficiency, and timing values
-3. **Performance Calculation:** Applies Amdahl's Law formula through `for` loop iteration over processor configurations
-4. **Metric Generation:** Computes speedup ratios and efficiency percentages for each configuration
-5. **History Tracking:** Records calculation sessions in a history LIST for comparative analysis
-6. **Visualization Trigger:** Invokes chart update functions to display results graphically
+1. **Input Processing:** Receives and parses numerical **parameters** from range slider elements
+2. **Baseline Calculation:** Computes sequential total time (T_seq-part + T_parallel-part)
+3. **Parallel Time Modeling:** Applies the execution time formula: T_parallel = seq + par/P + overhead*(P-1)
+4. **Speedup Computation:** Calculates speedup ratio as seqTotal / parallelTime
+5. **Bottleneck Analysis:** Determines shield ratio (seq/parallelTime) to visualize sequential bottleneck
+6. **Quest Tracking:** Checks if speedup threshold met and awards XP accordingly
 
-The `updateSpeedup()` procedure is indispensable to the program's functionality; without this computational pathway combining **sequencing**, **selection**, and **iteration**, user input could not be transformed into performance metrics, processed through the scaling algorithm, or returned as meaningful visualization output.
+The `updateM4Model()` procedure is indispensable to the program's functionality; without this computational pathway combining **sequencing**, **selection**, and **iteration**, user slider adjustments could not be transformed into execution metrics, processed through the time model, or returned as meaningful HUD visualizations.
 
 ---
 
 ### Procedure Code (for 3a)
 
-**File:** `frontend/hacks/speedup-calculator.md` — Lines 450-580
+**File:** `frontend/cores/core-4.md` — Lines 1031-1073
 
 ```javascript
-// PROCEDURE: updateSpeedup()
-// PURPOSE: Calculate performance metrics across processor configurations
-// RETURNS: Updates global lists and triggers visualization
-function updateSpeedup() {
-    // Initialize empty LISTS for results
-    speedupValues = [];
-    efficiencyValues = [];
-    parallelTimes = [];
-
-    // ITERATION: Process each processor count in LIST
-    for (let processorCount of processorCounts) {
-
-        // SELECTION: Apply Amdahl's Law only if valid inputs
-        if (sequentialTime > 0) {
-            // Amdahl's Law formula: T_par = T_seq * [(1-P) + P/N]
-            const serialPortion = (1 - parallelizableFraction);
-            const parallelPortion = parallelizableFraction / processorCount;
-            const parallelTime = sequentialTime * (serialPortion + parallelPortion);
-
-            // Store parallel time in LIST
-            parallelTimes.push(parallelTime);
-
-            // Calculate speedup
-            const speedup = processorCount === 1 ? 1.0 : sequentialTime / parallelTime;
-            speedupValues.push(speedup);
-
-            // Calculate efficiency: Speedup / N * 100%
-            const efficiency = (speedup / processorCount) * 100;
-            efficiencyValues.push(efficiency);
-        } else {
-            // Invalid input: add zeros to LISTS
-            speedupValues.push(0);
-            efficiencyValues.push(0);
-            parallelTimes.push(0);
-        }
+function updateM4Model() {
+    // Validate slider elements exist
+    if (!m4SeqSlider || !m4ParSlider || !m4ProcSlider || !m4OverheadSlider) {
+        return;
     }
 
-    // Store calculation in history LIST
-    const result = {
-        timestamp: new Date().toISOString(),
-        sequentialTime: sequentialTime,
-        parallelizableFraction: parallelizableFraction,
-        speedupValues: speedupValues,
-        efficiencyValues: efficiencyValues,
-        maxSpeedup: Math.max(...speedupValues),
-        peakEfficiency: Math.max(...efficiencyValues)
-    };
-    calculationHistory.push(result);
+    // Parse slider values (INPUT)
+    const seq = parseFloat(m4SeqSlider.value);      // T_seq-part
+    const par = parseFloat(m4ParSlider.value);      // T_parallel-part
+    const P = parseInt(m4ProcSlider.value, 10);     // Processors
+    const overhead = parseFloat(m4OverheadSlider.value);
 
-    // Update visualization
-    updateVisualization();
+    // Sequential baseline calculation
+    const seqTotal = seq + par;
+
+    // Parallel model: seq part + parallel split + coordination cost
+    const overheadCost = overhead * Math.max(P - 1, 0);
+    const parallelTime = seq + par / Math.max(P, 1) + overheadCost;
+
+    // Calculate speedup and bottleneck ratio
+    const speedup = seqTotal / parallelTime;
+    const shieldRatio = parallelTime > 0 ? Math.min(seq / parallelTime, 1) : 0;
+
+    // Update display elements (OUTPUT)
+    m4SeqValue.textContent = seq.toFixed(0);
+    m4ParValue.textContent = par.toFixed(0);
+    m4ProcValue.textContent = P.toString();
+    m4OverheadValue.textContent = overhead.toFixed(0);
+
+    m4SeqTotalEl.textContent = seqTotal.toFixed(0);
+    m4ParTimeEl.textContent = parallelTime.toFixed(0);
+    m4SpeedupEl.textContent = speedup.toFixed(2);
+    m4SpeedupLive.textContent = speedup.toFixed(2);
+
+    // Update shield bar visualization
+    const shieldPercent = shieldRatio * 100;
+    m4ShieldBar.style.width = `${shieldPercent.toFixed(0)}%`;
+    m4ShieldValue.textContent = shieldPercent.toFixed(0);
+
+    // SELECTION: Check speedup quest completion
+    if (speedup >= 2 && !m4State.quests.speedup) {
+        setQuestComplete("speedup", m4QuestSpeedupEl);
+        addXP(12, "Speedup threshold cleared");
+    }
 }
 ```
 
@@ -113,7 +106,7 @@ function updateSpeedup() {
 
 ### PURPOSE
 
-> The algorithm transforms user input parameters into performance analysis results through a sequential pipeline: initialize arrays → iterate processor counts → apply Amdahl's Law → calculate efficiency → store results → update charts. Selection handles input validation, while iteration enables multi-configuration analysis from a single calculation request.
+> The algorithm transforms slider input values into execution time analysis through a sequential pipeline: parse inputs → calculate baseline → apply time formula → compute speedup → update HUD → check quest thresholds. Selection handles quest completion logic, while iteration processes multiple display element updates.
 
 ### Written Response 3b
 
@@ -121,95 +114,87 @@ function updateSpeedup() {
 
 **Response:**
 
-The `updateSpeedup()` procedure implements an algorithm that includes sequencing, selection, and iteration to analyze algorithm performance scalability.
+The `updateM4Model()` procedure implements an algorithm that includes sequencing, selection, and iteration to model parallel execution time.
 
 **Sequencing:** The algorithm executes steps in a specific order that cannot be rearranged:
-1. First, initialize empty result arrays (speedupValues, efficiencyValues, parallelTimes)
-2. Then, iterate through each processor count configuration
-3. Next, apply Amdahl's Law formula for each configuration
-4. Then, calculate efficiency metrics based on speedup results
-5. Finally, store results in history and update visualization
+1. First, validate that all slider elements exist
+2. Then, parse slider values into numeric variables (seq, par, P, overhead)
+3. Next, calculate sequential baseline total (seq + par)
+4. Then, compute parallel execution time using the formula
+5. Next, calculate speedup ratio and shield percentage
+6. Finally, update all HUD display elements and check quest completion
 
 Each step depends on the previous step's output, making the sequence essential.
 
 **Selection:** The algorithm uses conditional statements to handle different scenarios:
-- `if (sequentialTime > 0)`: Validates that the input time is positive before calculating
-- `if (processorCount === 1)`: Special case where speedup is always 1.0 (baseline)
-- `if (inputType === 'sequentialTime')`: Determines which input parameter to update
-- `if (numValue >= 0 && numValue <= 100)`: Validates parallelizable fraction range
+- `if (!m4SeqSlider || !m4ParSlider || ...)`: Validates slider elements exist before processing
+- `Math.max(P - 1, 0)`: Ensures overhead calculation doesn't go negative for single processor
+- `Math.max(P, 1)`: Prevents division by zero in parallel time calculation
+- `if (speedup >= 2 && !m4State.quests.speedup)`: Checks if speedup threshold met AND quest not already complete
+- `parallelTime > 0 ? ... : 0`: Ternary selection for shield ratio calculation
 
-These selections ensure the program responds appropriately to various input conditions.
+These selections ensure the program responds appropriately to edge cases and quest state.
 
-**Iteration:** The algorithm uses a `for` loop to process multiple processor configurations:
-- `for (let processorCount of processorCounts)`: Iterates through [1, 2, 4, 8, 16, 32, 64, 128, 256]
-- For each iteration, the algorithm calculates parallel time, speedup, and efficiency, then appends results to output lists
+**Iteration:** The algorithm uses iteration through:
+- Array method `forEach` in event listener setup for slider inputs
+- DOM updates that process multiple display elements in sequence
+- The `sliderInputs.forEach((slider) => {...})` pattern that attaches handlers to all four sliders
 
-This iteration allows the program to generate comprehensive scalability curves from a single calculation, showing how performance changes across all processor configurations.
+This iteration allows the program to respond to any slider change with a complete model recalculation.
 
 ---
 
 ### Algorithm Code (for 3b)
 
-**File:** `frontend/hacks/speedup-calculator.md` — Lines 520-600
+**File:** `frontend/cores/core-4.md` — Lines 1031-1073, 1116-1122
 
 ```javascript
-// SEQUENCING: Steps must execute in this order
-// Step 1: Initialize result arrays
-speedupValues = [];
-efficiencyValues = [];
-parallelTimes = [];
+function updateM4Model() {
+    // SELECTION: Validate elements exist
+    if (!m4SeqSlider || !m4ParSlider || !m4ProcSlider || !m4OverheadSlider) {
+        return;
+    }
 
-// Step 2: Define processor configurations LIST
-const processorCounts = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+    // SEQUENCING STEP 1: Parse inputs
+    const seq = parseFloat(m4SeqSlider.value);
+    const par = parseFloat(m4ParSlider.value);
+    const P = parseInt(m4ProcSlider.value, 10);
+    const overhead = parseFloat(m4OverheadSlider.value);
 
-// ITERATION: Process each processor count
-for (let processorCount of processorCounts) {
+    // SEQUENCING STEP 2: Calculate sequential baseline
+    const seqTotal = seq + par;
 
-    // SELECTION: Validate input before calculation
-    if (sequentialTime > 0) {
-        // Step 3: Apply Amdahl's Law formula
-        const serialPortion = (1 - parallelizableFraction);
-        const parallelPortion = parallelizableFraction / processorCount;
-        const parallelTime = sequentialTime * (serialPortion + parallelPortion);
+    // SEQUENCING STEP 3: Apply parallel time formula
+    // SELECTION: Math.max prevents negative/zero values
+    const overheadCost = overhead * Math.max(P - 1, 0);
+    const parallelTime = seq + par / Math.max(P, 1) + overheadCost;
 
-        // LIST APPEND: Store parallel time
-        parallelTimes.push(parallelTime);
+    // SEQUENCING STEP 4: Calculate metrics
+    const speedup = seqTotal / parallelTime;
+    // SELECTION: Ternary for safe division
+    const shieldRatio = parallelTime > 0 ? Math.min(seq / parallelTime, 1) : 0;
 
-        // Step 4: Calculate speedup
-        // SELECTION: Handle baseline case
-        const speedup = processorCount === 1 ? 1.0 : sequentialTime / parallelTime;
+    // SEQUENCING STEP 5: Update displays
+    m4SeqTotalEl.textContent = seqTotal.toFixed(0);
+    m4ParTimeEl.textContent = parallelTime.toFixed(0);
+    m4SpeedupEl.textContent = speedup.toFixed(2);
+    m4ShieldBar.style.width = `${(shieldRatio * 100).toFixed(0)}%`;
 
-        // LIST APPEND: Store speedup value
-        speedupValues.push(speedup);
-
-        // Step 5: Calculate efficiency
-        const efficiency = (speedup / processorCount) * 100;
-
-        // LIST APPEND: Store efficiency value
-        efficiencyValues.push(efficiency);
-    } else {
-        // SELECTION: Handle invalid input
-        speedupValues.push(0);
-        efficiencyValues.push(0);
-        parallelTimes.push(0);
+    // SEQUENCING STEP 6: Check quest (SELECTION)
+    if (speedup >= 2 && !m4State.quests.speedup) {
+        setQuestComplete("speedup", m4QuestSpeedupEl);
+        addXP(12, "Speedup threshold cleared");
     }
 }
 
-// Step 6: Store in history LIST
-const result = {
-    timestamp: new Date().toISOString(),
-    sequentialTime: sequentialTime,
-    parallelizableFraction: parallelizableFraction,
-    processorCounts: processorCounts,
-    speedupValues: speedupValues,
-    efficiencyValues: efficiencyValues,
-    maxSpeedup: Math.max(...speedupValues),
-    peakEfficiency: Math.max(...efficiencyValues)
-};
-calculationHistory.push(result);
-
-// Step 7: Update visualization
-updateVisualization();
+// ITERATION: Attach event listeners to all sliders
+const sliderInputs = [m4SeqSlider, m4ParSlider, m4ProcSlider, m4OverheadSlider].filter(Boolean);
+sliderInputs.forEach((slider) => {
+    slider.addEventListener("input", () => {
+        updateM4Model();
+        markCalibrated();
+    });
+});
 ```
 
 ---
@@ -218,7 +203,7 @@ updateVisualization();
 
 ### PURPOSE
 
-> The `speedupValues` list stores calculated performance metrics for each processor configuration, enabling the program to handle variable analysis ranges. It maintains processor-count ordering and provides data directly to Chart.js for visualization rendering.
+> The `attempts` list stores quiz submission history for each grading attempt, enabling the program to track student progress across multiple tries. It maintains submission order and provides attempt summaries for both local display and server synchronization.
 
 ### Written Response 3c
 
@@ -226,87 +211,93 @@ updateVisualization();
 
 **Response:**
 
-The `speedupValues` list is essential to my program because it stores the calculated speedup metric for each processor configuration analyzed. This list manages complexity in several ways:
+The `attempts` list is essential to my program because it stores the grading history for each quiz submission to the Gemini AI grader. This list manages complexity in several ways:
 
-**What the list contains:** Each element in `speedupValues` is a floating-point number representing:
-- The performance improvement ratio at that processor count
-- Values range from 1.0 (baseline, single processor) to the theoretical maximum (limited by Amdahl's Law)
-- Index position corresponds to the processor count in `processorCounts` array
+**What the list contains:** Each element in `attempts` is an object containing:
+- The score received (0-3)
+- Maximum possible score (3)
+- Feedback text from Gemini
+- Server-side attempt summary
 
 **How the list manages complexity:**
 
-1. **Handles variable configurations:** The calculation might analyze 9 different processor counts (1 to 256). The list dynamically stores results for any number of configurations, eliminating the need for separate variables like `speedup1`, `speedup2`, `speedup4`, etc.
+1. **Handles variable submissions:** Users might submit 1 or 20+ attempts. The list dynamically grows to accommodate any number of quiz submissions, eliminating the need for separate variables like `attempt1`, `attempt2`, etc.
 
-2. **Enables batch visualization:** The Chart.js library accepts the `speedupValues` array directly as a dataset, allowing `data: speedupValues` instead of manually constructing data points.
+2. **Enables progress tracking:** The `recordAttempt()` function uses `attempts.push(attempt)` to add each submission, then iterates through the list to build a formatted summary string showing all attempts with labels (Perfect/Partial/No credit).
 
-3. **Preserves order:** The list maintains the processor-count order from the iteration, ensuring the x-axis (processors) correctly aligns with y-axis (speedup) values in the visualization.
+3. **Preserves submission order:** The list maintains chronological order of attempts, so `Attempt 1`, `Attempt 2`, etc. display correctly in the results panel.
 
-4. **Supports aggregate functions:** Operations like `Math.max(...speedupValues)` easily find the peak speedup achieved, and `speedupValues.length` tracks how many configurations were analyzed.
+4. **Supports aggregate analysis:** The iteration `for (let i = 0; i < attempts.length; i++)` processes each attempt to generate the local summary, classifying each by score level.
 
-5. **Enables history comparison:** The entire list is stored in the `calculationHistory` array, allowing users to compare previous analysis sessions.
+5. **Enables state persistence:** The `m4State` object also uses lists (`unlockedTerms: new Set()`, `bottleneckWins: new Set()`) to track which formula terms have been decoded and which bottleneck hunts have been completed.
 
-Without this list, I would need separate variables for each processor configuration, manual Chart.js data construction, complex conditional logic to extract maximum values—significantly increasing code complexity and reducing maintainability.
+Without these lists, the program would need separate variables for each possible attempt, complex conditional logic for different submission counts, and manual summary construction—significantly increasing code complexity.
 
 ---
 
 ### List Code (for 3c)
 
-**File:** `frontend/hacks/speedup-calculator.md` — Lines 500-600
+**File:** `frontend/cores/core-4.md` — Lines 1210-1232, 950-960
 
 ```javascript
-// LIST DECLARATION: Initialize empty lists to store results
-let speedupValues = [];      // Stores speedup for each processor count
-let efficiencyValues = [];   // Stores efficiency for each processor count
-let parallelTimes = [];      // Stores parallel execution time
-let calculationHistory = []; // Stores all calculation sessions
+// LIST DECLARATION: Track quiz attempts
+const attempts = [];
 
-// LIST: Processor configurations to analyze
-const processorCounts = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+// PROCEDURE: Record each grading attempt
+function recordAttempt(score, maxScore, feedback, serverSummary) {
+    // Create attempt object
+    const attempt = { score, maxScore, feedback, serverSummary };
 
-// ITERATION: Process each processor count and populate lists
-for (let processorCount of processorCounts) {
-    if (sequentialTime > 0) {
-        // Calculate metrics
-        const serialPortion = (1 - parallelizableFraction);
-        const parallelPortion = parallelizableFraction / processorCount;
-        const parallelTime = sequentialTime * (serialPortion + parallelPortion);
-        const speedup = sequentialTime / parallelTime;
-        const efficiency = (speedup / processorCount) * 100;
+    // LIST APPEND: Add to attempts array
+    attempts.push(attempt);
 
-        // LIST APPEND: Add values to respective lists
-        parallelTimes.push(parallelTime);
-        speedupValues.push(speedup);
-        efficiencyValues.push(efficiency);
+    // Build local summary string
+    let localSummary = "";
+
+    // ITERATION: Process each attempt in LIST
+    for (let i = 0; i < attempts.length; i++) {
+        const a = attempts[i];
+        let label;
+
+        // SELECTION: Classify attempt by score
+        if (a.score === a.maxScore) {
+            label = "Perfect";
+        } else if (a.score > 0) {
+            label = "Partial";
+        } else {
+            label = "No credit";
+        }
+
+        // Build summary line
+        localSummary += `Attempt ${i + 1}: ${label} (${a.score}/${a.maxScore})\n`;
     }
+
+    return localSummary.trim();
 }
 
-// LIST USAGE: Find maximum speedup achieved
-const maxSpeedup = Math.max(...speedupValues);
-const peakEfficiency = Math.max(...efficiencyValues);
+// STATE OBJECT with LIST structures
+const m4State = {
+    xp: 0,
+    quests: {
+        terminal: false,
+        calibrate: false,
+        bottleneck: false,
+        speedup: false
+    },
+    unlockedTerms: new Set(),    // LIST: Tracks decoded formula terms
+    bottleneckWins: new Set()    // LIST: Tracks correct bottleneck calls
+};
 
-// LIST USAGE: Store entire calculation in history
-calculationHistory.push({
-    timestamp: new Date().toISOString(),
-    speedupValues: speedupValues,        // <-- LIST stored in history
-    efficiencyValues: efficiencyValues,  // <-- LIST stored in history
-    maxSpeedup: maxSpeedup
-});
+// LIST USAGE: Check if all terms unlocked
+if (m4State.unlockedTerms.size === Object.keys(termMessages).length) {
+    setQuestComplete("terminal", m4QuestTerminalEl);
+    addXP(8, "Formula console fully decoded");
+}
 
-// LIST USAGE: Pass directly to Chart.js for visualization
-speedupChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: processorCounts.map(p => `${p}P`),
-        datasets: [{
-            label: 'Speedup',
-            data: speedupValues  // <-- LIST used as chart data
-        }]
-    }
-});
-
-// LIST USAGE: Display statistics
-document.getElementById('maxSpeedup').textContent =
-    Math.max(...speedupValues).toFixed(2) + 'x';  // <-- LIST aggregate function
+// LIST USAGE: Check bottleneck wins for quest completion
+if (m4State.bottleneckWins.size >= 2) {
+    setQuestComplete("bottleneck", m4QuestBottleneckEl);
+}
 ```
 
 ---
@@ -319,14 +310,14 @@ Take screenshots of these code segments for your Create PT submission:
 
 | Screenshot | File | Lines | Shows |
 |------------|------|-------|-------|
-| **Input** | `speedup-calculator.md` | 450-480 | Input handlers for sequential time, fraction, processors |
-| **Procedure** | `speedup-calculator.md` | 520-600 | Full `updateSpeedup()` function |
-| **List Declaration** | `speedup-calculator.md` | 500-510 | `speedupValues = []`, `efficiencyValues = []` |
-| **List Append** | `speedup-calculator.md` | 550-560 | `speedupValues.push(speedup)` |
-| **List Usage** | `speedup-calculator.md` | 720-740 | `data: speedupValues` in Chart.js |
-| **Iteration** | `speedup-calculator.md` | 530-580 | `for (let processorCount of processorCounts)` |
-| **Selection** | `speedup-calculator.md` | 535, 555 | `if (sequentialTime > 0)`, `if (processorCount === 1)` |
-| **Output** | `speedup-calculator.md` | 720-800 | Chart.js visualization code |
+| **Input** | `core-4.md` | 1035-1039 | Slider value parsing (seq, par, P, overhead) |
+| **Procedure** | `core-4.md` | 1031-1073 | Full `updateM4Model()` function |
+| **List Declaration** | `core-4.md` | 1210 | `const attempts = []` |
+| **List Append** | `core-4.md` | 1215 | `attempts.push(attempt)` |
+| **List Usage** | `core-4.md` | 1220-1230 | `for` loop building attempt summary |
+| **Iteration** | `core-4.md` | 1116-1122 | `sliderInputs.forEach((slider) => {...})` |
+| **Selection** | `core-4.md` | 1032, 1069-1072 | `if (!m4SeqSlider...)`, `if (speedup >= 2...)` |
+| **Output** | `core-4.md` | 1050-1067 | HUD element updates |
 
 ### How to Take Screenshots
 
@@ -344,75 +335,67 @@ Take screenshots of these code segments for your Create PT submission:
 Add these comments to your code for clarity:
 
 ```javascript
-// ===== PROCEDURE: updateSpeedup() =====
-// PURPOSE: Calculate speedup and efficiency across processor configurations
-// RETURNS: Updates visualization charts with performance data
-function updateSpeedup() {
-    // ===== LIST DECLARATION =====
-    speedupValues = [];      // Stores speedup for each processor count
-    efficiencyValues = [];   // Stores efficiency percentages
-    parallelTimes = [];      // Stores parallel execution times
-
-    // ===== SEQUENCING STEP 1: Define configurations =====
-    const processorCounts = [1, 2, 4, 8, 16, 32, 64, 128, 256];
-
-    // ===== ITERATION: Process each processor count =====
-    for (let processorCount of processorCounts) {
-
-        // ===== SELECTION: Validate input =====
-        if (sequentialTime > 0) {
-
-            // ===== SEQUENCING STEP 2: Apply Amdahl's Law =====
-            // Formula: T_parallel = T_sequential * [(1-P) + P/N]
-            const serialPortion = (1 - parallelizableFraction);
-            const parallelPortion = parallelizableFraction / processorCount;
-            const parallelTime = sequentialTime * (serialPortion + parallelPortion);
-
-            // ===== LIST APPEND: Store parallel time =====
-            parallelTimes.push(parallelTime);
-
-            // ===== SEQUENCING STEP 3: Calculate speedup =====
-            // SELECTION: Handle baseline case (1 processor = no speedup)
-            const speedup = processorCount === 1 ? 1.0 : sequentialTime / parallelTime;
-
-            // ===== LIST APPEND: Store speedup =====
-            speedupValues.push(speedup);
-
-            // ===== SEQUENCING STEP 4: Calculate efficiency =====
-            // Efficiency = Speedup / Processors * 100%
-            const efficiency = (speedup / processorCount) * 100;
-
-            // ===== LIST APPEND: Store efficiency =====
-            efficiencyValues.push(efficiency);
-
-        } else {
-            // ===== SELECTION: Handle invalid input =====
-            speedupValues.push(0);
-            efficiencyValues.push(0);
-            parallelTimes.push(0);
-        }
+// ===== PROCEDURE: updateM4Model() =====
+// PURPOSE: Calculate parallel execution time and update HUD
+// RETURNS: Updates display elements with computed metrics
+function updateM4Model() {
+    // ===== SELECTION: Validate elements exist =====
+    if (!m4SeqSlider || !m4ParSlider || !m4ProcSlider || !m4OverheadSlider) {
+        return;
     }
 
-    // ===== SEQUENCING STEP 5: Store in history =====
-    // LIST: calculationHistory tracks all sessions
-    const result = {
-        timestamp: new Date().toISOString(),
-        sequentialTime: sequentialTime,
-        parallelizableFraction: parallelizableFraction,
-        processorCounts: processorCounts,
-        speedupValues: speedupValues,         // LIST stored
-        efficiencyValues: efficiencyValues,   // LIST stored
-        maxSpeedup: Math.max(...speedupValues),
-        peakEfficiency: Math.max(...efficiencyValues)
-    };
+    // ===== SEQUENCING STEP 1: Parse slider inputs =====
+    const seq = parseFloat(m4SeqSlider.value);      // T_seq-part
+    const par = parseFloat(m4ParSlider.value);      // T_parallel-part
+    const P = parseInt(m4ProcSlider.value, 10);     // Processor count
+    const overhead = parseFloat(m4OverheadSlider.value); // Coordination cost
 
-    // ===== LIST APPEND: Add to history =====
-    calculationHistory.push(result);
+    // ===== SEQUENCING STEP 2: Calculate sequential baseline =====
+    const seqTotal = seq + par;
 
-    // ===== SEQUENCING STEP 6: Update visualization =====
-    // LIST USAGE: Pass speedupValues to Chart.js
-    updateVisualization();
+    // ===== SEQUENCING STEP 3: Apply parallel time formula =====
+    // Formula: T_parallel = T_seq-part + (T_parallel-part / P) + overhead
+    // SELECTION: Math.max prevents negative/zero edge cases
+    const overheadCost = overhead * Math.max(P - 1, 0);
+    const parallelTime = seq + par / Math.max(P, 1) + overheadCost;
+
+    // ===== SEQUENCING STEP 4: Calculate derived metrics =====
+    const speedup = seqTotal / parallelTime;
+    // SELECTION: Ternary prevents division by zero
+    const shieldRatio = parallelTime > 0 ? Math.min(seq / parallelTime, 1) : 0;
+
+    // ===== SEQUENCING STEP 5: Update HUD displays (OUTPUT) =====
+    m4SeqValue.textContent = seq.toFixed(0);
+    m4ParValue.textContent = par.toFixed(0);
+    m4ProcValue.textContent = P.toString();
+    m4OverheadValue.textContent = overhead.toFixed(0);
+
+    m4SeqTotalEl.textContent = seqTotal.toFixed(0);
+    m4ParTimeEl.textContent = parallelTime.toFixed(0);
+    m4SpeedupEl.textContent = speedup.toFixed(2);
+    m4SpeedupLive.textContent = speedup.toFixed(2);
+
+    // Update shield bar (bottleneck visualization)
+    const shieldPercent = shieldRatio * 100;
+    m4ShieldBar.style.width = `${shieldPercent.toFixed(0)}%`;
+    m4ShieldValue.textContent = shieldPercent.toFixed(0);
+
+    // ===== SEQUENCING STEP 6: Check quest completion =====
+    // SELECTION: Award XP if speedup threshold met
+    if (speedup >= 2 && !m4State.quests.speedup) {
+        setQuestComplete("speedup", m4QuestSpeedupEl);
+        addXP(12, "Speedup threshold cleared");
+    }
 }
+
+// ===== ITERATION: Attach handlers to all sliders =====
+const sliderInputs = [m4SeqSlider, m4ParSlider, m4ProcSlider, m4OverheadSlider].filter(Boolean);
+sliderInputs.forEach((slider) => {
+    slider.addEventListener("input", () => {
+        updateM4Model();    // Recalculate on any slider change
+        markCalibrated();   // Mark calibration quest complete
+    });
+});
 ```
 
 ---
@@ -431,9 +414,29 @@ function updateSpeedup() {
 
 | Question | Key Points | Word Count Target |
 |----------|------------|-------------------|
-| **3a** | Purpose: performance analysis; Procedure: `updateSpeedup()` handles input→Amdahl's Law→output | 150 words |
-| **3b** | Sequencing: 6 ordered steps; Selection: 4 if statements; Iteration: for loop through processor counts | 200 words |
-| **3c** | List: `speedupValues`; Manages: variable configs, batch visualization, order preservation, aggregate functions | 200 words |
+| **3a** | Purpose: execution time modeling; Procedure: `updateM4Model()` handles input→formula→output | 150 words |
+| **3b** | Sequencing: 6 ordered steps; Selection: 5 conditionals; Iteration: forEach on sliders | 200 words |
+| **3c** | Lists: `attempts[]`, `unlockedTerms`, `bottleneckWins`; Manages quiz history, quest tracking | 200 words |
+
+---
+
+## Key Formula
+
+**Parallel Execution Time Model:**
+```
+T_parallel = T_seq-part + (T_parallel-part / P) + overhead × (P - 1)
+```
+
+**Speedup Calculation:**
+```
+Speedup = T_sequential / T_parallel = (seq + par) / parallelTime
+```
+
+**Boss Shield (Bottleneck Indicator):**
+```
+Shield% = (T_seq-part / T_parallel) × 100
+```
+Higher shield = sequential portion dominates runtime (Amdahl's Law bottleneck)
 
 ---
 
@@ -441,6 +444,6 @@ function updateSpeedup() {
 
 1. Finalize 1-minute video script
 2. Set up screen recording software
-3. Practice demo walkthrough
+3. Practice demo walkthrough (sliders + quiz)
 4. Prepare localhost environment for recording
 5. **CHECKPOINT:** Review video script with peer
