@@ -143,3 +143,37 @@ pub fn concurrent(
 ## 3a: Description
 
 The main function of this procedure is to compute, concurrently, a bunch of tiles for a Mandelbrot set and store the performance metrics for playback.
+
+## 3b: Sequencing, Selection, Iteration
+
+### Sequencing
+
+The first few lines handle the sequencing (and iteration) of tiles to line up task IDs.
+```rs
+for ty in (0..height).step_by(tile_h) {
+    for tx in (0..width).step_by(tile_w) {
+        tiles.push((task_id, tx, ty));
+        task_id += 1;
+    }
+}
+```
+
+### Iteration
+
+Ibid.
+
+### Selection
+
+The function performs two time checks to know when to terminate the process:
+```rs
+// Check if time limit exceeded (TLE) and stop processing if so
+if time_exceeded.load(Ordering::Relaxed) {
+    break;
+}
+
+// Check if overall computation time has exceeded the specified time limit
+if overall_start.elapsed() > time_limit {
+    time_exceeded.store(true, Ordering::Relaxed);
+    break;
+}
+```
