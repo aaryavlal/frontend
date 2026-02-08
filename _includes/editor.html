@@ -10,14 +10,16 @@
             <button class="run-btn">Run Code</button>
         </div>
     </div>
-    <div class="output-panel"></div>
+    <div class="output-panel" style="font-family: monospace;"></div>
 </div>
 
 <script>
     // IIFE to initialize the editor for the *last* .embedded-editor-container
     // This script runs right after its container is inserted into the DOM.
-    (function() {
-        const container = document.currentScript.previousElementSibling;
+    (async function() {
+        const container = document.querySelector(
+          '.embedded-editor-container:last-of-type'
+        );
         if (!container || !container.classList.contains('embedded-editor-container')) return;
 
         const editorElement = container.querySelector('.editor-instance');
@@ -27,17 +29,38 @@
         const editorWrapper = container.querySelector('.editor-wrapper');
         const editorButtons = container.querySelector('.editor-buttons');
 
+        const rawLang = {{ include.lang | default: "c" | jsonify }};
+        const lang = (rawLang === 'c') ? 'c' : 'rust';
+        const aceMode = (rawLang === 'c') ? 'c_cpp' : 'rust';
+        // this is fine because we only handle C or Rust
+        const compiler = (rawLang === 'c') ? 'cg152' : 'r190';
+
+
+        const inlineCode = {{ include.code | jsonify | default: "null" }};
+        const codePath = {{ include.code_path | jsonify | default: "null" }};
+        var code;
+        if (inlineCode !== null) {
+            code = inlineCode;
+        } else if (codePath !== null) {
+            const res = await fetch(`{{site.baseurl}}/assets/${codePath}`);
+            if (!res.ok) throw new Error(`Failed to fetch code from ${codePath}`);
+            code = await res.text();
+        } else {
+            code = default_code;
+        }
+
+
         // Ace Editor Initialization
         const editor = ace.edit(editorElement);
         editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/rust");
+        editor.session.setMode(`ace/mode/${aceMode}`);
         editor.setOptions({
             fontSize: "12pt",
             maxLines: Infinity,
             minLines: 10
         });
 
-        editor.setValue(`{{ include.code | default: default_code }}`);
+        editor.setValue(code);
         editor.clearSelection();
 
         // Set styles for wrapper and buttons
@@ -72,41 +95,17 @@
         runButton.addEventListener('click', async function() {
             const code = editor.getValue();
             outputDiv.style.display = 'block';
-            outputDiv.textContent = 'Sending to Rust Playground...\n\n';
+            outputDiv.textContent = 'Running...';
 
             try {
-                const response = await fetch('https://play.rust-lang.org/execute', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        channel: "stable",
-                        mode: "debug",
-                        edition: "2021",
-                        crateType: "bin",
-                        code: code,
-                        tests: false
-                    })
+                const result = await window.Godbolt.executeCode({
+                    source: code,
+                    compiler: compiler,
+                    lang: lang,
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                if (result.success) {
-                    outputDiv.textContent =
-                        (result.stderr ? `Warnings:\n${result.stderr}` : '') +
-                        `\n${result.stdout || '(no stdout)'}`;
-                } else {
-                    outputDiv.textContent =
-                        `Error:${result.stderr || result.stdout || 'Unknown error'}`;
-                }
-
+                outputDiv.textContent = window.Godbolt.getResult(result);
             } catch (err) {
-                outputDiv.textContent = `Request failed: ${err.message}`;
+              outputDiv.textContent = 'Error: ' + err.message;
             }
         });
     })();

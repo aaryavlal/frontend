@@ -52,5 +52,31 @@ use std::sync::Arc;
       println!("Final count: {}", counter.load(Ordering::SeqCst));
       println!("Expected count: 10000");
     }' %}
-    {% include rust-editor.html code=threads %}
+    {% include editor.html code=threads %}
 </details>
+
+<script type="module">
+  import { executeCode, getStdout, getStderr, getExitCode } from '{{site.baseurl}}/assets/js/godbolt/godbolt.js';
+  
+  executeCode({
+      source: 'fn main() { println!("Hello, World!); }',
+      compiler: 'r190',
+      lang: 'rust',
+  }).then(result => {
+    console.log(result);
+      console.log(getStdout(result));
+      console.log(getExitCode(result));
+      console.log(getStderr(result));
+  });
+</script>
+
+<!--<script type="module">
+  import { executeCodeFile, getStdout } from '{{site.baseurl}}/assets/js/godbolt.js';
+  
+  executeCodeFile({
+    filePath: '{{site.baseurl}}/assets/c/hello.c',
+    userArguments: '-O3'
+  }).then(result => {
+    console.log(getStdout(result));
+  });
+</script>-->
