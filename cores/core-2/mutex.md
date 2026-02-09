@@ -9,11 +9,13 @@ breadcrumbs: false
 
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min/ace.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min/mode-rust.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min/mode-c_cpp.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min/theme-monokai.js"></script>
+<script type="module" src="{{site.baseurl}}/assets/js/godbolt/godbolt.js"></script>
 
 Let's say you want to write a document with a friend collaboratively (like Google Docs). In developing this model, you're likely to run into a few problems stemming from the fundamental idea of concurrency.
 
-## Safety
+### Safety
 
 Here's some food for thought:
 - How would you program your computer to handle two people trying to write to the same file at the same time?
@@ -23,60 +25,43 @@ Here's some food for thought:
 
 There's actually a name for all these problems, which we'll run through now
 
-<details>
-    <summary>Race Conditions</summary>
-    
-    {% assign threads = 'use std::thread;
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
-    
-    fn main() {
-      let counter = Arc::new(AtomicUsize::new(0));
-      let mut handles = vec![];
-      
-      for _ in 0..10 {
-        let counter = Arc::clone(&counter);
-        let handle = thread::spawn(move || {
-          for _ in 0..1000 {
-            let current = counter.load(Ordering::SeqCst);
-            counter.store(current + 1, Ordering::SeqCst);
-          }
-        });
-        handles.push(handle);
-      }
-      
-      for handle in handles {
-        handle.join().unwrap()
-      }
-      
-      println!("Final count: {}", counter.load(Ordering::SeqCst));
-      println!("Expected count: 10000");
-    }' %}
-    {% include editor.html code=threads %}
-</details>
+### Race Conditions
 
-<script type="module">
-  import { executeCode, getStdout, getStderr, getExitCode } from '{{site.baseurl}}/assets/js/godbolt/godbolt.js';
-  
-  executeCode({
-      source: 'fn main() { println!("Hello, World!); }',
-      compiler: 'r190',
-      lang: 'rust',
-  }).then(result => {
-    console.log(result);
-      console.log(getStdout(result));
-      console.log(getExitCode(result));
-      console.log(getStderr(result));
-  });
-</script>
+Let's model this with a bank.
+{% include editor.html code_path="c/bank1.c" lang="c" %}
 
-<!--<script type="module">
-  import { executeCodeFile, getStdout } from '{{site.baseurl}}/assets/js/godbolt.js';
-  
-  executeCodeFile({
-    filePath: '{{site.baseurl}}/assets/c/hello.c',
-    userArguments: '-O3'
-  }).then(result => {
-    console.log(getStdout(result));
-  });
-</script>-->
+Now let's assume that the customer has multiple people accessing their account at once; we can simulate this with multiple threads attempting `deposit();` and `withdraw();` actions:
+
+{% include editor.html code_path="c/bank2.c" lang="c" %}
+
+Running this multiple times, we might see final balances `!= 0` because of race conditions occurring.
+
+The problem is that multiple threads are simultaneously trying to access the same data while one mutates it.
+
+For example, the statement `the_bank.cash += n` expands to:
+
+```c
+int cur_cash += the_bank.cash;
+the_bank.cash = cur_cash + n;
+```
+
+The line performs both a read and write operation, but what if between the first and second line, a change to `the_bank.cash` occurs? That is, what if
+
+```c
+int cur_cash += the_bank.cash;
+// the_bank.cash is mutated by another thread
+the_bank.cash += cur_cash + n;
+```
+
+The same race condition occurs for the withdrawal action: `the_bank.cash -= n`.
+
+### Mutexes!
+
+Now we'll introduce the idea of mutexes. A mutex is a **mu**tually **ex**clusive flag, which basically ensures that if a process is already performing some operation on a data object, then no other process is allowed to access or modify that object until the operation is complete. In short, you're locking a piece of data from other threads so that you can safely mutate that data without a race condition. In code:
+
+{% include editor.html code_path="c/bank3.c" lang="c" %}
+(The amount of operations has been decreased to run properly on Godbolt's hardware allocations; still, the idea remains)
+
+Now, you might be asking: why can't we just add a separate lock for deposit and concurrent operations? Wouldn't that be better? Well, you'd still run into the simultaneous read/write problem. By locking each operation separately, you still run into the problem of each operation potentially overwriting the other.
+
+For example, one thread might hold the lock to withdraw (maybe `n = 2`), while another
