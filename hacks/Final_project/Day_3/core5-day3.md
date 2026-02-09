@@ -10,9 +10,25 @@ layout: post
 
 ---
 
-## Task 1: PPR 3a — Procedure Description ✓
+## 📋 College Board Requirements Summary
 
-> **Prompt:** Describe the overall purpose of the program and what functionality the selected procedure contributes to.
+| Requirement | Your Response |
+|------------|---------------|
+| **3a - Procedure** | `computeSpeedup()` - calculates speedup from task organization |
+| **3b - Algorithm** | Shows sequencing (7 steps), selection (3 conditionals), iteration (array methods) |
+| **3c - Lists** | `seriesBlocks[]` and `parallelBlocks[]` - manage dynamic task data |
+| **Screenshots** | Code from `core-5.md` lines 2730-2821 with annotations |
+
+---
+
+## Task 1: PPR 3a — Procedure ✓
+
+### 📝 Criteria
+
+- **Describe:** Overall program purpose
+- **Explain:** What the procedure does and why it's essential
+
+### ✅ Your Response
 
 **Program Purpose:**
 - Demonstrates parallel computing speedup
@@ -28,10 +44,7 @@ layout: post
 - Computes speedup ratio
 - Displays results
 - **Without it:** Just drag-and-drop interface with no computational analysis
-
-
-
-### Procedure Code Screenshot
+📸 Code Screenshot
 
 ![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
@@ -39,6 +52,13 @@ layout: post
 
 ---
 
+## Task 2: PPR 3b — Algorithm ✓
+
+### 📝 Criteria
+- **Must show:** Sequencing, Selection, AND Iteration
+- **Same code** can be used as for 3a
+
+### ✅ Your Response
 ## Task 2: PPR 3b — Algorithm Description ✓
 
 > **Prompt:** Describe how the selected algorithm includes sequencing, selection, and iteration.
@@ -58,20 +78,23 @@ layout: post
 - `parallelTime > 0 ? serialTime / parallelTime : 0` → prevents divide by zero
 
 **Iteration (loops):**
-- `.filter()` → iterates through DOM children
-- `.map()` → loops to extract values
-- `.reduce()` → sums array values
-
-
-
-### Algorithm Code Screenshot
+### 📸 Code Screenshot
 
 ![Algorithm Code - Annotated](../screenshots/core5-algorithm.png)
 
 **Location:** `frontend/cores/core-5.md` — Lines 2747-2785  
-**Annotations:** SEQUENCING, SELECTION, ITERATION
+**Must annotate:** SEQUENCING, SELECTION, ITERATION
 
 ---
+
+## Task 3: PPR 3c — Lists ✓
+
+### 📝 Criteria
+- **Identify:** The list(s) used in your program
+- **Explain:** How lists manage complexity (not just what they store)
+- **Show:** What would happen WITHOUT lists
+
+### ✅ Your Response
 
 ## Task 3: PPR 3c — List Usage ✓
 
@@ -96,71 +119,44 @@ layout: post
 3. **Simple calculations**
    - `.reduce()` sums in one line
    - No manual loops needed
-
-4. **Data persistence**
-   - Stored in `currentScore` object
-   - Saved to `savedRuns[]` array
-
-**Without lists:** Limited to fixed task counts, messy conditional logic
-
-### List Code Screenshot
+📸 Code Screenshot
 
 ![List Usage - seriesBlocks and parallelBlocks](../screenshots/core5-lists.png)
 
 **Location:** `frontend/cores/core-5.md` — Lines 2747-2821  
-**Highlights:** `seriesBlocks[]`, `parallelBlocks[]` arrays
-- **Focus on:** `seriesBlocks[]` and `parallelBlocks[]` creation and usage
-- **Add annotations:** LIST CREATION, LIST USAGE, LIST STORAGE
+**Must highlight:** `seriesBlocks[]`, `parallelBlocks[]` creation, usage, and storage
 
 ---
 
-## Task 4: Code Screenshots ✓
+## 📸 Complete Screenshot Guide
 
-### Screenshot Checklist
+| # | Purpose | File | Lines | Required Annotations |
+|---|---------|------|-------|---------------------|
+| **1** | Input (optional) | `core-5.md` | 2730-2740 | Label: INPUT |
+| **2** | Procedure (3a) | `core-5.md` | 2747-2785 | Label: PROCEDURE |
+| **3** | Algorithm (3b) | `core-5.md` | 2747-2785 | Labels: SEQUENCING, SELECTION, ITERATION |
+| **4** | Lists (3c) | `core-5.md` | 2749-2753 | Highlight: `seriesBlocks[]`, `parallelBlocks[]` |
+| **5** | Output (optional) | `core-5.md` | 2767-2782 | Label: OUTPUT |
 
-| Screenshot | File | Lines | Shows |
-|------------|------|-------|-------|
-| **Input** | `core-5.md` | 2730-2740 | `addTask()` function |
-| **Procedure** | `core-5.md` | 2747-2785 | `computeSpeedup()` function |
-| **List Creation** | `core-5.md` | 2749-2753 | `seriesBlocks`, `parallelBlocks` arrays |
-| **Iteration** | `core-5.md` | 2749-2753, 2760 | `.filter()`, `.map()`, `.reduce()` |
-| **Selection** | `core-5.md` | 2755, 2763, 2770 | `if` checks, ternary operators |
-| **Output** | `core-5.md` | 2767-2782 | Results display |
+### 💡 Screenshot Tips
+- Use arrows or boxes to highlight key elements
+- Add text labels directly in code comments
+- Make variable names clearly visible
+- Use 14pt+ font size for readability
+- Can reuse same screenshot for 3a and 3b if properly annotated
 
 ---
 
-## Task 5: Code Annotations ✓
+## ✅ Final Checklist
 
-```javascript
-window.computeSpeedup = function() {
-    // PROCEDURE: Calculate parallel speedup
-    // LISTS: seriesBlocks[], parallelBlocks[]
-    
-    // ITERATION: Collect tasks
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-        .filter(c => c.classList.contains("block"))  // SELECTION
-        .map(b => parseInt(b.textContent));
-
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
-
-    // SELECTION: Validate
-    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Add tasks first");
-        return;
-    }
-
-   Screenshot Guide
-
-### Required Screenshots
-
-| # | What to Capture | File | Lines | Annotations Needed |
-|---|----------------|------|-------|-------------------|
-| 1 | **Input Function** | `core-5.md` | 2730-2740 | Label: INPUT |
-| 2 | **Procedure (3a)** | `core-5.md` | 2747-2785 | Label: PROCEDURE |
-| 3 | **Algorithm (3b)** | `core-5.md` | 2747-2785 | Labels: SEQUENCING, SELECTION, ITERATION |
-| 4 | **Lists (3c)** | `core-5.md` | 2749-2753 | Highlight: `seriesBlocks[]`, `parallelBlocks[]` |
+- [ ] Written response for 3a (program purpose + procedure function)
+- [ ] Written response for 3b (sequencing, selection, iteration explained)
+- [ ] Written response for 3c (list complexity explanation)
+- [ ] Screenshot of procedure code (annotated)
+- [ ] Screenshot of algorithm code (sequencing/selection/iteration labeled)
+- [ ] Screenshot of list usage (arrays highlighted)
+- [ ] All responses under word limits (~150 words each)
+- [ ] Code screenshots are readable and properly annotated 2749-2753 | Highlight: `seriesBlocks[]`, `parallelBlocks[]` |
 | 5 | **Output** | `core-5.md` | 2767-2782 | Label: OUTPUT |
 
 ### Annotation Tips
