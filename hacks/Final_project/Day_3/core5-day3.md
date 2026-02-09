@@ -29,41 +29,13 @@ layout: post
 - Displays results
 - **Without it:** Just drag-and-drop interface with no computational analysis
 
----
 
-### Procedure Code (for 3a)
 
-**File:** `frontend/cores/core-5.md` — Lines 2747-2785
+### Procedure Code Screenshot
 
-```javascript
-window.computeSpeedup = function() {
-    // Collect tasks from rows
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
+![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
-
-    // Validate input
-    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Add tasks first");
-        return;
-    }
-
-    // Calculate times
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
-    const parallelTime = seriesBlocks.reduce((a, b) => a + b, 0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
-
-    // Display and store
-    resultsElem.textContent = `Speedup: ${speedup.toFixed(3)}×`;
-    speedBig.textContent = `${speedup.toFixed(2)}×`;
-    window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
-}
-```
+**Location:** `frontend/cores/core-5.md` — Lines 2747-2785
 
 ---
 
@@ -90,42 +62,14 @@ window.computeSpeedup = function() {
 - `.map()` → loops to extract values
 - `.reduce()` → sums array values
 
----
 
-### Algorithm Code (for 3b)
 
-**File:** `frontend/cores/core-5.md` — Lines 2747-2785
+### Algorithm Code Screenshot
 
-```javascript
-window.computeSpeedup = function() {
-    // STEP 1-2: Collect tasks (ITERATION)
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-        .filter(c => c.classList.contains("block"))  // ITERATION: filter
-        .map(b => parseInt(b.textContent));          // ITERATION: map
+![Algorithm Code - Annotated](../screenshots/core5-algorithm.png)
 
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
-
-    // STEP 3: Validate (SELECTION)
-    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Add tasks first");
-        return;
-    }
-
-    // STEP 4-5: Calculate times (ITERATION)
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
-    const parallelTime = seriesBlocks.reduce((a, b) => a + b, 0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);  // SELECTION
-
-    // STEP 6: Compute speedup (SELECTION)
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
-
-    // STEP 7: Display and store
-    resultsElem.textContent = `Speedup: ${speedup.toFixed(3)}×`;
-    window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
-}
-```
+**Location:** `frontend/cores/core-5.md` — Lines 2747-2785  
+**Annotations:** SEQUENCING, SELECTION, ITERATION
 
 ---
 
@@ -159,50 +103,14 @@ window.computeSpeedup = function() {
 
 **Without lists:** Limited to fixed task counts, messy conditional logic
 
----
+### List Code Screenshot
 
-### List Code (for 3c)
+![List Usage - seriesBlocks and parallelBlocks](../screenshots/core5-lists.png)
 
-**File:** `frontend/cores/core-5.md` — Lines 2747-2821
-
-```javascript
-window.computeSpeedup = function() {
-    // LIST CREATION: Collect into arrays
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
-
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-        .filter(c => c.classList.contains("block"))
-        .map(b => parseInt(b.textContent));
-
-    // LIST USAGE: Combine and sum
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
-    const parallelTime = seriesBlocks.reduce((a, b) => a + b, 0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
-
-    // LIST STORAGE: Save in object
-    window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
-}
-
-// LIST PERSISTENCE
-window.saveRun = function() {
-    savedRuns.push({
-        seriesBlocks: window.currentScore.seriesBlocks,      // LIST
-        parallelBlocks: window.currentScore.parallelBlocks,  // LIST
-        speedup: window.currentScore.speedup
-    });
-}
-
-// LIST ITERATION
-window.showSavedRuns = function() {
-    savedRuns.forEach((run, i) => {
-        text += `${i+1}. ${run.name} - Speedup: ${run.speedup.toFixed(3)}×\n`;
-        text += `   Series: [${run.seriesBlocks.join(', ')}]\n`;     // LIST
-        text += `   Parallel: [${run.parallelBlocks.join(', ')}]\n`; // LIST
-    });
-}
-```
+**Location:** `frontend/cores/core-5.md` — Lines 2747-2821  
+**Highlights:** `seriesBlocks[]`, `parallelBlocks[]` arrays
+- **Focus on:** `seriesBlocks[]` and `parallelBlocks[]` creation and usage
+- **Add annotations:** LIST CREATION, LIST USAGE, LIST STORAGE
 
 ---
 
@@ -243,41 +151,20 @@ window.computeSpeedup = function() {
         return;
     }
 
-    // ITERATION: Calculate
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
-    const parallelTime = seriesBlocks.reduce((a, b) => a + b, 0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);  // SELECTION
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;  // SELECTION
+   Screenshot Guide
 
-    // OUTPUT: Display
-    resultsElem.textContent = `Speedup: ${speedup.toFixed(3)}×`;
-    speedBig.textContent = `${speedup.toFixed(2)}×`;
+### Required Screenshots
 
-    // LIST STORAGE
-    window.currentScore = { seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup };
-}
-```
+| # | What to Capture | File | Lines | Annotations Needed |
+|---|----------------|------|-------|-------------------|
+| 1 | **Input Function** | `core-5.md` | 2730-2740 | Label: INPUT |
+| 2 | **Procedure (3a)** | `core-5.md` | 2747-2785 | Label: PROCEDURE |
+| 3 | **Algorithm (3b)** | `core-5.md` | 2747-2785 | Labels: SEQUENCING, SELECTION, ITERATION |
+| 4 | **Lists (3c)** | `core-5.md` | 2749-2753 | Highlight: `seriesBlocks[]`, `parallelBlocks[]` |
+| 5 | **Output** | `core-5.md` | 2767-2782 | Label: OUTPUT |
 
----
-
-## Day 3 Checklist
-
-- [x] PPR 3a — Procedure description
-- [x] PPR 3b — Algorithm (sequencing/selection/iteration)
-- [x] PPR 3c — List usage
-- [x] Screenshot checklist
-- [x] Code annotations
-
----
-
-## PPR Summary
-
-| Question | Key Points | Words |
-|----------|------------|-------|
-| **3a** | Purpose: parallel speedup demo; Procedure: `computeSpeedup()` | 150 |
-| **3b** | Sequencing: 7 steps; Selection: 3 conditionals; Iteration: .filter/.map/.reduce | 200 |
-| **3c** | Lists: `seriesBlocks[]`, `parallelBlocks[]`; Manages variable tasks, calculations | 150 |
-
-**Algorithm:** Serial = sum all. Parallel = series sum + max(parallel). Speedup = serial/parallel.
-
-**Example:** Tasks [5,10,8,12] → Series [5,10], Parallel [8,12] → Serial: 35, Parallel: 27, Speedup: 1.296×
+### Annotation Tips
+- Use arrows or boxes to highlight key elements
+- Add text labels in comments or as overlays
+- Make sure variable names are clearly visible
+- Zoom to readable size (14pt+ font)
