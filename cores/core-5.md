@@ -1757,7 +1757,7 @@ body {
             <h2 class="activity-title">
                 🎮 Drag & Drop Activity
                 <span class="help-icon">?
-                    <span class="tooltip">Drag tasks between areas to experiment with parallel vs. serial execution!</span>
+                    <span class="tooltip">Drag tasks to test serial vs. parallel execution</span>
                 </span>
             </h2>
             
@@ -1812,7 +1812,7 @@ body {
                 <h3 class="game-section-title">
                     📦 Task Pool
                     <span class="help-icon">?
-                        <span class="tooltip">Tasks waiting to be organized. Drag them to series or parallel rows below.</span>
+                        <span class="tooltip">Drag to series or parallel rows</span>
                     </span>
                 </h3>
                 <div class="drag-area" id="taskPool" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -1822,7 +1822,7 @@ body {
 
                 <h3 class="game-section-title">🔄 Series Row (Sequential)
                     <span class="help-icon">?
-                        <span class="tooltip">Tasks here run one after another. Total time = sum of all task times.</span>
+                        <span class="tooltip">Run one-by-one. Time = sum of all</span>
                     </span>
                 </h3>
                 <div class="drag-area" id="seriesRow" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -1832,7 +1832,7 @@ body {
 
                 <h3 class="game-section-title">⚡ Parallel Row (Simultaneous)
                     <span class="help-icon">?
-                        <span class="tooltip">Tasks here run at the same time! Total time = longest task time.</span>
+                        <span class="tooltip">Run simultaneously. Time = longest task</span>
                     </span>
                 </h3>
                 <div class="drag-area" id="parallelRow" ondrop="drop(event)" ondragover="allowDrop(event)">
