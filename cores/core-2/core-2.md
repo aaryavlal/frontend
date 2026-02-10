@@ -777,3 +777,9 @@ if (document.readyState === 'loading') {
   initMandelbrotSim();
 }
 </script>
+
+***
+
+<div style="text-align: center; width: 100%; height: 100px;">
+    <a href="{{site.baseurl}}/cores/core-2/mutexes">Next Up: What if you want shared data?</a>
+</div>
