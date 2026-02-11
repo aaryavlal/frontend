@@ -5,6 +5,7 @@ title: "Core 3 — AI Digit Recognizer"
 description: "Deep Learning-Powered Handwritten Digit Recognition"
 permalink: /cores/core-3
 breadcrumbs: false
+microblog: true
 ---
 
 <style>

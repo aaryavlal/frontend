@@ -5,6 +5,7 @@ title: "Core 1 — Module 1: Computing Models"
 description: "Module 1: Computing Models — an introduction to sequential and parallel models"
 permalink: /cores/core-1
 breadcrumbs: false
+microblog: true
 ---
 
 ## Module 1 — Computing Models

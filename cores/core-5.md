@@ -5,6 +5,7 @@ title: "Core 5 — Hardware Havoc"
 description: "Module 5: Understanding hardware performance and parallel computing"
 permalink: /cores/core-5
 breadcrumbs: false
+microblog: true
 ---
 
 <html lang="en">
@@ -2293,5 +2294,6 @@ window.addEventListener('load', function() {
     initializeDefaultTasks();
 });
 </script>
+
 </body>
 </html>
