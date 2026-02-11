@@ -150,11 +150,56 @@ The main function of this procedure is to compute, concurrently, a bunch of tile
 
 The first few lines handle the sequencing (and iteration) of tiles to line up task IDs.
 ```rs
-for ty in (0..height).step_by(tile_h) {
-    for tx in (0..width).step_by(tile_w) {
-        tiles.push((task_id, tx, ty));
-        task_id += 1;
-    }
+for (thread_id, tile_chunk) in tiles.chunks(chunk_size).enumerate() {
+    let time_exceeded = Arc::clone(&time_exceeded);
+    let records = Arc::clone(&records);
+    let overall_start = overall_start; // Copy for thread
+
+    // Spawn a thread for this chunk of tiles
+    s.spawn(move || {
+        for &(task_id, tx, ty) in tile_chunk {
+            // Check if time limit exceeded (TLE) and stop processing if so
+            if time_exceeded.load(Ordering::Relaxed) {
+                break;
+            }
+
+            // Check if overall computation time has exceeded the specified time limit
+            if overall_start.elapsed() > time_limit {
+                time_exceeded.store(true, Ordering::Relaxed);
+                break;
+            }
+
+            let start = Instant::now();
+            let start_time_ms = overall_start.elapsed().as_millis();
+
+            let data = render_tile(width, height, tx, ty, tile_w, tile_h, max_iter);
+            let duration_ms = start.elapsed().as_millis();
+
+            // Store the result
+            let record = TaskRecord {
+                task_id: task_id as u32,
+                thread_id: thread_id as u32,
+                tile_x: tx as u32,
+                tile_y: ty as u32,
+                tile_w: tile_w as u32,
+                tile_h: tile_h as u32,
+                start_time_ms,
+                duration_ms,
+                pixels_computed: (tile_w * tile_h) as u32,
+            };
+
+            // Lock and push to shared records
+            records.lock().unwrap().push((
+                record,
+                data,
+                start_time_ms,
+                duration_ms,
+                tx,
+                ty,
+                thread_id,
+            ));
+        }
+    });
 }
 ```
 
