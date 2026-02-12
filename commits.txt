@@ -1,0 +1,1242 @@
+5eb8f6b | 2026-02-11 | Dhyan Soni | microblogging!
+176	0	assets/js/api/microblog.js
+1	0	cores/core-1.md
+1	0	cores/core-2/core-2.md
+1	0	cores/core-3.md
+1	0	cores/core-4.md
+2	0	cores/core-5.md
+1	0	cores/core-6.md
+
+ce47768 | 2026-02-11 | mataiodoxion | Fix Core 2 PPR
+50	5	hacks/Final_project/Day_3/core2_day3.md
+
+b534d4c | 2026-02-10 | mataiodoxion | Finish Mutex modules, connect; start mutexes-rs impl
+13	0	assets/rust/bank1.rs
+14	0	assets/rust/bank2.rs
+6	0	cores/core-2/core-2.md
+36	0	cores/core-2/mutexes-rs.md
+43	5	cores/core-2/{mutex.md => mutexes.md}
+
+7a9256b | 2026-02-09 | tp254 | question box refactor
+4	4	cores/core-5.md
+
+aa3065d | 2026-02-09 | tp254 | cb integration formatting
+63	67	hacks/Final_project/Day_3/core5-day3.md
+
+0b48ab8 | 2026-02-09 | tp254 | screen shoot formatting
+27	140	hacks/Final_project/Day_3/core5-day3.md
+
+284e30c | 2026-02-09 | mataiodoxion | Update mutex module
+40	0	assets/c/bank1.c
+5	4	assets/c/{bank.c => bank2.c}
+53	0	assets/c/bank3.c
+43	58	cores/core-2/mutex.md
+
+ca59b60 | 2026-02-09 | Dhyan Soni | trasnfer to computer
+878	1302	hacks/gpu-assembly-simulator.md
+
+b2ab3f6 | 2026-02-08 | mataiodoxion | Added Godbolt functionality
+35	36	_includes/{rust-editor.html => editor.html}
+50	0	assets/c/bank.c
+6	0	assets/c/hello.c
+156	0	assets/js/godbolt/godbolt.js
+65	0	assets/js/godbolt/godbolt_docs.md
+27	1	cores/core-2/mutex.md
+8	127	hacks/test.md
+
+61d1241 | 2026-02-06 | RudraBJoshi | Fix embedding
+11	11	hacks/Final_project/Day_3/CORE3_DAY3.md
+
+f2c8be7 | 2026-02-06 | mataiodoxion | Start new module for Mutex
+0	0	cores/{ => core-2}/core-2.md
+56	0	cores/core-2/mutex.md
+
+6802192 | 2026-02-06 | RudraBJoshi | Screenshots
+59	21	hacks/Final_project/Day_3/CORE3_DAY3.md
+-	-	hacks/Final_project/Day_3/Snippits/Core3Input.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3Iteration.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3ListUsage.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3Listappend.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3Output.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3SelectionPart1.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3SelectionPart2.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3SelectionPart3.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3imgAlgPart1.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3imgAlgPart2.png
+-	-	hacks/Final_project/Day_3/Snippits/Core3imgList.png
+
+6ff325b | 2026-02-06 | tp254 | final changes
+1	1	hacks/Final_project/Day_3/core5-day3.md
+
+c5d51d8 | 2026-02-06 | tp254 | refactor day3 core5
+50	28	hacks/Final_project/Day_3/core5-day3.md
+
+2b5ed21 | 2026-02-06 | RudraBJoshi | Rerefactorng aaryav
+275	272	hacks/Final_project/Day_3/CORE4_DAY3.md
+
+27f86d7 | 2026-02-06 | RudraBJoshi | Refactoring Aaryav
+360	371	hacks/Final_project/Day_3/CORE4_DAY3.md
+
+5bd24d4 | 2026-02-06 | tp254 | core5 day4 video
+6	12	hacks/Final_project/Day_4/core-5-day4.md
+
+7f15b10 | 2026-02-06 | tp254 | core5 day 4 planning
+53	176	hacks/Final_project/Day_4/core-5-day4.md
+
+d007276 | 2026-02-06 | tp254 | core5 day 4 start
+214	0	hacks/Final_project/Day_4/core-5-day4.md
+
+bf36b98 | 2026-02-06 | mataiodoxion | Finish core2_day3
+34	0	hacks/Final_project/Day_3/core2_day3.md
+
+bf8e14e | 2026-02-05 | mataiodoxion | Start Core 2 Day 3
+145	0	hacks/Final_project/Day_3/core2_day3.md
+
+a0ef18a | 2026-02-05 | aaryavlal | college board intergration
+73	69	hacks/Final_project/Day_3/CORE4_DAY3.md
+
+ba2c5cf | 2026-02-05 | aaryavlal | day 3 done
+107	17	cores/core-4.md
+453	0	hacks/Final_project/Day_3/CORE4_DAY3.md
+
+bc5bfbf | 2026-02-04 | RudraBJoshi | Edit
+1	1	hacks/Final_project/peer-reviews-consolidated.md
+
+a9877d8 | 2026-02-04 | Dhyan Soni | update part 102124214
+89	36	hacks/Final_project/peer-reviews-consolidated.md
+
+4cfe905 | 2026-02-04 | jm1021 | Table fix
+2	0	hacks/Final_project/peer-reviews-consolidated.md
+
+a91cf83 | 2026-02-04 | Dhyan Soni | gpu update
+220	1	hacks/gpu-assembly-simulator.md
+
+5ed5e9d | 2026-02-04 | Dhyan Soni | core1 day3
+467	0	hacks/Final_project/Day_3/CORE1_DAY3.md
+
+2921ccb | 2026-02-04 | Dhyan Soni | actual feedback update
+10	4	hacks/Final_project/peer-reviews-consolidated.md
+
+73b723a | 2026-02-04 | Dhyan Soni | feedback update
+346	3	hacks/gpu-assembly-simulator.md
+
+3bd44e4 | 2026-02-04 | jm1021 | css
+1006	792	assets/css/digrecog.css
+
+dcc0992 | 2026-02-04 | tp254 | informational change mod5
+52	291	cores/core-5.md
+
+c553970 | 2026-02-04 | Dhyan Soni | feedback
+237	0	hacks/Final_project/peer-reviews-consolidated.md
+
+e2dafb9 | 2026-02-03 | tp254 | api fix
+16	22	cores/core-5.md
+
+707c72a | 2026-02-02 | RudraBJoshi | Precise language
+8	6	hacks/Final_project/Day_3/CORE3_DAY3.md
+
+89a8e0a | 2026-02-02 | tp254 | module 5 side bar readability
+33	337	cores/core-5.md
+
+0da6015 | 2026-02-02 | RudraBJoshi | Days 3-6
+24	11	hacks/Final_project/Day_3/CORE3_DAY3.md
+165	0	hacks/Final_project/Day_4/CORE3_DAY4.md
+108	0	hacks/Final_project/Day_5/CORE3_DAY5.md
+180	0	hacks/Final_project/Day_6/CORE3_DAY6.md
+
+a1ceef4 | 2026-02-02 | aaryavlal | day 2
+9	10	hacks/Final_project/Day_2/core2_day2.md
+
+00bc7f0 | 2026-02-02 | tp254 | server error dependency fix
+81	306	hacks/Final_project/Day_3/core5-day3.md
+
+6f60a0b | 2026-02-02 | tp254 | formatting fix
+486	0	hacks/Final_project/Day_3/core5-day3.md
+
+5809208 | 2026-01-31 | tp254 | core5-day1
+128	74	hacks/Final_project/Day_1/core5-day1.md
+
+19228d4 | 2026-01-30 | aaryavlal | day 2 done
+927	0	hacks/Final_project/Day_2/CORE4_DAY2.md
+
+a8d522f | 2026-01-30 | mataiodoxion | update permalink typo
+1	1	hacks/Final_project/Day_1/core2_day1.md
+
+ad963c0 | 2026-01-30 | mataiodoxion | update permalink typo
+1	1	hacks/Final_project/Day_1/core2_day1.md
+
+dc56574 | 2026-01-30 | tp254 | core 5 day 2 status line change
+842	0	hacks/day2/core5-day2.md
+
+ccdc075 | 2026-01-30 | aaryavlal | day 1 done
+213	0	hacks/Final_project/Day_1/CORE4_DAY1.md
+
+fe35829 | 2026-01-30 | mataiodoxion | Add Core 2 Day 1 api spec
+25	0	hacks/Final_project/Day_1/core2_day1.md
+
+ee14212 | 2026-01-30 | RudraBJoshi | Relocation
+0	0	hacks/{day2 => Final_project/Day_2}/core5-day2.md
+
+909278c | 2026-01-29 | tp254 | core5 day 2 edit
+123	777	hacks/day2/core5-day2.md
+
+7e528fb | 2026-01-29 | tp254 | core5-day2 finsihed
+1498	0	hacks/day2/core5-day2.md
+
+5a3dcc5 | 2026-01-29 | mataiodoxion | Update Core 2 Day 2 program ref
+276	0	hacks/Final_project/Day_2/core2_day2.md
+
+c63ef11 | 2026-01-29 | RudraBJoshi | Core 3 day 3
+453	0	hacks/Final_project/Day_3/CORE3_DAY3.md
+
+40520d0 | 2026-01-29 | Dhyan Soni | day 1 day 2 done
+367	0	hacks/Final_project/Day_1/CORE1_DAY1.md
+1050	0	hacks/Final_project/Day_2/CORE1_DAY2.md
+
+9d6d468 | 2026-01-28 | RudraBJoshi | Added Master core
+1	0	hacks/Final_project/Day_1/CORE3_DAY1.md
+
+6ad5b51 | 2026-01-28 | RudraBJoshi | Assignment
+5	5	hacks/Final_project/Day_1/CORE3_DAY1.md
+
+6819976 | 2026-01-28 | RudraBJoshi | Link edits
+1	1	hacks/Final_project/Day_1/CORE3_DAY1.md
+1	1	hacks/Final_project/Day_1/core5-day1.md
+1	1	hacks/Final_project/Day_2/CORE3_DAY2.md
+
+ef315a8 | 2026-01-28 | tp254 | Day1 Core 3
+451	0	hacks/Final_project/Day_1/core5-day1.md
+
+e4855ed | 2026-01-28 | RudraBJoshi | Update to postman
+62	4	hacks/Final_project/Day_2/CORE3_DAY2.md
+
+7f25432 | 2026-01-28 | RudraBJoshi | Day 2 Core 3
+511	0	hacks/Final_project/Day_2/CORE3_DAY2.md
+
+7f42f3c | 2026-01-27 | tp254 | sidebar fix
+67	435	cores/core-5.md
+
+20e707c | 2026-01-28 | RudraBJoshi | Final project init commit
+241	0	hacks/Final_project/Day_1/CORE3_DAY1.md
+
+f78ad9b | 2026-01-27 | RudraBJoshi | Added tensorflow qucik ref
+11	0	hacks/NATM_PLAN.md
+
+168aeb9 | 2026-01-27 | tp254 | module reformat
+435	67	cores/core-5.md
+
+53a2801 | 2026-01-27 | tp254 | sidebar changes
+210	67	cores/core-5.md
+
+b58f7d2 | 2026-01-27 | RudraBJoshi | CNN accuracy
+4	4	hacks/NATM_PLAN.md
+
+c88d658 | 2026-01-27 | aaryavlal | styling changes
+1	1	cores/core-4.md
+
+71212dd | 2026-01-27 | RudraBJoshi | Cores
+90	49	hacks/NATM_PLAN.md
+
+7d6122f | 2026-01-27 | RudraBJoshi | Format 3
+116	22	hacks/NATM_PLAN.md
+
+9e5eae6 | 2026-01-27 | RudraBJoshi | Anotehr format
+6	0	hacks/NATM_PLAN.md
+
+76110d0 | 2026-01-27 | RudraBJoshi | UI fix
+4	0	hacks/NATM_PLAN.md
+
+e146578 | 2026-01-27 | RudraBJoshi | NATM Plan
+1	1	hacks/NATM_PLAN.md
+
+be71bc6 | 2026-01-27 | RudraBJoshi | Plan
+346	0	hacks/NATM_PLAN.md
+
+ddd5e4a | 2026-01-20 | tp254 | scroll issue
+461	5	cores/core-5.md
+
+ce00558 | 2026-01-22 | mataiodoxion | Fix backtick typo
+1	1	assets/js/mandelbrot.js
+
+e16b7c1 | 2026-01-22 | RudraBJoshi | Button issues
+4	0	assets/js/digit-recognizer.js
+
+3bb5ac4 | 2026-01-22 | mataiodoxion | Update URLs for Prod
+8	2	assets/js/mandelbrot.js
+1	3	cores/core-2.md
+
+dcf9ca9 | 2026-01-22 | mataiodoxion | Update Mandelbrot to work with new REST API
+235	164	assets/js/mandelbrot.js
+75	53	cores/core-2.md
+
+9ce6b85 | 2026-01-20 | RudraBJoshi | JS
+5	31	assets/js/digit-recognizer.js
+
+27d8b28 | 2026-01-20 | RudraBJoshi | Frontmatter patch
+4	2	assets/digitrecog-standalone.html
+
+4dabdbe | 2026-01-20 | RudraBJoshi | Frontend issue
+1	1	assets/digitrecog-standalone.html
+1	1	assets/digitrecog.html
+
+d42e49f | 2026-01-20 | RudraBJoshi | Dependency issues
+2	1	requirements.txt
+
+8deefe1 | 2026-01-20 | RudraBJoshi | Flask Error
+4	1	assets/js/digit-recognizer.js
+
+40c6fec | 2026-01-20 | RudraBJoshi | fetchOptions
+7	26	assets/js/digit-recognizer.js
+
+0a24c0a | 2026-01-20 | RudraBJoshi | API localhost migration
+10	53	assets/computing-game.js
+2	2	assets/js/digit-recognizer.js
+
+f716580 | 2026-01-20 | tp254 | core 5 update
+157	3	cores/core-5.md
+
+6e13302 | 2026-01-16 | Dhyan Soni | trying something else for deployment as well
+6	0	hacks/frontend.md
+
+15a05a4 | 2026-01-16 | Dhyan Soni | deployment
+1	1	assets/js/api/config.js
+
+6d2e57f | 2026-01-15 | Dhyan Soni | Added fetchOptions to frontend
+3	3	assets/js/api/login.js
+5	2	assets/js/chatbot.js
+21	2	assets/js/digit-recognizer.js
+
+1cb5920 | 2026-01-09 | RudraBJoshi | Accept username
+87	85	assets/css/digrecog.css
+1	1	navigation/authentication/login.md
+
+b7f918a | 2026-01-09 | RudraBJoshi | padding
+3	11	cores/core-3.md
+
+dd64264 | 2026-01-09 | RudraBJoshi | Digit recog in core 3
+257	0	assets/digitrecog-standalone.html
+0	0	{hacks => assets}/digitrecog.html
+15	8	assets/js/digit-recognizer.js
+17	768	cores/core-3.md
+
+6fdb868 | 2026-01-09 | RudraBJoshi | new AI model
+1379	0	assets/css/digrecog.css
+1213	0	assets/js/digit-recognizer.js
+705	206	cores/core-3.md
+291	0	cores/core-3.md.backup
+253	0	hacks/digitrecog.html
+
+3f17176 | 2026-01-08 | mataiodoxion | Update core 2 with thread visualization (sequential and parallel); also updated images to fit inside the .mandelbrot-container properly
+384	7	cores/core-2.md
+
+013f277 | 2026-01-08 | RudraBJoshi | Port recallibration
+0	6	assets/api/config.js
+1	1	assets/js/api/config.js
+1	1	cores-storyboard.html
+1	1	hacks/dummy-quiz.md
+1	1	hacks/frontend.md
+1	1	hacks/jokes.md
+
+78182cf | 2026-01-08 | aaryavlal | core 4 update
+662	131	cores/core-4.md
+
+d83f0fc | 2026-01-08 | RudraBJoshi | backend point
+6	0	assets/api/config.js
+
+47743b4 | 2025-12-23 | rudra | Debugging tools
+2	1	_includes/themes/minima/header.html
+115	0	assets/js/api/debug-interceptor.js
+374	0	assets/js/api/debug.js
+6	0	assets/js/api/login.js
+513	0	navigation/authentication/debug.md
+
+0242845 | 2025-12-23 | rudra | new styling
+50	29	assets/computing-game.html
+12	4	cores/core-1.md
+88	20	cores/core-2.md
+89	0	cores/core-3.md
+28	18	cores/core-4.md
+35	20	cores/core-5.md
+16	0	cores/core-6.md
+911	361	hacks/frontend.md
+30	23	hacks/gpu-assembly-simulator.md
+
+e0112f6 | 2025-12-18 | rudra | APReqs
+464	312	cores/apreqs1.md
+26	14	cores/apreqs2.md
+
+92f8235 | 2025-12-18 | rudra | Login AP reqs
+228	61	cores/apreqs1.md
+-	-	images/{DBflow.ping.png => DBflow.png}
+
+8251b9e | 2025-12-18 | ShadowClawX | Add files via upload
+-	-	images/DBflow.ping.png
+
+7fec71a | 2025-12-18 | aaryavlal | apreqs fixed
+62	73	cores/apreqs2.md
+
+595131c | 2025-12-18 | aaryavlal | apreqs done
+7	289	cores/{apreqs.md => apreqs1.md}
+703	0	cores/apreqs2.md
+
+34da249 | 2025-12-18 | rudra | GPU fixes
+364	174	hacks/gpu-assembly-simulator.md
+
+326837b | 2025-12-17 | aaryavlal | ap requirments
+890	0	cores/apreqs.md
+
+b780e11 | 2025-12-17 | mataiodoxion | Update core-2 with a little more info
+6	0	cores/core-2.md
+
+cf3c525 | 2025-12-17 | Dhyan Soni | shortened the content
+6	298	cores/core-1.md
+
+449516c | 2025-12-17 | rudra | Storyboard
+1519	0	cores-storyboard.html
+
+104b5d8 | 2025-12-17 | Dhyan Soni | emojis removed
+27	27	cores/core-3.md
+
+e0b9702 | 2025-12-17 | Dhyan Soni | core 3 done
+191	8	cores/core-3.md
+
+916e0ca | 2025-12-16 | mataiodoxion | Integrate core 2 :D
+295	6	cores/core-2.md
+
+a83b993 | 2025-12-16 | aaryavlal | Demo room gone
+5	65	hacks/frontend.md
+
+4c12296 | 2025-12-16 | rudra | Core 6 updates
+374	1	assets/computing-game.html
+635	38	assets/computing-game.js
+1	1	cores/core-6.md
+59	2	hacks/frontend.md
+
+9d00c64 | 2025-12-16 | tp254 | mod 5
+7	16	cores/core-5.md
+
+0ec69e6 | 2025-12-16 | tp254 | core 5 save runs fix
+79	114	cores/core-5.md
+
+986a243 | 2025-12-16 | tp254 | core 5 drop down fix
+58	28	cores/core-5.md
+
+e789953 | 2025-12-16 | tp254 | core 5 drop downs
+869	39	cores/core-5.md
+
+466a85e | 2025-12-16 | Dhyan Soni | removed breadcrumbs, redundant
+1	1	cores/core-1.md
+1	1	cores/core-2.md
+1	1	cores/core-3.md
+1	1	cores/core-4.md
+1	1	cores/core-5.md
+1	1	cores/core-6.md
+
+63f2327 | 2025-12-16 | tp254 | mod 5 drop down reorg
+703	204	cores/core-5.md
+
+a0bff36 | 2025-12-16 | tp254 | gpu assembler edits
+77	254	hacks/gpu-assembly-simulator.md
+
+5a8eb4e | 2025-12-16 | mataiodoxion | Add simulation runner (DOM content loaded on click instead of page load); WIP: fix padding of images
+199	28	hacks/mandelbrot.md
+
+617f431 | 2025-12-16 | mataiodoxion | Updates for mandelbrot functionality, WIP: adding mandelbrot concurrent
+153	110	assets/js/mandelbrot.js
+24	4	hacks/mandelbrot.md
+
+986aa40 | 2025-12-15 | aaryavlal | module 4 complete
+354	0	cores/core-4.md
+112	0	hacks/frontend.md
+
+d4f2db9 | 2025-12-15 | tp254 | mod 1 fixes
+408	4	hacks/gpu-assembly-simulator.md
+
+a761a8e | 2025-12-15 | Dhyan Soni | dropdowns!
+49	57	hacks/gpu-assembly-simulator.md
+
+1e5570e | 2025-12-15 | tp254 | toc false
+1	1	cores/core-1.md
+1	1	cores/core-2.md
+1	1	cores/core-3.md
+1	0	cores/core-4.md
+1	1	cores/core-5.md
+1	1	cores/core-6.md
+
+50b2077 | 2025-12-15 | mataiodoxion | Add abstraction layer; you can now embed mandelbrots on pages!
+137	0	assets/js/mandelbrot.js
+14	86	hacks/mandelbrot.md
+
+d9ae6a3 | 2025-12-15 | aaryavlal | fixed create a room
+1	1	hacks/frontend.md
+
+98095cc | 2025-12-15 | tp254 | core 5
+133	73	cores/core-5.md
+
+2a2a53f | 2025-12-14 | mataiodoxion | Mandelbrot prototyping
+98	0	hacks/mandelbrot.md
+
+0587458 | 2025-12-14 | aaryavlal | UI CHANGED TO LOOK LESS AI
+763	1514	hacks/frontend.md
+
+403c18b | 2025-12-14 | aaryavlal | Revert: restore hacks/frontend.md to previous working version
+1	1	hacks/frontend.md
+
+c24ac1b | 2025-12-14 | aaryavlal | core 4 updates
+21	17	cores/core-4.md
+1	1	hacks/dummy-quiz.md
+1	1	hacks/frontend.md
+
+bfd29a9 | 2025-12-12 | rudra | Redirect Error
+2	1	assets/js/api/config.js
+
+3a205d0 | 2025-12-11 | mataiodoxion | Added prototype simulation animations using the `anime.js` library.
+3	1	Gemfile
+136	0	hacks/test.md
+
+4aae791 | 2025-12-11 | aaryavlal | module 4 changes
+63	13	cores/core-4.md
+
+1c9c4c9 | 2025-12-10 | mataiodoxion | Some more code for nuance
+71	0	hacks/test.md
+
+20ab728 | 2025-12-10 | mataiodoxion | Update code under test
+78	0	hacks/test.md
+
+841c7ef | 2025-12-10 | Dhyan Soni | core 1 lesson
+0	2	assets/js/api/config.js
+42	42	cores/core-1.md
+327	18	hacks/gpu-assembly-simulator.md
+
+634c412 | 2025-12-09 | mataiodoxion | Merge branch 'parallel-comp'
+e9f15ad | 2025-12-09 | mataiodoxion | concurrency module test
+0	148	hacks/concurrency.md
+19	0	hacks/concurrency/concurrency.md
+
+beb4d11 | 2025-12-09 | rudra | Frontend fixes
+-	-	hacks/bak.tar
+10	7	hacks/frontend.md
+
+c566915 | 2025-12-09 | mataiodoxion | Merge branch 'code-editor' into parallel-comp
+ac3cbf2 | 2025-12-09 | Dhyan Soni | html issue fixed
+0	1	hacks/gpu-assembly-simulator.md
+
+9488ad5 | 2025-12-09 | Dhyan Soni | gpu game + core content module
+296	8	cores/core-1.md
+1457	0	hacks/gpu-assembly-simulator.md
+
+2bb5788 | 2025-12-09 | Dhyan Soni | jokes modernized
+284	192	hacks/jokes.md
+
+4cc5b09 | 2025-12-08 | rudra | Login System
+21	9	assets/js/api/login.js
+4	7	hacks/frontend.md
+27	9	navigation/authentication/login.md
+
+106e732 | 2025-12-08 | rudra | Login integration
+38	10	assets/js/api/login.js
+157	53	hacks/frontend.md
+103	77	navigation/authentication/login.md
+
+178a824 | 2025-12-08 | mataiodoxion | Update editor w/ features (copy, output, default); styling
+39	7	_includes/rust-editor.html
+26	3	hacks/editor.md
+21	0	hacks/test.md
+
+f3f9664 | 2025-12-08 | aaryavlal | submodule 4 updates
+335	4	cores/core-4.md
+33	64	hacks/frontend.md
+
+9e621d0 | 2025-12-08 | rudra | The space triggered me
+0	1	cores/core-5.md
+
+c1b4aa6 | 2025-12-08 | rudra | Core 6 update
+12	3	assets/computing-game.html
+
+98af931 | 2025-12-08 | tp254 | interactive speedup game implementation
+2	4	cores/core-5.md
+
+d026c2d | 2025-12-08 | tp254 | mod 5 ui
+599	69	cores/core-5.md
+
+6475a00 | 2025-12-08 | tp254 | mod 5 test
+162	5	cores/core-5.md
+
+59ef317 | 2025-12-05 | mataiodoxion | Complete editor func, WIP: docs
+81	0	_includes/rust-editor.html
+1	1	hacks/editor.md
+15	0	hacks/test.md
+
+fbeecdb | 2025-12-04 | RudraBJoshi | Core-6
+495	0	assets/computing-game.html
+511	0	assets/computing-game.js
+3	4	cores/core-6.md
+4	4	hacks/frontend.md
+
+62b6704 | 2025-12-04 | mataiodoxion | Set up editor
+87	0	hacks/editor.md
+
+3bf9944 | 2025-12-04 | aaryavlal | frontend changes for quiz (auto generation)
+0	8	cores/core-4.md
+230	26	hacks/dummy-quiz.md
+
+3723955 | 2025-12-03 | aaryavlal | hardcoded api update
+1	1	hacks/dummy-quiz.md
+
+48409cd | 2025-12-03 | RudraBJoshi | final tweaks
+87	2	hacks/frontend.md
+
+c220900 | 2025-12-03 | Dhyan Soni | Script
+84	0	_notebooks/Foundation/P-Plan/2025-12-3-script.ipynb
+
+522ca32 | 2025-12-03 | RudraBJoshi | Stuck state fix 2
+25	0	hacks/frontend.md
+
+d1069c5 | 2025-12-03 | RudraBJoshi | Stuck State fixed
+441	33	hacks/frontend.md
+
+5425da6 | 2025-12-02 | aaryavlal | front end for api quiz done
+0	0	assets/js/computing/computing-home.js
+47	146	hacks/dummy-quiz.md
+
+e3892ca | 2025-12-02 | RudraBJoshi | AUTOKICK GO BYE BYE
+0	16	hacks/frontend.md
+
+304669a | 2025-12-02 | Dhyan Soni | added new overlay on the same page
+24	0	cores/core-1.md
+19	0	cores/core-2.md
+19	0	cores/core-3.md
+19	0	cores/core-4.md
+19	0	cores/core-5.md
+19	0	cores/core-6.md
+82	6	hacks/frontend.md
+
+cc0498a | 2025-12-02 | RudraBJoshi | GLossery
+1	1	_notebooks/Foundation/P-Plan/2025-11-14-planphase2.ipynb
+-	-	hacks/bak.tar
+388	21	hacks/frontend.md
+
+7bcb548 | 2025-12-01 | RudraBJoshi | Phase2
+319	0	_notebooks/Foundation/P-Plan/2025-11-14-planphase2.ipynb
+
+93031a3 | 2025-12-01 | RudraBJoshi | MD file
+1	2	dummy-quiz.html => hacks/dummy-quiz.md
+
+bc227b3 | 2025-12-01 | mataiodoxion | Update
+0	2	hacks/concurrency.md
+
+738ed82 | 2025-12-01 | Dhyan Soni | quiz api
+166	0	dummy-quiz.html
+
+81f576f | 2025-11-30 | RudraBJoshi | custom animations
+298	125	hacks/frontend.md
+
+6a493c0 | 2025-11-30 | RudraBJoshi | Upgraded the Prototype
+735	86	hacks/frontend.md
+212	0	hacks/jokes.md
+
+a09ba8b | 2025-11-19 | mataiodoxion | Start concurrency intro
+150	0	hacks/concurrency.md
+
+4d770a0 | 2025-11-19 | aaryavlal | background images added
+-	-	images/computing/background.png
+-	-	images/computing/spaceship.png
+
+cc91dbd | 2025-11-18 | Dhyan Soni | config yaml fixes
+3	3	_config.yml
+
+e31697c | 2025-11-19 | RudraBJoshi | Test commit
+19	1	hacks/frontend.md
+
+5c0dca0 | 2025-11-18 | RudraBJoshi | Prorotype front
+8	0	hacks/dump.txt
+919	0	hacks/frontend.md
+
+51a254d | 2025-11-18 | RudraBJoshi | Update Plan
+56	9	_notebooks/Foundation/P-Plan/2025-11-14-plan.ipynb
+
+4565c34 | 2025-11-18 | RudraBJoshi | Concept design
+68	0	_notebooks/Foundation/P-Plan/2025-11-14-plan.ipynb
+
+df97b59 | 2025-11-14 | RudraBJoshi | Test Comit
+1	1	_notebooks/Foundation/P-Plan/2025-11-14-plan.ipynb
+
+36d6203 | 2025-11-14 | RudraBJoshi | Proper
+0	0	_notebooks/Foundation/P-Plan/{2025-14-2025-plan.ipynb => 2025-11-14-plan.ipynb}
+
+43c41c5 | 2025-11-14 | RudraBJoshi | THE DATE
+0	0	_notebooks/Foundation/P-Plan/{plan.ipynb => 2025-14-2025-plan.ipynb}
+
+3b0b9b3 | 2025-11-14 | RudraBJoshi | Planned Out and styled
+141	0	_notebooks/Foundation/P-Plan/plan.ipynb
+
+4e77916 | 2025-11-14 | RudraBJoshi | Front matter
+32	0	_notebooks/Foundation/P-Plan/plan.ipynb
+
+641ebd6 | 2025-11-14 | RudraBJoshi | planning ipynb
+0	0	_notebooks/Foundation/P-Plan/plan.ipynb
+
+628ff4a | 2025-11-14 | Aaryav Lal | Initial commit
+5	0	.env
+66	0	.github/workflows/jekyll-gh-pages.yml
+25	0	.gitignore
+133	0	404.html
+7	0	Gemfile
+201	0	LICENSE
+294	0	Makefile
+429	0	README.md
+8	0	README4YML.md
+115	0	_config.yml
+55	0	_data/apis_localstorage.yml
+25	0	_data/datastore_infograph.yml
+55	0	_data/infographs/apis_localstorage.yml
+11	0	_data/kasm_flashcard.yml
+48	0	_data/kernels_infograph.yml
+33	0	_data/lesson_flashcard.yml
+38	0	_data/os_infograph.yml
+80	0	_data/tools_infograph.yml
+17	0	_data/tools_questions.yml
+117	0	_data/webdev_infograph.yml
+5	0	_includes/custom-head.html
+489	0	_includes/game.html
+15	0	_includes/google-analytics.html
+158	0	_includes/hack.html
+23	0	_includes/head-custom.html
+4	0	_includes/info.html
+29	0	_includes/mermaid.html
+515	0	_includes/microblog_foundation.html
+11	0	_includes/nav/github_pages.html
+14	0	_includes/nav/home.html
+83	0	_includes/nav/homejava.html
+12	0	_includes/nav/inheritance.html
+13	0	_includes/nav/java_spring.html
+11	0	_includes/nav/javascript_project.html
+109	0	_includes/nav/kasm_cloud.html
+8	0	_includes/nav/ml_teach.html
+39	0	_includes/nav/p4prompt.html
+7	0	_includes/nav/pair_programming.html
+0	0	_includes/nav/project/productivity-frontend/menu.html
+7	0	_includes/nav/recursion.html
+9	0	_includes/nav/sass_basics.html
+6	0	_includes/nav/sortingteamteaching.html
+7	0	_includes/nav/teamteaching.html
+11	0	_includes/nav/toolkits/productivity-frontend/menu.html
+11	0	_includes/nav/tools_setup.html
+5	0	_includes/notebook_binder_link.html
+5	0	_includes/notebook_colab_link.html
+5	0	_includes/notebook_deepnote_link.html
+9	0	_includes/notebook_github_link.html
+525	0	_includes/openaesthetic/header.html
+31	0	_includes/openaesthetic/sidebar.html
+39	0	_includes/post_category_blocks.html
+9	0	_includes/post_list.html
+25	0	_includes/post_list_image_card.html
+3	0	_includes/reading_time.html
+7	0	_includes/screenshot
+1046	0	_includes/slim_sidebar.html
+39	0	_includes/submenu.html
+39	0	_includes/tailwind/infograph.html
+119	0	_includes/tailwind/lesson.html
+31	0	_includes/tailwind/questions.html
+26	0	_includes/themes/minima/base.html
+46	0	_includes/themes/minima/footer.html
+42	0	_includes/themes/minima/header.html
+9	0	_includes/themes/minima/nav-items.html
+23	0	_includes/themes/so-simple/default.html
+182	0	_includes/toc.html
+119	0	_includes/toolkit/sidebar.html
+9	0	_includes/utterances.html
+563	0	_layouts/base_chatadpt.html
+563	0	_layouts/base_chatog.html
+48	0	_layouts/blogs.html
+82	0	_layouts/bootstrap.html
+75	0	_layouts/calendar.html
+525	0	_layouts/certchatbot.html
+658	0	_layouts/chatbot.html
+210	0	_layouts/cs-portfolio-admin.html
+487	0	_layouts/cs-portfolio-lesson.html
+1124	0	_layouts/dashboard.html
+172	0	_layouts/finance.html
+347	0	_layouts/fortunefinders.html
+249	0	_layouts/fortunefindersBank.html
+256	0	_layouts/fortunefindersCasino.html
+423	0	_layouts/lesson.html
+238	0	_layouts/lessonbase.html
+238	0	_layouts/lessonbasecapture.html
+5	0	_layouts/notebook.html
+55	0	_layouts/openaesthetic.html
+3	0	_layouts/opencs.html
+13	0	_layouts/page.html
+170	0	_layouts/post.html
+685	0	_layouts/profile.html
+152	0	_layouts/schedule.html
+19	0	_layouts/search.html
+116	0	_layouts/sprint.html
+469	0	_layouts/student_toolkit.html
+75	0	_layouts/tailwind.html
+8	0	_layouts/tailwindPost.html
+573	0	_layouts/teaching.html
+96	0	_layouts/toolkit.html
+261	0	_notebooks/Foundation/B-tools_and_equipment/2025-05-19-accounts.ipynb
+482	0	_notebooks/Foundation/B-tools_and_equipment/2025-05-20-github_pages.ipynb
+126	0	_notebooks/Foundation/B-tools_and_equipment/2025-06-13-html_javascript.ipynb
+305	0	_notebooks/Foundation/B-tools_and_equipment/2025-09-02-tools_setup-trouble.ipynb
+184	0	_notebooks/Foundation/G-kernels/2025-06-14-kernels-java.ipynb
+696	0	_notebooks/Foundation/G-kernels/2025-06-14-kernels-javascripthtmlcss.ipynb
+232	0	_notebooks/Foundation/G-kernels/2025-06-14-kernels-python.ipynb
+146	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_accounts.md
+24	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_home.md
+110	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-github.md
+100	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-kasm.md
+107	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-macos.md
+13	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-os.md
+422	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-pages.md
+227	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-vscode.md
+149	0	_posts/Foundation/B-tools_and_equipment/2025-04-15-tools_setup-win.md
+13	0	_posts/Foundation/G-kernels/2025-06-15-kernels.md
+10	0	_sass/minima/custom-styles.scss
+20	0	_sass/minima/footer.scss
+451	0	_sass/minima/lessonbase.scss
+39	0	_sass/minima/nav.scss
+348	0	_sass/open-coding/_main copy.scss
+27	0	_sass/open-coding/_main.scss
+49	0	_sass/open-coding/bathroom.scss
+40	0	_sass/open-coding/blogs.scss
+158	0	_sass/open-coding/calendar.scss
+209	0	_sass/open-coding/chatbot.scss
+11	0	_sass/open-coding/elements/_main.scss
+6	0	_sass/open-coding/elements/buttons/_main.scss
+28	0	_sass/open-coding/elements/buttons/common.scss
+36	0	_sass/open-coding/elements/buttons/filled.scss
+85	0	_sass/open-coding/elements/buttons/hacks-button.scss
+42	0	_sass/open-coding/elements/buttons/iridescent.scss
+28	0	_sass/open-coding/elements/buttons/responsive.scss
+49	0	_sass/open-coding/elements/buttons/states.scss
+0	0	_sass/open-coding/elements/containers/_main.scss
+0	0	_sass/open-coding/elements/containers/common.scss
+1	0	_sass/open-coding/elements/dropdown/_main.scss
+96	0	_sass/open-coding/elements/dropdown/dropdown.scss
+3	0	_sass/open-coding/elements/forms/_main.scss
+78	0	_sass/open-coding/elements/forms/containers.scss
+31	0	_sass/open-coding/elements/forms/oauth.scss
+43	0	_sass/open-coding/elements/forms/passwordvalidation.scss
+5	0	_sass/open-coding/elements/images/_main.scss
+1	0	_sass/open-coding/elements/loaders/_main.scss
+46	0	_sass/open-coding/elements/loaders/spinner.scss
+3	0	_sass/open-coding/elements/status-indicators/_main.scss
+21	0	_sass/open-coding/elements/status-indicators/animations.scss
+115	0	_sass/open-coding/elements/status-indicators/common.scss
+53	0	_sass/open-coding/elements/status-indicators/states.scss
+78	0	_sass/open-coding/elements/tables/_main.scss
+3	0	_sass/open-coding/elements/text_input/_main.scss
+33	0	_sass/open-coding/elements/text_input/common.scss
+34	0	_sass/open-coding/elements/text_input/sizes.scss
+21	0	_sass/open-coding/elements/text_input/styles.scss
+2	0	_sass/open-coding/elements/toggles/_main.scss
+44	0	_sass/open-coding/elements/toggles/common.scss
+39	0	_sass/open-coding/elements/toggles/styles.scss
+56	0	_sass/open-coding/elements/toggles/toggles.scss
+8	0	_sass/open-coding/elements/typography/_main.scss
+21	0	_sass/open-coding/elements/typography/colors.scss
+0	0	_sass/open-coding/elements/typography/sizes.scss
+97	0	_sass/open-coding/hacks.scss
+37	0	_sass/open-coding/hacks_lxd.scss
+57	0	_sass/open-coding/hallpass.scss
+7	0	_sass/open-coding/login.scss
+4	0	_sass/open-coding/materials/_main.scss
+1	0	_sass/open-coding/materials/borderSizing.scss
+29	0	_sass/open-coding/materials/colors.scss
+8	0	_sass/open-coding/materials/glass.scss
+60	0	_sass/open-coding/materials/glow.scss
+331	0	_sass/open-coding/microblog.scss
+136	0	_sass/open-coding/natm-2025-tri1.scss
+49	0	_sass/open-coding/navbar.scss
+313	0	_sass/open-coding/platformer-game.scss
+99	0	_sass/open-coding/quiz.scss
+331	0	_sass/open-coding/rps.scss
+210	0	_sass/open-coding/rps_lesson.scss
+39	0	_sass/open-coding/search.scss
+183	0	_sass/opencs-color-map.scss
+183	0	_sass/root-color-map.scss
+32	0	_sass/user-colors.scss
+-	-	apple-touch-icon.png
+-	-	assets/audio/MarioDeath.mp3
+-	-	assets/audio/Mushroom.mp3
+-	-	assets/audio/Shark.mp3
+-	-	assets/audio/coin.mp3
+-	-	assets/audio/discord-ping.mp3
+-	-	assets/audio/goomba-death.mp3
+-	-	assets/audio/mario-jump.mp3
+-	-	assets/audio/star.mp3
+-	-	assets/audio/stomp2-93279.mp3
+1	0	assets/badges/binder.svg
+1	0	assets/badges/colab.svg
+1	0	assets/badges/deepnote.svg
+1	0	assets/badges/github.svg
+26	0	assets/css/Aesthetihawk/charts.css
+26	0	assets/css/Aesthetihawk/shake.css
+57	0	assets/css/Aesthetihawk/tabs.css
+116	0	assets/css/marketEvents.css
+186	0	assets/js/Aesthetihawk/dashboard/barchartFillerTEMP.js
+117	0	assets/js/Aesthetihawk/dashboard/getGithubData.js
+195	0	assets/js/Aesthetihawk/dashboard/graphFillerTEMP.js
+38	0	assets/js/Aesthetihawk/profile/getUserData.js
+31	0	assets/js/Aesthetihawk/profile/setUserData.js
+41	0	assets/js/Aesthetihawk/shared/setTab.js
+78	0	assets/js/Aesthetihawk/shared/tabSwitcher.js
+55	0	assets/js/Aesthetihawk/shared/toastHandler.js
+63	0	assets/js/api/config.js
+89	0	assets/js/api/login.js
+30	0	assets/js/api/logout.js
+176	0	assets/js/api/profile.js
+237	0	assets/js/chatbot.js
+16	0	assets/js/layer.js
+135	0	assets/js/platformer3x/Alien.js
+87	0	assets/js/platformer3x/Background.js
+25	0	assets/js/platformer3x/BackgroundParallax.js
+39	0	assets/js/platformer3x/BackgroundSnow.js
+21	0	assets/js/platformer3x/BackgroundTransitions.js
+45	0	assets/js/platformer3x/BlockPlatform.js
+165	0	assets/js/platformer3x/Boss.js
+47	0	assets/js/platformer3x/BossItem.js
+172	0	assets/js/platformer3x/Character.js
+121	0	assets/js/platformer3x/Chat.js
+101	0	assets/js/platformer3x/ChocoFrog.js
+88	0	assets/js/platformer3x/Coin.js
+48	0	assets/js/platformer3x/Cutstory.js
+13	0	assets/js/platformer3x/Document.js
+162	0	assets/js/platformer3x/Enemy.js
+35	0	assets/js/platformer3x/EnemyCerberus.js
+35	0	assets/js/platformer3x/EnemyDraco.js
+179	0	assets/js/platformer3x/EnemyGoomba.js
+33	0	assets/js/platformer3x/EnemyPenguin.js
+35	0	assets/js/platformer3x/EnemySnowman.js
+41	0	assets/js/platformer3x/FinishLine.js
+19	0	assets/js/platformer3x/FlyingDementor.js
+19	0	assets/js/platformer3x/FlyingDragon.js
+150	0	assets/js/platformer3x/FlyingEnemy.js
+155	0	assets/js/platformer3x/FlyingEnemyOneD.js
+16	0	assets/js/platformer3x/FlyingGoomba.js
+16	0	assets/js/platformer3x/FlyingJellyfish.js
+19	0	assets/js/platformer3x/FlyingOwl.js
+19	0	assets/js/platformer3x/FlyingUFO.js
+272	0	assets/js/platformer3x/GameControl.js
+241	0	assets/js/platformer3x/GameEnv.js
+130	0	assets/js/platformer3x/GameLevel.js
+224	0	assets/js/platformer3x/GameObject.js
+28	0	assets/js/platformer3x/GameSet.js
+138	0	assets/js/platformer3x/GameSetterBoss.js
+25	0	assets/js/platformer3x/GameSetterEnd.js
+173	0	assets/js/platformer3x/GameSetterGreece.js
+151	0	assets/js/platformer3x/GameSetterGreeceMini.js
+141	0	assets/js/platformer3x/GameSetterHills.js
+160	0	assets/js/platformer3x/GameSetterHogwarts.js
+190	0	assets/js/platformer3x/GameSetterQuidditch.js
+520	0	assets/js/platformer3x/GameSetterSkibidi.js
+25	0	assets/js/platformer3x/GameSetterStart.js
+150	0	assets/js/platformer3x/GameSetterWater.js
+514	0	assets/js/platformer3x/GameSetterWinter.js
+518	0	assets/js/platformer3x/GameSetterWinterIce.js
+236	0	assets/js/platformer3x/GameSetup.js
+44	0	assets/js/platformer3x/Laser.js
+108	0	assets/js/platformer3x/Lava.js
+396	0	assets/js/platformer3x/Leaderboard.js
+60	0	assets/js/platformer3x/LocalStorage.js
+100	0	assets/js/platformer3x/MagicBeam.js
+62	0	assets/js/platformer3x/Multiplayer.js
+113	0	assets/js/platformer3x/Mushroom.js
+165	0	assets/js/platformer3x/NarwhalBoss.js
+50	0	assets/js/platformer3x/Platform.js
+0	0	assets/js/platformer3x/PlatformBase.js
+60	0	assets/js/platformer3x/PlatformFilter.js
+42	0	assets/js/platformer3x/PlatformFlyingIsland.js
+73	0	assets/js/platformer3x/PlatformJump.js
+64	0	assets/js/platformer3x/PlatformMoving.js
+101	0	assets/js/platformer3x/PlatformShake.js
+53	0	assets/js/platformer3x/PlatformSpawn.js
+384	0	assets/js/platformer3x/PlayerBase.js
+409	0	assets/js/platformer3x/PlayerBaseOneD.js
+154	0	assets/js/platformer3x/PlayerBoss.js
+183	0	assets/js/platformer3x/PlayerGreece.js
+173	0	assets/js/platformer3x/PlayerHills.js
+138	0	assets/js/platformer3x/PlayerIce.js
+152	0	assets/js/platformer3x/PlayerMini.js
+153	0	assets/js/platformer3x/PlayerMiniHogwarts.js
+154	0	assets/js/platformer3x/PlayerQuidditch.js
+167	0	assets/js/platformer3x/PlayerSkibidi.js
+188	0	assets/js/platformer3x/PlayerWinter.js
+283	0	assets/js/platformer3x/PlayerZombie.js
+15	0	assets/js/platformer3x/RandomEvent.js
+1072	0	assets/js/platformer3x/SettingsControl.js
+146	0	assets/js/platformer3x/SkibidiTitan.js
+131	0	assets/js/platformer3x/SkibidiToilet.js
+7	0	assets/js/platformer3x/Sound.js
+70	0	assets/js/platformer3x/Star.js
+10	0	assets/js/platformer3x/darkMode.js
+108	0	assets/js/platformer3x/hpBar.js
+6	0	assets/js/platformer3x/lightMode.js
+9	0	assets/js/platformer3x/toggleTheme.js
+34	0	assets/js/player.js
+32	0	assets/js/search-data.json
+301	0	assets/js/search.js
+46	0	assets/js/turtle/latest/Background.js
+61	0	assets/js/turtle/latest/GameControl.js
+124	0	assets/js/turtle/latest/GameEnv.js
+17	0	assets/js/turtle/latest/GameLevelSquares.js
+85	0	assets/js/turtle/latest/GameLevelWater.js
+488	0	assets/js/turtle/latest/GameObject.js
+130	0	assets/js/turtle/latest/NpcFrog.js
+55	0	assets/js/turtle/latest/PlayerOne.js
+48	0	assets/js/turtle/latest/PlayerTwo.js
+46	0	assets/js/turtle/stable/Background.js
+62	0	assets/js/turtle/stable/GameControl.js
+124	0	assets/js/turtle/stable/GameEnv.js
+17	0	assets/js/turtle/stable/GameLevelSquares.js
+87	0	assets/js/turtle/stable/GameLevelWater.js
+139	0	assets/js/turtle/stable/GameObject.js
+130	0	assets/js/turtle/stable/NPC.js
+246	0	assets/js/turtle/stable/Player.js
+55	0	assets/js/turtle/stable/PlayerOne.js
+48	0	assets/js/turtle/stable/PlayerTwo.js
+6	0	assets/js/vendor/lunr.min.js
+-	-	assets/mermaid/1134df9e7e12b3c7ed14ae86d025ea52d09e4f503d0359f86df301f4c4daac24.png
+-	-	assets/mermaid/37b17d9ddb0fe30d96e6eca73b99a94398063528f0f4df9d8cba2e2f0d94c426.png
+838	0	exam-predictor.html
+103	0	exercisegraphs.html
+-	-	favicon-16x16.png
+-	-	favicon-32x32.png
+-	-	favicon.ico
+0	0	git
+752	0	grade-predictor.html
+48	0	hacks/api/create.md
+81	0	hacks/api/read.md
+369	0	hacks/snake.md
+44	0	hacks/turtle.md
+-	-	images/Kasm.png
+-	-	images/LIFO.png
+-	-	images/MacOS.png
+-	-	images/Postfix.png
+-	-	images/Prof._Stampfers_Stroboscopische_Scheibe_No._X.gif
+-	-	images/Windows11.png
+-	-	images/about/claire.jpg
+-	-	images/about/familytree.png
+-	-	images/about/farm.jpg
+-	-	images/about/grandkids.jpg
+-	-	images/about/john_lora.jpg
+-	-	images/about/john_tamara.jpg
+-	-	images/about/lora_fam.jpg
+-	-	images/about/lora_fam2.jpg
+-	-	images/about/missionary.jpg
+-	-	images/about/pj_party.jpg
+-	-	images/about/surf.jpg
+-	-	images/about/tamara_fam.jpg
+-	-	images/about/trent_family.png
+-	-	images/agile.webp
+-	-	images/bfs.gif
+-	-	images/classStructures.png
+-	-	images/createusersample.png
+-	-	images/crud_anatomy.png
+-	-	images/default.png
+-	-	images/dfs.gif
+-	-	images/docs/Screenshot 2025-05-28 142907.png
+-	-	images/docs/assignments.png
+-	-	images/docs/calendar.png
+-	-	images/docs/casino.png
+-	-	images/docs/fortuneFinders.png
+-	-	images/docs/groups.png
+-	-	images/docs/queue.png
+-	-	images/docs/screenshare.png
+-	-	images/docs/stocks.png
+-	-	images/docs/stocksGame.png
+-	-	images/docs/teamteach.png
+-	-	images/featureflowchart.jpeg
+-	-	images/food.png
+-	-	images/githubpages.png
+-	-	images/homesample.png
+-	-	images/image.png
+-	-	images/image_matrix.png
+-	-	images/imagesdir.png
+-	-	images/information.png
+-	-	images/javaml/smile.jpg
+-	-	images/javaml/tablesaw.jpeg
+-	-	images/javaml/weka.jpeg
+-	-	images/javaml/wine.jpeg
+-	-	images/jokes.png
+-	-	images/kasm/kasmUI.png
+-	-	images/kasm/kasmlogin.png
+-	-	images/kasm/kasmsignup.png
+-	-	images/kasm/kasmv2.png
+-	-	images/kasm/launch.png
+-	-	images/kasm/ncslogin.png
+-	-	images/kasm/vskasm.png
+-	-	images/kernels/htmljskernel.jpg
+-	-	images/kernels/javakernel.jpg
+-	-	images/kernels/mathpythonkernel.jpg
+-	-	images/kernels/pythonkernel.jpg
+-	-	images/loginesample.png
+-	-	images/logo-framed.png
+-	-	images/logo.png
+-	-	images/mario.png
+-	-	images/mario_animation.png
+-	-	images/nitd_rpg/maze3.png
+-	-	images/nitd_rpg/mort.png
+-	-	images/notebooks/foundation/create_repo.png
+-	-	images/notebooks/foundation/push.jpg
+-	-	images/notebooks/foundation/stage.jpg
+-	-	images/notebooks/foundation/wsl.jpg
+-	-	images/post_form.png
+-	-	images/postmanexample.png
+-	-	images/prime_numbers.jpg
+-	-	images/rpg/fishies.png
+-	-	images/rpg/turtle.png
+-	-	images/rpg/water.png
+-	-	images/rubric.png
+-	-	images/signs.png
+-	-	images/sleep.png
+-	-	images/socket_server.png
+-	-	images/stress.png
+-	-	images/submitimage.png
+-	-	images/tailwind_logo.jpg
+-	-	images/thumbs-down.png
+-	-	images/thumbs-up.png
+-	-	images/tools/12we.png
+-	-	images/tools/13we.png
+-	-	images/tools/accounts.png
+-	-	images/tools/changegithubpagesbuild.png
+-	-	images/tools/create-repo.png
+-	-	images/tools/createafork.png
+-	-	images/tools/deploygithubpages.png
+-	-	images/tools/dev_tools.png
+-	-	images/tools/editconfig-yml.png
+-	-	images/tools/github-pages.jpg
+-	-	images/tools/github.png
+-	-	images/tools/github_pages.png
+-	-	images/tools/htmljs.png
+-	-	images/tools/kernels.png
+-	-	images/tools/linuxbasics.png
+-	-	images/tools/makechangescommit.png
+-	-	images/tools/mfa.jpg
+-	-	images/tools/os.png
+-	-	images/tools/use-this-template.png
+-	-	images/tools/vscode.png
+-	-	images/tools/vscodedev.png
+-	-	images/tracker1.png
+-	-	images/ttpic.png
+-	-	images/tux.png
+-	-	images/user_management_db.png
+-	-	images/waterfood.png
+-	-	images/web_server.png
+-	-	images/webdev/aboutme.png
+-	-	images/webdev/dataretrieval.png
+-	-	images/webdev/datastorage.png
+-	-	images/webdev/flask.png
+-	-	images/webdev/frameworks.png
+-	-	images/webdev/games.png
+-	-	images/webdev/liveshare.png
+-	-	images/webdev/markdown.png
+-	-	images/webdev/pyflask.png
+-	-	images/webdev/spring.png
+-	-	images/wireframe.png
+55	0	index.md
+-	-	kasm_design/aws_costs.png
+-	-	kasm_design/current_branding_config/background.jpg
+-	-	kasm_design/current_branding_config/favicon.ico
+-	-	kasm_design/current_branding_config/header.png
+-	-	kasm_design/current_branding_config/loginbackground.png
+-	-	kasm_design/current_branding_config/loginlogo.png
+-	-	kasm_design/hex_background.jpg
+-	-	kasm_design/kasm_desktop.png
+-	-	kasm_design/kasm_diagram.png
+-	-	kasm_design/kasm_install.png
+-	-	kasm_design/kasm_registry.png
+-	-	kasm_design/kasm_usage.png
+-	-	kasm_design/kasm_users.png
+-	-	kasm_design/logo/kasm_background.png
+-	-	kasm_design/logo/kasmv2_clear.png
+-	-	kasm_design/logo/kasmv2_logo_only.ico
+-	-	kasm_design/logo/kasmv2_logo_only.png
+-	-	kasm_design/logo/kasmv2_original.png
+-	-	kasm_design/logo/kasmv2_sideways.png
+13	0	kasm_design/note.md
+0	0	linuxcyberA/flag{nav_master}.txt
+4	0	linuxcyberA/permissions/file1.txt
+1	0	linuxcyberA/secret/whatsthis.txt
+258	0	login.css
+-	-	media/assets/abcL.png
+-	-	media/assets/atlanticL.png
+-	-	media/assets/bbcC.png
+-	-	media/assets/buzzfeedL.png
+-	-	media/assets/callerR.png
+-	-	media/assets/cbnR.png
+-	-	media/assets/cnnL.png
+-	-	media/assets/dailywireR.png
+-	-	media/assets/epochR.png
+-	-	media/assets/federalistR.png
+-	-	media/assets/forbesC.png
+-	-	media/assets/foxR.png
+-	-	media/assets/hillC.png
+-	-	media/assets/marketwatchC.png
+-	-	media/assets/nbcL.png
+-	-	media/assets/newsmaxR.png
+-	-	media/assets/newsnationC.png
+-	-	media/assets/newsweekC.png
+-	-	media/assets/nprL.png
+-	-	media/assets/nypR.png
+-	-	media/assets/nytL.png
+-	-	media/assets/reasonC.png
+-	-	media/assets/reutersC.png
+-	-	media/assets/sanC.png
+-	-	media/assets/timeL.png
+-	-	media/assets/upwardR.png
+-	-	media/assets/voxL.png
+-	-	media/assets/wsjC.png
+-	-	media/assets/wtR.png
+-	-	media/assets/yahooL.png
+52	0	media/leaderboard.md
+281	0	media/media.md
+138	0	navigation/about.md
+8	0	navigation/authentication/admin.md
+8	0	navigation/authentication/analytics.md
+150	0	navigation/authentication/facial_recognition.md
+331	0	navigation/authentication/login.md
+14	0	navigation/authentication/logout.md
+8	0	navigation/authentication/profile.md
+95	0	navigation/authentication/stats.md
+6	0	navigation/blog.md
+6	0	navigation/search.md
+150	0	navigation/signup.md
+149	0	navigation/toolkit/analytics_help.md
+473	0	navigation/toolkit/calendar.md
+241	0	navigation/toolkit/gamify.md
+121	0	navigation/toolkit/student.md
+7	0	navigation/toolkit/student_aesthetihawk.md
+133	0	navigation/toolkit/teacher.md
+5	0	navigation/users.md
+0	0	newsignup.html
+14	0	requirements.txt
+525	0	scorepredictor.html
+9	0	scripts/activate.sh
+55	0	scripts/activate_kali.sh
+53	0	scripts/activate_macos.sh
+55	0	scripts/activate_ubuntu.sh
+637	0	scripts/convert_docx.py
+177	0	scripts/convert_notebooks.py
+419	0	scripts/create_local_color_map.py
+236	0	scripts/frontmatter_manager.py
+566	0	scripts/github_api_funcs.py
+82	0	scripts/kasm_api_funcs.py
+52	0	scripts/md2ipynb.py
+30	0	scripts/progress_bar.py
+140	0	scripts/prs_issues.py
+129	0	scripts/prs_issues_summary.py
+190	0	scripts/pull_issues.py
+59	0	scripts/setup_macos.sh
+43	0	scripts/setup_ubuntu.sh
+22	0	scripts/setup_ubuntu_java.sh
+45	0	scripts/switch-theme.sh
+501	0	scripts/tilt.js
+248	0	scripts/uncomment_tool.sh
+33	0	scripts/venv.sh
+77	0	scripts/verifyTools.sh
+651	0	study-tracker.html
+26	0	testing.html

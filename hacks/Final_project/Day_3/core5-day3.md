@@ -44,11 +44,36 @@ layout: post
 - Computes speedup ratio
 - Displays results
 - **Without it:** Just drag-and-drop interface with no computational analysis
-📸 Code Screenshot
+### 📸 Code Screenshot
 
 ![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
-**Location:** `frontend/cores/core-5.md` — Lines 2747-2785
+**Location:** `frontend/cores/core-5.md` — Lines 2200-2240
+
+**What to capture:**
+```javascript
+function computeSpeedup() {
+    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+
+    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+        alert("Please add some tasks to the Series or Parallel rows first");
+        return;
+    }
+
+    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
+    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
+                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+    // Display results...
+    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+}
+```
 
 ---
 
@@ -82,8 +107,39 @@ layout: post
 
 ![Algorithm Code - Annotated](../screenshots/core5-algorithm.png)
 
-**Location:** `frontend/cores/core-5.md` — Lines 2747-2785  
-**Must annotate:** SEQUENCING, SELECTION, ITERATION
+**Location:** `frontend/cores/core-5.md` — Lines 2200-2240  
+**Must annotate:** SEQUENCING (steps 1-7), SELECTION (if statements), ITERATION (.filter, .map, .reduce)
+
+**What to capture (same as 3a, but add annotations):**
+```javascript
+function computeSpeedup() {
+    // STEP 1-2: Collect tasks (ITERATION)
+    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+                            .filter(c => c.classList.contains("block"))  // ITERATION
+                            .map(b => parseInt(b.textContent));          // ITERATION
+    
+    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+
+    // STEP 3: Validate (SELECTION)
+    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+        alert("Please add some tasks to the Series or Parallel rows first");
+        return;
+    }
+
+    // STEP 4-5: Calculate (ITERATION)
+    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
+    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
+                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0); // SELECTION
+
+    // STEP 6: Compute (SELECTION)
+    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+    // STEP 7: Store
+    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+}
+```
 
 ---
 
@@ -119,31 +175,75 @@ layout: post
 3. **Simple calculations**
    - `.reduce()` sums in one line
    - No manual loops needed
-📸 Code Screenshot
+### 📸 Code Screenshot
 
 ![List Usage - seriesBlocks and parallelBlocks](../screenshots/core5-lists.png)
 
-**Location:** `frontend/cores/core-5.md` — Lines 2747-2821  
-**Must highlight:** `seriesBlocks[]`, `parallelBlocks[]` creation, usage, and storage
+**Location:** `frontend/cores/core-5.md` — Lines 2200-2240  
+**Must highlight:** `seriesBlocks[]`, `parallelBlocks[]` - where created, used, and stored
+
+**What to capture:**
+```javascript
+function computeSpeedup() {
+    // LIST CREATION - collect into arrays
+    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+    
+    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+
+    // Validation
+    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+        alert("Please add some tasks to the Series or Parallel rows first");
+        return;
+    }
+
+    // LIST USAGE - combine and process
+    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
+    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
+                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+    // LIST STORAGE - save in object
+    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+}
+```
 
 ---
 
 ## 📸 Complete Screenshot Guide
 
-| # | Purpose | File | Lines | Required Annotations |
-|---|---------|------|-------|---------------------|
-| **1** | Input (optional) | `core-5.md` | 2730-2740 | Label: INPUT |
-| **2** | Procedure (3a) | `core-5.md` | 2747-2785 | Label: PROCEDURE |
-| **3** | Algorithm (3b) | `core-5.md` | 2747-2785 | Labels: SEQUENCING, SELECTION, ITERATION |
-| **4** | Lists (3c) | `core-5.md` | 2749-2753 | Highlight: `seriesBlocks[]`, `parallelBlocks[]` |
-| **5** | Output (optional) | `core-5.md` | 2767-2782 | Label: OUTPUT |
+| # | Purpose | File | Lines | What Code to Screenshot |
+|---|---------|------|-------|------------------------|
+| **1** | Input (optional) | `core-5.md` | 2181-2199 | `addTask()` function - creates task blocks |
+| **2** | Procedure (3a) | `core-5.md` | 2200-2240 | `computeSpeedup()` - full function |
+| **3** | Algorithm (3b) | `core-5.md` | 2200-2240 | Same as #2, add annotations: SEQUENCING, SELECTION, ITERATION |
+| **4** | Lists (3c) | `core-5.md` | 2200-2240 | Same as #2, highlight `seriesBlocks[]` and `parallelBlocks[]` |
+| **5** | Output (optional) | `core-5.md` | 2227-2235 | Results display section with `resultsElem.textContent` |
 
 ### 💡 Screenshot Tips
 - Use arrows or boxes to highlight key elements
 - Add text labels directly in code comments
 - Make variable names clearly visible
 - Use 14pt+ font size for readability
-- Can reuse same screenshot for 3a and 3b if properly annotated
+- **You can use ONE screenshot for 3a, 3b, and 3c** if you add proper annotations
+
+### 🎯 Annotation Guide
+
+**For 3a (Procedure):**
+- Label the function name
+- No special annotations needed
+
+**For 3b (Algorithm):**
+- Add "STEP 1", "STEP 2", etc. comments
+- Circle or highlight `if` statements → SELECTION
+- Circle `.filter()`, `.map()`, `.reduce()` → ITERATION
+
+**For 3c (Lists):**
+- Highlight `seriesBlocks` and `parallelBlocks` with arrows
+- Label where created, used, and stored
 
 ---
 
