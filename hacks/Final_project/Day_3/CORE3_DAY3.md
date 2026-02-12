@@ -497,10 +497,4 @@ def predict():
 
 ---
 
-## Next Steps (Day 4)
 
-1. Finalize 1-minute video script
-2. Set up screen recording software
-3. Practice demo walkthrough
-4. Prepare localhost environment for recording
-5. **CHECKPOINT:** Review video script with peer
