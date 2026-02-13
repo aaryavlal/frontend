@@ -8,20 +8,31 @@ breadcrumbs: false
 ---
 
 <style>
+  /* ── Override Jekyll container constraints ── */
+  .page-content, .wrapper, .post-content, main, article,
+  .container, .site-content, .entry-content, .content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
   /* ── Slideshow engine ── */
-  .slide-deck { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; }
+  .slide-deck { position: relative; width: 100vw; max-width: 100vw; margin-left: calc(-50vw + 50%); height: 100vh; display: flex; flex-direction: column; }
 
   .slide {
     display: none;
-    padding: 36px 40px;
-    min-height: 520px;
+    padding: 28px 36px 16px;
+    flex: 1; overflow-y: auto; box-sizing: border-box;
     background: linear-gradient(135deg, rgba(26,32,40,0.96), rgba(18,23,30,0.96));
     border: 2px solid rgba(0,255,170,0.28);
     border-left: 5px solid #00ffaa;
     border-radius: 2px;
     box-shadow: 0 0 30px rgba(0,255,170,0.15);
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
     color: #e0e6ed;
     font-family: 'Courier New', 'Consolas', monospace;
     letter-spacing: 0.3px;
@@ -32,7 +43,7 @@ breadcrumbs: false
     position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, #00ffaa, #00d4ff, transparent);
   }
-  .slide.active { display: block; animation: fadeSlide 0.35s ease; }
+  .slide.active { display: block; flex: 1; animation: fadeSlide 0.35s ease; }
 
   @keyframes fadeSlide {
     from { opacity: 0; transform: translateY(12px); }
@@ -40,39 +51,41 @@ breadcrumbs: false
   }
 
   .slide h2 {
-    color: #00ffaa; font-size: 1.6rem; margin: 0 0 18px 0;
+    color: #00ffaa; font-size: 2.2rem; margin: 0 0 14px 0;
     text-transform: uppercase; letter-spacing: 2px;
     text-shadow: 0 0 12px rgba(0,255,170,0.5);
   }
   .slide h3 {
-    color: #00d4ff; font-size: 1.15rem; margin: 18px 0 10px 0;
+    color: #00d4ff; font-size: 1.4rem; margin: 14px 0 8px 0;
     text-transform: uppercase; letter-spacing: 1px;
   }
-  .slide p, .slide li { color: #cbd5e1; font-size: 0.95rem; }
-  .slide ul { margin: 8px 0 8px 22px; }
-  .slide li { margin-bottom: 6px; }
+  .slide p, .slide li { color: #cbd5e1; font-size: 1.15rem; }
+  .slide ul { margin: 4px 0 4px 22px; }
+  .slide li { margin-bottom: 4px; }
   .slide strong { color: #00ffaa; }
   .slide em { color: #fbbf24; font-style: normal; }
   .slide code {
     background: rgba(0,255,170,0.12); color: #00ffaa;
-    padding: 2px 6px; border-radius: 2px; font-size: 0.9em;
+    padding: 3px 8px; border-radius: 2px; font-size: 0.95em;
   }
 
   .slide-tag {
-    position: absolute; top: 14px; right: 18px;
-    font-size: 0.7rem; color: #8b95a5; text-transform: uppercase; letter-spacing: 1px;
+    position: absolute; top: 18px; right: 24px;
+    font-size: 0.85rem; color: #8b95a5; text-transform: uppercase; letter-spacing: 1px;
   }
 
   /* Nav bar */
   .slide-nav {
     display: flex; justify-content: center; align-items: center; gap: 14px;
-    margin: 18px auto; max-width: 1000px;
+    margin: 0; padding: 10px 0; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(26,32,40,0.98), rgba(18,23,30,0.98));
+    border-top: 1px solid rgba(0,255,170,0.2);
   }
   .slide-nav button {
-    padding: 10px 22px; background: rgba(0,255,170,0.12); color: #00ffaa;
+    padding: 14px 30px; background: rgba(0,255,170,0.12); color: #00ffaa;
     border: 2px solid #00ffaa; border-radius: 2px; font-weight: 700; cursor: pointer;
     font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 1px;
-    transition: all 0.2s ease; font-size: 0.85rem;
+    transition: all 0.2s ease; font-size: 1rem;
   }
   .slide-nav button:hover {
     background: rgba(0,255,170,0.22);
@@ -80,19 +93,32 @@ breadcrumbs: false
     text-shadow: 0 0 8px #00ffaa;
   }
   .slide-nav button:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; text-shadow: none; }
-  .slide-counter { color: #8b95a5; font-size: 0.85rem; min-width: 70px; text-align: center; }
+  .slide-counter { color: #8b95a5; font-size: 1rem; min-width: 80px; text-align: center; }
 
   /* Two-col layout helper */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
   @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
 
   .card {
     background: rgba(10,14,20,0.6); border: 1px solid rgba(0,255,170,0.2);
-    border-left: 3px solid #00ffaa; border-radius: 2px; padding: 14px 16px;
+    border-left: 3px solid #00ffaa; border-radius: 2px; padding: 12px 14px;
   }
-  .card h4 { color: #00d4ff; margin: 0 0 8px 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+  .card h4 { color: #00d4ff; margin: 0 0 6px 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+  .card p { font-size: 1.05rem; }
 
-  .flow-arrow { text-align: center; color: #00ffaa; font-size: 1.1rem; margin: 8px 0; padding: 10px; background: rgba(0,255,170,0.06); border-radius: 2px; }
+  .flow-arrow { text-align: center; color: #00ffaa; font-size: 1.25rem; margin: 6px 0; padding: 10px; background: rgba(0,255,170,0.06); border-radius: 2px; }
+
+  /* Code snippet blocks */
+  .slide pre {
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,170,0.2);
+    border-left: 3px solid #00d4ff; border-radius: 2px; padding: 10px 14px;
+    font-size: 0.95rem; line-height: 1.55; overflow-x: auto; margin: 8px 0;
+    color: #e0e6ed; font-family: 'Courier New', 'Consolas', monospace;
+  }
+  .slide pre .kw { color: #ff79c6; } /* keywords */
+  .slide pre .fn { color: #50fa7b; } /* functions */
+  .slide pre .str { color: #f1fa8c; } /* strings */
+  .slide pre .cm { color: #6272a4; } /* comments */
 </style>
 
 <!-- ════════════════════════════════════════════ -->
@@ -182,7 +208,15 @@ breadcrumbs: false
     </div>
     <div class="card">
       <h4>Backend</h4>
-      <p><code>POST /api/progress/complete</code> marks a module done, then <code>check_and_update_room_progress()</code> checks if all members have finished — when all 6 cores light up, the room is complete. Mandelbrot rendering uses real Rust threads via PyO3 to reinforce the parallel theme.</p>
+      <p><code>POST /api/progress/complete</code> marks a module done, then <code>check_and_update_room_progress()</code> checks if all members have finished — when all 6 cores light up, the room is complete.</p>
+<pre><span class="cm"># Quest/models/room.py</span>
+result = query_db(<span class="str">'''
+  SELECT COUNT(DISTINCT up.user_id) as completed_count
+  FROM user_progress up
+  JOIN room_members rm ON up.user_id = rm.user_id
+  WHERE rm.room_id = ? AND up.module_number = ?
+'''</span>, (room_id, module_number), one=<span class="kw">True</span>)
+all_completed = result[<span class="str">'completed_count'</span>] == len(members)</pre>
     </div>
   </div>
 </div>
@@ -225,6 +259,19 @@ breadcrumbs: false
     <li><code>api/digit_api.py</code> — Projection-based segmentation, rotation correction via OpenCV moments, TTA with 8 augmentations + ensemble</li>
     <li><code>Quest/database.py</code> — Schema: users, rooms, room_members, user_progress, room_progress, glossary; WAL journaling for concurrency</li>
   </ul>
+<pre><span class="cm">// concurrent.rs — Rust scoped threads with shared state</span>
+<span class="kw">let</span> records = Arc::new(Mutex::new(Vec::new()));
+std::thread::<span class="fn">scope</span>(|s| {
+    <span class="kw">for</span> (thread_id, tile_chunk) <span class="kw">in</span> tiles.chunks(chunk_size).enumerate() {
+        <span class="kw">let</span> records = Arc::clone(&amp;records);
+        s.<span class="fn">spawn</span>(<span class="kw">move</span> || {
+            <span class="kw">for</span> &amp;(task_id, tx, ty) <span class="kw">in</span> tile_chunk {
+                <span class="kw">let</span> data = <span class="fn">render_tile</span>(tx, ty, tile_size, max_iter);
+                records.<span class="fn">lock</span>().unwrap().<span class="fn">push</span>(record);
+            }
+        });
+    }
+});</pre>
 </div>
 
 <!-- ──────────── SLIDE 5: API & BACKEND ──────────── -->
@@ -245,6 +292,17 @@ breadcrumbs: false
     <li><code>GET /api/glossary/room/&lt;id&gt;</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> — Collaborative per-room glossary CRUD with search and stats</li>
     <li><code>POST /api/game-logs/gpu-simulator</code> — Log GPU simulator game data; <code>GET /stats</code> — aggregated stats by stage; <code>GET /recent</code> — recent game sessions</li>
   </ul>
+<pre><span class="cm"># Quest/routes/speedup.py — serial vs parallel sort</span>
+<span class="kw">def</span> <span class="fn">serial_sort</span>(numbers):          <span class="cm"># O(n²) bubble sort</span>
+    <span class="kw">for</span> i <span class="kw">in</span> range(n):
+        <span class="kw">for</span> j <span class="kw">in</span> range(0, n - i - 1):
+            <span class="kw">if</span> arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+<span class="kw">def</span> <span class="fn">parallel_sort</span>(numbers):        <span class="cm"># split + merge (parallel-style)</span>
+    left = <span class="fn">sorted</span>(numbers[:mid])
+    right = <span class="fn">sorted</span>(numbers[mid:])
+    <span class="kw">return</span> <span class="fn">sorted</span>(left + right)</pre>
 </div>
 
 <!-- ──────────── SLIDE 6: DEPLOYMENT ──────────── -->
@@ -262,6 +320,13 @@ breadcrumbs: false
     <li>Gunicorn with 1 worker (Rust handles parallelism internally with native threads)</li>
     <li>Socket server on :8406 using Gunicorn + eventlet (for real-time WebSocket streams)</li>
   </ul>
+
+<pre><span class="cm"># Dockerfile — multi-language build</span>
+<span class="kw">FROM</span> python:3.12-slim
+<span class="kw">RUN</span> curl --proto <span class="str">'=https'</span> https://sh.rustup.rs | sh -s -- -y
+<span class="kw">RUN</span> maturin build --release &amp;&amp; pip install target/wheels/*.whl
+<span class="kw">RUN</span> pip install --no-cache-dir -r requirements.txt
+<span class="kw">CMD</span> [<span class="str">"gunicorn"</span>, <span class="str">"--bind"</span>, <span class="str">"0.0.0.0:8405"</span>, <span class="str">"main:app"</span>]</pre>
 
   <h3>Examples of Data Flow</h3>
   <div class="two-col">
@@ -311,6 +376,15 @@ breadcrumbs: false
       <code>POST /api/rooms/&lt;id&gt;/reset-progress</code> &#8594; deletes progress for all members</p>
     </div>
   </div>
+<pre><span class="cm"># Quest/routes/glossary.py — Create endpoint</span>
+@glossary_bp.<span class="fn">route</span>(<span class="str">'/room/&lt;int:room_id&gt;'</span>, methods=[<span class="str">"POST"</span>])
+@<span class="fn">jwt_required</span>()
+<span class="kw">def</span> <span class="fn">add_glossary_entry</span>(room_id):
+    user_id = int(<span class="fn">get_jwt_identity</span>())
+    entry = Glossary.<span class="fn">create</span>(
+        room_id=room_id, term=data[<span class="str">'term'</span>],
+        definition=data[<span class="str">'definition'</span>], author_id=user_id)
+    <span class="kw">return</span> <span class="fn">jsonify</span>({<span class="str">'entry'</span>: entry}), <span class="str">201</span></pre>
 </div>
 
 <!-- ──────────── SLIDE 8: BULK DATA ──────────── -->
@@ -333,6 +407,16 @@ breadcrumbs: false
     <li><strong>Room reset API</strong>: <code>POST /api/rooms/&lt;id&gt;/reset-progress</code> &#8594; clears all user_progress + room_progress without deleting users/rooms</li>
     <li><strong>Bulk delete</strong>: <code>POST /api/rooms/bulk-delete {room_ids: [1,2,3]}</code> &#8594; cascading deletes (demo room protected)</li>
   </ul>
+<pre><span class="cm"># Quest/database.py — init_db() schema creation</span>
+cursor.<span class="fn">execute</span>(<span class="str">'''
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'student' CHECK(role IN ('student','admin')),
+    current_room_id INTEGER REFERENCES rooms(id)
+  )'''</span>)
+<span class="cm"># + rooms, room_members, user_progress, room_progress, glossary</span></pre>
 </div>
 
 <!-- ──────────── SLIDE 9: DEBUGGING ──────────── -->
@@ -353,6 +437,15 @@ breadcrumbs: false
     <li><strong>Digit pipeline</strong> (<code>api/digit_api.py</code>): base64 decode &#8594; horizontal projection segmentation &#8594; per-digit crop &#8594; rotation correction (OpenCV moments, >10deg threshold) &#8594; morphological thinning &#8594; resize to 28x28 &#8594; TTA (8 augmentations + ensemble models) &#8594; averaged top-3 predictions</li>
     <li><strong>Concurrent Mandelbrot</strong> (<code>concurrent.rs</code>): Pre-collect tiles &#8594; chunk across threads &#8594; each thread: <code>AtomicBool</code> check for time limit &#8594; <code>render_tile()</code> &#8594; <code>Mutex</code> lock to push result &#8594; results sorted by start_time before return</li>
   </ul>
+<pre><span class="cm"># main.py — Gemini quiz grading decision point</span>
+gemini_response = gemini_client.models.<span class="fn">generate_content</span>(
+    model=<span class="str">"gemini-2.5-flash"</span>, contents=prompt,
+    config={<span class="str">"response_mime_type"</span>: <span class="str">"application/json"</span>})
+result = <span class="fn">getattr</span>(gemini_response, <span class="str">"parsed"</span>, <span class="kw">None</span>)
+<span class="kw">if</span> isinstance(result, dict):
+    graded = result  <span class="cm"># structured JSON response</span>
+<span class="kw">else</span>:
+    graded = json.<span class="fn">loads</span>(<span class="fn">getattr</span>(gemini_response, <span class="str">"text"</span>, <span class="str">""</span>))</pre>
 </div>
 
 <!-- ──────────── SLIDE 10: SOCIAL & ITERATION ──────────── -->
@@ -392,9 +485,13 @@ breadcrumbs: false
 
   <h3>Eureka #2: Digit Recognizer Pipeline Visualization</h3>
   <p>After wrestling with MNIST preprocessing — rotation correction via OpenCV moments, projection-based multi-digit segmentation, test-time augmentation — the moment someone drew a sloppy "7" on the canvas and it came back with 98% confidence was great. But clicking <em>"View Processing Pipeline"</em> and seeing the CNN layer activations light up, showing exactly which features each convolutional layer detected, connected the abstract idea of <strong>sequential neural network computation</strong> to something visible and real. It tied Core 3 back to the parallel computing theme beautifully: this is what a <em>sequential</em> pipeline looks like — now imagine parallelizing it.</p>
+<pre><span class="cm"># api/digit_api.py — the pipeline that made it click</span>
+components = <span class="fn">find_connected_components</span>(img_array)
+<span class="kw">for</span> component <span class="kw">in</span> components:
+    processed = <span class="fn">advanced_preprocess_digit</span>(img_array, component[<span class="str">'bbox'</span>])
+    predictions = <span class="fn">predict_with_tta</span>(processed, num_augmentations=<span class="str">8</span>)
+    predicted_digit = int(np.<span class="fn">argsort</span>(predictions)[-3:][::-1][0])</pre>
 </div>
-
-</div><!-- /slide-deck -->
 
 <!-- Navigation -->
 <div class="slide-nav">
@@ -402,6 +499,8 @@ breadcrumbs: false
   <span class="slide-counter" id="slideCounter">1 / 11</span>
   <button id="nextBtn" onclick="changeSlide(1)">Next &#9654;</button>
 </div>
+
+</div><!-- /slide-deck -->
 
 <script>
   let current = 0;
