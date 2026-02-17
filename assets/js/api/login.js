@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Build admin links conditionally
                 const adminLinks = data.role === 'admin' || data.role === 'teacher'
-                    ? `<a href="${baseurl}/admin/debug">API Debug Console</a>`
+                    ? `<a href="${baseurl}/admin/debug">Admin Panel</a>`
                     : '';
 
                 loginArea.innerHTML = `

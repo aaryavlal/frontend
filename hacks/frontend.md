@@ -645,6 +645,43 @@ breadcrumbs: true
     }
   }
 
+  /* New Game button - appears when all 6 cores are lit */
+  .new-game-btn{
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px 24px;
+    background: rgba(0,255,170,0.15);
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0,255,170,0.4), 0 0 30px rgba(0,255,170,0.2);
+    animation: newGamePulse 2s infinite;
+  }
+
+  .new-game-btn:hover{
+    background: rgba(0,255,170,0.25);
+    box-shadow: 0 0 25px rgba(0,255,170,0.6), 0 0 50px rgba(0,255,170,0.3);
+    text-shadow: 0 0 10px var(--accent);
+    transform: scale(1.02);
+  }
+
+  .new-game-btn.hidden{
+    display: none;
+  }
+
+  @keyframes newGamePulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0,255,170,0.4), 0 0 30px rgba(0,255,170,0.2); }
+    50% { box-shadow: 0 0 25px rgba(0,255,170,0.6), 0 0 50px rgba(0,255,170,0.3); }
+  }
+
   /* Module buttons */
   .module-controls{
     display:grid;
@@ -1301,6 +1338,7 @@ breadcrumbs: true
                 <div class="node" id="node6"><div class="node-icon">VI</div><div class="node-label">CORE 6</div></div>
               </div>
             </div>
+            <button id="newGameBtn" class="new-game-btn hidden" onclick="startNewGame()">New Game</button>
           </div>
 
           <div class="compact-section">
@@ -2010,6 +2048,7 @@ breadcrumbs: true
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
         document.getElementById('resetProgressBtn').classList.add('hidden');
+        document.getElementById('newGameBtn').classList.add('hidden');
 
         const cpuContainer = document.getElementById('cpuContainer');
         cpuContainer.classList.remove('all-active');
@@ -2042,6 +2081,7 @@ breadcrumbs: true
 
           const cpuContainer = document.getElementById('cpuContainer');
           cpuContainer.classList.remove('all-active');
+          document.getElementById('newGameBtn').classList.add('hidden');
 
           for (let i = 1; i <= 6; i++) {
             document.getElementById(`node${i}`).classList.remove('active');
@@ -2062,6 +2102,36 @@ breadcrumbs: true
             refreshBtn.innerHTML = originalText;
             refreshBtn.disabled = false;
           }
+        }
+      }
+    );
+  }
+
+  async function startNewGame() {
+    showConfirm(
+      'Start New Game',
+      'All 6 cores are active! Reset all progress for this room and start a new game?',
+      async () => {
+        try {
+          await apiCall(`/api/rooms/${currentRoomId}/reset-progress`, 'POST');
+          cpuFullyLit = false;
+
+          document.getElementById('cpuContainer').classList.remove('all-active');
+          document.getElementById('newGameBtn').classList.add('hidden');
+
+          for (let i = 1; i <= 6; i++) {
+            document.getElementById(`node${i}`).classList.remove('active');
+          }
+
+          const buttons = document.querySelectorAll('.module-btn');
+          buttons.forEach(btn => btn.classList.remove('completed'));
+
+          showToast('New game started! All progress has been reset.');
+
+          await new Promise(resolve => setTimeout(resolve, 500));
+          await loadRoomProgress();
+        } catch (error) {
+          showToast(`Failed to start new game: ${error.message}`);
         }
       }
     );
@@ -2137,6 +2207,7 @@ breadcrumbs: true
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
         document.getElementById('resetProgressBtn').classList.add('hidden');
+        document.getElementById('newGameBtn').classList.add('hidden');
 
         return;
       }
@@ -2155,6 +2226,9 @@ breadcrumbs: true
         if (data.completed_modules.length === 6) {
           cpuFullyLit = true;
           document.getElementById('cpuContainer').classList.add('all-active');
+          document.getElementById('newGameBtn').classList.remove('hidden');
+        } else {
+          document.getElementById('newGameBtn').classList.add('hidden');
         }
       }
 
@@ -2210,6 +2284,7 @@ breadcrumbs: true
         document.getElementById('joinRoomSection').classList.remove('hidden');
         document.getElementById('currentRoomInfo').classList.add('hidden');
         document.getElementById('resetProgressBtn').classList.add('hidden');
+        document.getElementById('newGameBtn').classList.add('hidden');
         return;
       }
 

@@ -119,8 +119,23 @@ show_reading_time: false
         // Login to Prototype API (JWT-based)
         prototypeLogin(username, password);
 
+        // Also login to Python backend (sets jwt cookie for @token_required endpoints)
+        pythonAuthenticate(username, password);
+
         // Also login to Java backend
         javaLogin();
+    }
+
+    // Authenticate with Python backend to set jwt_python_flask cookie
+    function pythonAuthenticate(username, password) {
+        fetch(`${pythonURI}/api/authenticate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ uid: username, password: password })
+        }).then(response => {
+            if (response.ok) console.log("Python cookie set successfully");
+        }).catch(err => console.error("Python auth cookie not set:", err));
     }
 
     // Function to handle Prototype API login (JWT-based)
