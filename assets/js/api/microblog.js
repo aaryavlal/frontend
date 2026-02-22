@@ -5,6 +5,31 @@
 
 import { pythonURI, fetchOptions } from './config.js';
 
+const MICROBLOG_BASE = `${pythonURI}/api/microblog`;
+
+async function requestJson(url, options, errorMessage) {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || errorMessage);
+    }
+    return await response.json();
+}
+
+function buildOptions(method, body) {
+    const options = {
+        ...fetchOptions,
+        method,
+        credentials: 'include'
+    };
+
+    if (body !== undefined) {
+        options.body = JSON.stringify(body);
+    }
+
+    return options;
+}
+
 /**
  * Fetch microblog posts
  * @param {string} pagePath - Optional page path to filter posts
@@ -12,21 +37,10 @@ import { pythonURI, fetchOptions } from './config.js';
  */
 export async function fetchPosts(pagePath) {
     const url = pagePath
-        ? `${pythonURI}/api/microblog?pagePath=${encodeURIComponent(pagePath)}`
-        : `${pythonURI}/api/microblog`;
+        ? `${MICROBLOG_BASE}?pagePath=${encodeURIComponent(pagePath)}`
+        : MICROBLOG_BASE;
 
-    const response = await fetch(url, {
-        ...fetchOptions,
-        method: 'GET',
-        credentials: 'include'
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to fetch posts');
-    }
-
-    return await response.json();
+    return await requestJson(url, buildOptions('GET'), 'Failed to fetch posts');
 }
 
 /**
@@ -35,19 +49,11 @@ export async function fetchPosts(pagePath) {
  * @returns {Promise<Object>} - Created post data
  */
 export async function createPost(postData) {
-    const response = await fetch(`${pythonURI}/api/microblog`, {
-        ...fetchOptions,
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(postData)
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create post');
-    }
-
-    return await response.json();
+    return await requestJson(
+        MICROBLOG_BASE,
+        buildOptions('POST', postData),
+        'Failed to create post'
+    );
 }
 
 /**
@@ -56,19 +62,11 @@ export async function createPost(postData) {
  * @returns {Promise<Object>} - Updated post data
  */
 export async function updatePost(postData) {
-    const response = await fetch(`${pythonURI}/api/microblog`, {
-        ...fetchOptions,
-        method: 'PUT',
-        credentials: 'include',
-        body: JSON.stringify(postData)
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to update post');
-    }
-
-    return await response.json();
+    return await requestJson(
+        MICROBLOG_BASE,
+        buildOptions('PUT', postData),
+        'Failed to update post'
+    );
 }
 
 /**
@@ -77,19 +75,11 @@ export async function updatePost(postData) {
  * @returns {Promise<Object>} - Deletion confirmation
  */
 export async function deletePost(postId) {
-    const response = await fetch(`${pythonURI}/api/microblog`, {
-        ...fetchOptions,
-        method: 'DELETE',
-        credentials: 'include',
-        body: JSON.stringify({ id: postId })
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to delete post');
-    }
-
-    return await response.json();
+    return await requestJson(
+        MICROBLOG_BASE,
+        buildOptions('DELETE', { id: postId }),
+        'Failed to delete post'
+    );
 }
 
 /**
@@ -98,19 +88,11 @@ export async function deletePost(postId) {
  * @returns {Promise<Object>} - Created reply data
  */
 export async function createReply(replyData) {
-    const response = await fetch(`${pythonURI}/api/microblog/reply`, {
-        ...fetchOptions,
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(replyData)
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create reply');
-    }
-
-    return await response.json();
+    return await requestJson(
+        `${MICROBLOG_BASE}/reply`,
+        buildOptions('POST', replyData),
+        'Failed to create reply'
+    );
 }
 
 /**
@@ -119,18 +101,11 @@ export async function createReply(replyData) {
  * @returns {Promise<Object>} - Replies data
  */
 export async function fetchReplies(postId) {
-    const response = await fetch(`${pythonURI}/api/microblog/reply?postId=${postId}`, {
-        ...fetchOptions,
-        method: 'GET',
-        credentials: 'include'
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to fetch replies');
-    }
-
-    return await response.json();
+    return await requestJson(
+        `${MICROBLOG_BASE}/reply?postId=${postId}`,
+        buildOptions('GET'),
+        'Failed to fetch replies'
+    );
 }
 
 /**
@@ -139,19 +114,11 @@ export async function fetchReplies(postId) {
  * @returns {Promise<Object>} - Updated post with reactions
  */
 export async function addReaction(reactionData) {
-    const response = await fetch(`${pythonURI}/api/microblog/reaction`, {
-        ...fetchOptions,
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(reactionData)
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to add reaction');
-    }
-
-    return await response.json();
+    return await requestJson(
+        `${MICROBLOG_BASE}/reaction`,
+        buildOptions('POST', reactionData),
+        'Failed to add reaction'
+    );
 }
 
 /**
@@ -160,17 +127,9 @@ export async function addReaction(reactionData) {
  * @returns {Promise<Object>} - Updated post without reaction
  */
 export async function removeReaction(reactionData) {
-    const response = await fetch(`${pythonURI}/api/microblog/reaction`, {
-        ...fetchOptions,
-        method: 'DELETE',
-        credentials: 'include',
-        body: JSON.stringify(reactionData)
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to remove reaction');
-    }
-
-    return await response.json();
+    return await requestJson(
+        `${MICROBLOG_BASE}/reaction`,
+        buildOptions('DELETE', reactionData),
+        'Failed to remove reaction'
+    );
 }
