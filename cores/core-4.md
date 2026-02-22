@@ -1209,18 +1209,16 @@ microblog: true
   };
 
   const attempts = [];
-  function recordAttempt(score, maxScore, feedback, serverSummary) {
-    const attempt = { score, maxScore, feedback, serverSummary };
-    attempts.push(attempt);
 
+  function summarizeAttempts(attemptList, partialFloor) {
     let localSummary = "";
-    for (let i = 0; i < attempts.length; i++) {
-      const a = attempts[i];
+    for (let i = 0; i < attemptList.length; i++) {
+      const a = attemptList[i];
       let label;
 
       if (a.score === a.maxScore) {
         label = "Perfect";
-      } else if (a.score > 0) {
+      } else if (a.score > partialFloor) {
         label = "Partial";
       } else {
         label = "No credit";
@@ -1230,6 +1228,12 @@ microblog: true
     }
 
     return localSummary.trim();
+  }
+
+  function recordAttempt(score, maxScore, feedback, serverSummary) {
+    const attempt = { score, maxScore, feedback, serverSummary };
+    attempts.push(attempt);
+    return summarizeAttempts(attempts, 0);
   }
 
   const sampleAnswers = {
