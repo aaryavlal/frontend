@@ -21,6 +21,10 @@ The written response section requires you to answer questions about:
 
 ## Task 1: PPR 3a — Procedure Description ✓
 
+### PURPOSE
+
+> The `findEligibleOrder()` procedure searches through pending GPU assembly orders to locate one that needs a specific task and meets all manufacturing prerequisites. It returns the first eligible order object or null, enabling the simulation's task assignment system to match robots with work.
+
 ### Written Response 3a
 
 > **Prompt:** Describe the overall purpose of the program and what functionality the selected procedure contributes to.
@@ -71,6 +75,10 @@ function findEligibleOrder(task, stationId) {
 ---
 
 ## Task 2: PPR 3b — Algorithm Description ✓
+
+### PURPOSE
+
+> The algorithm iterates through a list of pending orders, applying sequential filter checks (station match → task incomplete → prerequisites met) before returning. Selection handles different stage configurations and validation rules, while iteration enables processing of variable-length order queues.
 
 ### Written Response 3b
 
@@ -143,6 +151,10 @@ function findEligibleOrder(task, stationId) {
 
 ## Task 3: PPR 3c — List Usage ✓
 
+### PURPOSE
+
+> The `orders` list stores pending GPU assembly orders with their completion states, enabling the program to handle variable workloads dynamically. It maintains FIFO queue ordering and allows iteration-based task assignment across all three computing models without hardcoded order limits.
+
 ### Written Response 3c
 
 > **Prompt:** Describe how the selected list manages complexity in your program.
@@ -165,14 +177,9 @@ The `orders` list is essential to my program because it stores all pending GPU a
 
 3. **Preserves queue order:** The list maintains first-in-first-out (FIFO) ordering, so `orders[0]` represents the oldest pending order. This ensures earlier orders get priority during iteration.
 
-4. **Supports multiple computing models:**
-   - **Stage 1 (Sequential):** Orders process one at a time through a single robot
-   - **Stage 2 (Parallel):** Multiple orders can be partially complete simultaneously as three robots work in parallel
-   - **Stage 3 (Distributed):** Orders are split across three factories by counting list length at each station
+4. **Simplifies JSON response:** Array methods like `.filter()`, `.find()`, and `.splice()` replace complex manual tracking logic, keeping the codebase maintainable.
 
-5. **Simplifies state management:** Instead of tracking completion flags for each possible order position, the list allows direct access via iteration and array methods like `.filter()`, `.find()`, and `.splice()`.
-
-Without this list, I would need pre-allocated variables for each order slot, complex conditional logic to handle different queue sizes, and manual tracking of which slots are occupied—significantly increasing code complexity and making the multi-stage computing demonstration impossible to maintain.
+Without this list, I would need pre-allocated variables for each order slot, complex conditional logic to handle different queue sizes, and manual tracking of which slots are occupied—significantly increasing code complexity and reducing maintainability.
 
 ---
 
@@ -258,32 +265,71 @@ function checkOrderCompletion() {
 
 ## Task 4: Code Screenshots ✓
 
-### Screenshot Checklist
+### Input
+**File:** `gpu-assembly-simulator.md` — Button click triggering `assignTask()`
 
-Take screenshots of these code segments for your Create PT submission:
+![Core1 Input]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Input.png)
 
-| Screenshot | File | Lines | Shows |
-|------------|------|-------|-------|
-| **Input** | `gpu-assembly-simulator.md` | User clicks task button triggering `onclick="assignTask()"` |
-| **Procedure** | `gpu-assembly-simulator.md` | 1859-1876 | Full `findEligibleOrder()` function |
-| **List Declaration** | `gpu-assembly-simulator.md` | 1595 | `orders = []` |
-| **List Iteration** | `gpu-assembly-simulator.md` | 1860-1875 | `for (let order of orders)` loop |
-| **Selection** | `gpu-assembly-simulator.md` | 1862, 1865, 1870 | Conditional filters |
-| **Return Value** | `gpu-assembly-simulator.md` | 1871, 1875 | `return order` and `return null` |
-| **Output** | `gpu-assembly-simulator.md` | Called by `assignTask()` which updates UI |
+---
 
-### How to Take Screenshots
+### Algorithm (Procedure)
+**File:** `gpu-assembly-simulator.md` — Full `findEligibleOrder()` function
 
-1. Open the file in VS Code
-2. Highlight the relevant lines
-3. Use `Cmd+Shift+4` (Mac) or `Win+Shift+S` (Windows) to capture
-4. Save with descriptive names: `input.png`, `procedure.png`, `list.png`, etc.
+![Core1 Algorithm]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1imgAlgorithm.png)
+
+---
+
+### List Declaration
+**File:** `gpu-assembly-simulator.md` — `orders = []`
+
+![Core1 List Declaration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1imgList.png)
+
+---
+
+### List Append
+**File:** `gpu-assembly-simulator.md` — `orders.push({...})`
+
+![Core1 List Append]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1ListAppend.png)
+
+---
+
+### List Usage
+**File:** `gpu-assembly-simulator.md` — `for (let order of orders)` in `findEligibleOrder()`
+
+![Core1 List Usage]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1ListUsage.png)
+
+---
+
+### Iteration
+**File:** `gpu-assembly-simulator.md` — `for (let order of orders)` loop
+
+![Core1 Iteration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Iteration.png)
+
+---
+
+### Selection
+**File:** `gpu-assembly-simulator.md` — `if (order.stationId !== stationId)`, `if (!order.steps[task])`, `if (idx === 0 || ...)`
+
+![Core1 Selection Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart1.png)
+
+![Core1 Selection Part 2]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart2.png)
+
+![Core1 Selection Part 3]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart3.png)
+
+---
+
+### Output
+**File:** `gpu-assembly-simulator.md` — `return order` and `return null`
+
+![Core1 Output]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Output.png)
 
 ---
 
 ## Task 5: Code Annotations ✓
 
 ### Annotated Procedure Code
+
+Add these comments to your code for clarity:
 
 ```javascript
 function findEligibleOrder(task, stationId) {
@@ -323,34 +369,6 @@ function findEligibleOrder(task, stationId) {
 }
 ```
 
-### Annotated Helper Functions
-
-```javascript
-// HELPER PROCEDURE: validateTaskPrerequisites
-// PURPOSE: Check if previous tasks are complete
-// PARAMETERS: order (object), task (string)
-// RETURNS: boolean (true if prerequisites met)
-function validateTaskPrerequisites(order, task) {
-  const steps = ['pcb', 'cores', 'memory'];
-  const idx = steps.indexOf(task);
-
-  // SELECTION: First task always valid
-  if (idx === 0) return true;
-
-  // SELECTION: Check previous task complete
-  return order.steps[steps[idx - 1]];
-}
-
-// HELPER PROCEDURE: getTaskDuration
-// PURPOSE: Calculate task duration based on computing stage
-// PARAMETERS: task (string)
-// RETURNS: number (milliseconds)
-function getTaskDuration(task) {
-  // SELECTION: Parallel stage (2) is 40% faster than sequential (1)
-  return currentStage === 2 ? TASK_DURATIONS[task] * 0.6 : TASK_DURATIONS[task];
-}
-```
-
 ---
 
 ## Day 3 Checklist
@@ -365,24 +383,10 @@ function getTaskDuration(task) {
 
 ## PPR Summary Table
 
-| Question | Key Points | Word Count |
-|----------|------------|------------|
-| **3a** | Purpose: computing models simulation; Procedure: `findEligibleOrder()` returns eligible order via iteration+selection | ~150 |
-| **3b** | Sequencing: 5 ordered steps; Selection: 3 conditionals for filtering; Iteration: for...of loop through orders; Returns: order or null | ~175 |
-| **3c** | List: `orders`; Manages: variable workload, FIFO queue, multi-stage support, eliminates fixed variables | ~175 |
-
-**Key Improvements:**
-- ✅ Shorter procedure (17 lines vs 61 lines)
-- ✅ Clear return value (order object or null)
-- ✅ Focused purpose (search and filter)
-- ✅ Still demonstrates all three concepts (sequencing, selection, iteration)
+| Question | Key Points | Word Count Target |
+|----------|------------|-------------------|
+| **3a** | Purpose: computing models simulation; Procedure: `findEligibleOrder()` returns eligible order via iteration+selection | 150 words |
+| **3b** | Sequencing: 5 ordered steps; Selection: 3 conditionals for filtering; Iteration: for...of loop through orders | 200 words |
+| **3c** | List: `orders`; Manages: variable workload, FIFO queue, multi-stage support, eliminates fixed variables | 200 words |
 
 ---
-
-## Next Steps (Day 4)
-
-1. Finalize 1-minute video script
-2. Set up screen recording software
-3. Practice demo walkthrough showing all three stages
-4. Prepare localhost environment for recording
-5. **CHECKPOINT:** Review video script with peer
