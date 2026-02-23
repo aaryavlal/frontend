@@ -1855,56 +1855,75 @@ function autoProcessOrder(order) {
 }
 
 // ===== TASK ASSIGNMENT (PPR - PRESERVED EXACTLY) =====
+// Helper: Find eligible order (ITERATION + SELECTION)
+function findEligibleOrder(task, stationId) {
+  for (let order of orders) {
+    // Selection: Filter by station
+    if (order.stationId !== stationId && currentStage !== 3) continue;
+
+    // Selection: Check if task needed
+    if (!order.steps[task]) {
+      const steps = ['pcb', 'cores', 'memory'];
+      const idx = steps.indexOf(task);
+
+      // Selection: Verify prerequisites
+      if (idx === 0 || order.steps[steps[idx - 1]]) {
+        return order;  // Return first eligible order
+      }
+    }
+  }
+  return null;  // No eligible order found
+}
+
+// Helper: Validate prerequisites (SELECTION)
+function validateTaskPrerequisites(order, task) {
+  const steps = ['pcb', 'cores', 'memory'];
+  const idx = steps.indexOf(task);
+
+  // Selection: First task has no prerequisites
+  if (idx === 0) return true;
+
+  // Selection: Check previous task completed
+  return order.steps[steps[idx - 1]];
+}
+
+// Helper: Calculate task duration (SELECTION)
+function getTaskDuration(task) {
+  // Selection: Parallel stage is faster
+  return currentStage === 2 ? TASK_DURATIONS[task] * 0.6 : TASK_DURATIONS[task];
+}
+
+// Main procedure: Assign task to robot (SEQUENCING)
 function assignTask(stationId, robotId, task) {
   const station = workstations.find(s => s.id === stationId);
   const robot = station.robots.find(r => r.id === robotId);
 
+  // Selection: Validate robot available
   if (robot.busy || orders.length === 0) return;
 
-  // Find first available order that needs this task and meets prerequisites
-  let order = null;
-  for (let o of orders) {
-    if (o.stationId !== stationId && currentStage !== 3) continue;
-
-    if (!o.steps[task]) {
-      const steps = ['pcb', 'cores', 'memory'];
-      const idx = steps.indexOf(task);
-
-      // Check if prerequisites are met
-      if (idx === 0 || order === null) {
-        if (idx === 0 || o.steps[steps[idx - 1]]) {
-          order = o;
-          break;
-        }
-      }
-    }
-  }
-
+  // Sequencing Step 1: Find eligible order (uses ITERATION)
+  const order = findEligibleOrder(task, stationId);
   if (!order) {
     showToast('No orders need this task!', 'warning');
     return;
   }
 
-  if (order.steps[task]) {
-    showToast(`${task.toUpperCase()} already done!`, 'warning');
-    return;
-  }
-
-  const steps = ['pcb', 'cores', 'memory'];
-  const idx = steps.indexOf(task);
-  if (idx > 0 && !order.steps[steps[idx - 1]]) {
+  // Sequencing Step 2: Validate prerequisites (uses SELECTION)
+  if (!validateTaskPrerequisites(order, task)) {
+    const steps = ['pcb', 'cores', 'memory'];
+    const idx = steps.indexOf(task);
     showToast(`Complete ${steps[idx - 1].toUpperCase()} first!`, 'warning');
     return;
   }
 
+  // Sequencing Step 3: Assign task to robot
   robot.busy = true;
   robot.task = task;
   robot.orderId = order.id;
   playSound('click');
 
-  // Faster task times for Stage 2 to show parallel advantage
-  const duration = currentStage === 2 ? TASK_DURATIONS[task] * 0.6 : TASK_DURATIONS[task];
-
+  // Sequencing Step 4: Schedule completion (uses SELECTION for duration)
+  const duration = getTaskDuration(task);
   robot.timer = setTimeout(() => {
     order.steps[task] = true;
     robot.busy = false;
