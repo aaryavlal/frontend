@@ -36,42 +36,44 @@ layout: post
 - Calculates performance improvement
 - Visualizes Amdahl's Law
 
-**Procedure: `computeSpeedup()`**
-- Collects task values from both rows
-- Validates input exists
-- Calculates serial time (sum all)
-- Calculates parallel time (series + max parallel)
-- Computes speedup ratio
-- Displays results
-- **Without it:** Just drag-and-drop interface with no computational analysis
+**Main Procedure: `computeSpeedup()`**
+- Orchestrates the speedup calculation by calling helper functions
+- Each helper function has a single, clear responsibility
+
+**Supporting Procedures:**
+- `collectTaskBlocks(rowId)` — Extracts task values from a specific row
+- `validateTasks()` — Checks if tasks exist before processing
+- `calculateSerialTime()` — Computes total serial execution time
+- `calculateParallelTime()` — Computes parallel execution time using Amdahl's Law
+- `computeSpeedupRatio()` — Calculates the speedup ratio
+- `displayResults()` — Updates the UI with results
+
+**Without it:** Just drag-and-drop interface with no computational analysis
 ### 📸 Code Screenshot
 
 ![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
-**Location:** `frontend/cores/core-5.md` — Lines 2200-2240
+**Location:** `frontend/cores/core-5.md` — Lines 2200-2280
 
-**What to capture:**
+**Complete Code:**
+
 ```javascript
-function computeSpeedup() {
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-                            .filter(c => c.classList.contains("block"))
-                            .map(b => parseInt(b.textContent));
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-                            .filter(c => c.classList.contains("block"))
-                            .map(b => parseInt(b.textContent));
-
-    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Please add some tasks to the Series or Parallel rows first");
+// Simple function from core-5.md (Lines 2181-2196)
+function addTask() {
+    const val = parseInt(document.getElementById('newTaskTime').value);
+    if(isNaN(val) || val < 1) {
+        alert("Please enter a valid task time (positive number)");
         return;
     }
 
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
-    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
-
-    // Display results...
-    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+    const block = document.createElement("div");
+    block.className = "block";
+    block.id = "task" + Date.now();
+    block.draggable = true;
+    block.ondragstart = drag;
+    block.textContent = val;
+    document.getElementById("taskPool").appendChild(block);
+    document.getElementById('newTaskTime').value = "";
 }
 ```
 
@@ -89,20 +91,23 @@ function computeSpeedup() {
 > **Prompt:** Describe how the selected algorithm includes sequencing, selection, and iteration.
 
 **Sequencing (7 steps in order):**
-1. Collect series tasks
-2. Collect parallel tasks
-3. Validate input
-4. Calculate serial time
-5. Calculate parallel time
-6. Compute speedup
-7. Display results
+1. Call `collectTaskBlocks("seriesRow")` to gather series tasks
+2. Call `collectTaskBlocks("parallelRow")` to gather parallel tasks
+3. Call `validateTasks()` to ensure input exists
+4. Call `calculateSerialTime()` to sum all tasks
+5. Call `calculateParallelTime()` to apply Amdahl's Law
+6. Call `computeSpeedupRatio()` to calculate speedup
+7. Call `displayResults()` to update the UI
 
 **Selection (conditionals):**
-- `if (seriesBlocks.length === 0 && parallelBlocks.length === 0)` → validates tasks exist
-- `parallelBlocks.length ? Math.max(...) : 0` → checks parallel tasks before max
-- `parallelTime > 0 ? serialTime / parallelTime : 0` → prevents divide by zero
+- `if (seriesBlocks.length === 0 && parallelBlocks.length === 0)` → validates tasks exist in `validateTasks()`
+- `parallelBlocks.length ? Math.max(...) : 0` → checks parallel tasks before max in `calculateParallelTime()`
+- `parallelTime > 0 ? serialTime / parallelTime : 0` → prevents divide by zero in `computeSpeedupRatio()`
 
-**Iteration (loops):**
+**Iteration (array methods):**
+- `.filter()` in `collectTaskBlocks()` — iterates to find block elements
+- `.map()` in `collectTaskBlocks()` — iterates to parse integers
+- `.reduce()` in `calculateSerialTime()` and `calculateParallelTime()` — iterates to sum values
 ### 📸 Code Screenshot
 
 ![Algorithm Code - Annotated](../screenshots/core5-algorithm.png)
@@ -112,32 +117,57 @@ function computeSpeedup() {
 
 **What to capture (same as 3a, but add annotations):**
 ```javascript
-function computeSpeedup() {
-    // STEP 1-2: Collect tasks (ITERATION)
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-                            .filter(c => c.classList.contains("block"))  // ITERATION
-                            .map(b => parseInt(b.textContent));          // ITERATION
-    
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-                            .filter(c => c.classList.contains("block"))
-                            .map(b => parseInt(b.textContent));
+// HELPER: Collect blocks (ITERATION)
+function collectTaskBlocks(rowId) {
+    return Array.from(document.getElementById(rowId).children)
+        .filter(c => c.classList.contains("block"))  // ITERATION
+        .map(b => parseInt(b.textContent));          // ITERATION
+}
 
-    // STEP 3: Validate (SELECTION)
+// HELPER: Validate (SELECTION)
+function validateTasks(seriesBlocks, parallelBlocks) {
     if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
         alert("Please add some tasks to the Series or Parallel rows first");
-        return;
+        return false;
     }
+    return true;
+}
 
-    // STEP 4-5: Calculate (ITERATION)
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
-    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0); // SELECTION
+// HELPER: Serial time (ITERATION)
+function calculateSerialTime(seriesBlocks, parallelBlocks) {
+    return [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
+}
 
-    // STEP 6: Compute (SELECTION)
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+// HELPER: Parallel time (ITERATION + SELECTION)
+function calculateParallelTime(seriesBlocks, parallelBlocks) {
+    const seriesTime = seriesBlocks.reduce((a, b) => a + b, 0);
+    const parallelMax = parallelBlocks.length ? Math.max(...parallelBlocks) : 0; // SELECTION
+    return seriesTime + parallelMax;
+}
 
-    // STEP 7: Store
-    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+// HELPER: Speedup (SELECTION)
+function computeSpeedupRatio(serialTime, parallelTime) {
+    return parallelTime > 0 ? serialTime / parallelTime : 0;  // SELECTION
+}
+
+// MAIN PROCEDURE: Orchestrates calculation (SEQUENCING)
+function computeSpeedup() {
+    // STEP 1-2: Collect
+    const seriesBlocks = collectTaskBlocks("seriesRow");
+    const parallelBlocks = collectTaskBlocks("parallelRow");
+    
+    // STEP 3: Validate
+    if (!validateTasks(seriesBlocks, parallelBlocks)) return;
+    
+    // STEP 4-5: Calculate
+    const serialTime = calculateSerialTime(seriesBlocks, parallelBlocks);
+    const parallelTime = calculateParallelTime(seriesBlocks, parallelBlocks);
+    
+    // STEP 6: Compute speedup
+    const speedup = computeSpeedupRatio(serialTime, parallelTime);
+    
+    // STEP 7: Display
+    displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup);
 }
 ```
 
@@ -184,30 +214,48 @@ function computeSpeedup() {
 
 **What to capture:**
 ```javascript
+// LIST CREATION FUNCTION - Purpose: Create array from DOM elements
+function collectTaskBlocks(rowId) {
+    return Array.from(document.getElementById(rowId).children)
+        .filter(c => c.classList.contains("block"))
+        .map(b => parseInt(b.textContent));
+}
+
+// LIST PROCESSING FUNCTION - Purpose: Sum all values in both arrays
+function calculateSerialTime(seriesBlocks, parallelBlocks) {
+    return [...seriesBlocks, ...parallelBlocks].reduce((a, b) => a + b, 0);
+}
+
+// LIST PROCESSING FUNCTION - Purpose: Find max from parallel array
+function calculateParallelTime(seriesBlocks, parallelBlocks) {
+    const seriesTime = seriesBlocks.reduce((a, b) => a + b, 0);
+    const parallelMax = parallelBlocks.length ? Math.max(...parallelBlocks) : 0;
+    return seriesTime + parallelMax;
+}
+
+// MAIN PROCEDURE - Uses lists created by helper functions
 function computeSpeedup() {
     // LIST CREATION - collect into arrays
-    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
-                            .filter(c => c.classList.contains("block"))
-                            .map(b => parseInt(b.textContent));
-    
-    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
-                            .filter(c => c.classList.contains("block"))
-                            .map(b => parseInt(b.textContent));
+    const seriesBlocks = collectTaskBlocks("seriesRow");
+    const parallelBlocks = collectTaskBlocks("parallelRow");
 
     // Validation
-    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Please add some tasks to the Series or Parallel rows first");
-        return;
+    if (!validateTasks(seriesBlocks, parallelBlocks)) return;
     }
 
-    // LIST USAGE - combine and process
-    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
-    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
-                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
-    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+    // LIST USAGE - call processing functions
+    const serialTime = calculateSerialTime(seriesBlocks, parallelBlocks);
+    const parallelTime = calculateParallelTime(seriesBlocks, parallelBlocks);
+    const speedup = computeSpeedupRatio(serialTime, parallelTime);
 
-    // LIST STORAGE - save in object
+    // LIST STORAGE - save arrays in object
+    displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup);
+}
+
+// LIST STORAGE FUNCTION - Purpose: Store results including lists
+function displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup) {
     window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+    // Update display elements...
 }
 ```
 
@@ -218,10 +266,10 @@ function computeSpeedup() {
 | # | Purpose | File | Lines | What Code to Screenshot |
 |---|---------|------|-------|------------------------|
 | **1** | Input (optional) | `core-5.md` | 2181-2199 | `addTask()` function - creates task blocks |
-| **2** | Procedure (3a) | `core-5.md` | 2200-2240 | `computeSpeedup()` - full function |
-| **3** | Algorithm (3b) | `core-5.md` | 2200-2240 | Same as #2, add annotations: SEQUENCING, SELECTION, ITERATION |
-| **4** | Lists (3c) | `core-5.md` | 2200-2240 | Same as #2, highlight `seriesBlocks[]` and `parallelBlocks[]` |
-| **5** | Output (optional) | `core-5.md` | 2227-2235 | Results display section with `resultsElem.textContent` |
+| **2** | Procedure (3a) | `core-5.md` | 2200-2280 | All helper functions + `computeSpeedup()` main procedure |
+| **3** | Algorithm (3b) | `core-5.md` | 2200-2280 | Same as #2, add annotations: SEQUENCING, SELECTION, ITERATION |
+| **4** | Lists (3c) | `core-5.md` | 2200-2280 | Highlight `collectTaskBlocks()`, list operations in calculation functions |
+| **5** | Output (optional) | `core-5.md` | 2227-2235 | `displayResults()` function with storage operation |
 
 ### 💡 Screenshot Tips
 - Use arrows or boxes to highlight key elements
@@ -233,17 +281,21 @@ function computeSpeedup() {
 ### 🎯 Annotation Guide
 
 **For 3a (Procedure):**
-- Label the function name
+- Label the main `computeSpeedup()` function
+- Label each helper function with its single purpose
 - No special annotations needed
 
 **For 3b (Algorithm):**
-- Add "STEP 1", "STEP 2", etc. comments
-- Circle or highlight `if` statements → SELECTION
-- Circle `.filter()`, `.map()`, `.reduce()` → ITERATION
+- Add "STEP 1", "STEP 2", etc. comments in main function
+- Circle or highlight `if` statements in `validateTasks()` → SELECTION
+- Circle `.filter()`, `.map()` in `collectTaskBlocks()` → ITERATION
+- Circle `.reduce()` in calculation functions → ITERATION
 
 **For 3c (Lists):**
-- Highlight `seriesBlocks` and `parallelBlocks` with arrows
-- Label where created, used, and stored
+- Highlight `seriesBlocks` and `parallelBlocks` arrays with arrows
+- Label `collectTaskBlocks()` as LIST CREATION
+- Label calculation functions as LIST PROCESSING
+- Label `displayResults()` as LIST STORAGE
 
 ---
 

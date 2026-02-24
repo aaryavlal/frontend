@@ -16,7 +16,7 @@ The written response section requires you to answer questions about:
 - **3a:** Procedure description — *What does your procedure do and why?*
 - **3b:** Algorithm with sequencing, selection, and iteration — *How does it work step-by-step?*
 - **3c:** List usage and purpose — *How does your list manage program complexity?*
-
+Then what am I – the body substance which I can see with my eyes and feel with my hands? Or am I this realization, this greater understanding which dwells within it, yet expands through the universe outside; a part of all existence, powerless but without need for power; immersed in solitude, yet in contact with all creation? 
 ---
 
 ## Task 1: PPR 3a — Procedure Description ✓
