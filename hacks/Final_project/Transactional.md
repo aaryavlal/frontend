@@ -1,7 +1,7 @@
 ---
 permalink: /transactions
 title: Quest — Transactional Data & Room Code System
-lauout: post
+layout: post
 ---
 # Quest — Transactional Data & Room Code System
 
@@ -72,7 +72,7 @@ erDiagram
 
 ## Room Code System
 
-Rooms are identified by a unique 6-character hex code (e.g. `A3F9C2`). Students never deal with internal IDs — they join by code. The demo room `DEMO01` is a special hardcoded code that always exists and cannot be deleted.
+Rooms are identified by a unique 6-character hex code (e.g. `A3F9C2`). Students never deal with internal IDs — they join by code.
 
 ```mermaid
 flowchart TD
@@ -94,27 +94,34 @@ flowchart TD
 
 ## Room Membership — Two-Write Sync
 
-Joining and leaving a room always touches two tables together. `room_members` holds the official membership record. `users.current_room_id` is a shortcut pointer used by the frontend to know which room the user is currently active in.
+Every join or leave writes to two tables. `room_members` is the source of truth for membership. `users.current_room_id` is a pointer the frontend uses to know which room the user is currently in — it must stay in sync.
 
+**Join**
 ```mermaid
 sequenceDiagram
     participant Client
-    participant rooms_bp
+    participant API
     participant room_members
     participant users
 
-    Note over Client,users: Join
-    Client->>rooms_bp: POST /api/rooms/join { room_code }
-    rooms_bp->>rooms_bp: lookup room by code
-    rooms_bp->>room_members: INSERT (room_id, user_id)
-    rooms_bp->>users: UPDATE current_room_id = room_id
-    rooms_bp-->>Client: 200 { room }
+    Client->>API: POST /api/rooms/join { room_code }
+    API->>room_members: INSERT (room_id, user_id)
+    API->>users: UPDATE current_room_id = room_id
+    API-->>Client: 200 { room }
+```
 
-    Note over Client,users: Leave
-    Client->>rooms_bp: POST /api/rooms/:id/leave
-    rooms_bp->>room_members: DELETE WHERE room_id AND user_id
-    rooms_bp->>users: UPDATE current_room_id = NULL
-    rooms_bp-->>Client: 200
+**Leave**
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API
+    participant room_members
+    participant users
+
+    Client->>API: POST /api/rooms/:id/leave
+    API->>room_members: DELETE WHERE room_id AND user_id
+    API->>users: UPDATE current_room_id = NULL
+    API-->>Client: 200
 ```
 
 ---
@@ -135,9 +142,7 @@ flowchart TD
     H --> I[COUNT modules\nin room_progress]
     I --> J{count == 6?}
     J -- No --> K[module_complete: true\nroom_complete: false]
-    J -- Yes --> L{is demo room?}
-    L -- Yes --> M[room_complete: true\nis_demo: true]
-    L -- No --> N[room_complete: true\nis_demo: false]
+    J -- Yes --> L[room_complete: true]
 ```
 
 ---
@@ -175,11 +180,7 @@ flowchart TD
     A[POST /api/rooms/:id/reset-progress] --> B[DELETE FROM room_progress\nWHERE room_id = ?]
     B --> C[GET all members\nFROM room_members]
     C --> D[DELETE FROM user_progress\nWHERE user_id IN all members]
-    D --> E{Is demo room?}
-    E -- Yes --> F[Members stay\nRoom stays\nProgress zeroed]
-    E -- No --> G[Members stay\nRoom stays\nProgress zeroed]
-    F --> H[glossary untouched]
-    G --> H
+    D --> E[Members stay\nRoom stays\nProgress zeroed\nGlossary untouched]
 ```
 
 ---
@@ -207,4 +208,3 @@ flowchart TD
     end
 ```
 
-> The demo room `DEMO01` is protected at the model layer — `delete_room()` exits early if `is_demo_room()` returns true. It can be reset but never deleted.
