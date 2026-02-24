@@ -10,7 +10,7 @@ layout: post
 
 ---
 
-## 📋 College Board Requirements Summary
+## College Board Requirements Summary
 
 | Requirement | Your Response |
 |------------|---------------|
@@ -21,14 +21,14 @@ layout: post
 
 ---
 
-## Task 1: PPR 3a — Procedure ✓
+## Task 1: PPR 3a — Procedure
 
-### 📝 Criteria
+### Criteria
 
 - **Describe:** Overall program purpose
 - **Explain:** What the procedure does and why it's essential
 
-### ✅ Your Response
+### Your Response
 
 **Program Purpose:**
 - Demonstrates parallel computing speedup
@@ -49,7 +49,7 @@ layout: post
 - `displayResults()` — Updates the UI with results
 
 **Without it:** Just drag-and-drop interface with no computational analysis
-### 📸 Code Screenshot
+### Code Screenshot
 
 ![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
@@ -134,7 +134,7 @@ function saveRun() {
     if(!name) return;
 
     savedRuns.push({name, ...window.currentScore, timestamp: new Date().toLocaleString()});
-    alert(`✅ Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
+    alert(`Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
     
     checkForCPUReward();
 }
@@ -142,14 +142,14 @@ function saveRun() {
 
 ---
 
-## Task 2: PPR 3b — Algorithm ✓
+## Task 2: PPR 3b — Algorithm
 
-### 📝 Criteria
+### Criteria
 - **Must show:** Sequencing, Selection, AND Iteration
 - **Same code** can be used as for 3a
 
-### ✅ Your Response
-## Task 2: PPR 3b — Algorithm Description ✓
+### Your Response
+## Task 2: PPR 3b — Algorithm Description
 
 > **Prompt:** Describe how the selected algorithm includes sequencing, selection, and iteration.
 
@@ -171,7 +171,7 @@ function saveRun() {
 - `.filter()` in `collectTaskBlocks()` — iterates to find block elements
 - `.map()` in `collectTaskBlocks()` — iterates to parse integers
 - `.reduce()` in `calculateSerialTime()` and `calculateParallelTime()` — iterates to sum values
-### 📸 Code Screenshot
+### Code Screenshot
 
 ![Algorithm Code - Annotated](../screenshots/core5-algorithm.png)
 
@@ -236,16 +236,16 @@ function computeSpeedup() {
 
 ---
 
-## Task 3: PPR 3c — Lists ✓
+## Task 3: PPR 3c — Lists
 
-### 📝 Criteria
+### Criteria
 - **Identify:** The list(s) used in your program
 - **Explain:** How lists manage complexity (not just what they store)
 - **Show:** What would happen WITHOUT lists
 
-### ✅ Your Response
+### Your Response
 
-## Task 3: PPR 3c — List Usage ✓
+## Task 3: PPR 3c — List Usage
 
 > **Prompt:** Describe how the selected list manages complexity in your program.
 
@@ -268,7 +268,7 @@ function computeSpeedup() {
 3. **Simple calculations**
    - `.reduce()` sums in one line
    - No manual loops needed
-### 📸 Code Screenshot
+### Code Screenshot
 
 ![List Usage - seriesBlocks and parallelBlocks](../screenshots/core5-lists.png)
 
@@ -324,7 +324,7 @@ function displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, 
 
 ---
 
-## 📸 Complete Screenshot Guide
+## Complete Screenshot Guide
 
 | # | Purpose | File | Lines | What Code to Screenshot |
 |---|---------|------|-------|------------------------|
@@ -334,14 +334,14 @@ function displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, 
 | **4** | Lists (3c) | `core-5.md` | 2200-2280 | Highlight `collectTaskBlocks()`, list operations in calculation functions |
 | **5** | Output (optional) | `core-5.md` | 2227-2235 | `displayResults()` function with storage operation |
 
-### 💡 Screenshot Tips
+### Screenshot Tips
 - Use arrows or boxes to highlight key elements
 - Add text labels directly in code comments
 - Make variable names clearly visible
 - Use 14pt+ font size for readability
 - **You can use ONE screenshot for 3a, 3b, and 3c** if you add proper annotations
 
-### 🎯 Annotation Guide
+### Annotation Guide
 
 **For 3a (Procedure):**
 - Label the main `computeSpeedup()` function
@@ -362,7 +362,7 @@ function displayResults(seriesBlocks, parallelBlocks, serialTime, parallelTime, 
 
 ---
 
-## ✅ Final Checklist
+## Final Checklist
 
 - [ ] Written response for 3a (program purpose + procedure function)
 - [ ] Written response for 3b (sequencing, selection, iteration explained)
