@@ -58,7 +58,7 @@ layout: post
 **Complete Code:**
 
 ```javascript
-// Simple function from core-5.md (Lines 2181-2196)
+// Function 1: Add a new task block (Lines 2181-2196)
 function addTask() {
     const val = parseInt(document.getElementById('newTaskTime').value);
     if(isNaN(val) || val < 1) {
@@ -74,6 +74,69 @@ function addTask() {
     block.textContent = val;
     document.getElementById("taskPool").appendChild(block);
     document.getElementById('newTaskTime').value = "";
+}
+
+// Function 2: Compute speedup from task organization (Lines 2198-2237)
+function computeSpeedup() {
+    const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+    const parallelBlocks = Array.from(document.getElementById("parallelRow").children)
+                            .filter(c => c.classList.contains("block"))
+                            .map(b => parseInt(b.textContent));
+
+    if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
+        alert("Please add some tasks to the Series or Parallel rows first");
+        return;
+    }
+
+    const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
+    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+    const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
+
+    const resultsElem = document.getElementById("results");
+    resultsElem.className = "results has-results";
+    resultsElem.textContent = 
+        `RESULTS\n` +
+        `${'='.repeat(50)}\n\n` +
+        `Series Tasks: [${seriesBlocks.join(', ') || 'none'}]\n` +
+        `Parallel Tasks: [${parallelBlocks.join(', ') || 'none'}]\n\n` +
+        `Serial Time (all sequential): ${serialTime} units\n` +
+        `Parallel Time (with parallelism): ${parallelTime} units\n\n` +
+        `Speedup: ${speedup.toFixed(3)}×\n\n` +
+        `${speedup > 1 ? 'Success! You achieved speedup through parallelization.' : 'No speedup gained - try moving more tasks to parallel row.'}`; 
+
+    // update live visual panel
+    const speedBig = document.getElementById('speedBig');
+    const speedBarInner = document.getElementById('speedBarInner');
+    const speedLabel = document.getElementById('speedLabel');
+    const pct = Math.min(200, Math.max(0, Math.round(speedup * 50)));
+    speedBig.textContent = speedup > 0 ? `${speedup.toFixed(2)}×` : '—';
+    speedBarInner.style.width = pct + '%';
+    speedLabel.textContent = speedup > 1 ? 'Nice — parallelism helped!' : 'No speedup yet — try moving tasks to parallel.';
+
+    window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
+}
+
+// Function 3: Save current run to history (Lines 2240-2268)
+function saveRun() {
+    if (!window.currentScore) {
+        alert("Please compute speedup first before saving!");
+        return;
+    }
+    
+    if (typeof window.currentScore.speedup !== 'number') {
+        alert("Please compute speedup first before saving!");
+        return;
+    }
+    
+    const name = prompt("Enter a name for this run:");
+    if(!name) return;
+
+    savedRuns.push({name, ...window.currentScore, timestamp: new Date().toLocaleString()});
+    alert(`✅ Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
+    
+    checkForCPUReward();
 }
 ```
 
