@@ -266,62 +266,179 @@ function checkOrderCompletion() {
 ## Task 4: Code Screenshots ✓
 
 ### Input
-**File:** `gpu-assembly-simulator.md` — Button click triggering `assignTask()`
+**File:** `gpu-assembly-simulator.md` — Lines 1728
 
-![Core1 Input]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Input.png)
+Button click triggering `assignTask()`:
+
+```html
+<button class="task-btn" onclick="assignTask(${station.id}, ${robot.id}, '${task}')" ${robot.busy ? 'disabled' : ''}>
+  ${TASK_ICONS[task]}
+</button>
+```
 
 ---
 
 ### Algorithm (Procedure)
-**File:** `gpu-assembly-simulator.md` — Full `findEligibleOrder()` function
+**File:** `gpu-assembly-simulator.md` — Lines 1859-1876
 
-![Core1 Algorithm]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1imgAlgorithm.png)
+Full `findEligibleOrder()` function:
+
+```javascript
+function findEligibleOrder(task, stationId) {
+  for (let order of orders) {
+    // Selection: Filter by station
+    if (order.stationId !== stationId && currentStage !== 3) continue;
+
+    // Selection: Check if task needed
+    if (!order.steps[task]) {
+      const steps = ['pcb', 'cores', 'memory'];
+      const idx = steps.indexOf(task);
+
+      // Selection: Verify prerequisites
+      if (idx === 0 || order.steps[steps[idx - 1]]) {
+        return order;  // Return first eligible order
+      }
+    }
+  }
+  return null;  // No eligible order found
+}
+```
 
 ---
 
 ### List Declaration
-**File:** `gpu-assembly-simulator.md` — `orders = []`
+**File:** `gpu-assembly-simulator.md` — Line 1461
 
-![Core1 List Declaration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1imgList.png)
+```javascript
+let orders = [];
+```
 
 ---
 
 ### List Append
-**File:** `gpu-assembly-simulator.md` — `orders.push({...})`
+**File:** `gpu-assembly-simulator.md` — Lines 1778-1788
 
-![Core1 List Append]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1ListAppend.png)
+```javascript
+function addOrder() {
+  const stationId = currentStage === 3 ? findLeastBusyStation() : 1;
+
+  const order = {
+    id: orderCounter++,
+    steps: { pcb: false, cores: false, memory: false, test: false },
+    stationId: stationId,
+    startTime: Date.now()
+  };
+
+  orders.push(order);  // LIST APPEND
+  playSound('click');
+  renderOrders();
+}
+```
 
 ---
 
 ### List Usage
-**File:** `gpu-assembly-simulator.md` — `for (let order of orders)` in `findEligibleOrder()`
+**File:** `gpu-assembly-simulator.md` — Lines 1860-1875
 
-![Core1 List Usage]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1ListUsage.png)
+`for (let order of orders)` in `findEligibleOrder()`:
+
+```javascript
+function findEligibleOrder(task, stationId) {
+  // LIST ITERATION
+  for (let order of orders) {
+    if (order.stationId !== stationId && currentStage !== 3) continue;
+
+    if (!order.steps[task]) {
+      const steps = ['pcb', 'cores', 'memory'];
+      const idx = steps.indexOf(task);
+
+      if (idx === 0 || order.steps[steps[idx - 1]]) {
+        return order;  // LIST ACCESS
+      }
+    }
+  }
+  return null;
+}
+```
 
 ---
 
 ### Iteration
-**File:** `gpu-assembly-simulator.md` — `for (let order of orders)` loop
+**File:** `gpu-assembly-simulator.md` — Lines 1860-1875
 
-![Core1 Iteration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Iteration.png)
+`for (let order of orders)` loop:
+
+```javascript
+// ITERATION: Loop through all pending orders
+for (let order of orders) {
+  // Filter by station
+  if (order.stationId !== stationId && currentStage !== 3) continue;
+
+  // Check if task needed
+  if (!order.steps[task]) {
+    const steps = ['pcb', 'cores', 'memory'];
+    const idx = steps.indexOf(task);
+
+    // Verify prerequisites
+    if (idx === 0 || order.steps[steps[idx - 1]]) {
+      return order;
+    }
+  }
+}
+```
 
 ---
 
 ### Selection
-**File:** `gpu-assembly-simulator.md` — `if (order.stationId !== stationId)`, `if (!order.steps[task])`, `if (idx === 0 || ...)`
 
-![Core1 Selection Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart1.png)
+**File:** `gpu-assembly-simulator.md` — Lines 1862, 1865, 1870
 
-![Core1 Selection Part 2]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart2.png)
+#### Selection 1: Station filtering
+```javascript
+if (order.stationId !== stationId && currentStage !== 3) continue;
+```
 
-![Core1 Selection Part 3]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1SelectionPart3.png)
+#### Selection 2: Task status check
+```javascript
+if (!order.steps[task]) {
+  // ... continue processing
+}
+```
+
+#### Selection 3: Prerequisite validation
+```javascript
+const steps = ['pcb', 'cores', 'memory'];
+const idx = steps.indexOf(task);
+
+if (idx === 0 || order.steps[steps[idx - 1]]) {
+  return order;
+}
+```
 
 ---
 
 ### Output
-**File:** `gpu-assembly-simulator.md` — `return order` and `return null`
+**File:** `gpu-assembly-simulator.md` — Lines 1871, 1875
 
-![Core1 Output]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core1Output.png)
+Return statements:
+
+```javascript
+function findEligibleOrder(task, stationId) {
+  for (let order of orders) {
+    if (order.stationId !== stationId && currentStage !== 3) continue;
+
+    if (!order.steps[task]) {
+      const steps = ['pcb', 'cores', 'memory'];
+      const idx = steps.indexOf(task);
+
+      if (idx === 0 || order.steps[steps[idx - 1]]) {
+        return order;  // OUTPUT: Return eligible order
+      }
+    }
+  }
+  return null;  // OUTPUT: No eligible order found
+}
+```
 
 ---
 
