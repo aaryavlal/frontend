@@ -1,4 +1,3 @@
-
 ---
 title: "Core 4 - Final Written Responses"
 permalink: /core4/final
