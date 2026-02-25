@@ -167,7 +167,7 @@ The `orders` list is essential to my program because it stores all pending GPU a
 - Unique order ID for tracking
 - Station assignment (`stationId`) for distributed processing
 - Assembly steps object with boolean flags: `{pcb: false, cores: false, memory: false, test: false}`
-- Creation timestamp for performance calculations
+- Start timestamp (`startTime`) for performance calculations
 
 **How the list manages complexity:**
 
@@ -177,7 +177,7 @@ The `orders` list is essential to my program because it stores all pending GPU a
 
 3. **Preserves queue order:** The list maintains first-in-first-out (FIFO) ordering, so `orders[0]` represents the oldest pending order. This ensures earlier orders get priority during iteration.
 
-4. **Simplifies JSON response:** Array methods like `.filter()`, `.find()`, and `.splice()` replace complex manual tracking logic, keeping the codebase maintainable.
+4. **Simplifies removal:** Array methods like `.filter()` and `.find()` replace complex manual tracking logic, keeping the codebase maintainable. For example, `orders = orders.filter(o => o.id !== order.id)` removes a completed order in one line.
 
 Without this list, I would need pre-allocated variables for each order slot, complex conditional logic to handle different queue sizes, and manual tracking of which slots are occupied—significantly increasing code complexity and reducing maintainability.
 
@@ -185,33 +185,27 @@ Without this list, I would need pre-allocated variables for each order slot, com
 
 ### List Code (for 3c)
 
-**File:** `frontend/hacks/gpu-assembly-simulator.md` — Lines 1595-1650, 1859-1876
+**File:** `frontend/hacks/gpu-assembly-simulator.md` — Lines 1461, 1778-1795, 1859-1876, 1897-1938, 1986-1999
 
 ```javascript
 // LIST DECLARATION: Global orders array
 let orders = [];
-let orderIdCounter = 1;
+let orderCounter = 1;
 
 // LIST APPEND: Add new order to queue
 function addOrder() {
-  let stationId = 1;
+  const stationId = currentStage === 3 ? findLeastBusyStation() : 1;
 
-  // LIST USAGE: Count orders per station for load balancing
-  if (currentStage === 3) {
-    const stationOrders = [1, 2, 3].map(id =>
-      orders.filter(o => o.stationId === id).length
-    );
-    stationId = stationOrders.indexOf(Math.min(...stationOrders)) + 1;
-  }
+  const order = {
+    id: orderCounter++,
+    steps: { pcb: false, cores: false, memory: false, test: false },
+    stationId: stationId,
+    startTime: Date.now()
+  };
 
   // LIST APPEND
-  orders.push({
-    id: orderIdCounter++,
-    stationId: stationId,
-    steps: { pcb: false, cores: false, memory: false, test: false },
-    createdAt: Date.now()
-  });
-
+  orders.push(order);
+  playSound('click');
   renderOrders();
 }
 
@@ -248,15 +242,13 @@ function assignTask(stationId, robotId, task) {
 }
 
 // LIST REMOVAL: Remove completed orders
-function checkOrderCompletion() {
-  for (let i = orders.length - 1; i >= 0; i--) {
-    const order = orders[i];  // LIST ACCESS by index
+function checkOrderComplete(order) {
+  if (order.steps.pcb && order.steps.cores &&
+      order.steps.memory && order.steps.test) {
+    completedGPUs++;
+    totalGPUsAllTime++;
 
-    if (order.steps.pcb && order.steps.cores &&
-        order.steps.memory && order.steps.test) {
-      orders.splice(i, 1);  // LIST REMOVAL
-      completedGPUs++;
-    }
+    orders = orders.filter(o => o.id !== order.id);  // LIST REMOVAL
   }
 }
 ```
@@ -316,7 +308,7 @@ let orders = [];
 ---
 
 ### List Append
-**File:** `gpu-assembly-simulator.md` — Lines 1778-1788
+**File:** `gpu-assembly-simulator.md` — Lines 1778-1795
 
 ```javascript
 function addOrder() {
@@ -332,6 +324,10 @@ function addOrder() {
   orders.push(order);  // LIST APPEND
   playSound('click');
   renderOrders();
+
+  if (currentStage === 3) {
+    autoProcessOrder(order);
+  }
 }
 ```
 

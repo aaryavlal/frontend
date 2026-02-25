@@ -1999,6 +1999,7 @@ function checkOrderComplete(order) {
 
     updateStats();
     checkAchievements();
+    logGameData();
 
     if (completedGPUs >= 5) {
       completeStage();
