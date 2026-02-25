@@ -1182,7 +1182,11 @@ microblog: true
 <script>
   const MODULE4_PASS_RATIO = 1 / 3;
   const MODULE4_NUMBER = 4;
-  const API_URL = "http://localhost:8405/api/quiz/grade";
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  const apiBase = isLocal
+    ? "http://localhost:8405"
+    : "https://hardwarehavoc.opencodingsociety.com";
+  const API_URL = `${apiBase}/api/quiz/grade`;
   const submitBtn = document.getElementById("m4-quiz-submit");
   const answerEl = document.getElementById("m4-quiz-answer");
   const resultEl = document.getElementById("m4-quiz-result");
