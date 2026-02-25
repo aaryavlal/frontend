@@ -488,6 +488,18 @@ show_reading_time: false
   animation: pulse 0.4s ease;
 }
 
+#gpu-simulator-app .progress-step.in-progress {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: #00d4ff;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+  animation: working-pulse 1s ease infinite;
+}
+
+@keyframes working-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(0, 212, 255, 0.4); }
+  50% { box-shadow: 0 0 16px rgba(0, 212, 255, 0.8); }
+}
+
 /* ===== EDUCATION PANEL ===== */
 #gpu-simulator-app .education-panel {
   border-left: 1px solid rgba(0,255,170,0.2);
@@ -1829,7 +1841,7 @@ function setupStage(stage) {
       tester: { busy: false, timer: null, orderId: null }
     });
   } else if (stage === 2) {
-    stageBrief.textContent = 'PARALLEL: Three robots work together! But they share ONE testing station—this creates a bottleneck!';
+    stageBrief.textContent = 'PARALLEL: Three robots work on the SAME GPU simultaneously! PCB + Cores + Memory at once—but they share one test station.';
     workstations.push({
       id: 1,
       name: 'Assembly Line',
@@ -1911,7 +1923,7 @@ function renderOrders() {
       ${currentStage === 3 ? `<div class="order-factory">Factory ${String.fromCharCode(64 + order.stationId)}</div>` : ''}
       <div class="order-progress">
         ${Object.keys(TASK_DURATIONS).map(task => `
-          <div class="progress-step ${order.steps[task] ? 'completed' : ''}">
+          <div class="progress-step ${order.steps[task] === true ? 'completed' : (order.claimed && order.claimed[task]) ? 'in-progress' : ''}">
             ${TASK_ICONS[task]}
           </div>
         `).join('')}
@@ -1978,11 +1990,13 @@ function autoProcessOrder(order) {
       if (!robot.busy) {
         robot.busy = true;
         robot.task = step;
+        robot.orderId = order.id;
         playSound('click');
         robot.timer = setTimeout(() => {
           order.steps[step] = true;
           robot.busy = false;
           robot.task = null;
+          robot.orderId = null;
           renderOrders();
           renderWorkstations();
 
@@ -2000,20 +2014,20 @@ function autoProcessOrder(order) {
   processStep('pcb');
 }
 
-// ===== TASK ASSIGNMENT (PPR - PRESERVED EXACTLY) =====
+// ===== TASK ASSIGNMENT (PPR) =====
 // Helper: Find eligible order (ITERATION + SELECTION)
 function findEligibleOrder(task, stationId) {
   for (let order of orders) {
     // Selection: Filter by station
     if (order.stationId !== stationId && currentStage !== 3) continue;
 
-    // Selection: Check if task needed
-    if (!order.steps[task]) {
+    // Selection: Check if task needed and not already claimed by another robot
+    if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
       const steps = ['pcb', 'cores', 'memory'];
       const idx = steps.indexOf(task);
 
-      // Selection: Verify prerequisites
-      if (idx === 0 || order.steps[steps[idx - 1]]) {
+      // Selection: In parallel mode tasks are independent; otherwise verify prerequisites
+      if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
         return order;  // Return first eligible order
       }
     }
@@ -2033,10 +2047,9 @@ function validateTaskPrerequisites(order, task) {
   return order.steps[steps[idx - 1]];
 }
 
-// Helper: Calculate task duration (SELECTION)
+// Helper: Calculate task duration
 function getTaskDuration(task) {
-  // Selection: Parallel stage is faster
-  return currentStage === 2 ? TASK_DURATIONS[task] * 0.6 : TASK_DURATIONS[task];
+  return TASK_DURATIONS[task];
 }
 
 // Main procedure: Assign task to robot (SEQUENCING)
@@ -2050,10 +2063,11 @@ function assignTask(stationId, robotId, task) {
   // Sequencing Step 1: Find eligible order (uses ITERATION)
   const order = findEligibleOrder(task, stationId);
   if (!order) {
-    // Selection: Check if orders exist but have unmet prerequisites
+    // Selection: Check if orders exist but have unmet prerequisites or are already claimed
     const blockedOrder = orders.find(o => {
       if (o.stationId !== stationId && currentStage !== 3) return false;
       if (o.steps[task]) return false;
+      if (o.claimed && o.claimed[task]) return false;
       return true;
     });
 
@@ -2065,20 +2079,33 @@ function assignTask(stationId, robotId, task) {
     return;
   }
 
-  // Sequencing Step 3: Assign task to robot
+  // Sequencing Step 3: Assign task to robot and claim the task
   robot.busy = true;
   robot.task = task;
   robot.orderId = order.id;
+  if (!order.claimed) order.claimed = {};
+  order.claimed[task] = true;
   playSound('click');
+  renderOrders();
 
-  // Sequencing Step 4: Schedule completion (uses SELECTION for duration)
+  // Sequencing Step 4: Schedule completion
   const duration = getTaskDuration(task);
   robot.timer = setTimeout(() => {
     order.steps[task] = true;
+    if (order.claimed) delete order.claimed[task];
     robot.busy = false;
     robot.task = null;
     robot.orderId = null;
     playSound('complete');
+
+    // In parallel mode, auto-queue test when all assembly steps done
+    if (currentStage === 2 && order.steps.pcb && order.steps.cores && order.steps.memory && !order.steps.test) {
+      const station = workstations.find(s => s.id === stationId);
+      if (!station.tester.busy) {
+        assignTest(stationId);
+      }
+    }
+
     renderOrders();
     renderWorkstations();
   }, duration);
@@ -2116,8 +2143,7 @@ function assignTest(stationId) {
   station.tester.orderId = order.id;
   playSound('click');
 
-  // Faster test times for Stage 2
-  const duration = currentStage === 2 ? TASK_DURATIONS.test * 0.6 : TASK_DURATIONS.test;
+  const duration = TASK_DURATIONS.test;
 
   station.tester.timer = setTimeout(() => {
     order.steps.test = true;
@@ -2360,24 +2386,27 @@ function processAutoFillTasks() {
     for (let order of orders) {
       if (!order.steps.test && order.steps.pcb && order.steps.cores && order.steps.memory) {
         assignTest(1);
-        return;
+        break;
       }
     }
   }
 
-  // Try to assign assembly tasks to idle robots
+  // Try to assign assembly tasks to all idle robots
   const tasks = ['pcb', 'cores', 'memory'];
 
   for (let robot of station.robots) {
     if (robot.busy) continue;
 
+    let assigned = false;
     for (let order of orders) {
+      if (assigned) break;
       for (let task of tasks) {
-        if (!order.steps[task]) {
+        if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
           const taskIndex = tasks.indexOf(task);
-          if (taskIndex === 0 || order.steps[tasks[taskIndex - 1]]) {
+          if (currentStage === 2 || taskIndex === 0 || order.steps[tasks[taskIndex - 1]]) {
             assignTask(1, robot.id, task);
-            return;
+            assigned = true;
+            break;
           }
         }
       }

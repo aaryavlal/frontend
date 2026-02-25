@@ -57,13 +57,13 @@ function findEligibleOrder(task, stationId) {
     // Selection: Filter by station
     if (order.stationId !== stationId && currentStage !== 3) continue;
 
-    // Selection: Check if task needed
-    if (!order.steps[task]) {
+    // Selection: Check if task needed and not already claimed by another robot
+    if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
       const steps = ['pcb', 'cores', 'memory'];
       const idx = steps.indexOf(task);
 
-      // Selection: Verify prerequisites
-      if (idx === 0 || order.steps[steps[idx - 1]]) {
+      // Selection: In parallel mode tasks are independent; otherwise verify prerequisites
+      if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
         return order;  // Return first eligible order
       }
     }
@@ -99,10 +99,10 @@ Each step depends on the previous step's output—you cannot check prerequisites
 
 **Selection:** The algorithm uses conditional statements to handle different scenarios:
 - `if (order.stationId !== stationId && currentStage !== 3)`: Filters orders by station assignment, skipping mismatches except in distributed mode
-- `if (!order.steps[task])`: Checks whether this specific task has already been completed
-- `if (idx === 0 || order.steps[steps[idx - 1]])`: Verifies either (1) this is the first task with no prerequisites, OR (2) the previous task in sequence is complete
+- `if (!order.steps[task] && !(order.claimed && order.claimed[task]))`: Checks whether this specific task has already been completed or is currently being worked on by another robot
+- `if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]])`: In parallel mode, tasks are independent and can run simultaneously; otherwise verifies either (1) this is the first task with no prerequisites, OR (2) the previous task in sequence is complete
 
-These selections ensure the procedure returns only valid orders that are ready for the specified task.
+These selections ensure the procedure returns only valid orders that are ready for the specified task, and adapts behavior based on the computing model.
 
 **Iteration:** The algorithm uses a `for...of` loop to process orders:
 - `for (let order of orders)`: Iterates through each pending order in the global orders list
@@ -215,12 +215,12 @@ function findEligibleOrder(task, stationId) {
   for (let order of orders) {
     if (order.stationId !== stationId && currentStage !== 3) continue;
 
-    // LIST ELEMENT ACCESS
-    if (!order.steps[task]) {
+    // LIST ELEMENT ACCESS + claim check
+    if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
       const steps = ['pcb', 'cores', 'memory'];
       const idx = steps.indexOf(task);
 
-      if (idx === 0 || order.steps[steps[idx - 1]]) {
+      if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
         return order;  // Return element from list
       }
     }
@@ -281,13 +281,13 @@ function findEligibleOrder(task, stationId) {
     // Selection: Filter by station
     if (order.stationId !== stationId && currentStage !== 3) continue;
 
-    // Selection: Check if task needed
-    if (!order.steps[task]) {
+    // Selection: Check if task needed and not already claimed by another robot
+    if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
       const steps = ['pcb', 'cores', 'memory'];
       const idx = steps.indexOf(task);
 
-      // Selection: Verify prerequisites
-      if (idx === 0 || order.steps[steps[idx - 1]]) {
+      // Selection: In parallel mode tasks are independent; otherwise verify prerequisites
+      if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
         return order;  // Return first eligible order
       }
     }
@@ -394,19 +394,19 @@ for (let order of orders) {
 if (order.stationId !== stationId && currentStage !== 3) continue;
 ```
 
-#### Selection 2: Task status check
+#### Selection 2: Task status and claim check
 ```javascript
-if (!order.steps[task]) {
+if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
   // ... continue processing
 }
 ```
 
-#### Selection 3: Prerequisite validation
+#### Selection 3: Prerequisite validation (adapts to computing model)
 ```javascript
 const steps = ['pcb', 'cores', 'memory'];
 const idx = steps.indexOf(task);
 
-if (idx === 0 || order.steps[steps[idx - 1]]) {
+if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
   return order;
 }
 ```
@@ -461,17 +461,17 @@ function findEligibleOrder(task, stationId) {
     // In stage 3 (distributed), all stations share orders
     if (order.stationId !== stationId && currentStage !== 3) continue;
 
-    // ===== SELECTION: Check if task incomplete =====
-    if (!order.steps[task]) {
+    // ===== SELECTION: Check if task incomplete and not claimed =====
+    if (!order.steps[task] && !(order.claimed && order.claimed[task])) {
 
       // ===== SEQUENCING: Determine prerequisite requirements =====
       const steps = ['pcb', 'cores', 'memory'];
       const idx = steps.indexOf(task);
 
       // ===== SELECTION: Verify prerequisites satisfied =====
-      // First task (idx 0) has no prerequisites
-      // Other tasks require previous step complete
-      if (idx === 0 || order.steps[steps[idx - 1]]) {
+      // Parallel mode: tasks are independent, no prerequisites
+      // Sequential/Distributed: first task has no prereqs, others require previous step
+      if (currentStage === 2 || idx === 0 || order.steps[steps[idx - 1]]) {
         return order;  // RETURN: First eligible order found
       }
     }
