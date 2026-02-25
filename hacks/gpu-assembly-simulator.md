@@ -786,6 +786,120 @@ show_reading_time: false
 #gpu-simulator-app .toast.warning { border-color: #FBBF24; }
 #gpu-simulator-app .toast.info { border-color: #4CAFEF; }
 
+/* ===== PREREQUISITE POPUP ===== */
+#gpu-simulator-app .prereq-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+#gpu-simulator-app .prereq-popup {
+  background: linear-gradient(135deg, #0f1923 0%, #1a2a3e 100%);
+  border: 2px solid #ff6b6b;
+  border-radius: 12px;
+  padding: 24px 32px;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3), 0 0 60px rgba(255, 107, 107, 0.1);
+  animation: popIn 0.25s ease;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-icon {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ff6b6b;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 16px 0;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-step {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid #2a3f5f;
+  background: #1a2332;
+  color: #7a8ba0;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-step.done {
+  border-color: #34c759;
+  color: #34c759;
+  background: rgba(52, 199, 89, 0.1);
+}
+
+#gpu-simulator-app .prereq-popup .prereq-step.needed {
+  border-color: #FBBF24;
+  color: #FBBF24;
+  background: rgba(251, 191, 36, 0.1);
+  animation: pulse-glow 1.5s infinite;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-step.target {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+#gpu-simulator-app .prereq-popup .prereq-arrow {
+  color: #3a4f6f;
+  font-size: 0.8rem;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-msg {
+  font-size: 0.8rem;
+  color: #c0c8d4;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-dismiss {
+  margin-top: 16px;
+  padding: 8px 24px;
+  background: linear-gradient(135deg, #ff6b6b, #cc5555);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s ease;
+}
+
+#gpu-simulator-app .prereq-popup .prereq-dismiss:hover {
+  transform: scale(1.05);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ===== WELCOME BANNER ===== */
 #gpu-simulator-app .welcome-banner {
   position: fixed;
@@ -1546,6 +1660,38 @@ function showToast(msg, type = 'success') {
   }, 2500);
 }
 
+function showPrereqPopup(order, task) {
+  playSound('click');
+  const allSteps = ['pcb', 'cores', 'memory'];
+  const targetIdx = allSteps.indexOf(task);
+  const needed = allSteps.find((s, i) => i < targetIdx && !order.steps[s]);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'prereq-overlay';
+  overlay.innerHTML = `
+    <div class="prereq-popup">
+      <div class="prereq-icon">🚫</div>
+      <div class="prereq-title">Prerequisite Required</div>
+      <div class="prereq-pipeline">
+        ${allSteps.map((s, i) => `
+          <span class="prereq-step ${order.steps[s] ? 'done' : i === targetIdx ? 'target' : s === needed ? 'needed' : ''}">${order.steps[s] ? '✓' : ''} ${TASK_NAMES[s]}</span>
+          ${i < allSteps.length - 1 ? '<span class="prereq-arrow">→</span>' : ''}
+        `).join('')}
+      </div>
+      <div class="prereq-msg">
+        Complete <strong>${TASK_NAMES[needed] || 'previous steps'}</strong> before ${TASK_NAMES[task]} on GPU #${order.id}
+      </div>
+      <button class="prereq-dismiss" onclick="this.closest('.prereq-overlay').remove()">Got it</button>
+    </div>
+  `;
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  document.getElementById('gpu-simulator-app').appendChild(overlay);
+}
+
 function checkAchievements() {
   achievements.forEach(ach => {
     if (!ach.unlocked && ach.check()) {
@@ -1904,15 +2050,18 @@ function assignTask(stationId, robotId, task) {
   // Sequencing Step 1: Find eligible order (uses ITERATION)
   const order = findEligibleOrder(task, stationId);
   if (!order) {
-    showToast('No orders need this task!', 'warning');
-    return;
-  }
+    // Selection: Check if orders exist but have unmet prerequisites
+    const blockedOrder = orders.find(o => {
+      if (o.stationId !== stationId && currentStage !== 3) return false;
+      if (o.steps[task]) return false;
+      return true;
+    });
 
-  // Sequencing Step 2: Validate prerequisites (uses SELECTION)
-  if (!validateTaskPrerequisites(order, task)) {
-    const steps = ['pcb', 'cores', 'memory'];
-    const idx = steps.indexOf(task);
-    showToast(`Complete ${steps[idx - 1].toUpperCase()} first!`, 'warning');
+    if (blockedOrder) {
+      showPrereqPopup(blockedOrder, task);
+    } else {
+      showToast('No orders need this task!', 'warning');
+    }
     return;
   }
 
