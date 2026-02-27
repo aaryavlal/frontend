@@ -37,47 +37,32 @@ layout: post
 - Visualizes Amdahl's Law
 
 **Main Procedure: `computeSpeedup()`**
-- Orchestrates the speedup calculation by calling helper functions
-- Each helper function has a single, clear responsibility
+- Takes input from user-arranged task blocks
+- Calculates serial time vs parallel time
+- Computes speedup ratio
+- Displays results visually
+- **This is the procedure demonstrated in the video**
 
-**Supporting Procedures:**
-- `collectTaskBlocks(rowId)` — Extracts task values from a specific row
-- `validateTasks()` — Checks if tasks exist before processing
-- `calculateSerialTime()` — Computes total serial execution time
-- `calculateParallelTime()` — Computes parallel execution time using Amdahl's Law
-- `computeSpeedupRatio()` — Calculates the speedup ratio
-- `displayResults()` — Updates the UI with results
+**How it works:**
+1. User drags tasks into Series or Parallel rows (INPUT)
+2. User clicks "Compute Speedup" button (TRIGGER)
+3. Function collects blocks using `.filter()` and `.map()` (ITERATION)
+4. Function validates input exists (SELECTION)
+5. Function calculates times using `.reduce()` (ITERATION + SEQUENCING)
+6. Function displays results (OUTPUT)
 
 **Without it:** Just drag-and-drop interface with no computational analysis
 ### Code Screenshot
 
 ![Procedure Code - computeSpeedup()](../screenshots/core5-procedure.png)
 
-**Location:** `frontend/cores/core-5.md` — Lines 2200-2280
+**Location:** `frontend/cores/core-5.md`
 
-**Complete Code:**
+**Main Procedure for Video Demonstration (Lines 2198-2220)**
 
 ```javascript
-// Function 1: Add a new task block (Lines 2181-2196)
-function addTask() {
-    const val = parseInt(document.getElementById('newTaskTime').value);
-    if(isNaN(val) || val < 1) {
-        alert("Please enter a valid task time (positive number)");
-        return;
-    }
-
-    const block = document.createElement("div");
-    block.className = "block";
-    block.id = "task" + Date.now();
-    block.draggable = true;
-    block.ondragstart = drag;
-    block.textContent = val;
-    document.getElementById("taskPool").appendChild(block);
-    document.getElementById('newTaskTime').value = "";
-}
-
-// Function 2: Compute speedup from task organization (Lines 2198-2237)
 function computeSpeedup() {
+    // INPUT: Collect task blocks from DOM (ITERATION)
     const seriesBlocks = Array.from(document.getElementById("seriesRow").children)
                             .filter(c => c.classList.contains("block"))
                             .map(b => parseInt(b.textContent));
@@ -85,60 +70,42 @@ function computeSpeedup() {
                             .filter(c => c.classList.contains("block"))
                             .map(b => parseInt(b.textContent));
 
+    // SELECTION: Validate input
     if (seriesBlocks.length === 0 && parallelBlocks.length === 0) {
-        alert("Please add some tasks to the Series or Parallel rows first");
+        alert("Please add some tasks first");
         return;
     }
 
+    // PROCESSING: Calculate speedup (ITERATION + SELECTION)
     const serialTime = [...seriesBlocks, ...parallelBlocks].reduce((a,b)=>a+b,0);
-    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
+    const parallelTime = seriesBlocks.reduce((a,b)=>a+b,0) + 
+                         (parallelBlocks.length ? Math.max(...parallelBlocks) : 0);
     const speedup = parallelTime > 0 ? serialTime / parallelTime : 0;
 
-    const resultsElem = document.getElementById("results");
-    resultsElem.className = "results has-results";
-    resultsElem.textContent = 
-        `RESULTS\n` +
-        `${'='.repeat(50)}\n\n` +
-        `Series Tasks: [${seriesBlocks.join(', ') || 'none'}]\n` +
-        `Parallel Tasks: [${parallelBlocks.join(', ') || 'none'}]\n\n` +
-        `Serial Time (all sequential): ${serialTime} units\n` +
-        `Parallel Time (with parallelism): ${parallelTime} units\n\n` +
-        `Speedup: ${speedup.toFixed(3)}×\n\n` +
-        `${speedup > 1 ? 'Success! You achieved speedup through parallelization.' : 'No speedup gained - try moving more tasks to parallel row.'}`; 
-
-    // update live visual panel
-    const speedBig = document.getElementById('speedBig');
-    const speedBarInner = document.getElementById('speedBarInner');
-    const speedLabel = document.getElementById('speedLabel');
-    const pct = Math.min(200, Math.max(0, Math.round(speedup * 50)));
-    speedBig.textContent = speedup > 0 ? `${speedup.toFixed(2)}×` : '—';
-    speedBarInner.style.width = pct + '%';
-    speedLabel.textContent = speedup > 1 ? 'Nice — parallelism helped!' : 'No speedup yet — try moving tasks to parallel.';
-
+    // OUTPUT: Store results
     window.currentScore = {seriesBlocks, parallelBlocks, serialTime, parallelTime, speedup};
-}
-
-// Function 3: Save current run to history (Lines 2240-2268)
-function saveRun() {
-    if (!window.currentScore) {
-        alert("Please compute speedup first before saving!");
-        return;
-    }
     
-    if (typeof window.currentScore.speedup !== 'number') {
-        alert("Please compute speedup first before saving!");
-        return;
-    }
-    
-    const name = prompt("Enter a name for this run:");
-    if(!name) return;
-
-    savedRuns.push({name, ...window.currentScore, timestamp: new Date().toLocaleString()});
-    alert(`Run "${name}" saved successfully! (Speedup: ${window.currentScore.speedup.toFixed(2)}×)`);
-    
-    checkForCPUReward();
+    // Display results (additional code not shown for brevity)
+    displayResults();
 }
 ```
+
+### Video Demonstration Guide
+
+**What to show:**
+1. Open Core 5 page in browser
+2. Open Inspect Element (F12) → Console tab
+3. Drag task blocks (e.g., 5, 10, 8) into Series/Parallel rows
+4. Click "Compute Speedup" button
+5. In console, type: `window.currentScore` to see the stored data
+6. Point out results displayed on screen
+
+**Key points to mention in video:**
+- "This function takes INPUT from the task blocks I arranged"
+- "It uses ITERATION with .filter(), .map(), and .reduce() methods"
+- "It uses SELECTION with if statements and ternary operators"
+- "It follows SEQUENCING - collect, validate, calculate, store"
+- "The lists seriesBlocks[] and parallelBlocks[] manage the task data"
 
 ---
 
