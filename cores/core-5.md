@@ -1666,15 +1666,15 @@ body {
 <!-- Welcome Overlay -->
 <div class="welcome-overlay" id="welcomeOverlay">
     <div class="welcome-box">
-        <h1>🎮 Hardware Havoc</h1>
+        <h1>Hardware Havoc</h1>
         <p>Welcome to <span class="highlight">Module 5: Hardware Performance</span>!</p>
         <p>In this module, you'll explore how different computing hardware configurations affect performance. Understanding hardware performance is crucial for solving complex computational problems efficiently.</p>
         
         <ul>
-            <li>🎯 <strong>Learn:</strong> How parallel computing improves performance through speedup</li>
-            <li>🧪 <strong>Experiment:</strong> Drag and drop tasks to see real-time performance changes</li>
-            <li>⚡ <strong>Discover:</strong> When parallel processing makes a difference</li>
-            <li>🏆 <strong>Apply:</strong> Connect hardware knowledge to real-world problems</li>
+            <li><strong>Learn:</strong> How parallel computing improves performance through speedup</li>
+            <li><strong>Experiment:</strong> Drag and drop tasks to see real-time performance changes</li>
+            <li><strong>Discover:</strong> When parallel processing makes a difference</li>
+            <li><strong>Apply:</strong> Connect hardware knowledge to real-world problems</li>
         </ul>
         
         <button class="start-btn" onclick="closeWelcome()">Start Learning →</button>
@@ -1683,7 +1683,7 @@ body {
 
 <!-- CPU Collection Popup -->
 <div class="cpu-collection" id="cpuCollection">
-    <div class="cpu-icon">🔥</div>
+    <div class="cpu-icon">CPU</div>
     <h2>OCS Delivery Service</h2>
     <p>Congratulations! You've mastered hardware performance concepts!</p>
     <p>You've earned:</p>
@@ -1696,42 +1696,42 @@ body {
     <!-- LEFT SIDEBAR with Information Panels -->
     <div class="info-sidebar collapsed">
         <div class="sidebar-header">
-            <h2>📚 Learning Guide</h2>
+            <h2>Learning Guide</h2>
             <p>Essential Concepts</p>
         </div>
 
         <!-- Panel 1: What is Speedup? -->
         <div class="info-panel" onclick="openModal('speedup')">
             <div class="panel-header">
-                <h3>⚡ What is Speedup?</h3>
+                <h3>What is Speedup?</h3>
             </div>
         </div>
 
         <!-- Panel 2: How It Works -->
         <div class="info-panel" onclick="openModal('howitworks')">
             <div class="panel-header">
-                <h3>🔧 How It Works</h3>
+                <h3>How It Works</h3>
             </div>
         </div>
 
         <!-- Panel 3: Parallel vs Serial -->
         <div class="info-panel" onclick="openModal('comparison')">
             <div class="panel-header">
-                <h3>⚙️ Parallel vs Serial</h3>
+                <h3>Parallel vs Serial</h3>
             </div>
         </div>
 
         <!-- Panel 4: Amdahl's Law -->
         <div class="info-panel" onclick="openModal('amdahl')">
             <div class="panel-header">
-                <h3>📊 Amdahl's Law</h3>
+                <h3>Amdahl's Law</h3>
             </div>
         </div>
 
         <!-- Panel 5: Real-World Examples -->
         <div class="info-panel" onclick="openModal('realworld')">
             <div class="panel-header">
-                <h3>🌍 Real-World Use</h3>
+                <h3>Real-World Use</h3>
             </div>
         </div>
     </div>
@@ -1749,14 +1749,14 @@ body {
         </button>
 
         <div class="content-header">
-            <h1>⚡ Interactive Speedup Calculator</h1>
+            <h1>Interactive Speedup Calculator</h1>
             <p class="subtitle">Explore parallel computing performance through hands-on experimentation</p>
         </div>
 
         <!-- Main Activity Card -->
         <div class="activity-card">
             <h2 class="activity-title">
-                🎮 Drag & Drop Activity
+                Drag & Drop Activity
                 <span class="help-icon">?
                     <span class="tooltip">Drag tasks to test serial vs. parallel execution</span>
                 </span>
@@ -1779,7 +1779,7 @@ body {
 
             <!-- Progress Tracker -->
             <div class="progress-tracker">
-                <h4>🎯 Progress to CPU Reward</h4>
+                <h4>Progress to CPU Reward</h4>
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;">
                         <span id="progressBarText">0/3</span>
@@ -1790,7 +1790,7 @@ body {
 
             <!-- Live Speedup Display -->
             <div class="live-panel">
-                <div class="live-panel-title">🔴 LIVE SPEEDUP MONITOR</div>
+                <div class="live-panel-title">LIVE SPEEDUP MONITOR</div>
                 <div class="speed-display">
                     <div class="speed-big" id="speedBig">—</div>
                     <div class="speed-bar">
@@ -1804,14 +1804,14 @@ body {
             <div class="game-area">
                 <div class="controls">
                     <input type="number" id="newTaskTime" placeholder="Task time" min="1" value="10">
-                    <button class="add-btn" onclick="addTask()">➕ Add Task</button>
-                    <button class="compute-btn" onclick="computeSpeedup()">⚡ Compute Speedup</button>
-                    <button class="save-btn" onclick="saveRun()">💾 Save Run</button>
-                    <button class="show-btn" onclick="showSavedRuns()">📊 Show Saved</button>
+                    <button class="add-btn" onclick="addTask()">Add Task</button>
+                    <button class="compute-btn" onclick="computeSpeedup()">Compute Speedup</button>
+                    <button class="save-btn" onclick="saveRun()">Save Run</button>
+                    <button class="show-btn" onclick="showSavedRuns()">Show Saved</button>
                 </div>
 
                 <h3 class="game-section-title">
-                    📦 Task Pool
+                    Task Pool
                     <span class="help-icon">?
                         <span class="tooltip">Drag to series or parallel rows</span>
                     </span>
