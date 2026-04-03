@@ -33,13 +33,13 @@ The written response section requires you to answer questions about:
 
 **Response:**
 
-The purpose of this program is to provide an intelligent digit recognition system that enables users to draw handwritten numerical characters (0-9) on an interactive canvas interface and receive real-time classification predictions powered by a trained Convolutional Neural Network (CNN). This application demonstrates the practical implementation of machine learning inference within a web-based client-server architecture, utilizing the industry-standard MNIST dataset methodology for handwritten digit classification.
+My program provides an intelligent digit recognition system that lets users draw handwritten numerical characters (0-9) on an interactive canvas interface and receive real-time classification predictions powered by a trained Convolutional Neural Network (CNN). It demonstrates machine learning inference within a web-based client-server architecture, using the industry-standard MNIST dataset methodology for handwritten digit classification.
 
-The student-developed procedure `predict()` serves as the top-level coordinator of this system. It orchestrates a three-tier processing hierarchy: at the top level, `predict()` handles the "big picture" — receiving user input, iterating through detected digit regions, and assembling the final response. At the mid level, it calls `advanced_preprocess_digit(img_array, bbox)`, which standardizes each raw digit region to the 28×28 pixel format the CNN requires. At the bottom level, `predict_with_tta()` performs the actual neural network inference. This hierarchical design means `predict()` cannot fulfill its purpose without its sub-algorithms; raw image data must first be standardized before the network can classify it.
+My procedure `predict()` serves as the top-level coordinator of this system. It orchestrates a three-tier processing hierarchy: at the top level, `predict()` handles the "big picture" — receiving user input, iterating through detected digit regions, and assembling the final response. At the mid level, it calls `advanced_preprocess_digit(img_array, bbox)`, which standardizes each raw digit region to the 28×28 pixel format the CNN requires. At the bottom level, `predict_with_tta()` performs the actual neural network inference. This hierarchical design means `predict()` cannot fulfill its purpose without its sub-algorithms; raw image data must first be standardized before the network can classify it.
 
-The procedure uses **selection** through conditional statements (`if model is None`, `if not data`, `if not components`) to validate preconditions and handle edge cases. **Iteration** is implemented via a `for component in components` loop that processes each detected digit individually, enabling multi-digit recognition from a single canvas drawing. **Sequencing** ensures each step — decode, segment, preprocess, infer, respond — executes in the only order that produces correct output.
+I implemented **selection** through conditional statements (`if model is None`, `if not data`, `if not components`) to validate preconditions and handle edge cases. **Iteration** is implemented via a `for component in components` loop that processes each detected digit individually, enabling multi-digit recognition from a single canvas drawing. **Sequencing** ensures each step — decode, segment, preprocess, infer, respond — executes in the only order that produces correct output.
 
-The `predict()` procedure fulfills these essential functions within the program architecture:
+`predict()` fulfills these essential functions within my program:
 
 1. **Input Acquisition:** Receives and validates base64-encoded image data from the client canvas
 2. **Data Transformation:** Decodes binary image data into a numerical array
@@ -48,7 +48,7 @@ The `predict()` procedure fulfills these essential functions within the program 
 5. **Model Inference (Sub-Algorithm):** Calls `predict_with_tta()` to run the CNN and generate confidence scores across all ten digit classes
 6. **Response Construction:** Aggregates results into a structured JSON response
 
-The `predict()` procedure is indispensable to the program's functionality; without this computational pathway combining **sequencing**, **selection**, and **iteration** across its three-tier hierarchy, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output.
+`predict()` is indispensable to my program; without this computational pathway combining **sequencing**, **selection**, and **iteration** across its three-tier hierarchy, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output.
 
 ---
 
@@ -111,9 +111,9 @@ def predict():
 
 ### PURPOSE
 
-> The algorithm transforms raw image data into digit predictions through a sequential pipeline: decode base64 → segment digits → preprocess to 28×28 → run CNN inference → aggregate results. Selection handles error cases and validation, while iteration enables multi-digit recognition from a single drawing.
+> The student-developed procedure `predict_with_tta(image, num_augmentations)` performs robust CNN inference using Test-Time Augmentation — running the model on the original image and multiple augmented copies, then averaging the results to produce a more reliable confidence score.
 >
-> **Structure:** `predict()` is the **main algorithm**; `advanced_preprocess_digit(img_array, bbox)` is the **sub-algorithm** with explicit parameters. Point to this hierarchy to satisfy both the algorithm and abstraction requirements.
+> **Structure:** `predict_with_tta(image, num_augmentations)` is the **main algorithm** with two explicit parameters. It is called by `predict()` for every detected digit. The two-parameter signature satisfies the abstraction/parameter requirement directly.
 
 ### Written Response 3b
 
@@ -121,119 +121,75 @@ def predict():
 
 **Response:**
 
-The `predict()` procedure implements a two-level algorithm — a main algorithm and a sub-algorithm — that together include sequencing, selection, and iteration to recognize handwritten digits.
+My procedure `predict_with_tta(image, num_augmentations)` implements an algorithm that includes sequencing, selection, and iteration to produce reliable handwritten digit predictions.
+
+**Parameters:** It accepts two parameters — `image`, a 28×28 normalized NumPy array representing a single preprocessed digit, and `num_augmentations`, an integer (defaulting to 8) that controls how many augmented copies are generated for averaging.
 
 ---
 
-**Main Algorithm — `predict()`**
+**Sequencing:** My algorithm executes steps in a precise order that cannot be rearranged:
+1. Initialize an empty `predictions` list
+2. Run the original `image` through the CNN model and append the output probability array to `predictions`
+3. For each of the remaining `num_augmentations - 1` iterations, copy the image, apply a random rotation (−5° to +5°) and a random pixel shift, run the augmented copy through the CNN, and append its output
+4. Check if additional ensemble models are loaded; if so, run the original image through each and append those outputs as well
+5. Average all collected prediction arrays with `np.mean`
+6. Return the single averaged probability distribution
 
-**Sequencing:** The main algorithm executes steps in a specific order that cannot be rearranged:
-1. Validate that the CNN model is loaded
-2. Extract and decode the base64 image from the request
-3. Segment the image into individual digit regions
-4. For each digit region, call the sub-algorithm to preprocess it
-5. Run CNN inference on the preprocessed digit
-6. Aggregate and return results
+Each step depends on the previous step's results — the list must be populated before it can be averaged, and the original pass must come first.
 
-Each step depends on the previous step's output, making the sequence essential.
+**Selection:** I use `if ensemble_models:` to check whether additional trained models were loaded at startup. If true, my algorithm iterates through each ensemble model and adds its predictions to the pool before averaging. This selection lets my procedure work correctly with either a single model or a multi-model ensemble, without requiring two separate code paths.
 
-**Selection (in the main algorithm):** Conditional statements handle different scenarios:
-- `if model is None`: Terminates early if the CNN model failed to load
-- `if not data or 'image' not in data`: Validates that the client sent image data
-- `if not components`: Returns an empty result set when no digits are detected
+**Iteration:** I use two loops:
+- `for _ in range(num_augmentations - 1):` — iterates to generate augmented copies of the input digit, each with a different random rotation and shift. Running the CNN on these varied copies captures how the model responds to slight drawing inconsistencies.
+- `for ens_model in ensemble_models:` (inside the selection block) — iterates through any loaded ensemble models, collecting additional predictions.
 
-These selections ensure the program responds correctly to invalid or empty inputs.
+Averaging all predictions — original, augmented, and ensemble — is what makes my procedure more accurate than a single forward pass. Without iteration, only one prediction would exist; without sequencing, the average could be computed before all predictions are collected; without selection, my procedure would crash if no ensemble models were present.
 
-**Iteration (in the main algorithm):** The `for component in components` loop iterates through every digit region detected in the drawing. For each iteration, the algorithm calls the sub-algorithm, runs CNN inference, and appends results to the output list. This iteration is what allows the program to recognize multi-digit numbers like "742" from a single canvas drawing — the same code handles any count of digits without modification.
-
----
-
-**Sub-Algorithm — `advanced_preprocess_digit(img_array, bbox)`**
-
-The main algorithm **cannot fulfill its purpose without this sub-algorithm.** The CNN was trained exclusively on 28×28 grayscale images in the MNIST format. Raw canvas drawings are arbitrary sizes and must be cropped, resized, and normalized before the network can classify them. `advanced_preprocess_digit` takes two parameters — `img_array` (the full canvas pixel data) and `bbox` (the bounding box coordinates of a single digit) — and returns a standardized 28×28 array ready for inference.
-
-This creates a clear processing hierarchy:
-- **Top Level:** `predict()` handles the big picture — routing, looping, and response assembly
-- **Mid Level:** `advanced_preprocess_digit(img_array, bbox)` handles the math — cropping, scaling, and centering each digit to MNIST format
-- **Bottom Level:** `predict_with_tta()` handles the inference — running the CNN and averaging predictions across augmented copies for accuracy
-
-Without the sub-algorithm standardizing inputs to 28×28, the CNN would receive incorrectly-shaped data and produce meaningless output, making the entire digit recognition pipeline non-functional.
+I call `predict_with_tta` from my top-level `predict()` endpoint once per detected digit (inside a `for component in components` loop), making it the core inference engine of my entire digit recognition system.
 
 ---
 
 ### Algorithm Code (for 3b)
 
-**File:** `backend/api/digit_api.py` — Lines 382-440
+**File:** `backend/api/digit_api.py` — Lines 228-258
 
 ```python
-# SEQUENCING: Steps must execute in this order
-# Step 1: Decode image
-img_bytes = base64.b64decode(image_data)
-img = Image.open(io.BytesIO(img_bytes)).convert('L')
-img_array = np.array(img)
+def predict_with_tta(image, num_augmentations=8):
+    """Test-Time Augmentation for robust predictions"""
 
-# Step 2: Find digit regions
-components = find_connected_components(img_array)
+    # ===== SEQUENCING STEP 1: Initialize predictions list =====
+    predictions = []
 
-# SELECTION: Handle no digits found
-if not components:
-    return jsonify({
-        'success': True,
-        'digits': [],
-        'number': '',
-        'message': 'No digits found'
-    })
+    # ===== SEQUENCING STEP 2: Run original image through CNN =====
+    predictions.append(model.predict(image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-# Step 3: Preprocess each digit
-processed_digits = []
-for component in components:
-    bbox = component['bbox']
-    processed = advanced_preprocess_digit(img_array, bbox)
-    processed_digits.append(processed)
+    # ===== ITERATION: Generate augmented copies and predict each =====
+    for _ in range(num_augmentations - 1):
+        aug_image = image.copy()
 
-# Step 4: Predict each digit
-results = []
-recognized_digits = []
+        # Apply random rotation (-5° to +5°)
+        angle = np.random.uniform(-5, 5)
+        aug_image = rotate(aug_image, angle, reshape=False, mode='constant', cval=0)
 
-# ITERATION: Process each detected digit
-for idx, (component, processed) in enumerate(zip(components, processed_digits)):
-    bbox = component['bbox']
+        # Apply random pixel shift
+        shift_x = np.random.randint(-2, 3)
+        shift_y = np.random.randint(-2, 3)
+        aug_image = shift(aug_image, [shift_y, shift_x], mode='constant', cval=0)
 
-    # Run CNN prediction with test-time augmentation
-    predictions = predict_with_tta(processed, num_augmentations=8)
+        # ===== SEQUENCING STEP 3: Predict augmented copy and collect =====
+        predictions.append(model.predict(aug_image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-    # Get top 3 predictions
-    top_3_idx = np.argsort(predictions)[-3:][::-1]
-    predicted_digit = int(top_3_idx[0])
-    confidence = float(predictions[predicted_digit])
+    # ===== SELECTION: Add ensemble model predictions if available =====
+    if ensemble_models:
+        # ===== ITERATION: Run each ensemble model on original image =====
+        for ens_model in ensemble_models:
+            predictions.append(ens_model.predict(image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-    # SELECTION: Check confidence threshold
-    recognized_digits.append(str(predicted_digit))
+    # ===== SEQUENCING STEP 4: Average all predictions =====
+    avg_prediction = np.mean(predictions, axis=0)
 
-    # Build result and add to list
-    results.append({
-        'digit': predicted_digit,
-        'confidence': confidence,
-        'top3': [
-            {'digit': int(top_3_idx[i]), 'confidence': float(predictions[top_3_idx[i]])}
-            for i in range(3)
-        ],
-        'bbox': {
-            'x': int(bbox[2]),
-            'y': int(bbox[0]),
-            'width': int(bbox[3] - bbox[2]),
-            'height': int(bbox[1] - bbox[0])
-        }
-    })
-
-# Step 5: Return results
-full_number = ''.join(recognized_digits)
-return jsonify({
-    'success': True,
-    'digits': results,
-    'number': full_number,
-    'count': len(results)
-})
+    # ===== SEQUENCING STEP 5: Return averaged probability distribution =====
+    return avg_prediction
 ```
 
 ---
@@ -511,13 +467,13 @@ def predict():
 | Question | Key Points | Word Count Target |
 |----------|------------|-------------------|
 | **3a** | Purpose: digit recognition; `predict()` is top-level coordinator; 3-tier hierarchy; sub-algorithms are required dependencies | 150 words |
-| **3b** | Main algo: `predict()` — sequencing (6 steps), selection (3 if-checks), iteration (`for component in components`); Sub-algo: `advanced_preprocess_digit(img_array, bbox)` — has explicit params, required because CNN needs 28×28 MNIST format | 200 words |
+| **3b** | Main algo: `predict_with_tta(image, num_augmentations)` — sequencing (6 steps), selection (`if ensemble_models`), iteration (augmentation loop + ensemble loop); two explicit params satisfy abstraction requirement | 200 words |
 | **3c** | List: `results`; Manages: variable digits, batch processing, order preservation, JSON serialization | 200 words |
 
 > **Rubric strategy summary:**
-> - Use `predict()` as the main student-developed procedure (shows loop + selection clearly)
-> - Use `advanced_preprocess_digit(img_array, bbox)` for the **Abstraction / Parameter** requirement — it has two visible parameters and a clear, testable contract
-> - Always name the dependency: `predict()` calls the sub-algorithm *because* the CNN mandates 28×28 MNIST-format input
+> - Use `predict_with_tta(image, num_augmentations)` as the **3b student-developed procedure** — two explicit parameters, clear sequencing, selection (`if ensemble_models`), and two iterations
+> - Use `predict()` in **3a** to explain overall program purpose and the three-tier hierarchy
+> - Use `advanced_preprocess_digit(img_array, bbox)` if an additional parameter-based procedure is needed elsewhere
 
 ---
 
