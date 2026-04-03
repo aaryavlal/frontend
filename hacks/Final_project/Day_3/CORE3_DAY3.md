@@ -296,84 +296,89 @@ document.getElementById('export-pdf-btn').addEventListener('click', function () 
   btn.disabled = true;
   btn.textContent = 'Generating PDF…';
 
-  // Find just the post body, not the full Jekyll page
-  var source = document.querySelector('.post-content, article.post, main article, .page-content article')
-               || document.querySelector('main')
-               || document.body;
+  // ── 1. Build a fresh container — zero Jekyll chrome ──────────────────────
+  var container = document.createElement('div');
+  container.style.cssText = [
+    'position:fixed', 'left:-9999px', 'top:0',
+    'width:650px',    'background:#fff',
+    'font-family:"Times New Roman",serif',
+    'font-size:12pt', 'color:#000', 'line-height:1.8'
+  ].join(';');
+  document.body.appendChild(container);
 
-  // Clone so we can strip unwanted sections without touching the live page
-  var clone = source.cloneNode(true);
+  // ── 2. CB cover header ────────────────────────────────────────────────────
+  var cover = document.createElement('div');
+  cover.style.cssText = 'border-bottom:2px solid #000;padding-bottom:8pt;margin-bottom:16pt;';
+  cover.innerHTML =
+    '<div style="font-size:13pt;font-weight:bold;">AP Computer Science Principles — Create Performance Task</div>' +
+    '<div style="font-size:12pt;font-weight:bold;">Personalized Project Reference — Written Responses</div>' +
+    '<div style="font-size:10pt;margin-top:4pt;">AI Digit Recognizer &nbsp;|&nbsp; Rudra Joshi</div>';
+  container.appendChild(cover);
 
-  // Remove the screenshots section and everything after it
-  var allHeadings = clone.querySelectorAll('h2');
-  allHeadings.forEach(function (h) {
-    if (h.textContent.trim() === 'Code Screenshots') {
-      var node = h;
-      var toRemove = [];
-      // collect the heading and all its following siblings
-      while (node) { toRemove.push(node); node = node.nextElementSibling; }
-      toRemove.forEach(function (el) { el.parentNode && el.parentNode.removeChild(el); });
-    }
-  });
-
-  // Remove the export button itself and any <script> tags
-  clone.querySelectorAll('#export-pdf-btn, [id="export-pdf-btn"]').forEach(function (el) {
-    el.closest('div') ? el.closest('div').remove() : el.remove();
-  });
-  clone.querySelectorAll('script, hr:last-of-type').forEach(function (el) { el.remove(); });
-
-  // Add CB-style cover header
-  var header = document.createElement('div');
-  header.innerHTML = [
-    '<div style="border-bottom:2px solid #000;padding-bottom:10pt;margin-bottom:18pt;">',
-    '  <div style="font-family:\'Times New Roman\',serif;font-size:11pt;color:#000;">',
-    '    <strong>AP Computer Science Principles — Create Performance Task</strong><br>',
-    '    <strong>Personalized Project Reference (PPR) — Written Responses</strong><br>',
-    '    <span style="font-size:10pt;">AI Digit Recognizer &nbsp;|&nbsp; Student: Rudra Joshi</span>',
-    '  </div>',
-    '</div>'
-  ].join('');
-  clone.insertBefore(header, clone.firstChild);
-
-  // Inject CB-consistent PDF styles
+  // ── 3. Inject scoped styles inside container ──────────────────────────────
   var style = document.createElement('style');
   style.textContent = [
-    '* { box-sizing: border-box; }',
-    // CB standard: Times New Roman 12pt, black on white
-    'body, div, p, li, td { font-family: "Times New Roman", Times, serif !important; font-size: 12pt !important; color: #000 !important; background: #fff !important; }',
-    'h1 { font-size: 14pt !important; font-weight: bold; margin: 0 0 14pt; }',
-    // Section labels (3a, 3b, 3c) get a clear visual break
-    'h2 { font-size: 13pt !important; font-weight: bold; margin: 20pt 0 8pt; padding-bottom: 4pt; border-bottom: 1px solid #000; page-break-after: avoid; }',
-    'h3 { font-size: 12pt !important; font-weight: bold; font-style: italic; margin: 12pt 0 4pt; page-break-after: avoid; }',
-    'p  { line-height: 1.8 !important; margin: 0 0 10pt; }',
-    'ul, ol { margin: 0 0 10pt 22pt !important; padding: 0; }',
-    'li { line-height: 1.8 !important; margin-bottom: 3pt; }',
-    // Inline code: keep readable but minimal decoration
-    'code { font-family: "Courier New", Courier, monospace !important; font-size: 10pt !important; background: #f0f0f0 !important; padding: 0 2pt; }',
-    // Code blocks: CB expects code to be readable; light gray bg, no overflow
-    'pre { font-family: "Courier New", Courier, monospace !important; font-size: 9pt !important;',
-    '      background: #f5f5f5 !important; border: 1px solid #ccc; padding: 10pt; margin: 8pt 0 14pt;',
-    '      white-space: pre-wrap !important; word-break: break-word !important;',
-    '      overflow: visible !important; page-break-inside: avoid; line-height: 1.45 !important; }',
-    'pre code { background: none !important; padding: 0; font-size: inherit !important; }',
-    'hr { border: none; border-top: 1px solid #999; margin: 16pt 0; }',
-    'blockquote { border-left: 3pt solid #555; margin: 8pt 0 8pt 12pt; padding-left: 10pt; font-style: italic; }',
-    'strong { font-weight: bold; }',
-    'em { font-style: italic; }',
-    'img { display: none !important; }',   // screenshots excluded from written response PDF
+    '* { box-sizing:border-box; }',
+    'p, li  { font-family:"Times New Roman",serif; font-size:12pt; line-height:1.8; color:#000; margin:0 0 9pt; }',
+    'ul, ol  { margin:0 0 9pt 20pt; padding:0; }',
+    'li      { margin-bottom:3pt; }',
+    'h2      { font-family:"Times New Roman",serif; font-size:13pt; font-weight:bold; margin:18pt 0 7pt;',
+    '          border-bottom:1px solid #000; padding-bottom:3pt; page-break-after:avoid; color:#000; }',
+    'h3      { font-family:"Times New Roman",serif; font-size:12pt; font-weight:bold; font-style:italic;',
+    '          margin:12pt 0 4pt; page-break-after:avoid; color:#000; }',
+    'code    { font-family:"Courier New",monospace; font-size:9.5pt; background:#f0f0f0; padding:0 2pt; color:#000; }',
+    'pre     { font-family:"Courier New",monospace; font-size:8.5pt; background:#f5f5f5;',
+    '          border:1px solid #ccc; padding:9pt; margin:7pt 0 13pt;',
+    '          white-space:pre-wrap; word-break:break-word; line-height:1.4;',
+    '          page-break-inside:avoid; color:#000; }',
+    'pre code{ background:none; padding:0; font-size:inherit; }',
+    'hr      { border:none; border-top:1px solid #bbb; margin:14pt 0; }',
+    'strong  { font-weight:bold; }',
+    'em      { font-style:italic; }',
+    'img     { display:none !important; }',
   ].join('\n');
-  clone.insertBefore(style, clone.firstChild);
+  container.appendChild(style);
 
+  // ── 4. Walk ONLY 3a / 3b / 3c h2 sections from the live page ─────────────
+  var wanted = ['3a', '3b', '3c'];
+
+  function collectUntilNextH2(startH2) {
+    var frag = document.createDocumentFragment();
+    var node = startH2.nextElementSibling;
+    while (node && node.tagName !== 'H2') {
+      var tag = node.tagName;
+      // stop at the export button or any script/style block
+      if (tag === 'SCRIPT' || tag === 'STYLE') { node = node.nextElementSibling; continue; }
+      if (node.querySelector && node.querySelector('#export-pdf-btn')) break;
+      if (node.id === 'export-pdf-btn') break;
+      frag.appendChild(node.cloneNode(true));
+      node = node.nextElementSibling;
+    }
+    return frag;
+  }
+
+  Array.from(document.querySelectorAll('h2')).forEach(function (h2) {
+    var text = h2.textContent.trim().toLowerCase();
+    if (!wanted.some(function (p) { return text.startsWith(p); })) return;
+    container.appendChild(h2.cloneNode(true));
+    container.appendChild(collectUntilNextH2(h2));
+  });
+
+  // Clean up anything that slipped through
+  container.querySelectorAll('script, style:not(:first-of-type), img, button').forEach(function (el) { el.remove(); });
+
+  // ── 5. Export ─────────────────────────────────────────────────────────────
   var opt = {
-    margin:      [1, 1, 1, 1],            // standard 1-inch margins
+    margin:      [1, 1, 1, 1],
     filename:    'PPR_Written_Responses_RudraJoshi.pdf',
-    image:       { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+    image:       { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff', removeContainer: true },
     jsPDF:       { unit: 'in', format: 'letter', orientation: 'portrait' },
-    pagebreak:   { mode: ['css', 'legacy'], avoid: ['pre', 'h2', 'h3', 'ul', 'ol', 'li'] }
+    pagebreak:   { mode: ['css', 'legacy'], avoid: 'pre, h2, h3' }
   };
 
-  html2pdf().set(opt).from(clone).save().then(function () {
+  html2pdf().set(opt).from(container).save().then(function () {
+    document.body.removeChild(container);
     btn.disabled = false;
     btn.textContent = 'Export to PDF';
   });
