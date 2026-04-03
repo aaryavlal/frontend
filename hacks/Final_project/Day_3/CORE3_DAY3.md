@@ -4,34 +4,11 @@ permalink: /core3/day3
 layout: post
 ---
 
-# Core 3: AI Digit Recognizer — Day 3 Complete
-
-**Task:** Write PPR (Personalized Project Reference) Responses for Create PT
+# Core 3: AI Digit Recognizer — PPR Written Responses
 
 ---
 
-## College Board Create PT Requirements
-
-The written response section requires you to answer questions about:
-- **3a:** Procedure description — *What does your procedure do and why?*
-- **3b:** Algorithm with sequencing, selection, and iteration — *How does it work step-by-step?*
-- **3c:** List usage and purpose — *How does your list manage program complexity?*
-
----
-
-## Task 1: PPR 3a — Procedure Description ✓
-
-### PURPOSE
-
-> The `predict()` procedure enables real-time handwritten digit classification by receiving canvas drawings, processing them through a Convolutional Neural Network, and returning prediction results with confidence scores. It serves as the API endpoint that bridges user input with machine learning inference.
-
-> **Parameter Note:** Because `predict()` in Flask has no parameters in its `def` line (data comes via HTTP request body), the **Abstraction** requirement (3b) is best demonstrated using `advanced_preprocess_digit(img_array, bbox)`, which has two explicit, clearly-defined parameters. This is the safer strategy for the rubric.
-
-### Written Response 3a
-
-> **Prompt:** Describe the overall purpose of the program and what functionality the selected procedure contributes to.
-
-**Response:**
+## 3a — Procedure Description
 
 My program provides an intelligent digit recognition system that lets users draw handwritten numerical characters (0-9) on an interactive canvas interface and receive real-time classification predictions powered by a trained Convolutional Neural Network (CNN). It demonstrates machine learning inference within a web-based client-server architecture, using the industry-standard MNIST dataset methodology for handwritten digit classification.
 
@@ -50,49 +27,35 @@ I implemented **selection** through conditional statements (`if model is None`, 
 
 `predict()` is indispensable to my program; without this computational pathway combining **sequencing**, **selection**, and **iteration** across its three-tier hierarchy, user-drawn input could not be transformed into machine-readable format, processed through the classification model, or returned as meaningful prediction output.
 
----
-
-### Procedure Code (for 3a)
+### Procedure Code
 
 **File:** `backend/api/digit_api.py` — Lines 356-454
 
 ```python
 @digit_api.route('/api/digit/predict', methods=['POST'])
 def predict():
-    """
-    Main digit recognition endpoint.
-
-    Purpose: Receives drawn digit image, processes through CNN,
-    returns predicted digit(s) with confidence scores.
-    """
     try:
-        # Validate model availability
         if model is None:
             return jsonify({'error': 'Model not loaded'}), 503
 
-        # Get input image from request
         data = request.get_json()
         if not data or 'image' not in data:
             return jsonify({'error': 'No image provided'}), 400
 
         image_data = data['image']
 
-        # Decode base64 to image array
         if ',' in image_data:
             image_data = image_data.split(',')[1]
         img_bytes = base64.b64decode(image_data)
         img = Image.open(io.BytesIO(img_bytes)).convert('L')
         img_array = np.array(img)
 
-        # Find and process digits
         components = find_connected_components(img_array)
 
-        # Build results
         results = []
         for component in components:
             processed = advanced_preprocess_digit(img_array, component['bbox'])
             predictions = predict_with_tta(processed)
-            # ... build result object
             results.append({...})
 
         return jsonify({
@@ -107,25 +70,11 @@ def predict():
 
 ---
 
-## Task 2: PPR 3b — Algorithm Description ✓
-
-### PURPOSE
-
-> The student-developed procedure `predict_with_tta(image, num_augmentations)` performs robust CNN inference using Test-Time Augmentation — running the model on the original image and multiple augmented copies, then averaging the results to produce a more reliable confidence score.
->
-> **Structure:** `predict_with_tta(image, num_augmentations)` is the **main algorithm** with two explicit parameters. It is called by `predict()` for every detected digit. The two-parameter signature satisfies the abstraction/parameter requirement directly.
-
-### Written Response 3b
-
-> **Prompt:** Describe how the selected algorithm includes sequencing, selection, and iteration.
-
-**Response:**
+## 3b — Algorithm Description
 
 My procedure `predict_with_tta(image, num_augmentations)` implements an algorithm that includes sequencing, selection, and iteration to produce reliable handwritten digit predictions.
 
 **Parameters:** It accepts two parameters — `image`, a 28×28 normalized NumPy array representing a single preprocessed digit, and `num_augmentations`, an integer (defaulting to 8) that controls how many augmented copies are generated for averaging.
-
----
 
 **Sequencing:** My algorithm executes steps in a precise order that cannot be rearranged:
 1. Initialize an empty `predictions` list
@@ -147,9 +96,7 @@ Averaging all predictions — original, augmented, and ensemble — is what make
 
 I call `predict_with_tta` from my top-level `predict()` endpoint once per detected digit (inside a `for component in components` loop), making it the core inference engine of my entire digit recognition system.
 
----
-
-### Algorithm Code (for 3b)
+### Algorithm Code
 
 **File:** `backend/api/digit_api.py` — Lines 228-258
 
@@ -157,54 +104,42 @@ I call `predict_with_tta` from my top-level `predict()` endpoint once per detect
 def predict_with_tta(image, num_augmentations=8):
     """Test-Time Augmentation for robust predictions"""
 
-    # ===== SEQUENCING STEP 1: Initialize predictions list =====
+    # SEQUENCING STEP 1: Initialize predictions list
     predictions = []
 
-    # ===== SEQUENCING STEP 2: Run original image through CNN =====
+    # SEQUENCING STEP 2: Run original image through CNN
     predictions.append(model.predict(image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-    # ===== ITERATION: Generate augmented copies and predict each =====
+    # ITERATION: Generate augmented copies and predict each
     for _ in range(num_augmentations - 1):
         aug_image = image.copy()
 
-        # Apply random rotation (-5° to +5°)
         angle = np.random.uniform(-5, 5)
         aug_image = rotate(aug_image, angle, reshape=False, mode='constant', cval=0)
 
-        # Apply random pixel shift
         shift_x = np.random.randint(-2, 3)
         shift_y = np.random.randint(-2, 3)
         aug_image = shift(aug_image, [shift_y, shift_x], mode='constant', cval=0)
 
-        # ===== SEQUENCING STEP 3: Predict augmented copy and collect =====
+        # SEQUENCING STEP 3: Predict augmented copy and collect
         predictions.append(model.predict(aug_image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-    # ===== SELECTION: Add ensemble model predictions if available =====
+    # SELECTION: Add ensemble model predictions if available
     if ensemble_models:
-        # ===== ITERATION: Run each ensemble model on original image =====
+        # ITERATION: Run each ensemble model on original image
         for ens_model in ensemble_models:
             predictions.append(ens_model.predict(image.reshape(1, 28, 28, 1), verbose=0)[0])
 
-    # ===== SEQUENCING STEP 4: Average all predictions =====
+    # SEQUENCING STEP 4: Average all predictions
     avg_prediction = np.mean(predictions, axis=0)
 
-    # ===== SEQUENCING STEP 5: Return averaged probability distribution =====
+    # SEQUENCING STEP 5: Return averaged probability distribution
     return avg_prediction
 ```
 
 ---
 
-## Task 3: PPR 3c — List Usage ✓
-
-### PURPOSE
-
-> The `results` list stores prediction data for each detected digit, enabling the program to handle variable-length input (single digit or multi-digit numbers). It maintains left-to-right spatial ordering and serializes directly to JSON for API response construction.
-
-### Written Response 3c
-
-> **Prompt:** Describe how the selected list manages complexity in your program.
-
-**Response:**
+## 3c — List Usage
 
 The `results` list is essential to my program because it stores the prediction data for each digit detected in the user's drawing. This list manages complexity in several ways:
 
@@ -213,7 +148,6 @@ The `results` list is essential to my program because it stores the prediction d
 - Confidence score (0.0 to 1.0)
 - Top 3 alternative predictions
 - Bounding box coordinates
-- Processed image data
 
 **How the list manages complexity:**
 
@@ -227,14 +161,12 @@ The `results` list is essential to my program because it stores the prediction d
 
 Without this list, I would need separate variables for each possible digit position, complex conditional logic to handle different digit counts, and manual JSON construction—significantly increasing code complexity and reducing maintainability.
 
----
-
-### List Code (for 3c)
+### List Code
 
 **File:** `backend/api/digit_api.py` — Lines 400-440
 
 ```python
-# LIST DECLARATION: Initialize empty list to store results
+# LIST DECLARATION
 results = []
 recognized_digits = []
 
@@ -247,16 +179,14 @@ for idx, (component, processed) in enumerate(zip(components, processed_digits)):
     predicted_digit = int(top_3_idx[0])
     confidence = float(predictions[predicted_digit])
 
-    # LIST APPEND: Add digit string to recognized_digits list
-    recognized_digits.append(str(predicted_digit))
+    recognized_digits.append(str(predicted_digit))  # LIST APPEND
 
-    # LIST APPEND: Add full result object to results list
-    results.append({
+    results.append({                                 # LIST APPEND
         'digit': predicted_digit,
         'confidence': confidence,
         'top3': [
             {'digit': int(top_3_idx[i]), 'confidence': float(predictions[top_3_idx[i]])}
-            for i in range(3)  # LIST COMPREHENSION: Build top 3 list
+            for i in range(3)
         ],
         'bbox': {
             'x': int(bbox[2]),
@@ -266,21 +196,19 @@ for idx, (component, processed) in enumerate(zip(components, processed_digits)):
         }
     })
 
-# LIST USAGE: Join all digits into final number string
-full_number = ''.join(recognized_digits)
+full_number = ''.join(recognized_digits)  # LIST USAGE
 
-# LIST USAGE: Return entire list in JSON response
 return jsonify({
     'success': True,
-    'digits': results,      # <-- The list is returned here
+    'digits': results,       # LIST returned in response
     'number': full_number,
-    'count': len(results)   # <-- List length used
+    'count': len(results)    # LIST length
 })
 ```
 
 ---
 
-## Task 4: Code Screenshots ✓
+## Code Screenshots
 
 ### Input
 **File:** `digit-recognizer.js` — Canvas capture + fetch POST
@@ -290,7 +218,7 @@ return jsonify({
 ---
 
 ### Algorithm (Procedure)
-**File:** `digit_api.py` — Full `predict()` function
+**File:** `digit_api.py` — Full `predict_with_tta()` function
 
 ![Core3 Algorithm Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3imgAlgPart1.png)
 
@@ -320,14 +248,14 @@ return jsonify({
 ---
 
 ### Iteration
-**File:** `digit_api.py` — `for idx, (component, processed) in enumerate(...)`
+**File:** `digit_api.py` — `for _ in range(num_augmentations - 1)`
 
 ![Core3 Iteration]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3Iteration.png)
 
 ---
 
 ### Selection
-**File:** `digit_api.py` — `if model is None`, `if not data`, `if not components`
+**File:** `digit_api.py` — `if ensemble_models:`
 
 ![Core3 Selection Part 1]({{site.baseurl}}/hacks/Final_project/Day_3/Snippits/Core3SelectionPart1.png)
 
@@ -344,137 +272,41 @@ return jsonify({
 
 ---
 
-## Task 5: Code Annotations ✓
+<div style="text-align:center; margin: 2rem 0;">
+  <button id="export-pdf-btn" style="
+    background: #1a1a2e;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  ">Export to PDF</button>
+</div>
 
-### Annotated Procedure Code
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+document.getElementById('export-pdf-btn').addEventListener('click', function () {
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = 'Generating PDF…';
 
-Add these comments to your code for clarity:
+  var content = document.querySelector('.post-content') || document.querySelector('article') || document.body;
 
-```python
-@digit_api.route('/api/digit/predict', methods=['POST'])
-def predict():
-    """
-    PROCEDURE: predict()
-    PURPOSE: Recognize handwritten digits from canvas drawing
-    RETURNS: JSON with predicted digits and confidence scores
-    """
-    try:
-        # ===== SELECTION: Validate model is loaded =====
-        if model is None:
-            return jsonify({'error': 'Model not loaded'}), 503
+  var opt = {
+    margin:       [0.75, 0.75, 0.75, 0.75],
+    filename:     'CORE3_PPR_Written_Responses.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, logging: false },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+  };
 
-        # ===== SEQUENCING STEP 1: Get input data =====
-        data = request.get_json()
-
-        # ===== SELECTION: Validate input exists =====
-        if not data or 'image' not in data:
-            return jsonify({'error': 'No image provided'}), 400
-
-        image_data = data['image']
-
-        # ===== SEQUENCING STEP 2: Decode base64 to image =====
-        if ',' in image_data:
-            image_data = image_data.split(',')[1]
-        img_bytes = base64.b64decode(image_data)
-        img = Image.open(io.BytesIO(img_bytes)).convert('L')
-        img_array = np.array(img)
-
-        # ===== SEQUENCING STEP 3: Segment digits =====
-        # LIST: components stores bounding boxes for each digit
-        components = find_connected_components(img_array)
-
-        # ===== SELECTION: Handle no digits found =====
-        if not components:
-            return jsonify({
-                'success': True,
-                'digits': [],
-                'number': '',
-                'message': 'No digits found'
-            })
-
-        # ===== SEQUENCING STEP 4: Preprocess each digit =====
-        processed_digits = []
-        for component in components:
-            processed = advanced_preprocess_digit(img_array, component['bbox'])
-            processed_digits.append(processed)
-
-        # ===== LIST DECLARATION =====
-        results = []           # Stores prediction results for each digit
-        recognized_digits = [] # Stores digit characters for final number
-
-        # ===== ITERATION: Process each detected digit =====
-        for idx, (component, processed) in enumerate(zip(components, processed_digits)):
-            bbox = component['bbox']
-
-            # ===== SEQUENCING STEP 5: Run CNN prediction =====
-            predictions = predict_with_tta(processed, num_augmentations=8)
-
-            # Get top 3 predictions sorted by confidence
-            top_3_idx = np.argsort(predictions)[-3:][::-1]
-            predicted_digit = int(top_3_idx[0])
-            confidence = float(predictions[predicted_digit])
-
-            # ===== LIST APPEND: Add to recognized digits =====
-            recognized_digits.append(str(predicted_digit))
-
-            # ===== LIST APPEND: Add result object =====
-            results.append({
-                'digit': predicted_digit,
-                'confidence': confidence,
-                'top3': [
-                    {'digit': int(top_3_idx[i]), 'confidence': float(predictions[top_3_idx[i]])}
-                    for i in range(3)  # LIST COMPREHENSION
-                ],
-                'bbox': {
-                    'x': int(bbox[2]),
-                    'y': int(bbox[0]),
-                    'width': int(bbox[3] - bbox[2]),
-                    'height': int(bbox[1] - bbox[0])
-                }
-            })
-
-        # ===== SEQUENCING STEP 6: Build response =====
-        # LIST USAGE: Join digits into number string
-        full_number = ''.join(recognized_digits)
-
-        # ===== OUTPUT: Return JSON with results LIST =====
-        return jsonify({
-            'success': True,
-            'digits': results,      # LIST returned in response
-            'number': full_number,
-            'count': len(results)   # LIST length
-        })
-
-    except Exception as e:
-        # ===== SELECTION: Error handling =====
-        return jsonify({'error': str(e)}), 500
-```
-
----
-
-## Day 3 Checklist
-
-- [x] Task 1: PPR 3a — Procedure description written
-- [x] Task 2: PPR 3b — Algorithm with sequencing/selection/iteration explained
-- [x] Task 3: PPR 3c — List usage and complexity management described
-- [x] Task 4: Screenshot checklist prepared
-- [x] Task 5: Code annotations added
-
----
-
-## PPR Summary Table
-
-| Question | Key Points | Word Count Target |
-|----------|------------|-------------------|
-| **3a** | Purpose: digit recognition; `predict()` is top-level coordinator; 3-tier hierarchy; sub-algorithms are required dependencies | 150 words |
-| **3b** | Main algo: `predict_with_tta(image, num_augmentations)` — sequencing (6 steps), selection (`if ensemble_models`), iteration (augmentation loop + ensemble loop); two explicit params satisfy abstraction requirement | 200 words |
-| **3c** | List: `results`; Manages: variable digits, batch processing, order preservation, JSON serialization | 200 words |
-
-> **Rubric strategy summary:**
-> - Use `predict_with_tta(image, num_augmentations)` as the **3b student-developed procedure** — two explicit parameters, clear sequencing, selection (`if ensemble_models`), and two iterations
-> - Use `predict()` in **3a** to explain overall program purpose and the three-tier hierarchy
-> - Use `advanced_preprocess_digit(img_array, bbox)` if an additional parameter-based procedure is needed elsewhere
-
----
-
-
+  html2pdf().set(opt).from(content).save().then(function () {
+    btn.disabled = false;
+    btn.textContent = 'Export to PDF';
+  });
+});
+</script>
